@@ -91,14 +91,6 @@ npm run test:all   # run Biome, Vitest, build, and Playwright
 
 Motion is installed as the planned React animation library. Do not use it in early feature work. Keep initial screens functional and accessible first; apply Motion during the final polish/animation stage for deliberate transitions, layout animation, gestures, and micro-interactions.
 
-## Backend
 
-The backend lives in `C:\Projects\Miskatonic_Lab_backend`.
 
-Useful backend references:
-
-- `docs/testing.md`
-- `docs/room-realtime.md`
-- `docs/errors/`
-
-More frontend detail lives in [FRONTEND_STACK.md](FRONTEND_STACK.md), [AGENTS.md](AGENTS.md), and [docs/testing.md](docs/testing.md).
+More frontend detail lives in [docs/testing.md](docs/testing.md).
