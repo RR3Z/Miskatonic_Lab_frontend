@@ -1,6 +1,6 @@
-import Image from "next/image";
+import Image from "next/image"
 
-import tentaclesOverlay from "../../../assets/bg-tentacles.svg";
+import tentaclesOverlay from "../../../assets/bg-tentacles.svg"
 
 export function LandingBackground() {
   return (
@@ -18,9 +18,9 @@ export function LandingBackground() {
         sizes="100vw"
         src={tentaclesOverlay}
       />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_43%,transparent_0%,rgba(16,14,12,0.12)_38%,rgba(4,4,3,0.72)_78%,rgba(2,2,2,0.94)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_43%,rgba(0,0,0,0.4)_0%,rgba(16,14,12,0.6)_38%,rgba(4,4,3,0.9)_78%,rgba(0,0,0,1)_100%)]" />
       <div className="ml-screen-noise absolute inset-0 opacity-20" />
-      <div className="absolute inset-x-0 bottom-0 h-44 bg-[linear-gradient(0deg,rgba(4,4,3,0.8),transparent)]" />
+      <div className="absolute inset-x-0 bottom-0 h-44 bg-[linear-gradient(0deg,rgba(4,4,3,0.9),transparent)]" />
     </div>
   );
 }
