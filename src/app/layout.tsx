@@ -1,3 +1,4 @@
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import {
   Cormorant_Garamond,
@@ -45,7 +46,9 @@ export default function RootLayout({
       lang="ru"
       className={`${spectral.variable} ${cormorantGaramond.variable} ${marckScript.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="theme-dark min-h-full flex flex-col">{children}</body>
+      <body className="theme-dark min-h-full flex flex-col">
+        <ClerkProvider>{children}</ClerkProvider>
+      </body>
     </html>
   );
 }
