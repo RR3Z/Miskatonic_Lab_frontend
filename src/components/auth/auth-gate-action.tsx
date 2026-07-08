@@ -1,10 +1,11 @@
 "use client";
 
-import { SignInButton, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import type { VariantProps } from "class-variance-authority";
 import Link from "next/link";
 import type * as React from "react";
 
+import { CustomSignInButton } from "@/components/auth/sign-in-button";
 import { Button, type buttonVariants } from "@/components/ui/button";
 
 type AuthGateActionProps = VariantProps<typeof buttonVariants> & {
@@ -31,10 +32,8 @@ export function AuthGateAction({
   }
 
   return (
-    <SignInButton mode="modal">
-      <Button className={className} size={size} type="button" variant={variant}>
-        {children}
-      </Button>
-    </SignInButton>
+    <CustomSignInButton className={className} size={size} variant={variant}>
+      {children}
+    </CustomSignInButton>
   );
 }
