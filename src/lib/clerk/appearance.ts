@@ -1,3 +1,63 @@
+export const userButtonCompactElements = {
+  userButtonTrigger: {
+    borderRadius: "999px",
+    cursor: "pointer",
+    outlineColor: "var(--ml-focus-ring)",
+  },
+  userButtonAvatarBox: {
+    height: "2rem",
+    width: "2rem",
+  },
+  userButtonPopoverCard: {
+    backgroundColor: "var(--ml-surface-panel-raised)",
+    border: "1px solid var(--ml-border-aged)",
+    borderRadius: "4px",
+    boxShadow: "0 14px 44px rgba(0, 0, 0, 0.44)",
+    color: "var(--ml-ink-primary)",
+    maxWidth: "17.5rem",
+    minWidth: "16.25rem",
+    overflow: "hidden",
+    width: "17.5rem",
+  },
+  userButtonPopoverMain: {
+    padding: "0.45rem 0",
+  },
+  userPreview: {
+    gap: "0.65rem",
+    padding: "0.75rem 0.85rem",
+  },
+  userPreviewAvatarBox: {
+    height: "2.25rem",
+    width: "2.25rem",
+  },
+  userPreviewMainIdentifier: {
+    fontSize: "0.95rem",
+    lineHeight: "1.1",
+  },
+  userPreviewSecondaryIdentifier: {
+    color: "var(--ml-ink-muted)",
+    fontSize: "0.78rem",
+    lineHeight: "1.1",
+  },
+  userButtonPopoverActions: {
+    padding: "0.25rem 0",
+  },
+  userButtonPopoverActionButton: {
+    color: "var(--ml-ink-primary)",
+    fontSize: "0.9rem",
+    gap: "0.7rem",
+    minHeight: "2.55rem",
+    padding: "0 0.9rem",
+  },
+  userButtonPopoverActionButtonIcon: {
+    height: "1rem",
+    width: "1rem",
+  },
+  userButtonPopoverFooter: {
+    padding: "0.65rem 0.85rem 0.75rem",
+  },
+} as const
+
 export const clerkAppearance = {
   variables: {
     borderRadius: "0.25rem",
@@ -67,30 +127,36 @@ export const clerkAppearance = {
     modalContent: {
       borderRadius: "4px",
     },
+    logoBox: {
+      height: "3.1rem",
+      justifyContent: "center",
+      margin: "0 auto 0.85rem",
+      width: "10.5rem",
+    },
+    logoImage: {
+      height: "100%",
+      objectFit: "contain",
+      width: "100%",
+    },
     socialButtonsBlockButton: {
       backgroundColor:
-        "color-mix(in srgb, var(--ml-surface-panel-raised) 82%, black)",
-      border: "1px solid var(--ml-border-aged)",
+        "color-mix(in srgb, var(--ml-surface-panel-raised) 92%, var(--ml-accent-brass) 8%)",
+      border:
+        "1px solid color-mix(in srgb, var(--ml-border-aged) 78%, var(--ml-accent-brass) 22%)",
       borderRadius: "3px",
       color: "var(--ml-ink-primary)",
+      boxShadow: "inset 0 0 0 1px rgba(214, 199, 145, 0.05)",
     },
-    userButtonAvatarBox: {
-      height: "2rem",
-      width: "2rem",
-    },
-    userButtonPopoverCard: {
-      backgroundColor: "var(--ml-surface-panel-raised)",
-      border: "1px solid var(--ml-border-aged)",
-      borderRadius: "4px",
+    socialButtonsBlockButtonText: {
       color: "var(--ml-ink-primary)",
-      boxShadow: "0 18px 60px rgba(0, 0, 0, 0.46)",
+      fontWeight: 600,
     },
-    userButtonPopoverActionButton: {
-      color: "var(--ml-ink-primary)",
-    },
+    ...userButtonCompactElements,
   },
-  options: {
-    logoPlacement: "none",
+  layout: {
+    logoImageUrl: "/miskatonic-logo.webp",
+    logoPlacement: "inside",
+    logoLinkUrl: "/",
     socialButtonsPlacement: "bottom",
     socialButtonsVariant: "blockButton",
   },

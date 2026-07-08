@@ -170,6 +170,26 @@
   }
 }
 
+@layer components {
+  .cl-card .cl-socialButtonsBlockButton:hover,
+  .cl-card .cl-socialButtonsBlockButton:focus-visible {
+    /* biome-ignore lint/complexity/noImportantStyles: Clerk applies higher-priority hover styles. */
+    background: var(--ml-accent-brass-strong) !important;
+    /* biome-ignore lint/complexity/noImportantStyles: Clerk applies higher-priority hover styles. */
+    border-color: var(--ml-accent-brass-strong) !important;
+    /* biome-ignore lint/complexity/noImportantStyles: Clerk applies higher-priority hover styles. */
+    color: var(--ml-ink-on-paper) !important;
+  }
+
+  .cl-card .cl-socialButtonsBlockButton:hover .cl-socialButtonsBlockButtonText,
+  .cl-card
+    .cl-socialButtonsBlockButton:focus-visible
+    .cl-socialButtonsBlockButtonText {
+    /* biome-ignore lint/complexity/noImportantStyles: Clerk applies higher-priority hover styles. */
+    color: var(--ml-ink-on-paper) !important;
+  }
+}
+
 @layer utilities {
   .ml-screen-noise {
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 128 128' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='128' height='128' filter='url(%23noise)' opacity='0.42'/%3E%3C/svg%3E");
