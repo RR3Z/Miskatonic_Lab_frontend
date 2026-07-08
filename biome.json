@@ -34,7 +34,10 @@
     "domains": {
       "next": "recommended",
       "react": "recommended"
-    }
+    },
+    "ignoreDiagnostics": [
+      "assist/source/organizeImports"
+    ]
   },
   "assist": {
     "actions": {
