@@ -47,3 +47,4 @@ Desktop.ini
 
 # Local agent memory
 .agent/
+assets/generated/*
