@@ -1,14 +1,21 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Cormorant_Garamond, Geist_Mono, Spectral } from "next/font/google";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
+const spectral = Spectral({
+  variable: "--font-body",
+  subsets: ["cyrillic", "latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
+const cormorantGaramond = Cormorant_Garamond({
+  variable: "--font-display",
+  subsets: ["cyrillic", "latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
 const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+  variable: "--font-code",
   subsets: ["latin"],
 });
 
@@ -25,7 +32,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${spectral.variable} ${cormorantGaramond.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="theme-dark min-h-full flex flex-col">{children}</body>
     </html>
