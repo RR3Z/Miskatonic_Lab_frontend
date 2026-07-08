@@ -16,7 +16,6 @@ export function LandingMarquee() {
         </span>
       }
       trackClassName="font-heading text-[1.22rem] text-[var(--ml-ink-primary)] leading-none sm:text-[2.45rem]"
-      repeatCount={4}
     />
   )
 }
