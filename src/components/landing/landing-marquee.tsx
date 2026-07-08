@@ -1,7 +1,7 @@
-import { InfiniteMarquee } from "@/components/marquee/infinite-marquee";
-import { landingContent } from "@/lib/content/landing.content";
+import { InfiniteMarquee } from "@/components/marquee/infinite-marquee"
+import { landingContent } from "@/lib/content/landing.content"
 
-const marqueeDurationSeconds = 26;
+const marqueeDurationSeconds = 26
 
 export function LandingMarquee() {
   return (
@@ -18,5 +18,5 @@ export function LandingMarquee() {
       trackClassName="font-heading text-[1.22rem] text-[var(--ml-ink-primary)] leading-none sm:text-[2.45rem]"
       repeatCount={4}
     />
-  );
+  )
 }

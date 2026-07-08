@@ -1,8 +1,8 @@
-import { CaseFileCard } from "@/components/landing/case-file-card";
-import { LandingBackground } from "@/components/landing/landing-background";
-import { LandingFooter } from "@/components/landing/landing-footer";
-import { LandingHeader } from "@/components/landing/landing-header";
-import { LandingMarquee } from "@/components/landing/landing-marquee";
+import { CaseFileCard } from "@/components/landing/case-file-card"
+import { LandingBackground } from "@/components/landing/landing-background"
+import { LandingFooter } from "@/components/landing/landing-footer"
+import { LandingHeader } from "@/components/landing/landing-header"
+import { LandingMarquee } from "@/components/landing/landing-marquee"
 
 export function LandingPage() {
   return (
@@ -15,5 +15,5 @@ export function LandingPage() {
       <LandingMarquee />
       <LandingFooter />
     </main>
-  );
+  )
 }

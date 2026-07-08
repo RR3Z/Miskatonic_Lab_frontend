@@ -1,15 +1,15 @@
-"use client";
+"use client"
 
-import { SignInButton } from "@clerk/nextjs";
-import type { VariantProps } from "class-variance-authority";
+import { SignInButton } from "@clerk/nextjs"
+import type { VariantProps } from "class-variance-authority"
 
-import type { buttonVariants } from "@/components/ui/button";
-import { Button } from "@/components/ui/button";
+import type { buttonVariants } from "@/components/ui/button"
+import { Button } from "@/components/ui/button"
 
 type SignInButtonLabProps = VariantProps<typeof buttonVariants> & {
-  children: React.ReactNode;
-  className?: string;
-};
+  children: React.ReactNode
+  className?: string
+}
 
 export function CustomSignInButton({
   children,
@@ -23,5 +23,5 @@ export function CustomSignInButton({
         {children}
       </Button>
     </SignInButton>
-  );
+  )
 }

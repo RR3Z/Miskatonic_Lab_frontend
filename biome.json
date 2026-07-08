@@ -38,6 +38,10 @@
     "ignoreDiagnostics": [
       "assist/source/organizeImports"
     ]
+  "javascript": {
+    "formatter": {
+      "semicolons": "asNeeded"
+    }
   },
   "assist": {
     "actions": {

@@ -1,22 +1,22 @@
-"use client";
+"use client"
 
-import { motion, useReducedMotion } from "motion/react";
-import * as React from "react";
+import { motion, useReducedMotion } from "motion/react"
+import * as React from "react"
 
-import { cn } from "@/lib/utils/cn.util";
+import { cn } from "@/lib/utils/cn.util"
 
-const defaultDurationSeconds = 26;
+const defaultDurationSeconds = 26
 
 type InfiniteMarqueeProps = {
-  "aria-label": string;
-  className?: string;
-  durationSeconds?: number;
-  itemClassName?: string;
-  items: readonly string[];
-  separator?: React.ReactNode;
-  trackClassName?: string;
-  repeatCount?: number;
-};
+  "aria-label": string
+  className?: string
+  durationSeconds?: number
+  itemClassName?: string
+  items: readonly string[]
+  separator?: React.ReactNode
+  trackClassName?: string
+  repeatCount?: number
+}
 
 function MarqueeGroup({
   idPrefix,
@@ -24,17 +24,17 @@ function MarqueeGroup({
   items,
   separator,
 }: {
-  idPrefix: string;
-  itemClassName?: string;
-  items: readonly string[];
-  separator: React.ReactNode;
+  idPrefix: string
+  itemClassName?: string
+  items: readonly string[]
+  separator: React.ReactNode
 }) {
   const itemsWithIds = React.useMemo(() => {
     return items.map((item, index) => ({
       id: `${idPrefix}-item-${index}`,
       value: item,
-    }));
-  }, [items, idPrefix]);
+    }))
+  }, [items, idPrefix])
 
   return (
     <div className="flex shrink-0 items-center">
@@ -47,7 +47,7 @@ function MarqueeGroup({
         </div>
       ))}
     </div>
-  );
+  )
 }
 
 export function InfiniteMarquee({
@@ -64,14 +64,14 @@ export function InfiniteMarquee({
   trackClassName,
   repeatCount = 4,
 }: InfiniteMarqueeProps) {
-  const shouldReduceMotion = useReducedMotion();
+  const shouldReduceMotion = useReducedMotion()
 
-  const componentId = React.useId();
+  const componentId = React.useId()
   const groupIds = React.useMemo(() => {
     return Array.from({ length: repeatCount }).map(
       (_, index) => `marquee-group-${componentId}-${index}`,
-    );
-  }, [repeatCount, componentId]);
+    )
+  }, [repeatCount, componentId])
 
   return (
     <section
@@ -104,5 +104,5 @@ export function InfiniteMarquee({
         ))}
       </motion.div>
     </section>
-  );
+  )
 }

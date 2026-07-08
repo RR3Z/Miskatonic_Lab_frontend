@@ -1,4 +1,4 @@
-import { appRoutes } from "@/lib/routes/app-routes";
+import { appRoutes } from "@/lib/routes/app-routes"
 
 export const landingContent = {
   brand: {
@@ -70,4 +70,4 @@ export const landingContent = {
       },
     },
   },
-} as const;
+} as const

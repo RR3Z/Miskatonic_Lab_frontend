@@ -1,4 +1,4 @@
-import type { SVGProps } from "react";
+import type { SVGProps } from "react"
 
 export function CloseStamp(props: SVGProps<SVGSVGElement>) {
   return (
@@ -31,5 +31,5 @@ export function CloseStamp(props: SVGProps<SVGSVGElement>) {
         ЗАКРЫТО
       </text>
     </svg>
-  );
+  )
 }

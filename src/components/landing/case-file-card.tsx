@@ -1,12 +1,12 @@
-import Image from "next/image";
-import { CloseStamp } from "@/components/landing/close-stamp";
-import { LandingActions } from "@/components/landing/landing-actions";
-import { landingContent } from "@/lib/content/landing.content";
-import badgeIcon from "../../../assets/symbols/black/nyarlathotep.svg";
-import keeperStamp from "../../../assets/symbols/signature.svg";
+import Image from "next/image"
+import { CloseStamp } from "@/components/landing/close-stamp"
+import { LandingActions } from "@/components/landing/landing-actions"
+import { landingContent } from "@/lib/content/landing.content"
+import badgeIcon from "../../../assets/symbols/black/nyarlathotep.svg"
+import keeperStamp from "../../../assets/symbols/signature.svg"
 
 export function CaseFileCard() {
-  const { caseFile } = landingContent;
+  const { caseFile } = landingContent
 
   return (
     <section
@@ -102,5 +102,5 @@ export function CaseFileCard() {
         </div>
       </div>
     </section>
-  );
+  )
 }

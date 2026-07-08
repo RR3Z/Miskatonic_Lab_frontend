@@ -1,9 +1,9 @@
-import Link from "next/link";
+import Link from "next/link"
 
-import { HeaderAuth } from "@/components/auth/header-auth";
-import { BrandMark } from "@/components/brand/brand-mark";
-import { landingContent } from "@/lib/content/landing.content";
-import { appRoutes } from "@/lib/routes/app-routes";
+import { HeaderAuth } from "@/components/auth/header-auth"
+import { BrandMark } from "@/components/brand/brand-mark"
+import { landingContent } from "@/lib/content/landing.content"
+import { appRoutes } from "@/lib/routes/app-routes"
 
 export function LandingHeader() {
   return (
@@ -17,5 +17,5 @@ export function LandingHeader() {
       </Link>
       <HeaderAuth>{landingContent.header.signIn}</HeaderAuth>
     </header>
-  );
+  )
 }

@@ -1,4 +1,4 @@
-import { LandingBackground } from "@/components/landing/landing-background";
+import { LandingBackground } from "@/components/landing/landing-background"
 
 export function NotFoundPage() {
   return (
@@ -19,5 +19,5 @@ export function NotFoundPage() {
         </p>
       </div>
     </main>
-  );
+  )
 }

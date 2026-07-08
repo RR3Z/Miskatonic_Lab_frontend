@@ -1,35 +1,35 @@
-import { ClerkProvider } from "@/components/auth/clerk-provider";
-import type { Metadata } from "next";
+import type { Metadata } from "next"
 import {
   Cormorant_Garamond,
   Geist_Mono,
   Marck_Script,
   Spectral,
-} from "next/font/google";
-import "./globals.css";
+} from "next/font/google"
+import { ClerkProvider } from "@/components/auth/clerk-provider"
+import "./globals.css"
 
 const spectral = Spectral({
   variable: "--font-body",
   subsets: ["cyrillic", "latin"],
   weight: ["400", "500", "600", "700"],
-});
+})
 
 const cormorantGaramond = Cormorant_Garamond({
   variable: "--font-display",
   subsets: ["cyrillic", "latin"],
   weight: ["400", "500", "600", "700"],
-});
+})
 
 const marckScript = Marck_Script({
   variable: "--font-signature-source",
   subsets: ["cyrillic", "latin"],
   weight: "400",
-});
+})
 
 const geistMono = Geist_Mono({
   variable: "--font-code",
   subsets: ["latin"],
-});
+})
 
 export const metadata: Metadata = {
   title: "Miskatonic Lab",
@@ -47,12 +47,12 @@ export const metadata: Metadata = {
     ],
     apple: [{ url: "/favicon-180.png", sizes: "180x180", type: "image/png" }],
   },
-};
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html
@@ -63,5 +63,5 @@ export default function RootLayout({
         <ClerkProvider>{children}</ClerkProvider>
       </body>
     </html>
-  );
+  )
 }

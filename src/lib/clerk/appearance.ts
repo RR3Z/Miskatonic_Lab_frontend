@@ -94,4 +94,4 @@ export const clerkAppearance = {
     socialButtonsPlacement: "bottom",
     socialButtonsVariant: "blockButton",
   },
-} as const;
+} as const

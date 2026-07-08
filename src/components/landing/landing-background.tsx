@@ -1,6 +1,6 @@
-import Image from "next/image";
+import Image from "next/image"
 
-import tentaclesOverlay from "../../../assets/bg-tentacles.svg";
+import tentaclesOverlay from "../../../assets/bg-tentacles.svg"
 
 export function LandingBackground() {
   return (
@@ -22,5 +22,5 @@ export function LandingBackground() {
       <div className="ml-screen-noise absolute inset-0 opacity-20" />
       <div className="absolute inset-x-0 bottom-0 h-44 bg-[linear-gradient(0deg,rgba(4,4,3,0.9),transparent)]" />
     </div>
-  );
+  )
 }

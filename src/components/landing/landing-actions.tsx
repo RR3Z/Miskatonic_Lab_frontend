@@ -1,10 +1,10 @@
-import { ArrowRight, PencilLine } from "lucide-react";
+import { ArrowRight, PencilLine } from "lucide-react"
 
-import { AuthGateAction } from "@/components/auth/auth-gate-action";
-import { landingContent } from "@/lib/content/landing.content";
+import { AuthGateAction } from "@/components/auth/auth-gate-action"
+import { landingContent } from "@/lib/content/landing.content"
 
 export function LandingActions() {
-  const { openArchive, createInvestigator } = landingContent.caseFile.actions;
+  const { openArchive, createInvestigator } = landingContent.caseFile.actions
 
   return (
     <div className="flex items-center gap-3">
@@ -24,5 +24,5 @@ export function LandingActions() {
         {createInvestigator.label}
       </AuthGateAction>
     </div>
-  );
+  )
 }

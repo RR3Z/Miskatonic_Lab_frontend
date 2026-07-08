@@ -1,15 +1,15 @@
-import Image, { type StaticImageData } from "next/image";
+import Image, { type StaticImageData } from "next/image"
 
 type SocialLink = {
-  href: string;
-  icon: StaticImageData;
-  label: string;
-};
+  href: string
+  icon: StaticImageData
+  label: string
+}
 
 type SocialLinksProps = {
-  iconClassName?: string;
-  links: readonly SocialLink[];
-};
+  iconClassName?: string
+  links: readonly SocialLink[]
+}
 
 export function SocialLinks({ iconClassName, links }: SocialLinksProps) {
   return (
@@ -34,5 +34,5 @@ export function SocialLinks({ iconClassName, links }: SocialLinksProps) {
         </a>
       ))}
     </>
-  );
+  )
 }

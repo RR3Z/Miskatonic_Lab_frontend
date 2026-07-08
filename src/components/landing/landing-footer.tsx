@@ -1,10 +1,10 @@
-import { SocialLinks } from "@/components/social/social-links";
-import { landingContent } from "@/lib/content/landing.content";
-import githubIcon from "../../../assets/icons/github.svg";
-import telegramIcon from "../../../assets/icons/telegram.svg";
+import { SocialLinks } from "@/components/social/social-links"
+import { landingContent } from "@/lib/content/landing.content"
+import githubIcon from "../../../assets/icons/github.svg"
+import telegramIcon from "../../../assets/icons/telegram.svg"
 
 export function LandingFooter() {
-  const { footer } = landingContent;
+  const { footer } = landingContent
   const socialLinks = [
     {
       href: footer.links.telegram.href,
@@ -16,7 +16,7 @@ export function LandingFooter() {
       icon: githubIcon,
       label: `${footer.links.github.label} ${footer.links.github.handle}`,
     },
-  ] as const;
+  ] as const
 
   return (
     <footer className="relative z-10 flex flex-col items-center justify-between gap-1.5 px-4 py-2 text-[var(--ml-ink-muted)] sm:flex-row sm:gap-4 sm:px-8 sm:py-4">
@@ -31,5 +31,5 @@ export function LandingFooter() {
         />
       </div>
     </footer>
-  );
+  )
 }
