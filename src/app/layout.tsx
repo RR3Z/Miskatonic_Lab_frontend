@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Geist_Mono, Spectral } from "next/font/google";
+import {
+  Cormorant_Garamond,
+  Geist_Mono,
+  Marck_Script,
+  Spectral,
+} from "next/font/google";
 import "./globals.css";
 
 const spectral = Spectral({
@@ -12,6 +17,12 @@ const cormorantGaramond = Cormorant_Garamond({
   variable: "--font-display",
   subsets: ["cyrillic", "latin"],
   weight: ["400", "500", "600", "700"],
+});
+
+const marckScript = Marck_Script({
+  variable: "--font-signature-source",
+  subsets: ["cyrillic", "latin"],
+  weight: "400",
 });
 
 const geistMono = Geist_Mono({
@@ -31,8 +42,8 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="en"
-      className={`${spectral.variable} ${cormorantGaramond.variable} ${geistMono.variable} h-full antialiased`}
+      lang="ru"
+      className={`${spectral.variable} ${cormorantGaramond.variable} ${marckScript.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="theme-dark min-h-full flex flex-col">{children}</body>
     </html>
