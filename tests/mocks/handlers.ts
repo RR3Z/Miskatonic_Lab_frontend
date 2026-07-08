@@ -1,4 +1,4 @@
-import { HttpResponse, http } from "msw";
+import { HttpResponse, http } from "msw"
 
 export const handlers = [
   http.get("http://localhost:8000/api/me", () =>
@@ -7,4 +7,4 @@ export const handlers = [
       username: "investigator",
     }),
   ),
-];
+]

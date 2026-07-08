@@ -1,0 +1,40 @@
+import { render, screen } from "@testing-library/react"
+import type * as React from "react"
+import { describe, expect, it, vi } from "vitest"
+
+vi.mock("@clerk/nextjs", () => ({
+  SignInButton: ({ children }: { children: React.ReactNode }) => (
+    <span>{children}</span>
+  ),
+}))
+
+import { CustomSignInButton } from "@/components/auth/sign-in-button"
+
+describe("CustomSignInButton", () => {
+  it("renders Button with children", () => {
+    render(<CustomSignInButton>Войти</CustomSignInButton>)
+
+    expect(screen.getByRole("button", { name: /войти/i })).toBeVisible()
+  })
+
+  it("passes variant and size to Button", () => {
+    const { container } = render(
+      <CustomSignInButton size="sm" variant="ghost">
+        Войти
+      </CustomSignInButton>,
+    )
+
+    const button = container.querySelector('[data-slot="button"]')
+    expect(button).toHaveAttribute("data-variant", "ghost")
+    expect(button).toHaveAttribute("data-size", "sm")
+  })
+
+  it("passes className to Button", () => {
+    const { container } = render(
+      <CustomSignInButton className="custom-class">Войти</CustomSignInButton>,
+    )
+
+    const button = container.querySelector('[data-slot="button"]')
+    expect(button).toHaveClass("custom-class")
+  })
+})
