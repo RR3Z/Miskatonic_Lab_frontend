@@ -60,6 +60,7 @@ npm run test:all
 - Put component tests under `tests/components`.
 - Test accessible behavior: roles, labels, keyboard interaction, validation messages, loading/error/empty states.
 - Avoid snapshot-first tests. Prefer user-visible assertions.
+- For landing reusable pieces, test shared components directly and keep page tests focused on integration.
 
 ## API Mocking
 
