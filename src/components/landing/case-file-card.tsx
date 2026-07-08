@@ -1,7 +1,8 @@
-import Image from "next/image"
+import { MadnessText } from "@/components/effects/madness-text/madness-text"
 import { CloseStamp } from "@/components/landing/close-stamp"
 import { LandingActions } from "@/components/landing/landing-actions"
 import { landingContent } from "@/lib/content/landing.content"
+import Image from "next/image"
 import badgeIcon from "../../../assets/symbols/black/nyarlathotep.svg"
 import keeperStamp from "../../../assets/symbols/signature.svg"
 
@@ -58,47 +59,71 @@ export function CaseFileCard() {
         ))}
       </dl>
 
-      <div className="relative z-10 mt-3 grid gap-3 sm:mt-4 sm:grid-cols-[minmax(20.75rem,1fr)_minmax(0,20.5rem)] sm:gap-5">
-        <div>
-          <p className="font-body text-[0.72rem] text-(--ml-ink-on-paper-muted) tracking-[0.18em] sm:text-[1rem] sm:tracking-[0.22em]">
-            {caseFile.investigatorsLabel}
-          </p>
-          <ul className="mt-1 space-y-0.5 font-heading font-semibold text-[1rem] leading-[1.08] sm:mt-1.5 sm:space-y-1 sm:text-[1.46rem]">
-            {caseFile.investigators.map((investigator) => (
-              <li key={investigator}>{investigator}</li>
-            ))}
-          </ul>
-          <div className="mt-3 sm:mt-6">
-            <LandingActions />
+      <div className="relative z-10 mt-3 sm:mt-4">
+        <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,0.92fr)] gap-3 sm:grid-cols-[minmax(20.75rem,1fr)_minmax(0,20.5rem)] sm:gap-5">
+          <div>
+            <p className="font-body text-[0.72rem] text-(--ml-ink-on-paper-muted) tracking-[0.18em] sm:text-[1rem] sm:tracking-[0.22em]">
+              {caseFile.investigatorsLabel}
+            </p>
+            <ul className="mt-1 space-y-0.5 font-heading font-semibold text-[0.92rem] leading-[1.08] sm:mt-1.5 sm:space-y-1 sm:text-[1.46rem]">
+              {caseFile.investigators.map((investigator) => (
+                <li key={investigator}>{investigator}</li>
+              ))}
+            </ul>
+            <div className="mt-3 hidden sm:mt-6 sm:block">
+              <LandingActions />
+            </div>
           </div>
-        </div>
 
-        <div className="relative min-h-[8.2rem] sm:min-h-[10.4rem]">
-          <p className="font-body text-[0.72rem] text-(--ml-ink-on-paper-muted) tracking-[0.2em] sm:text-[1rem] sm:tracking-[0.28em]">
-            {caseFile.keeper.label}
-          </p>
-          <p className="mt-1 max-w-56 font-heading font-semibold text-[1.04rem] leading-tight sm:mt-2 sm:text-[1.5rem]">
-            {caseFile.keeper.name}
-          </p>
+          <div className="relative sm:min-h-[10.4rem]">
+            <p className="font-body text-[0.72rem] text-(--ml-ink-on-paper-muted) tracking-[0.18em] sm:text-[1rem] sm:tracking-[0.28em]">
+              {caseFile.keeper.label}
+            </p>
+            <p className="mt-1 font-heading font-semibold text-[0.98rem] leading-tight sm:mt-2 sm:max-w-56 sm:text-[1.5rem]">
+              {caseFile.keeper.name}
+            </p>
 
-          <div className="relative mt-2 h-24 w-full sm:mt-2 sm:h-28">
-            <Image
-              alt=""
-              aria-hidden="true"
-              className="absolute -top-9 right-[4.95rem] z-0 size-24 rotate-[-10deg] object-contain opacity-[0.9] mix-blend-multiply sm:-top-8 sm:right-20 sm:size-[6.45rem]"
-              height={200}
-              src={keeperStamp}
-              width={200}
-            />
-            <div className="absolute right-0 bottom-0 z-10 flex rotate-[-10deg] flex-col items-center gap-1 text-center sm:-bottom-4">
-              <p className="whitespace-nowrap font-signature text-[1.9rem] leading-none tracking-[0.02em] sm:text-[2.58rem]">
-                {caseFile.keeper.name}
-              </p>
-              <p className="whitespace-nowrap font-signature text-[0.8rem] text-(--ml-ink-on-paper-muted) uppercase leading-none tracking-[0.12em] sm:text-[1rem] sm:tracking-[0.16em]">
-                {caseFile.keeper.location}, {caseFile.keeper.date}
+            <div className="relative mt-1 hidden w-full sm:block sm:h-24 lg:h-[6.7rem]">
+              <Image
+                alt=""
+                aria-hidden="true"
+                className="absolute z-0 rotate-[-10deg] object-contain opacity-[0.9] mix-blend-multiply sm:-top-9 sm:right-[4.9rem] sm:size-[6rem] lg:-top-4 lg:right-[3.2rem] lg:size-[6.45rem]"
+                height={200}
+                src={keeperStamp}
+                width={200}
+              />
+              <div className="absolute z-10 flex rotate-[-10deg] flex-col items-center gap-1 text-center sm:right-8 sm:-bottom-2 lg:right-12 lg:-bottom-3">
+                <p className="whitespace-nowrap font-signature text-(--ml-ink-on-paper-muted) text-[0.9rem] uppercase leading-none tracking-[0.16em] lg:text-[1rem]">
+                  <MadnessText>
+                    {`${caseFile.keeper.location}, ${caseFile.keeper.date}`}
+                  </MadnessText>
+                </p>
+              </div>
+            </div>
+
+            <div className="absolute top-9 right-0 z-10 flex flex-col items-center sm:hidden">
+              <Image
+                alt=""
+                aria-hidden="true"
+                className="size-[4.5rem] rotate-[-3deg] object-contain opacity-[0.9] mix-blend-multiply"
+                height={200}
+                src={keeperStamp}
+                width={200}
+              />
+              <p className="whitespace-nowrap text-center font-signature text-[0.6rem] text-(--ml-ink-on-paper-muted) uppercase leading-none tracking-[0.1em] rotate-[-3deg]">
+                <MadnessText>
+                  {`${caseFile.keeper.location}, ${caseFile.keeper.date}`}
+                </MadnessText>
               </p>
             </div>
           </div>
+        </div>
+
+        <div className="mt-3 sm:hidden">
+          <LandingActions
+            actionClassName="min-w-0 flex-1 px-2 text-[0.76rem]"
+            className="grid w-full grid-cols-2 gap-2 mt-8"
+          />
         </div>
       </div>
     </section>
