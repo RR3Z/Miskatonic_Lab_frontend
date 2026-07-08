@@ -99,7 +99,7 @@ export function CaseFileCard() {
               <p className="whitespace-nowrap font-signature text-[1.9rem] leading-none tracking-[0.02em] sm:text-[2.58rem]">
                 {caseFile.keeper.name}
               </p>
-              <p className="whitespace-nowrap font-body text-[0.48rem] text-(--ml-ink-on-paper-muted) uppercase leading-none tracking-[0.12em] sm:text-[0.62rem] sm:tracking-[0.16em]">
+              <p className="whitespace-nowrap font-signature text-[0.8rem] text-(--ml-ink-on-paper-muted) uppercase leading-none tracking-[0.12em] sm:text-[1rem] sm:tracking-[0.16em]">
                 {caseFile.keeper.location}, {caseFile.keeper.date}
               </p>
             </div>
