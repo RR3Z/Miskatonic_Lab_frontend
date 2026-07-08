@@ -17,7 +17,7 @@ export function SocialLinks({ iconClassName, links }: SocialLinksProps) {
       {links.map((link) => (
         <a
           aria-label={link.label}
-          className="group text-[var(--ml-ink-muted)] transition hover:text-[var(--ml-accent-brass)]"
+          className="group inline-flex cursor-pointer items-center justify-center text-[var(--ml-ink-muted)] leading-none transition hover:text-[var(--ml-accent-brass)]"
           href={link.href}
           key={link.href}
           rel="noopener noreferrer"

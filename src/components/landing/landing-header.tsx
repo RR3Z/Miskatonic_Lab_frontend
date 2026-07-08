@@ -7,7 +7,7 @@ import { appRoutes } from "@/lib/routes/app-routes"
 
 export function LandingHeader() {
   return (
-    <header className="relative z-10 flex items-start justify-between gap-4 px-5 pt-4 sm:px-8">
+    <header className="relative z-20 flex items-start justify-between gap-4 px-5 pt-4 sm:px-8">
       <Link
         aria-label="Miskatonic Lab home"
         className="inline-flex w-32 cursor-pointer sm:w-44"
