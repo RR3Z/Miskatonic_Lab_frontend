@@ -1,7 +1,7 @@
-import { SocialLinks } from "@/components/social/social-links"
-import { landingContent } from "@/lib/content/landing.content"
-import githubIcon from "../../../assets/icons/github.svg"
-import telegramIcon from "../../../assets/icons/telegram.svg"
+import { SocialLinks } from "@/components/social/social-links";
+import { landingContent } from "@/lib/content/landing.content";
+import githubIcon from "../../../assets/icons/github.svg";
+import telegramIcon from "../../../assets/icons/telegram.svg";
 
 export function LandingFooter() {
   const { footer } = landingContent;

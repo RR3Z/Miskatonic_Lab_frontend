@@ -1,7 +1,7 @@
+import Image from "next/image";
 import { CloseStamp } from "@/components/landing/close-stamp";
 import { LandingActions } from "@/components/landing/landing-actions";
 import { landingContent } from "@/lib/content/landing.content";
-import Image from "next/image";
 import badgeIcon from "../../../assets/symbols/black/nyarlathotep.svg";
 import keeperStamp from "../../../assets/symbols/signature.svg";
 

@@ -1,6 +1,6 @@
-import Image from "next/image"
+import Image from "next/image";
 
-import tentaclesOverlay from "../../../assets/bg-tentacles.svg"
+import tentaclesOverlay from "../../../assets/bg-tentacles.svg";
 
 export function LandingBackground() {
   return (

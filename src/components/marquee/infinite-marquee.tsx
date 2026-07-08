@@ -1,9 +1,9 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react"
-import * as React from "react"
+import { motion, useReducedMotion } from "motion/react";
+import * as React from "react";
 
-import { cn } from "@/lib/utils/cn.util"
+import { cn } from "@/lib/utils/cn.util";
 
 const defaultDurationSeconds = 26;
 
@@ -39,10 +39,7 @@ function MarqueeGroup({
   return (
     <div className="flex shrink-0 items-center">
       {itemsWithIds.map((itemObj) => (
-        <div
-          className="flex items-center pr-4"
-          key={itemObj.id}
-        >
+        <div className="flex items-center pr-4" key={itemObj.id}>
           <span className={cn("whitespace-nowrap", itemClassName)}>
             {itemObj.value}
           </span>
@@ -72,7 +69,7 @@ export function InfiniteMarquee({
   const componentId = React.useId();
   const groupIds = React.useMemo(() => {
     return Array.from({ length: repeatCount }).map(
-      (_, index) => `marquee-group-${componentId}-${index}`
+      (_, index) => `marquee-group-${componentId}-${index}`,
     );
   }, [repeatCount, componentId]);
 
@@ -83,10 +80,7 @@ export function InfiniteMarquee({
     >
       <motion.div
         animate={shouldReduceMotion ? { x: "0%" } : { x: "-50%" }}
-        className={cn(
-          "flex w-max items-center",
-          trackClassName,
-        )}
+        className={cn("flex w-max items-center", trackClassName)}
         data-testid="infinite-marquee-track"
         initial={{ x: "0%" }}
         transition={

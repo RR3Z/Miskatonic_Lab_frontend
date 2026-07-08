@@ -15,9 +15,7 @@ export function LandingHeader() {
       >
         <BrandMark priority />
       </Link>
-      <HeaderAuth>
-        {landingContent.header.signIn}
-      </HeaderAuth>
+      <HeaderAuth>{landingContent.header.signIn}</HeaderAuth>
     </header>
   );
 }

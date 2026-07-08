@@ -1,5 +1,5 @@
-import { InfiniteMarquee } from "@/components/marquee/infinite-marquee"
-import { landingContent } from "@/lib/content/landing.content"
+import { InfiniteMarquee } from "@/components/marquee/infinite-marquee";
+import { landingContent } from "@/lib/content/landing.content";
 
 const marqueeDurationSeconds = 26;
 
