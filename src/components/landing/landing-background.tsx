@@ -12,12 +12,48 @@ export function LandingBackground() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,var(--ml-bg-radial-center)_0%,var(--ml-bg-page)_34%,var(--ml-bg-radial-edge)_74%,#050403_100%)]" />
       <Image
         alt=""
-        className="absolute inset-0 h-full w-full object-cover opacity-[0.48]"
+        className="absolute inset-0 hidden h-full w-full object-cover opacity-[0.48] lg:block"
         fill
         priority
         sizes="100vw"
         src={tentaclesOverlay}
       />
+      <div
+        className="absolute inset-y-0 -left-[8vw] w-[58vw] overflow-hidden lg:hidden"
+        style={{
+          WebkitMaskImage:
+            "linear-gradient(90deg, black 0%, black 68%, transparent 100%)",
+          maskImage:
+            "linear-gradient(90deg, black 0%, black 68%, transparent 100%)",
+        }}
+      >
+        <Image
+          alt=""
+          className="object-cover object-left opacity-[0.42]"
+          fill
+          priority
+          sizes="58vw"
+          src={tentaclesOverlay}
+        />
+      </div>
+      <div
+        className="absolute inset-y-0 -right-[8vw] w-[58vw] overflow-hidden lg:hidden"
+        style={{
+          WebkitMaskImage:
+            "linear-gradient(90deg, transparent 0%, black 32%, black 100%)",
+          maskImage:
+            "linear-gradient(90deg, transparent 0%, black 32%, black 100%)",
+        }}
+      >
+        <Image
+          alt=""
+          className="object-cover object-right opacity-[0.42]"
+          fill
+          priority
+          sizes="58vw"
+          src={tentaclesOverlay}
+        />
+      </div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_43%,rgba(0,0,0,0.4)_0%,rgba(16,14,12,0.6)_38%,rgba(4,4,3,0.9)_78%,rgba(0,0,0,1)_100%)]" />
       <div className="ml-screen-noise absolute inset-0 opacity-20" />
       <div className="absolute inset-x-0 bottom-0 h-44 bg-[linear-gradient(0deg,rgba(4,4,3,0.9),transparent)]" />
