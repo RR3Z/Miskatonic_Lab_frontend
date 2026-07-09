@@ -6,6 +6,7 @@ import {
   Spectral,
 } from "next/font/google"
 import { ClerkProvider } from "@/components/auth/clerk-provider"
+import { QueryProvider } from "@/lib/api/provider"
 import "./globals.css"
 
 const spectral = Spectral({
@@ -60,7 +61,9 @@ export default function RootLayout({
       className={`${spectral.variable} ${cormorantGaramond.variable} ${marckScript.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="theme-dark min-h-full flex flex-col">
-        <ClerkProvider>{children}</ClerkProvider>
+        <ClerkProvider>
+          <QueryProvider>{children}</QueryProvider>
+        </ClerkProvider>
       </body>
     </html>
   )
