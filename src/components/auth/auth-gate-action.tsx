@@ -9,12 +9,14 @@ import { CustomSignInButton } from "@/components/auth/sign-in-button"
 import { Button, type buttonVariants } from "@/components/ui/button"
 
 type AuthGateActionProps = VariantProps<typeof buttonVariants> & {
+  ariaCurrent?: React.AriaAttributes["aria-current"]
   children: React.ReactNode
   className?: string
   href: string
 }
 
 export function AuthGateAction({
+  ariaCurrent,
   children,
   className,
   href,
@@ -26,7 +28,9 @@ export function AuthGateAction({
   if (isSignedIn) {
     return (
       <Button asChild className={className} size={size} variant={variant}>
-        <Link href={href}>{children}</Link>
+        <Link aria-current={ariaCurrent} href={href}>
+          {children}
+        </Link>
       </Button>
     )
   }
