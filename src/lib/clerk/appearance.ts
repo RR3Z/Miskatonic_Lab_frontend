@@ -1,8 +1,62 @@
+const clerkInteractiveState = {
+  backgroundColor: "var(--ml-clerk-hover-bg)",
+  borderColor: "var(--ml-clerk-hover-border)",
+  color: "var(--ml-clerk-hover-fg)",
+} as const
+
+const clerkInteractiveElement = {
+  color: "var(--ml-ink-primary)",
+  transition:
+    "background-color 160ms ease, border-color 160ms ease, color 160ms ease",
+  "&:hover": clerkInteractiveState,
+  "&:focus-visible": clerkInteractiveState,
+} as const
+
+const clerkIconElement = {
+  color: "currentColor",
+} as const
+
+const clerkActionElement = {
+  ...clerkInteractiveElement,
+  fontSize: "0.9rem",
+  gap: "0.7rem",
+  minHeight: "2.55rem",
+  padding: "0 0.9rem",
+} as const
+
+const clerkDangerElement = {
+  color: "var(--ml-clerk-danger)",
+  "&:hover": {
+    backgroundColor: "var(--ml-clerk-danger-bg)",
+    borderColor: "var(--ml-clerk-danger-border)",
+    color: "var(--ml-clerk-danger)",
+  },
+  "&:focus-visible": {
+    backgroundColor: "var(--ml-clerk-danger-bg)",
+    borderColor: "var(--ml-clerk-danger-border)",
+    color: "var(--ml-clerk-danger)",
+  },
+} as const
+
+const clerkBadgeElement = {
+  backgroundColor: "var(--ml-clerk-badge-bg)",
+  border: "1px solid var(--ml-clerk-badge-border)",
+  boxShadow: "none",
+  color: "var(--ml-clerk-badge-fg)",
+  fontWeight: 600,
+} as const
+
 export const userButtonCompactElements = {
   userButtonTrigger: {
     borderRadius: "999px",
     cursor: "pointer",
     outlineColor: "var(--ml-focus-ring)",
+    "&:hover": {
+      boxShadow: "0 0 0 2px var(--ml-clerk-hover-border)",
+    },
+    "&:focus-visible": {
+      boxShadow: "0 0 0 2px var(--ml-focus-ring)",
+    },
   },
   userButtonAvatarBox: {
     height: "2rem",
@@ -42,14 +96,10 @@ export const userButtonCompactElements = {
   userButtonPopoverActions: {
     padding: "0.25rem 0",
   },
-  userButtonPopoverActionButton: {
-    color: "var(--ml-ink-primary)",
-    fontSize: "0.9rem",
-    gap: "0.7rem",
-    minHeight: "2.55rem",
-    padding: "0 0.9rem",
-  },
+  userButtonPopoverActionButton: clerkActionElement,
+  userButtonPopoverActionButtonIconBox: clerkIconElement,
   userButtonPopoverActionButtonIcon: {
+    ...clerkIconElement,
     height: "1rem",
     width: "1rem",
   },
@@ -63,7 +113,7 @@ export const clerkAppearance = {
     borderRadius: "0.25rem",
     colorBackground: "var(--ml-surface-panel)",
     colorBorder: "var(--ml-border-aged)",
-    colorDanger: "var(--ml-accent-danger)",
+    colorDanger: "var(--ml-clerk-danger)",
     colorForeground: "var(--ml-ink-primary)",
     colorInput: "color-mix(in srgb, var(--ml-surface-panel-raised) 86%, black)",
     colorInputForeground: "var(--ml-ink-primary)",
@@ -80,6 +130,12 @@ export const clerkAppearance = {
     spacing: "0.95rem",
   },
   elements: {
+    button: {
+      '&[data-color="danger"]': clerkDangerElement,
+      '&[data-variant="ghost"]': clerkInteractiveElement,
+      '&[data-variant="outline"]': clerkInteractiveElement,
+      '&[data-variant="bordered"]': clerkInteractiveElement,
+    },
     card: {
       background:
         "linear-gradient(180deg, var(--ml-surface-panel-raised), var(--ml-surface-panel))",
@@ -87,8 +143,27 @@ export const clerkAppearance = {
       boxShadow: "0 24px 80px rgba(0, 0, 0, 0.48)",
       color: "var(--ml-ink-primary)",
     },
+    accountSwitcherActionButton: clerkActionElement,
+    accountSwitcherActionButtonIcon: clerkIconElement,
+    alternativeMethodsBlockButton: {
+      ...clerkInteractiveElement,
+      border:
+        "1px solid color-mix(in srgb, var(--ml-border-aged) 78%, var(--ml-accent-brass) 22%)",
+      borderRadius: "3px",
+    },
+    alternativeMethodsBlockButtonText: {
+      color: "currentColor",
+      fontWeight: 600,
+    },
+    badge: clerkBadgeElement,
     footerActionLink: {
       color: "var(--ml-accent-brass-strong)",
+      "&:hover": {
+        color: "var(--ml-clerk-hover-fg)",
+      },
+      "&:focus-visible": {
+        color: "var(--ml-clerk-hover-fg)",
+      },
     },
     formButtonPrimary: {
       backgroundColor: "var(--ml-accent-brass-strong)",
@@ -96,6 +171,7 @@ export const clerkAppearance = {
       color: "var(--ml-ink-on-paper)",
       fontWeight: 600,
     },
+    formButtonReset: clerkInteractiveElement,
     formFieldInput: {
       backgroundColor:
         "color-mix(in srgb, var(--ml-surface-panel-raised) 86%, black)",
@@ -110,23 +186,28 @@ export const clerkAppearance = {
     headerSubtitle: {
       color: "var(--ml-ink-muted)",
     },
+    lastAuthenticationStrategyBadge: clerkBadgeElement,
     headerTitle: {
       color: "var(--ml-ink-primary)",
       fontFamily: "var(--font-display), Georgia, serif",
       letterSpacing: "0.08em",
       textTransform: "uppercase",
     },
+    menuItem: clerkInteractiveElement,
     modalBackdrop: {
       backdropFilter: "blur(3px)",
       backgroundColor: "rgba(10, 8, 6, 0.82)",
     },
     modalCloseButton: {
+      ...clerkInteractiveElement,
       borderRadius: "3px",
-      color: "var(--ml-ink-muted)",
     },
     modalContent: {
       borderRadius: "4px",
     },
+    navbarButton: clerkInteractiveElement,
+    navbarButtonIcon: clerkIconElement,
+    notificationBadge: clerkBadgeElement,
     logoBox: {
       height: "3.1rem",
       justifyContent: "center",
@@ -138,19 +219,29 @@ export const clerkAppearance = {
       objectFit: "contain",
       width: "100%",
     },
+    organizationSwitcherPopoverActionButton: clerkActionElement,
+    organizationSwitcherPopoverActionButtonIcon: clerkIconElement,
+    paymentAttemptHeaderBadge: clerkBadgeElement,
+    paymentMethodRowBadge: clerkBadgeElement,
+    planDetailBadge: clerkBadgeElement,
+    pricingTableCardBadge: clerkBadgeElement,
+    pricingTableMatrixBadge: clerkBadgeElement,
+    selectOption: clerkInteractiveElement,
     socialButtonsBlockButton: {
+      ...clerkInteractiveElement,
       backgroundColor:
         "color-mix(in srgb, var(--ml-surface-panel-raised) 92%, var(--ml-accent-brass) 8%)",
       border:
         "1px solid color-mix(in srgb, var(--ml-border-aged) 78%, var(--ml-accent-brass) 22%)",
       borderRadius: "3px",
-      color: "var(--ml-ink-primary)",
       boxShadow: "inset 0 0 0 1px rgba(214, 199, 145, 0.05)",
     },
     socialButtonsBlockButtonText: {
-      color: "var(--ml-ink-primary)",
+      color: "currentColor",
       fontWeight: 600,
     },
+    statementHeaderBadge: clerkBadgeElement,
+    tabButton: clerkInteractiveElement,
     ...userButtonCompactElements,
   },
   layout: {

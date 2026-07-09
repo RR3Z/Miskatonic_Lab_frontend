@@ -68,6 +68,15 @@
   --ml-accent-danger: #8b211f;
   --ml-border-aged: #5d5231;
   --ml-border-subtle: #39352c;
+  --ml-clerk-badge-bg: #332d24;
+  --ml-clerk-badge-border: #746842;
+  --ml-clerk-badge-fg: #d8c783;
+  --ml-clerk-danger: #e06a61;
+  --ml-clerk-danger-bg: #3a201e;
+  --ml-clerk-danger-border: #99413b;
+  --ml-clerk-hover-bg: #3a3328;
+  --ml-clerk-hover-border: #8e8052;
+  --ml-clerk-hover-fg: #f0e8d8;
   --ml-focus-ring: #9e9a75;
   --font-mono: var(--font-code);
 
@@ -122,6 +131,15 @@
   --ml-accent-danger: #8b211f;
   --ml-border-aged: #9b9274;
   --ml-border-subtle: #c9c0aa;
+  --ml-clerk-badge-bg: #e4dcc8;
+  --ml-clerk-badge-border: #9b9274;
+  --ml-clerk-badge-fg: #4b4529;
+  --ml-clerk-danger: #9d2f2a;
+  --ml-clerk-danger-bg: #ead4d1;
+  --ml-clerk-danger-border: #b96962;
+  --ml-clerk-hover-bg: #ddd4bd;
+  --ml-clerk-hover-border: #8b815f;
+  --ml-clerk-hover-fg: #17140e;
   --ml-focus-ring: #7a7650;
   --font-mono: var(--font-code);
 
@@ -173,21 +191,87 @@
 
 @layer components {
   .cl-card .cl-socialButtonsBlockButton:hover,
-  .cl-card .cl-socialButtonsBlockButton:focus-visible {
+  .cl-card .cl-socialButtonsBlockButton:focus-visible,
+  .cl-card .cl-alternativeMethodsBlockButton:hover,
+  .cl-card .cl-alternativeMethodsBlockButton:focus-visible,
+  .cl-card .cl-formButtonReset:hover,
+  .cl-card .cl-formButtonReset:focus-visible,
+  .cl-card .cl-footerActionLink:hover,
+  .cl-card .cl-footerActionLink:focus-visible,
+  .cl-modalContent .cl-socialButtonsBlockButton:hover,
+  .cl-modalContent .cl-socialButtonsBlockButton:focus-visible,
+  .cl-modalContent .cl-alternativeMethodsBlockButton:hover,
+  .cl-modalContent .cl-alternativeMethodsBlockButton:focus-visible,
+  .cl-modalContent .cl-formButtonReset:hover,
+  .cl-modalContent .cl-formButtonReset:focus-visible,
+  .cl-modalContent .cl-footerActionLink:hover,
+  .cl-modalContent .cl-footerActionLink:focus-visible,
+  .cl-popoverBox .cl-userButtonPopoverActionButton:hover,
+  .cl-popoverBox .cl-userButtonPopoverActionButton:focus-visible,
+  .cl-popoverBox .cl-organizationSwitcherPopoverActionButton:hover,
+  .cl-popoverBox .cl-organizationSwitcherPopoverActionButton:focus-visible,
+  .cl-popoverBox .cl-menuItem:hover,
+  .cl-popoverBox .cl-menuItem:focus-visible,
+  .cl-userButtonPopoverCard .cl-userButtonPopoverActionButton:hover,
+  .cl-userButtonPopoverCard .cl-userButtonPopoverActionButton:focus-visible,
+  .cl-userButtonPopoverCard .cl-menuItem:hover,
+  .cl-userButtonPopoverCard .cl-menuItem:focus-visible {
     /* biome-ignore lint/complexity/noImportantStyles: Clerk applies higher-priority hover styles. */
-    background: var(--ml-accent-brass-strong) !important;
+    background: var(--ml-clerk-hover-bg) !important;
     /* biome-ignore lint/complexity/noImportantStyles: Clerk applies higher-priority hover styles. */
-    border-color: var(--ml-accent-brass-strong) !important;
+    border-color: var(--ml-clerk-hover-border) !important;
     /* biome-ignore lint/complexity/noImportantStyles: Clerk applies higher-priority hover styles. */
-    color: var(--ml-ink-on-paper) !important;
+    color: var(--ml-clerk-hover-fg) !important;
   }
 
   .cl-card .cl-socialButtonsBlockButton:hover .cl-socialButtonsBlockButtonText,
   .cl-card
     .cl-socialButtonsBlockButton:focus-visible
+    .cl-socialButtonsBlockButtonText,
+  .cl-modalContent
+    .cl-socialButtonsBlockButton:hover
+    .cl-socialButtonsBlockButtonText,
+  .cl-modalContent
+    .cl-socialButtonsBlockButton:focus-visible
     .cl-socialButtonsBlockButtonText {
     /* biome-ignore lint/complexity/noImportantStyles: Clerk applies higher-priority hover styles. */
-    color: var(--ml-ink-on-paper) !important;
+    color: var(--ml-clerk-hover-fg) !important;
+  }
+
+  .cl-card .cl-badge,
+  .cl-modalContent .cl-badge,
+  .cl-popoverBox .cl-badge,
+  .cl-userButtonPopoverCard .cl-badge {
+    /* biome-ignore lint/complexity/noImportantStyles: Clerk applies runtime badge colors. */
+    background: var(--ml-clerk-badge-bg) !important;
+    /* biome-ignore lint/complexity/noImportantStyles: Clerk applies runtime badge colors. */
+    border-color: var(--ml-clerk-badge-border) !important;
+    /* biome-ignore lint/complexity/noImportantStyles: Clerk applies runtime badge colors. */
+    color: var(--ml-clerk-badge-fg) !important;
+  }
+
+  .cl-card [data-color="danger"],
+  .cl-modalContent [data-color="danger"],
+  .cl-popoverBox [data-color="danger"],
+  .cl-userButtonPopoverCard [data-color="danger"] {
+    /* biome-ignore lint/complexity/noImportantStyles: Clerk applies runtime danger colors. */
+    color: var(--ml-clerk-danger) !important;
+  }
+
+  .cl-card button[data-color="danger"]:hover,
+  .cl-card button[data-color="danger"]:focus-visible,
+  .cl-modalContent button[data-color="danger"]:hover,
+  .cl-modalContent button[data-color="danger"]:focus-visible,
+  .cl-popoverBox button[data-color="danger"]:hover,
+  .cl-popoverBox button[data-color="danger"]:focus-visible,
+  .cl-userButtonPopoverCard button[data-color="danger"]:hover,
+  .cl-userButtonPopoverCard button[data-color="danger"]:focus-visible {
+    /* biome-ignore lint/complexity/noImportantStyles: Clerk applies runtime danger hover colors. */
+    background: var(--ml-clerk-danger-bg) !important;
+    /* biome-ignore lint/complexity/noImportantStyles: Clerk applies runtime danger hover colors. */
+    border-color: var(--ml-clerk-danger-border) !important;
+    /* biome-ignore lint/complexity/noImportantStyles: Clerk applies runtime danger hover colors. */
+    color: var(--ml-clerk-danger) !important;
   }
 }
 
