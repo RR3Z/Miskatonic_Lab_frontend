@@ -26,15 +26,15 @@ export function SiteHeader() {
   const pathname = usePathname()
 
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between gap-4 border-b border-[var(--ml-border-aged)] bg-[var(--ml-bg-page)]/35 px-4 py-1.5 text-[var(--ml-ink-muted)] sm:px-8 sm:py-2.5">
+    <header className="sticky top-0 z-30 flex items-center justify-between gap-4 border-b border-[var(--ml-border-aged)] bg-[var(--ml-bg-page)]/35 px-4 py-1.5 text-[var(--ml-ink-muted)] sm:grid sm:grid-cols-[1fr_auto_1fr] sm:px-8 sm:py-2.5">
       <Link
         aria-label="Miskatonic Lab home"
-        className="inline-flex w-32 shrink-0 sm:w-36"
+        className="inline-flex w-32 shrink-0 sm:w-36 sm:justify-self-start"
         href={appRoutes.home}
       >
         <BrandMark />
       </Link>
-      <nav className="flex items-center gap-6">
+      <nav className="flex items-center gap-6 sm:justify-self-center">
         {navLinks.map((link) => {
           const Icon = link.icon
           const isActive =
@@ -83,7 +83,9 @@ export function SiteHeader() {
           return null
         })}
       </nav>
-      <HeaderAuth>{landingContent.header.signIn}</HeaderAuth>
+      <div className="sm:justify-self-end">
+        <HeaderAuth>{landingContent.header.signIn}</HeaderAuth>
+      </div>
     </header>
   )
 }
