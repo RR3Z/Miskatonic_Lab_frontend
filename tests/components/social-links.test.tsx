@@ -4,8 +4,16 @@ import { describe, expect, it } from "vitest"
 import { SocialLinks } from "@/components/social/social-links"
 
 const testLinks = [
-  { href: "https://t.me/test", icon: { src: "/telegram.svg", height: 36, width: 36 } as never, label: "Telegram @test" },
-  { href: "https://github.com/test", icon: { src: "/github.svg", height: 36, width: 36 } as never, label: "GitHub test" },
+  {
+    href: "https://t.me/test",
+    icon: { src: "/telegram.svg", height: 36, width: 36 } as never,
+    label: "Telegram @test",
+  },
+  {
+    href: "https://github.com/test",
+    icon: { src: "/github.svg", height: 36, width: 36 } as never,
+    label: "GitHub test",
+  },
 ]
 
 describe("SocialLinks", () => {

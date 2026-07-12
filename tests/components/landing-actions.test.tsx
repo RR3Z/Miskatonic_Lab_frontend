@@ -20,9 +20,7 @@ describe("LandingActions", () => {
 
     render(<LandingActions />)
 
-    expect(
-      screen.getByRole("button", { name: /открыть архив/i }),
-    ).toBeVisible()
+    expect(screen.getByRole("button", { name: /открыть архив/i })).toBeVisible()
     expect(
       screen.getByRole("button", { name: /создать сыщика/i }),
     ).toBeVisible()

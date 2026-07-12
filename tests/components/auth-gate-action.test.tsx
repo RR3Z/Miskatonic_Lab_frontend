@@ -18,9 +18,7 @@ describe("AuthGateAction", () => {
   it("renders link when signed in", () => {
     clerkState.signedIn = true
 
-    render(
-      <AuthGateAction href="/characters">Открыть архив</AuthGateAction>,
-    )
+    render(<AuthGateAction href="/characters">Открыть архив</AuthGateAction>)
 
     const link = screen.getByRole("link", { name: /открыть архив/i })
     expect(link).toHaveAttribute("href", "/characters")
@@ -29,9 +27,7 @@ describe("AuthGateAction", () => {
   it("renders sign-in button when signed out", () => {
     clerkState.signedIn = false
 
-    render(
-      <AuthGateAction href="/characters">Открыть архив</AuthGateAction>,
-    )
+    render(<AuthGateAction href="/characters">Открыть архив</AuthGateAction>)
 
     const button = screen.getByRole("button", { name: /открыть архив/i })
     expect(button).toBeInTheDocument()

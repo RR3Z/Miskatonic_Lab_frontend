@@ -13,9 +13,7 @@ describe("LandingFooter", () => {
   it("renders legal notice", () => {
     render(<LandingFooter />)
 
-    expect(
-      screen.getByText(/Все права защищены/),
-    ).toBeVisible()
+    expect(screen.getByText(/Все права защищены/)).toBeVisible()
   })
 
   it("renders Telegram and GitHub links", () => {
@@ -24,8 +22,9 @@ describe("LandingFooter", () => {
     expect(
       screen.getByRole("link", { name: /telegram @roger3z/i }),
     ).toHaveAttribute("href", "https://t.me/RogeR3Z")
-    expect(
-      screen.getByRole("link", { name: /github rr3z/i }),
-    ).toHaveAttribute("href", "https://github.com/RR3Z")
+    expect(screen.getByRole("link", { name: /github rr3z/i })).toHaveAttribute(
+      "href",
+      "https://github.com/RR3Z",
+    )
   })
 })
