@@ -13,6 +13,7 @@ type AuthGateActionProps = VariantProps<typeof buttonVariants> & {
   children: React.ReactNode
   className?: string
   href: string
+  onNavigate?: React.MouseEventHandler<HTMLAnchorElement>
 }
 
 export function AuthGateAction({
@@ -20,6 +21,7 @@ export function AuthGateAction({
   children,
   className,
   href,
+  onNavigate,
   size,
   variant,
 }: AuthGateActionProps) {
@@ -28,7 +30,7 @@ export function AuthGateAction({
   if (isSignedIn) {
     return (
       <Button asChild className={className} size={size} variant={variant}>
-        <Link aria-current={ariaCurrent} href={href}>
+        <Link aria-current={ariaCurrent} href={href} onClick={onNavigate}>
           {children}
         </Link>
       </Button>
