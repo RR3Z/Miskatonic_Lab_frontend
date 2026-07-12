@@ -273,6 +273,74 @@
     /* biome-ignore lint/complexity/noImportantStyles: Clerk applies runtime danger hover colors. */
     color: var(--ml-clerk-danger) !important;
   }
+
+  @media (max-width: 47.999rem) {
+    .cl-modalContent {
+      border-radius: 4px;
+      margin: auto;
+      max-height: calc(100dvh - 1rem);
+      max-width: calc(100vw - 1rem);
+      overflow-x: hidden;
+      overflow-y: auto;
+      width: calc(100vw - 1rem);
+    }
+
+    .cl-modalContent .cl-profileSectionPrimaryButton {
+      box-shadow: inset 0 0 0 1px rgba(214, 199, 145, 0.04);
+      /* biome-ignore lint/complexity/noImportantStyles: Clerk applies per-action alignment. */
+      justify-content: center !important;
+      text-align: center;
+    }
+
+    .cl-modalContent .cl-profileSectionButtonGroup {
+      /* biome-ignore lint/complexity/noImportantStyles: Clerk applies justify-between at runtime. */
+      justify-content: center !important;
+      width: 100%;
+    }
+
+    .cl-modalContent .cl-profileSectionItem {
+      /* biome-ignore lint/complexity/noImportantStyles: Clerk applies runtime row backgrounds. */
+      background: transparent !important;
+      /* biome-ignore lint/complexity/noImportantStyles: Clerk applies runtime row borders. */
+      border: 0 !important;
+    }
+
+    .cl-modalContent .cl-profileSectionPrimaryButton:hover,
+    .cl-modalContent .cl-profileSectionPrimaryButton:focus-visible,
+    .cl-modalContent .cl-menuButton:hover,
+    .cl-modalContent .cl-menuButton:focus-visible {
+      /* biome-ignore lint/complexity/noImportantStyles: Clerk applies runtime action styles. */
+      background: var(--ml-clerk-hover-bg) !important;
+      /* biome-ignore lint/complexity/noImportantStyles: Clerk applies runtime action styles. */
+      border-color: var(--ml-clerk-hover-border) !important;
+      /* biome-ignore lint/complexity/noImportantStyles: Clerk applies runtime action styles. */
+      color: var(--ml-clerk-hover-fg) !important;
+    }
+
+    .cl-modalContent .cl-cardBox,
+    .cl-modalContent .cl-card {
+      max-width: 100%;
+      width: 100%;
+    }
+
+    .cl-modalContent .cl-logoBox {
+      height: 2.4rem;
+      margin-bottom: 0.4rem;
+      width: 8.5rem;
+    }
+
+    .cl-modalContent button:not(.cl-modalCloseButton),
+    .cl-modalContent input {
+      min-height: 2.75rem;
+    }
+
+    .cl-modalContent .cl-modalCloseButton {
+      position: absolute;
+      right: 0.5rem;
+      top: 0.5rem;
+      z-index: 2;
+    }
+  }
 }
 
 @layer utilities {

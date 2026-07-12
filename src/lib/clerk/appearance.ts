@@ -194,6 +194,15 @@ export const clerkAppearance = {
       textTransform: "uppercase",
     },
     menuItem: clerkInteractiveElement,
+    menuButton: {
+      ...clerkInteractiveElement,
+      backgroundColor:
+        "color-mix(in srgb, var(--ml-surface-panel-raised) 88%, transparent)",
+      border: "1px solid var(--ml-border-aged)",
+      borderRadius: "3px",
+      minHeight: "2.25rem",
+      minWidth: "2.25rem",
+    },
     modalBackdrop: {
       backdropFilter: "blur(3px)",
       backgroundColor: "rgba(10, 8, 6, 0.82)",
@@ -226,6 +235,32 @@ export const clerkAppearance = {
     planDetailBadge: clerkBadgeElement,
     pricingTableCardBadge: clerkBadgeElement,
     pricingTableMatrixBadge: clerkBadgeElement,
+    profileSectionButtonGroup: {
+      justifyContent: "center",
+      width: "100%",
+    },
+    profileSectionItem: {
+      backgroundColor: "transparent",
+      border: "none",
+      minHeight: "3rem",
+      padding: "0.55rem 0.65rem",
+    },
+    profileSectionPrimaryButton: {
+      ...clerkInteractiveElement,
+      backgroundColor:
+        "color-mix(in srgb, var(--ml-surface-panel-raised) 88%, transparent)",
+      border: "1px solid var(--ml-border-aged)",
+      borderRadius: "3px",
+      color: "var(--ml-accent-brass-strong)",
+      fontWeight: 600,
+      justifyContent: "center",
+      minHeight: "2.5rem",
+      padding: "0.5rem 0.75rem",
+    },
+    profileSectionTitleText: {
+      color: "var(--ml-ink-primary)",
+      fontWeight: 600,
+    },
     selectOption: clerkInteractiveElement,
     socialButtonsBlockButton: {
       ...clerkInteractiveElement,
