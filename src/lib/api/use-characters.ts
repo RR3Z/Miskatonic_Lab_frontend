@@ -7,11 +7,12 @@ import { fetchCharacters } from "@/lib/api/characters"
 import { createApiClient } from "@/lib/api/client"
 
 export function useCharacters() {
-  const { getToken } = useAuth()
+  const { getToken, isLoaded, isSignedIn } = useAuth()
   const api = useMemo(() => createApiClient(getToken), [getToken])
 
   return useQuery({
     queryKey: ["characters"],
     queryFn: () => fetchCharacters(api),
+    enabled: isLoaded && isSignedIn,
   })
 }
