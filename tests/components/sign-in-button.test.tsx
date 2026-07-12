@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
 import type * as React from "react"
 import { describe, expect, it, vi } from "vitest"
 
@@ -36,5 +37,15 @@ describe("CustomSignInButton", () => {
 
     const button = container.querySelector('[data-slot="button"]')
     expect(button).toHaveClass("custom-class")
+  })
+
+  it("passes click handler to Button", async () => {
+    const onClick = vi.fn()
+    const user = userEvent.setup()
+    render(<CustomSignInButton onClick={onClick}>Войти</CustomSignInButton>)
+
+    await user.click(screen.getByRole("button", { name: /войти/i }))
+
+    expect(onClick).toHaveBeenCalledOnce()
   })
 })
