@@ -7,7 +7,7 @@ export function LandingMarquee() {
   return (
     <InfiniteMarquee
       aria-label={landingContent.marquee.ariaLabel}
-      className="relative z-10 w-full border-[color-mix(in_srgb,var(--ml-border-subtle)_52%,transparent)] border-y bg-[rgba(16,14,12,0.34)] py-1.5 sm:py-3"
+      className="relative z-10 mb-[clamp(1rem,4vh,3rem)] w-full border-[color-mix(in_srgb,var(--ml-border-subtle)_52%,transparent)] border-y bg-[rgba(16,14,12,0.34)] py-1.5 sm:py-3"
       durationSeconds={marqueeDurationSeconds}
       items={landingContent.marquee.items}
       separator={
