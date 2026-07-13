@@ -36,7 +36,7 @@ describe("LandingActions", () => {
     ).toHaveAttribute("href", "/characters")
     expect(
       screen.getByRole("link", { name: /создать сыщика/i }),
-    ).toHaveAttribute("href", "/characters/new")
+    ).toHaveAttribute("href", "/characters?create=1")
   })
 
   it("accepts className and actionClassName props", () => {

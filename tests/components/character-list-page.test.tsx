@@ -11,6 +11,8 @@ import { server } from "../mocks/server"
 const mocks = vi.hoisted(() => ({
   getToken: vi.fn(async () => "test-token"),
   toastError: vi.fn(),
+  toastSuccess: vi.fn(),
+  toastWarning: vi.fn(),
 }))
 
 vi.mock("@clerk/nextjs", () => ({
@@ -22,7 +24,11 @@ vi.mock("@clerk/nextjs", () => ({
 }))
 
 vi.mock("sonner", () => ({
-  toast: { error: mocks.toastError },
+  toast: {
+    error: mocks.toastError,
+    success: mocks.toastSuccess,
+    warning: mocks.toastWarning,
+  },
 }))
 
 function renderWithQuery(ui: React.ReactNode) {
@@ -51,9 +57,20 @@ function apiCharacter(id = "character-1") {
 describe("CharacterListPage", () => {
   beforeEach(() => {
     mocks.toastError.mockClear()
+    mocks.toastSuccess.mockClear()
+    mocks.toastWarning.mockClear()
+    window.history.replaceState({}, "", "/")
+    Object.defineProperty(URL, "createObjectURL", {
+      configurable: true,
+      value: vi.fn(() => "blob:portrait-preview"),
+    })
+    Object.defineProperty(URL, "revokeObjectURL", {
+      configurable: true,
+      value: vi.fn(),
+    })
   })
 
-  it("renders fetched characters and keeps disabled create card last", async () => {
+  it("renders fetched characters and keeps active create card last", async () => {
     server.use(
       http.get("http://localhost:8000/api/characters/", () =>
         HttpResponse.json([apiCharacter()]),
@@ -66,7 +83,7 @@ describe("CharacterListPage", () => {
     })
     const buttons = screen.getAllByRole("button")
     expect(buttons.at(-1)).toHaveTextContent("Создать нового сыщика")
-    expect(buttons.at(-1)).toBeDisabled()
+    expect(buttons.at(-1)).toBeEnabled()
   })
 
   it("shows only 0/30 and create card for an empty list", async () => {
@@ -84,11 +101,11 @@ describe("CharacterListPage", () => {
       screen.queryByText("У вас пока нет персонажей"),
     ).not.toBeInTheDocument()
     expect(
-      screen.getByRole("button", { name: /создать нового сыщика/i }),
-    ).toBeDisabled()
+      await screen.findByRole("button", { name: /создать нового сыщика/i }),
+    ).toBeEnabled()
   })
 
-  it("shows the disabled limit card at 30/30", async () => {
+  it("hides the create card and disables the red header action at 30/30", async () => {
     server.use(
       http.get("http://localhost:8000/api/characters/", () =>
         HttpResponse.json(
@@ -103,9 +120,145 @@ describe("CharacterListPage", () => {
     await screen.findByRole("heading", {
       name: /список персонажей \(30\/30\)/i,
     })
+    const limitButton = screen.getByRole("button", {
+      name: /создание персонажа недоступно: достигнут лимит/i,
+    })
+    expect(limitButton).toBeDisabled()
+    expect(limitButton).toHaveAttribute("data-variant", "destructive")
     expect(
-      screen.getByRole("button", { name: /достигнут лимит персонажей/i }),
-    ).toBeDisabled()
+      screen.queryByRole("button", { name: /создать нового сыщика/i }),
+    ).not.toBeInTheDocument()
+  })
+
+  it("creates a character from the modal and refreshes the list", async () => {
+    const user = userEvent.setup()
+    let created = false
+    server.use(
+      http.get("http://localhost:8000/api/characters/", () =>
+        HttpResponse.json(created ? [apiCharacter("created-character")] : []),
+      ),
+      http.post(
+        "http://localhost:8000/api/characters/",
+        async ({ request }) => {
+          const body = (await request.json()) as {
+            name: string
+            age: number | null
+            sex: string | null
+          }
+          expect(body).toEqual({ name: "Армитедж", age: 56, sex: "male" })
+          created = true
+          return HttpResponse.json(
+            {
+              id: "created-character",
+              name: body.name,
+              age: body.age,
+              sex: body.sex,
+              portrait_url: null,
+            },
+            { status: 201 },
+          )
+        },
+      ),
+    )
+    renderWithQuery(<CharacterListPage />)
+
+    await user.click(
+      await screen.findByRole("button", { name: /создать нового сыщика/i }),
+    )
+    expect(
+      screen.getByRole("dialog", { name: /новый персонаж/i }),
+    ).toBeVisible()
+
+    await user.type(screen.getByLabelText("Имя"), "Армитедж")
+    await user.selectOptions(screen.getByLabelText("Пол"), "male")
+    await user.type(screen.getByLabelText("Возраст"), "56")
+    await user.click(screen.getByRole("button", { name: "Создать персонажа" }))
+
+    await screen.findByRole("heading", {
+      name: /список персонажей \(1\/30\)/i,
+    })
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
+    expect(mocks.toastSuccess).toHaveBeenCalledWith("Персонаж создан")
+  })
+
+  it("marks only the name as required and shows creation placeholders", async () => {
+    const user = userEvent.setup()
+    server.use(
+      http.get("http://localhost:8000/api/characters/", () =>
+        HttpResponse.json([]),
+      ),
+    )
+    renderWithQuery(<CharacterListPage />)
+
+    await user.click(
+      await screen.findByRole("button", { name: /создать нового сыщика/i }),
+    )
+
+    const name = screen.getByLabelText("Имя")
+    const age = screen.getByLabelText("Возраст")
+    const sex = screen.getByLabelText("Пол")
+    const portrait = screen.getByLabelText("Выбрать изображение")
+    expect(name).toBeRequired()
+    expect(name).toHaveAttribute("placeholder", "Например, Харви Уолтерс")
+    expect(age).not.toBeRequired()
+    expect(age).toHaveAttribute("placeholder", "Например, 42")
+    expect(sex).not.toBeRequired()
+    expect(portrait).not.toBeRequired()
+  })
+
+  it("accepts a portrait file and shows the selected state", async () => {
+    const user = userEvent.setup()
+    server.use(
+      http.get("http://localhost:8000/api/characters/", () =>
+        HttpResponse.json([]),
+      ),
+      http.post("http://localhost:8000/api/characters/", () =>
+        HttpResponse.json(
+          {
+            id: "portrait-character",
+            name: "Лавиния",
+            age: null,
+            sex: "female",
+            portrait_url: null,
+          },
+          { status: 201 },
+        ),
+      ),
+      http.patch(
+        "http://localhost:8000/api/characters/portrait-character/",
+        async ({ request }) => {
+          const form = await request.formData()
+          const portrait = form.get("portrait")
+          expect(portrait).not.toBeNull()
+          expect((portrait as File).type).toBe("image/png")
+          return HttpResponse.json({
+            id: "portrait-character",
+            name: "Лавиния",
+            age: null,
+            sex: "female",
+            portrait_url:
+              "http://localhost:8000/uploads/portraits/portrait.png",
+          })
+        },
+      ),
+    )
+    renderWithQuery(<CharacterListPage />)
+
+    await user.click(
+      await screen.findByRole("button", { name: /создать нового сыщика/i }),
+    )
+    await user.type(screen.getByLabelText("Имя"), "Лавиния")
+    await user.selectOptions(screen.getByLabelText("Пол"), "female")
+    await user.upload(
+      screen.getByLabelText("Выбрать изображение"),
+      new File([new Uint8Array([0x89, 0x50, 0x4e, 0x47])], "portrait.png", {
+        type: "image/png",
+      }),
+    )
+    expect(URL.createObjectURL).toHaveBeenCalledOnce()
+    expect(
+      screen.getByRole("button", { name: "Удалить выбранный портрет" }),
+    ).toBeVisible()
   })
 
   it("reports list loading failure through a deduplicated Sonner toast", async () => {

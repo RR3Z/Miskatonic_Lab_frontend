@@ -7,7 +7,9 @@ describe("LandingMarquee", () => {
   it("renders with aria-label", () => {
     render(<LandingMarquee />)
 
-    expect(screen.getByLabelText("Возможности Miskatonic Lab")).toBeVisible()
+    expect(screen.getByLabelText("Возможности Miskatonic Lab")).toHaveClass(
+      "mb-[clamp(1rem,4vh,3rem)]",
+    )
   })
 
   it("renders all marquee items", () => {

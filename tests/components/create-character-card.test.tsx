@@ -1,22 +1,20 @@
 import { render, screen } from "@testing-library/react"
-import { describe, expect, it } from "vitest"
+import userEvent from "@testing-library/user-event"
+import { describe, expect, it, vi } from "vitest"
 
 import { CreateCharacterCard } from "@/components/character/create-character-card"
 
 describe("CreateCharacterCard", () => {
-  it("stays disabled before creation flow exists", () => {
-    render(<CreateCharacterCard />)
+  it("opens the creation flow", async () => {
+    const user = userEvent.setup()
+    const onCreate = vi.fn()
+    render(<CreateCharacterCard onCreate={onCreate} />)
 
     const card = screen.getByRole("button", { name: /создать нового сыщика/i })
-    expect(card).toBeDisabled()
+    expect(card).toBeEnabled()
     expect(card).toHaveClass("h-[104px]")
-  })
 
-  it("shows the limit label at 30 characters", () => {
-    render(<CreateCharacterCard atLimit />)
-
-    expect(
-      screen.getByRole("button", { name: /достигнут лимит персонажей/i }),
-    ).toBeDisabled()
+    await user.click(card)
+    expect(onCreate).toHaveBeenCalledOnce()
   })
 })
