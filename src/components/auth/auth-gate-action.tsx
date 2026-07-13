@@ -38,7 +38,12 @@ export function AuthGateAction({
   }
 
   return (
-    <CustomSignInButton className={className} size={size} variant={variant}>
+    <CustomSignInButton
+      className={className}
+      forceRedirectUrl={href}
+      size={size}
+      variant={variant}
+    >
       {children}
     </CustomSignInButton>
   )

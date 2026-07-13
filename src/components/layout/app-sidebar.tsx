@@ -92,7 +92,7 @@ export function AppSidebar() {
                 if (item.kind === "auth" && !isSignedIn) {
                   return (
                     <SidebarMenuItem key={item.label}>
-                      <SignInButton mode="modal">
+                      <SignInButton forceRedirectUrl={item.href} mode="modal">
                         <SidebarMenuButton
                           disabled={!isLoaded}
                           onClick={closeSidebar}

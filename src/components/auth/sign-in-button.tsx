@@ -9,18 +9,20 @@ import { Button } from "@/components/ui/button"
 type SignInButtonLabProps = VariantProps<typeof buttonVariants> & {
   children: React.ReactNode
   className?: string
+  forceRedirectUrl?: string
   onClick?: React.MouseEventHandler<HTMLButtonElement>
 }
 
 export function CustomSignInButton({
   children,
   className,
+  forceRedirectUrl,
   onClick,
   size,
   variant,
 }: SignInButtonLabProps) {
   return (
-    <SignInButton mode="modal">
+    <SignInButton forceRedirectUrl={forceRedirectUrl} mode="modal">
       <Button
         className={className}
         onClick={onClick}
