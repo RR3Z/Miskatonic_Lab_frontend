@@ -29,8 +29,8 @@ type SidebarUserControlsProps = {
 export function SidebarUserControls({ signInLabel }: SidebarUserControlsProps) {
   const { openUserProfile } = useClerk()
   const { isLoaded, isSignedIn, user } = useUser()
-  const { setOpenMobile } = useSidebar()
-  const closeMobileSidebar = () => setOpenMobile(false)
+  const { isMobile, setOpen, setOpenMobile } = useSidebar()
+  const closeSidebar = () => (isMobile ? setOpenMobile(false) : setOpen(false))
 
   if (!isLoaded) {
     return <SidebarMenuSkeleton showIcon />
@@ -42,7 +42,8 @@ export function SidebarUserControls({ signInLabel }: SidebarUserControlsProps) {
         <SidebarMenuItem>
           <SignInButton mode="modal">
             <SidebarMenuButton
-              onClick={closeMobileSidebar}
+              className="cursor-pointer"
+              onClick={closeSidebar}
               tooltip={signInLabel}
             >
               <LogIn aria-hidden="true" />
@@ -58,10 +59,14 @@ export function SidebarUserControls({ signInLabel }: SidebarUserControlsProps) {
 
   return (
     <SidebarMenu>
-      <SidebarMenuItem>
+      <SidebarMenuItem
+        className="flex items-center gap-1"
+        data-slot="sidebar-user-row"
+      >
         <SidebarMenuButton
+          className="min-w-0 flex-1 cursor-pointer text-[1.05rem]"
           onClick={() =>
-            openProfileAfterNavigation(closeMobileSidebar, openUserProfile)
+            openProfileAfterNavigation(closeSidebar, openUserProfile)
           }
           size="lg"
           tooltip={displayName}
@@ -70,6 +75,7 @@ export function SidebarUserControls({ signInLabel }: SidebarUserControlsProps) {
             appearance={{
               elements: {
                 avatarBox: {
+                  cursor: "pointer",
                   height: "1.5rem",
                   width: "1.5rem",
                 },
@@ -78,16 +84,14 @@ export function SidebarUserControls({ signInLabel }: SidebarUserControlsProps) {
           />
           <span>{displayName}</span>
         </SidebarMenuButton>
-      </SidebarMenuItem>
-      <SidebarMenuItem>
         <SignOutButton redirectUrl={appRoutes.home}>
           <SidebarMenuButton
-            className="text-[var(--ml-clerk-danger)] hover:bg-[var(--ml-clerk-danger-bg)] hover:text-[var(--ml-clerk-danger)]"
-            onClick={closeMobileSidebar}
-            tooltip="Выйти"
+            aria-label="Выйти"
+            className="size-9 w-9! shrink-0 cursor-pointer justify-center gap-0 p-0! text-[var(--ml-clerk-danger)] hover:bg-[var(--ml-clerk-danger-bg)] hover:text-[var(--ml-clerk-danger)] group-data-[collapsible=icon]:hidden"
+            onClick={closeSidebar}
+            tooltip={{ children: "Выйти", hidden: false }}
           >
             <LogOut aria-hidden="true" />
-            <span>Выйти</span>
           </SidebarMenuButton>
         </SignOutButton>
       </SidebarMenuItem>

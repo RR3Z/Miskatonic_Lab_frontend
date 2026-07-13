@@ -1,6 +1,7 @@
 "use client"
 
 import { SignInButton, useUser } from "@clerk/nextjs"
+import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -17,13 +18,11 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar"
 import { landingContent } from "@/lib/content/landing.content"
@@ -32,8 +31,8 @@ import { appRoutes } from "@/lib/routes/app-routes"
 export function AppSidebar() {
   const pathname = usePathname()
   const { isLoaded, isSignedIn } = useUser()
-  const { setOpenMobile } = useSidebar()
-  const closeMobileSidebar = () => setOpenMobile(false)
+  const { isMobile, setOpen, setOpenMobile } = useSidebar()
+  const closeSidebar = () => (isMobile ? setOpenMobile(false) : setOpen(false))
 
   return (
     <Sidebar collapsible="icon">
@@ -42,18 +41,23 @@ export function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="h-12"
+              className="h-12 justify-center"
               size="lg"
               tooltip="Miskatonic Lab"
             >
               <Link
                 aria-label="Miskatonic Lab home"
                 href={appRoutes.home}
-                onClick={closeMobileSidebar}
+                onClick={closeSidebar}
               >
-                <span className="hidden size-7 shrink-0 items-center justify-center rounded-md border border-[var(--ml-border-aged)] font-heading text-xs font-semibold group-data-[collapsible=icon]:flex">
-                  ML
-                </span>
+                <Image
+                  alt=""
+                  className="hidden size-7 shrink-0 rounded-md group-data-[collapsible=icon]:block"
+                  data-slot="sidebar-favicon"
+                  height={28}
+                  src="/favicon-48.png"
+                  width={28}
+                />
                 <BrandMark className="w-36 group-data-[collapsible=icon]:hidden" />
               </Link>
             </SidebarMenuButton>
@@ -63,7 +67,6 @@ export function AppSidebar() {
 
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Навигация</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {navigationItems.map((item) => {
@@ -92,7 +95,7 @@ export function AppSidebar() {
                       <SignInButton mode="modal">
                         <SidebarMenuButton
                           disabled={!isLoaded}
-                          onClick={closeMobileSidebar}
+                          onClick={closeSidebar}
                           tooltip={item.label}
                         >
                           <Icon aria-hidden="true" />
@@ -113,7 +116,7 @@ export function AppSidebar() {
                       <Link
                         aria-current={isActive ? "page" : undefined}
                         href={item.href}
-                        onClick={closeMobileSidebar}
+                        onClick={closeSidebar}
                       >
                         <Icon aria-hidden="true" />
                         <span>{item.label}</span>
@@ -131,7 +134,6 @@ export function AppSidebar() {
         <SidebarUserControls signInLabel={landingContent.header.signIn} />
         <SidebarSiteFooter />
       </SidebarFooter>
-      <SidebarRail />
     </Sidebar>
   )
 }
