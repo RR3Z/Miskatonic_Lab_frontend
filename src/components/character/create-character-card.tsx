@@ -1,40 +1,39 @@
-"use client"
+import { UserPlus } from "lucide-react"
+import Image from "next/image"
 
-import { SignInButton, useUser } from "@clerk/nextjs"
-import { Plus } from "lucide-react"
+import cardTentacle from "../../../assets/character-card-tentacle.svg"
 
 const cardClassName =
-  "flex min-h-40 w-full flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed border-[var(--ml-border-subtle)] bg-transparent p-6 transition"
+  "relative flex h-[104px] w-full items-center justify-center gap-2 overflow-hidden rounded-md border border-[var(--ml-border-subtle)] bg-[var(--ml-surface-panel)] p-4 transition"
 
-export function CreateCharacterCard() {
-  const { isSignedIn } = useUser()
+type CreateCharacterCardProps = {
+  atLimit?: boolean
+}
 
-  if (isSignedIn) {
-    return (
-      <button
-        className={`${cardClassName} cursor-not-allowed opacity-40`}
-        disabled
-        type="button"
-      >
-        <Plus className="size-8 text-[var(--ml-ink-muted)]" />
-        <span className="font-body text-sm text-[var(--ml-ink-muted)]">
-          Создание персонажа — скоро
-        </span>
-      </button>
-    )
-  }
+export function CreateCharacterCard({
+  atLimit = false,
+}: CreateCharacterCardProps) {
+  const label = atLimit ? "Достигнут лимит персонажей" : "Создать нового сыщика"
 
   return (
-    <SignInButton mode="modal">
-      <button
-        className={`${cardClassName} cursor-pointer hover:border-[var(--ml-border-aged)] hover:bg-[var(--ml-surface-panel)]`}
-        type="button"
-      >
-        <Plus className="size-8 text-[var(--ml-ink-muted)]" />
-        <span className="font-body text-sm text-[var(--ml-ink-muted)]">
-          Создать нового сыщика
-        </span>
-      </button>
-    </SignInButton>
+    <button
+      aria-label={`${label} — скоро`}
+      className={`${cardClassName} cursor-not-allowed disabled:opacity-75`}
+      disabled
+      type="button"
+    >
+      <Image
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.11]"
+        fill
+        sizes="(min-width: 1536px) 25vw, (min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
+        src={cardTentacle}
+      />
+      <UserPlus className="relative size-6 shrink-0 text-[var(--ml-ink-primary)]" />
+      <span className="relative font-heading text-lg text-[var(--ml-ink-primary)]">
+        {label}
+      </span>
+    </button>
   )
 }

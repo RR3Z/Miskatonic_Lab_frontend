@@ -2,9 +2,14 @@ import type { LucideIcon } from "lucide-react"
 import type { StaticImageData } from "next/image"
 import Image from "next/image"
 
+import { cn } from "@/lib/utils/cn.util"
+
 type CharacterStatProps = {
   icon?: LucideIcon
   image?: StaticImageData
+  iconClassName?: string
+  imageClassName?: string
+  imageFilter?: string
   current: number
   max: number
   label: string
@@ -13,6 +18,9 @@ type CharacterStatProps = {
 export function CharacterStat({
   icon,
   image,
+  iconClassName,
+  imageClassName,
+  imageFilter,
   current,
   max,
   label,
@@ -20,20 +28,24 @@ export function CharacterStat({
   const Icon = icon
 
   return (
-    <div className="flex items-center gap-1.5" title={label}>
+    <div className="flex min-w-0 items-center gap-1" title={label}>
       {image ? (
         <Image
           alt=""
           aria-hidden="true"
-          className="size-4 opacity-70"
-          height={16}
+          className={cn("size-5 shrink-0", imageClassName)}
+          height={20}
           src={image}
-          width={16}
+          style={imageFilter ? { filter: imageFilter } : undefined}
+          width={20}
         />
       ) : Icon ? (
-        <Icon aria-hidden="true" className="size-4 opacity-70" />
+        <Icon
+          aria-hidden="true"
+          className={cn("size-5 shrink-0", iconClassName)}
+        />
       ) : null}
-      <span className="font-body text-xs text-[var(--ml-ink-muted)] tabular-nums">
+      <span className="whitespace-nowrap font-body text-xs text-[var(--ml-ink-primary)] tabular-nums">
         {current}/{max}
       </span>
     </div>
