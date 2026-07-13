@@ -41,9 +41,6 @@ export function CharacterDeleteDialog({
     try {
       await onDelete(character.id)
       onOpenChange(false)
-      toast.success(`Персонаж «${character.name}» удалён`, {
-        id: `character-delete-success-${character.id}`,
-      })
     } catch {
       toast.error("Не удалось удалить персонажа. Попробуйте ещё раз.", {
         id: `character-delete-error-${character.id}`,

@@ -61,8 +61,6 @@ export function CreateCharacterForm({
 
       if (result.portraitStatus === "failed") {
         toast.warning("Персонаж создан, но портрет загрузить не удалось")
-      } else {
-        toast.success("Персонаж создан")
       }
 
       onCompleted()
