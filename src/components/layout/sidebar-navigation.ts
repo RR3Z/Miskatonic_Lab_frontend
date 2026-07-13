@@ -6,7 +6,6 @@ import { appRoutes } from "@/lib/routes/app-routes"
 type NavigationItemBase = {
   icon: LucideIcon
   label: string
-  visibility: "all" | "mobile"
 }
 
 export type NavigationItem =
@@ -29,21 +28,18 @@ export const navigationItems: readonly NavigationItem[] = [
     icon: House,
     kind: "link",
     label: "Главная",
-    visibility: "mobile",
   },
   {
     badge: "WIP",
     icon: BookOpenText,
     kind: "disabled",
     label: "Справочник",
-    visibility: "all",
   },
   {
     href: appRoutes.characters,
     icon: UsersRound,
     kind: "auth",
     label: "Список персонажей",
-    visibility: "all",
   },
 ]
 
@@ -58,11 +54,4 @@ export function isNavigationItemActive(
   return item.href === appRoutes.home
     ? pathname === appRoutes.home
     : pathname.startsWith(item.href)
-}
-
-export function isNavigationItemVisible(
-  item: NavigationItem,
-  variant: "desktop" | "mobile",
-) {
-  return item.visibility === "all" || variant === "mobile"
 }

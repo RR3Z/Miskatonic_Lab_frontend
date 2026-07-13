@@ -1,14 +1,14 @@
-import { LandingBackground } from "@/components/landing/landing-background"
-import { Button } from "@/components/ui/button"
-import { appRoutes } from "@/lib/routes/app-routes"
 import { House } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { LandingBackground } from "@/components/landing/landing-background"
+import { Button } from "@/components/ui/button"
+import { appRoutes } from "@/lib/routes/app-routes"
 import cthulhu from "../../../assets/symbols/esoteric/cthulhu.svg"
 
 export function NotFoundPage() {
   return (
-    <main className="relative flex h-svh min-h-0 flex-col overflow-hidden bg-(--ml-bg-page) text-(--ml-ink-primary)">
+    <main className="relative flex min-h-0 flex-1 flex-col overflow-hidden bg-(--ml-bg-page) text-(--ml-ink-primary)">
       <LandingBackground />
       <div className="relative z-10 flex min-h-0 flex-1 flex-col items-center justify-center px-4 py-8 text-center">
         <Image
