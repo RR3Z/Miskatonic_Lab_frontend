@@ -2,11 +2,11 @@
 
 import { CircleAlert, Plus } from "lucide-react"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
-import { useEffect, useState } from "react"
 
 import { CharacterCard } from "@/components/character/character-card"
-import { CreateCharacterCard } from "@/components/character/create-character-card"
-import { CreateCharacterModal } from "@/components/character/create-character-modal"
+import { CreateCharacterCard } from "@/components/character/create/create-character-card"
+import { CreateCharacterModal } from "@/components/character/create/create-character-modal"
+import { useCreateCharacterIntent } from "@/components/character/create/use-create-character-intent"
 import {
   Alert,
   AlertAction,
@@ -33,25 +33,13 @@ export function CharacterListPage() {
   const shouldReduceMotion = useReducedMotion()
   const { data, error, isFetching, isLoading, refetch } = useCharacters()
   const deleteCharacter = useDeleteCharacter()
-  const [createOpen, setCreateOpen] = useState(false)
   const characters = data ?? []
   const hasLoadError = Boolean(error) && data === undefined
   const atLimit = characters.length >= MAX_CHARACTERS_PER_USER
   const creationUnavailable = isLoading || hasLoadError || atLimit
-
-  useEffect(() => {
-    if (isLoading || atLimit || typeof window === "undefined") return
-    const url = new URL(window.location.href)
-    if (url.searchParams.get("create") !== "1") return
-
-    setCreateOpen(true)
-    url.searchParams.delete("create")
-    window.history.replaceState(
-      {},
-      "",
-      `${url.pathname}${url.search}${url.hash}`,
-    )
-  }, [atLimit, isLoading])
+  const { createOpen, setCreateOpen } = useCreateCharacterIntent(
+    !creationUnavailable,
+  )
 
   return (
     <div className="mx-auto w-full max-w-[1720px] px-4 py-6 sm:px-8 sm:py-8 lg:py-10">

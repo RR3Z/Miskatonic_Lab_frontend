@@ -6,23 +6,11 @@ import { useMemo } from "react"
 import type { CreateCharacterFormDto } from "@/dto/character/create-character.dto"
 import { characterQueryKeys } from "@/lib/api/character-query-keys"
 import {
-  createCharacter,
+  createCharacterWithPortrait,
   deleteCharacter,
   fetchCharacters,
-  uploadCharacterPortrait,
 } from "@/lib/api/characters"
 import { createApiClient } from "@/lib/api/client"
-import type { CreatedCharacter } from "@/types/character"
-
-export class CharacterPortraitUploadError extends Error {
-  readonly character: CreatedCharacter
-
-  constructor(character: CreatedCharacter, options: ErrorOptions) {
-    super("character created, but portrait upload failed", options)
-    this.name = "CharacterPortraitUploadError"
-    this.character = character
-  }
-}
 
 export class CharacterSessionRequiredError extends Error {
   constructor() {
@@ -68,15 +56,7 @@ export function useCreateCharacter() {
   return useMutation({
     mutationFn: async (input: CreateCharacterFormDto) => {
       if (!userId) throw new CharacterSessionRequiredError()
-
-      const character = await createCharacter(api, input)
-      if (!input.portrait) return character
-
-      try {
-        return await uploadCharacterPortrait(api, character.id, input.portrait)
-      } catch (error) {
-        throw new CharacterPortraitUploadError(character, { cause: error })
-      }
+      return createCharacterWithPortrait(api, input)
     },
     onSettled: () => {
       if (queryKey) void queryClient.invalidateQueries({ queryKey })

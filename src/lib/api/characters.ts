@@ -1,5 +1,8 @@
 import type { KyInstance } from "ky"
-import type { CreateCharacterPayload } from "@/dto/character/create-character.dto"
+import type {
+  CreateCharacterFormDto,
+  CreateCharacterPayload,
+} from "@/dto/character/create-character.dto"
 import type {
   CharacterApiListItem,
   CharacterApiLuckValue,
@@ -9,6 +12,11 @@ import type {
   CharacterStatValue,
   CreatedCharacter,
 } from "@/types/character"
+
+export type CreateCharacterResult = {
+  character: CreatedCharacter
+  portraitStatus: "not_requested" | "uploaded" | "failed"
+}
 
 export async function fetchCharacters(
   api: KyInstance,
@@ -49,6 +57,28 @@ export async function uploadCharacterPortrait(
   return api
     .patch(`api/characters/${characterId}/`, { body })
     .json<CreatedCharacter>()
+}
+
+export async function createCharacterWithPortrait(
+  api: KyInstance,
+  input: CreateCharacterFormDto,
+): Promise<CreateCharacterResult> {
+  const character = await createCharacter(api, input)
+
+  if (!input.portrait) {
+    return { character, portraitStatus: "not_requested" }
+  }
+
+  try {
+    const uploadedCharacter = await uploadCharacterPortrait(
+      api,
+      character.id,
+      input.portrait,
+    )
+    return { character: uploadedCharacter, portraitStatus: "uploaded" }
+  } catch {
+    return { character, portraitStatus: "failed" }
+  }
 }
 
 export function normalizeCharacterListItem(
