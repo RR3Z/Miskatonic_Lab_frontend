@@ -18,6 +18,13 @@ export async function fetchCharacters(
   return characters.map(normalizeCharacterListItem)
 }
 
+export async function deleteCharacter(
+  api: KyInstance,
+  characterId: string,
+): Promise<void> {
+  await api.delete(`api/characters/${characterId}/`)
+}
+
 export function normalizeCharacterListItem(
   character: CharacterApiListItem,
 ): CharacterListItem {

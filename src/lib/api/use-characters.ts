@@ -1,9 +1,9 @@
 "use client"
 
 import { useAuth } from "@clerk/nextjs"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useMemo } from "react"
-import { fetchCharacters } from "@/lib/api/characters"
+import { deleteCharacter, fetchCharacters } from "@/lib/api/characters"
 import { createApiClient } from "@/lib/api/client"
 
 export function useCharacters() {
@@ -14,5 +14,17 @@ export function useCharacters() {
     queryKey: ["characters"],
     queryFn: () => fetchCharacters(api),
     enabled: isLoaded && isSignedIn,
+  })
+}
+
+export function useDeleteCharacter() {
+  const { getToken } = useAuth()
+  const api = useMemo(() => createApiClient(getToken), [getToken])
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: (characterId: string) => deleteCharacter(api, characterId),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: ["characters"] }),
   })
 }
