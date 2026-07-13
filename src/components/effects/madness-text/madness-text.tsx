@@ -1,5 +1,6 @@
 "use client"
 
+import { useReducedMotion } from "motion/react"
 import * as React from "react"
 import { MASKS_OF_NYARLATHOTEP_DATE_POOL } from "@/components/effects/madness-text/constants/masks-of-nyarlathotep-timeline"
 import { DEFAULT_AUTO_DELAY_MS } from "@/components/effects/madness-text/constants/timing"
@@ -25,9 +26,11 @@ export function MadnessText({
   minAutoDelayMs = DEFAULT_AUTO_DELAY_MS.min,
 }: MadnessTextProps) {
   const ref = React.useRef<HTMLButtonElement>(null)
+  const shouldReduceMotion = useReducedMotion()
   const maxWidth = useMeasuredTextWidth(ref, children, hallucinationPool)
   const animation = useMadnessAnimation({
     alternates: hallucinationPool,
+    disabled: Boolean(shouldReduceMotion),
     maxAutoDelayMs,
     minAutoDelayMs,
     original: children,
@@ -44,6 +47,7 @@ export function MadnessText({
       type="button"
       ref={ref}
       className={rootClassName}
+      data-state={animation.active ? "active" : "idle"}
       size="sm"
       style={style}
       variant="link"

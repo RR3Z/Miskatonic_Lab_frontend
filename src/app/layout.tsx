@@ -7,6 +7,7 @@ import {
 } from "next/font/google"
 import { ClerkProvider } from "@/components/auth/clerk-provider"
 import { SiteShell } from "@/components/layout/site-shell"
+import { MotionProvider } from "@/components/motion/motion-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { QueryProvider } from "@/lib/api/provider"
@@ -64,14 +65,16 @@ export default function RootLayout({
       className={`${spectral.variable} ${cormorantGaramond.variable} ${marckScript.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="theme-dark min-h-full flex flex-col">
-        <ClerkProvider>
-          <TooltipProvider>
-            <QueryProvider>
-              <SiteShell>{children}</SiteShell>
-            </QueryProvider>
-          </TooltipProvider>
-        </ClerkProvider>
-        <Toaster />
+        <MotionProvider>
+          <ClerkProvider>
+            <TooltipProvider>
+              <QueryProvider>
+                <SiteShell>{children}</SiteShell>
+              </QueryProvider>
+            </TooltipProvider>
+          </ClerkProvider>
+          <Toaster />
+        </MotionProvider>
       </body>
     </html>
   )

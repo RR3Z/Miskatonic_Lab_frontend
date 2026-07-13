@@ -3,6 +3,7 @@ import { pickRandom, randomInt } from "@/lib/utils/random.util"
 
 type UseMadnessAnimationParams = {
   alternates: readonly string[]
+  disabled?: boolean
   maxAutoDelayMs: number
   minAutoDelayMs: number
   original: string
@@ -10,6 +11,7 @@ type UseMadnessAnimationParams = {
 
 export function useMadnessAnimation({
   alternates,
+  disabled = false,
   maxAutoDelayMs,
   minAutoDelayMs,
   original,
@@ -21,6 +23,7 @@ export function useMadnessAnimation({
 
   const trigger = React.useCallback(
     (force = false) => {
+      if (disabled) return
       if (active && !force) return
       const candidates = alternates.filter((item) => item !== original)
       const pool = candidates.length > 0 ? candidates : alternates
@@ -30,7 +33,7 @@ export function useMadnessAnimation({
       setAnimationKey((key) => key + 1)
       setActive(true)
     },
-    [active, alternates, original],
+    [active, alternates, disabled, original],
   )
 
   const complete = React.useCallback(() => {
@@ -42,23 +45,30 @@ export function useMadnessAnimation({
   }, [trigger])
 
   const hold = React.useCallback(() => {
+    if (disabled) return
     isHeldRef.current = true
     trigger()
-  }, [trigger])
+  }, [disabled, trigger])
 
   const release = React.useCallback(() => {
     isHeldRef.current = false
   }, [])
 
   React.useEffect(() => {
-    if (active) return
+    if (disabled || active) return
     const timeout = window.setTimeout(
       trigger,
       randomInt(minAutoDelayMs, maxAutoDelayMs),
     )
 
     return () => window.clearTimeout(timeout)
-  }, [active, maxAutoDelayMs, minAutoDelayMs, trigger])
+  }, [active, disabled, maxAutoDelayMs, minAutoDelayMs, trigger])
+
+  React.useEffect(() => {
+    if (!disabled) return
+    isHeldRef.current = false
+    setActive(false)
+  }, [disabled])
 
   return {
     active,
