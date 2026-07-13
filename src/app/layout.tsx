@@ -7,6 +7,7 @@ import {
 } from "next/font/google"
 import { ClerkProvider } from "@/components/auth/clerk-provider"
 import { Toaster } from "@/components/ui/sonner"
+import { TooltipProvider } from "@/components/ui/tooltip"
 import { QueryProvider } from "@/lib/api/provider"
 import "./globals.css"
 
@@ -63,7 +64,9 @@ export default function RootLayout({
     >
       <body className="theme-dark min-h-full flex flex-col">
         <ClerkProvider>
-          <QueryProvider>{children}</QueryProvider>
+          <TooltipProvider>
+            <QueryProvider>{children}</QueryProvider>
+          </TooltipProvider>
         </ClerkProvider>
         <Toaster />
       </body>
