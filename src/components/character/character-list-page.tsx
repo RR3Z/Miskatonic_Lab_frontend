@@ -1,36 +1,16 @@
 "use client"
 
-import { CircleAlert, Plus } from "lucide-react"
-import { AnimatePresence, motion, useReducedMotion } from "motion/react"
+import { Plus } from "lucide-react"
 
-import { CharacterCard } from "@/components/character/character-card"
-import { CreateCharacterCard } from "@/components/character/create/create-character-card"
 import { CreateCharacterModal } from "@/components/character/create/create-character-modal"
 import { useCreateCharacterIntent } from "@/components/character/create/use-create-character-intent"
-import {
-  Alert,
-  AlertAction,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert"
+import { CharacterListContent } from "@/components/character/list/character-list-content"
 import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Spinner } from "@/components/ui/spinner"
 import { useCharacters, useDeleteCharacter } from "@/lib/api/use-characters"
-
-const skeletonCards = [
-  "skeleton-card-1",
-  "skeleton-card-2",
-  "skeleton-card-3",
-  "skeleton-card-4",
-  "skeleton-card-5",
-  "skeleton-card-6",
-]
 
 export const MAX_CHARACTERS_PER_USER = 30
 
 export function CharacterListPage() {
-  const shouldReduceMotion = useReducedMotion()
   const { data, error, isFetching, isLoading, refetch } = useCharacters()
   const deleteCharacter = useDeleteCharacter()
   const characters = data ?? []
@@ -71,105 +51,16 @@ export function CharacterListPage() {
         </Button>
       </div>
 
-      <section
-        aria-busy={isLoading || isFetching}
-        aria-label="Список персонажей"
-        className="relative grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
-      >
-        {isLoading ? (
-          <>
-            <output className="sr-only" aria-live="polite">
-              Загрузка персонажей…
-            </output>
-            {skeletonCards.map((key) => (
-              <Skeleton
-                aria-hidden="true"
-                key={key}
-                className="h-[120px] rounded-md border border-[var(--ml-border-subtle)] bg-[var(--ml-surface-panel)]/80"
-              />
-            ))}
-          </>
-        ) : hasLoadError ? (
-          <Alert
-            className="col-span-full border-destructive/70 bg-destructive/10"
-            variant="destructive"
-          >
-            <CircleAlert aria-hidden="true" />
-            <AlertTitle className="text-destructive">
-              Не удалось загрузить персонажей
-            </AlertTitle>
-            <AlertDescription>
-              Проверьте подключение и попробуйте получить список ещё раз.
-            </AlertDescription>
-            <AlertAction>
-              <Button
-                disabled={isFetching}
-                onClick={() => void refetch()}
-                size="sm"
-                type="button"
-                variant="secondary"
-              >
-                {isFetching ? (
-                  <Spinner aria-hidden="true" data-icon="inline-start" />
-                ) : null}
-                {isFetching ? "Загрузка…" : "Повторить"}
-              </Button>
-            </AlertAction>
-          </Alert>
-        ) : (
-          <AnimatePresence initial={!shouldReduceMotion} mode="popLayout">
-            {characters.map((character, index) => (
-              <motion.div
-                animate={{ opacity: 1, y: 0 }}
-                className="relative min-w-0"
-                data-slot="character-motion-item"
-                exit={
-                  shouldReduceMotion
-                    ? { opacity: 0 }
-                    : { opacity: 0, scale: 0.98, y: -4 }
-                }
-                initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
-                key={character.id}
-                layout={shouldReduceMotion ? false : "position"}
-                transition={{
-                  delay: shouldReduceMotion ? 0 : Math.min(index * 0.035, 0.18),
-                  duration: shouldReduceMotion ? 0 : 0.24,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-              >
-                <CharacterCard
-                  character={character}
-                  onDelete={(characterId) =>
-                    deleteCharacter.mutateAsync(characterId)
-                  }
-                />
-              </motion.div>
-            ))}
-            {!atLimit ? (
-              <motion.div
-                animate={{ opacity: 1, y: 0 }}
-                className="relative min-w-0"
-                data-slot="create-character-motion-item"
-                exit={
-                  shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 4 }
-                }
-                initial={shouldReduceMotion ? false : { opacity: 0, y: 8 }}
-                key="create-character"
-                layout={shouldReduceMotion ? false : "position"}
-                transition={{
-                  delay: shouldReduceMotion
-                    ? 0
-                    : Math.min(characters.length * 0.035, 0.18),
-                  duration: shouldReduceMotion ? 0 : 0.24,
-                  ease: [0.22, 1, 0.36, 1],
-                }}
-              >
-                <CreateCharacterCard onCreate={() => setCreateOpen(true)} />
-              </motion.div>
-            ) : null}
-          </AnimatePresence>
-        )}
-      </section>
+      <CharacterListContent
+        atLimit={atLimit}
+        characters={characters}
+        hasLoadError={hasLoadError}
+        isFetching={isFetching}
+        isLoading={isLoading}
+        onCreate={() => setCreateOpen(true)}
+        onDelete={(characterId) => deleteCharacter.mutateAsync(characterId)}
+        onRetry={() => void refetch()}
+      />
 
       <CreateCharacterModal open={createOpen} onOpenChange={setCreateOpen} />
     </div>

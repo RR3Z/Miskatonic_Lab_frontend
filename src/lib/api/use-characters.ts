@@ -11,6 +11,7 @@ import {
   fetchCharacters,
 } from "@/lib/api/characters"
 import { createApiClient } from "@/lib/api/client"
+import type { CharacterListItem } from "@/types/character"
 
 export class CharacterSessionRequiredError extends Error {
   constructor() {
@@ -41,8 +42,13 @@ export function useDeleteCharacter() {
       if (!userId) throw new CharacterSessionRequiredError()
       return deleteCharacter(api, characterId)
     },
-    onSuccess: () => {
-      if (queryKey) void queryClient.invalidateQueries({ queryKey })
+    onSuccess: (_, characterId) => {
+      if (queryKey) {
+        queryClient.setQueryData<CharacterListItem[]>(queryKey, (characters) =>
+          characters?.filter((character) => character.id !== characterId),
+        )
+        void queryClient.invalidateQueries({ queryKey })
+      }
     },
   })
 }
