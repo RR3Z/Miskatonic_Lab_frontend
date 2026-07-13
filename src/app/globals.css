@@ -119,6 +119,8 @@
   --sidebar-foreground: var(--ml-ink-primary);
   --sidebar-primary: var(--ml-accent-brass);
   --sidebar-primary-foreground: var(--ml-ink-on-paper);
+  --sidebar-active: #3a3328;
+  --sidebar-active-foreground: #f0e8d8;
   --sidebar-accent: var(--ml-surface-panel-raised);
   --sidebar-accent-foreground: var(--ml-ink-primary);
   --sidebar-border: var(--border);
@@ -193,6 +195,8 @@
   --sidebar-foreground: var(--ml-ink-primary);
   --sidebar-primary: var(--ml-accent-brass);
   --sidebar-primary-foreground: #f4f1ea;
+  --sidebar-active: #ddd4bd;
+  --sidebar-active-foreground: #17140e;
   --sidebar-accent: var(--ml-surface-panel-raised);
   --sidebar-accent-foreground: var(--ml-ink-primary);
   --sidebar-border: var(--border);
