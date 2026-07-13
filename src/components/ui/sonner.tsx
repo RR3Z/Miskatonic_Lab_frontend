@@ -6,14 +6,26 @@ export function Toaster(props: ToasterProps) {
   return (
     <Sonner
       closeButton
-      position="top-right"
+      containerAriaLabel="Уведомления"
+      position="top-center"
       theme="dark"
       toastOptions={{
+        closeButtonAriaLabel: "Закрыть уведомление",
         classNames: {
           toast:
-            "border-[var(--ml-border-aged)]! bg-[var(--ml-surface-panel-raised)]! text-[var(--ml-ink-primary)]!",
-          description: "text-[var(--ml-ink-muted)]!",
-          error: "border-[var(--ml-clerk-danger-border)]!",
+            "w-[min(26rem,calc(100vw-2rem))]! rounded-lg! border! border-l-4! border-[var(--ml-border-aged)]! bg-[var(--ml-surface-panel-raised)]! p-4! font-body! text-[var(--ml-ink-primary)]! shadow-[0_16px_40px_rgba(0,0,0,0.42)]!",
+          title: "text-base! leading-snug! font-semibold!",
+          description: "text-sm! text-current! opacity-80!",
+          content: "gap-0.5!",
+          icon: "text-current!",
+          closeButton:
+            "border-current/35! bg-[var(--ml-surface-panel)]! text-current! hover:bg-[var(--ml-surface-panel-raised)]!",
+          success:
+            "border-[var(--ml-toast-success-border)]! bg-[var(--ml-toast-success-bg)]! text-[var(--ml-toast-success-fg)]!",
+          error:
+            "border-[var(--ml-toast-error-border)]! bg-[var(--ml-toast-error-bg)]! text-[var(--ml-toast-error-fg)]!",
+          warning:
+            "border-[var(--ml-toast-warning-border)]! bg-[var(--ml-toast-warning-bg)]! text-[var(--ml-toast-warning-fg)]!",
         },
       }}
       {...props}

@@ -18,7 +18,9 @@ const buttonVariants = cva(
         ghost:
           "border-transparent bg-transparent text-[var(--ml-ink-muted)] hover:bg-[color-mix(in_srgb,var(--ml-surface-panel)_60%,transparent)] hover:text-[var(--ml-ink-primary)]",
         destructive:
-          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
+          "border-destructive/80 bg-destructive text-[#f4f1ea] hover:bg-[color-mix(in_srgb,var(--destructive)_86%,white)] focus-visible:border-destructive focus-visible:ring-destructive/30",
+        success:
+          "border-[color-mix(in_srgb,var(--ml-accent-success)_80%,black)] bg-[var(--ml-accent-success)] text-[#f4f1ea] hover:bg-[color-mix(in_srgb,var(--ml-accent-success)_86%,white)] focus-visible:border-[var(--ml-accent-success)] focus-visible:ring-[color-mix(in_srgb,var(--ml-accent-success)_35%,transparent)]",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
