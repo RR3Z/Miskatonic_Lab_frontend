@@ -6,6 +6,7 @@ import { DEFAULT_AUTO_DELAY_MS } from "@/components/effects/madness-text/constan
 import { useMadnessAnimation } from "@/components/effects/madness-text/hooks/use-madness-animation"
 import { useMeasuredTextWidth } from "@/components/effects/madness-text/hooks/use-measured-text-width"
 import { TransformSkewGlitch } from "@/components/effects/madness-text/transform-skew-glitch"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils/cn.util"
 
 type MadnessTextProps = {
@@ -32,18 +33,20 @@ export function MadnessText({
     original: children,
   })
   const rootClassName = cn(
-    "relative inline-flex cursor-pointer items-center border-0 bg-transparent p-0 font-[inherit] text-inherit",
+    "relative h-auto min-w-0 rounded-none border-0 bg-transparent p-0 font-[inherit] text-inherit no-underline hover:bg-transparent hover:text-inherit hover:no-underline",
     className,
   )
   const style =
     maxWidth === null ? undefined : { overflow: "visible", width: maxWidth }
 
   return (
-    <button
+    <Button
       type="button"
       ref={ref}
       className={rootClassName}
+      size="sm"
       style={style}
+      variant="link"
       onBlur={animation.release}
       onFocus={animation.hold}
       onMouseEnter={animation.hold}
@@ -62,6 +65,6 @@ export function MadnessText({
       ) : (
         <span aria-hidden="true">{children}</span>
       )}
-    </button>
+    </Button>
   )
 }
