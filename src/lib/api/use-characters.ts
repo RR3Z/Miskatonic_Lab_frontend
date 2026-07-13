@@ -4,6 +4,7 @@ import { useAuth } from "@clerk/nextjs"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useMemo } from "react"
 import type { CreateCharacterFormDto } from "@/dto/character/create-character.dto"
+import { characterQueryKeys } from "@/lib/api/character-query-keys"
 import {
   createCharacter,
   deleteCharacter,
@@ -23,36 +24,51 @@ export class CharacterPortraitUploadError extends Error {
   }
 }
 
+export class CharacterSessionRequiredError extends Error {
+  constructor() {
+    super("an authenticated user is required for character mutations")
+    this.name = "CharacterSessionRequiredError"
+  }
+}
+
 export function useCharacters() {
-  const { getToken, isLoaded, isSignedIn } = useAuth()
+  const { getToken, isLoaded, userId } = useAuth()
   const api = useMemo(() => createApiClient(getToken), [getToken])
 
   return useQuery({
-    queryKey: ["characters"],
+    queryKey: userId ? characterQueryKeys.list(userId) : characterQueryKeys.all,
     queryFn: () => fetchCharacters(api),
-    enabled: isLoaded && isSignedIn,
+    enabled: isLoaded && Boolean(userId),
   })
 }
 
 export function useDeleteCharacter() {
-  const { getToken } = useAuth()
+  const { getToken, userId } = useAuth()
   const api = useMemo(() => createApiClient(getToken), [getToken])
   const queryClient = useQueryClient()
+  const queryKey = userId ? characterQueryKeys.list(userId) : null
 
   return useMutation({
-    mutationFn: (characterId: string) => deleteCharacter(api, characterId),
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ["characters"] }),
+    mutationFn: (characterId: string) => {
+      if (!userId) throw new CharacterSessionRequiredError()
+      return deleteCharacter(api, characterId)
+    },
+    onSuccess: () => {
+      if (queryKey) void queryClient.invalidateQueries({ queryKey })
+    },
   })
 }
 
 export function useCreateCharacter() {
-  const { getToken } = useAuth()
+  const { getToken, userId } = useAuth()
   const api = useMemo(() => createApiClient(getToken), [getToken])
   const queryClient = useQueryClient()
+  const queryKey = userId ? characterQueryKeys.list(userId) : null
 
   return useMutation({
     mutationFn: async (input: CreateCharacterFormDto) => {
+      if (!userId) throw new CharacterSessionRequiredError()
+
       const character = await createCharacter(api, input)
       if (!input.portrait) return character
 
@@ -62,7 +78,8 @@ export function useCreateCharacter() {
         throw new CharacterPortraitUploadError(character, { cause: error })
       }
     },
-    onSettled: () =>
-      queryClient.invalidateQueries({ queryKey: ["characters"] }),
+    onSettled: () => {
+      if (queryKey) void queryClient.invalidateQueries({ queryKey })
+    },
   })
 }

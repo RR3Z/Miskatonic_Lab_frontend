@@ -10,6 +10,7 @@ import { SiteShell } from "@/components/layout/site-shell"
 import { MotionProvider } from "@/components/motion/motion-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { AuthQueryCacheBoundary } from "@/lib/api/auth-query-cache-boundary"
 import { QueryProvider } from "@/lib/api/provider"
 import "./globals.css"
 
@@ -69,7 +70,9 @@ export default function RootLayout({
           <ClerkProvider>
             <TooltipProvider>
               <QueryProvider>
-                <SiteShell>{children}</SiteShell>
+                <AuthQueryCacheBoundary>
+                  <SiteShell>{children}</SiteShell>
+                </AuthQueryCacheBoundary>
               </QueryProvider>
             </TooltipProvider>
           </ClerkProvider>
