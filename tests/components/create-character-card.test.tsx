@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
 
-import { CreateCharacterCard } from "@/components/character/create-character-card"
+import { CreateCharacterCard } from "@/components/character/create/create-character-card"
 
 describe("CreateCharacterCard", () => {
   it("opens the creation flow", async () => {

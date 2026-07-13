@@ -11,6 +11,7 @@ const clerkState = vi.hoisted(() => ({
   loaded: true,
   openUserProfile: vi.fn(),
   pathname: "/",
+  signInProps: vi.fn(),
   signedIn: false,
   user: {
     fullName: "Артур Кэллахан",
@@ -24,7 +25,17 @@ vi.mock("next/navigation", () => ({
 }))
 
 vi.mock("@clerk/nextjs", () => ({
-  SignInButton: ({ children }: { children: React.ReactNode }) => children,
+  SignInButton: ({
+    children,
+    ...props
+  }: {
+    children: React.ReactNode
+    forceRedirectUrl?: string
+    mode: "modal"
+  }) => {
+    clerkState.signInProps(props)
+    return children
+  },
   SignOutButton: ({ children }: { children: React.ReactNode }) => children,
   UserAvatar: () => <span data-testid="user-avatar" />,
   useClerk: () => ({ openUserProfile: clerkState.openUserProfile }),
@@ -62,6 +73,7 @@ describe("AppSidebar", () => {
     clerkState.loaded = true
     clerkState.openUserProfile.mockClear()
     clerkState.pathname = "/"
+    clerkState.signInProps.mockClear()
     clerkState.signedIn = false
     Object.defineProperty(window, "innerWidth", {
       configurable: true,
@@ -97,6 +109,10 @@ describe("AppSidebar", () => {
     expect(
       screen.getByRole("button", { name: "Список персонажей" }),
     ).toBeVisible()
+    expect(clerkState.signInProps).toHaveBeenCalledWith({
+      forceRedirectUrl: "/characters",
+      mode: "modal",
+    })
     expect(screen.getByRole("button", { name: "Войти" })).toHaveClass(
       "cursor-pointer",
     )

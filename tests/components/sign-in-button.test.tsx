@@ -1,17 +1,33 @@
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import type * as React from "react"
-import { describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
+
+const mocks = vi.hoisted(() => ({
+  signInProps: vi.fn(),
+}))
 
 vi.mock("@clerk/nextjs", () => ({
-  SignInButton: ({ children }: { children: React.ReactNode }) => (
-    <span>{children}</span>
-  ),
+  SignInButton: ({
+    children,
+    ...props
+  }: {
+    children: React.ReactNode
+    forceRedirectUrl?: string
+    mode: "modal"
+  }) => {
+    mocks.signInProps(props)
+    return <span>{children}</span>
+  },
 }))
 
 import { CustomSignInButton } from "@/components/auth/sign-in-button"
 
 describe("CustomSignInButton", () => {
+  beforeEach(() => {
+    mocks.signInProps.mockClear()
+  })
+
   it("renders Button with children", () => {
     render(<CustomSignInButton>Войти</CustomSignInButton>)
 
@@ -47,5 +63,18 @@ describe("CustomSignInButton", () => {
     await user.click(screen.getByRole("button", { name: /войти/i }))
 
     expect(onClick).toHaveBeenCalledOnce()
+  })
+
+  it("passes the forced return URL to Clerk", () => {
+    render(
+      <CustomSignInButton forceRedirectUrl="/characters">
+        Войти
+      </CustomSignInButton>,
+    )
+
+    expect(mocks.signInProps).toHaveBeenCalledWith({
+      forceRedirectUrl: "/characters",
+      mode: "modal",
+    })
   })
 })

@@ -1,12 +1,12 @@
-import { HTTPError } from "ky"
-
 export async function getApiErrorCode(error: unknown): Promise<string | null> {
-  if (!(error instanceof HTTPError)) return null
-
-  try {
-    const body = (await error.response.clone().json()) as { code?: string }
-    return body.code ?? null
-  } catch {
+  if (typeof error !== "object" || error === null || !("data" in error)) {
     return null
   }
+
+  const data = error.data
+  if (typeof data !== "object" || data === null || !("code" in data)) {
+    return null
+  }
+
+  return typeof data.code === "string" ? data.code : null
 }

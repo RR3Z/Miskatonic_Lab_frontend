@@ -1,20 +1,35 @@
 import { render, screen } from "@testing-library/react"
 import type * as React from "react"
-import { describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { LandingActions } from "@/components/landing/landing-actions"
 
 const clerkState = vi.hoisted(() => ({
+  signInProps: vi.fn(),
   signedIn: false,
 }))
 
 vi.mock("@clerk/nextjs", () => ({
-  SignInButton: ({ children }: { children: React.ReactNode }) => children,
+  SignInButton: ({
+    children,
+    ...props
+  }: {
+    children: React.ReactNode
+    forceRedirectUrl?: string
+    mode: "modal"
+  }) => {
+    clerkState.signInProps(props)
+    return children
+  },
   UserButton: () => <button aria-label="User menu" type="button" />,
   useUser: () => ({ isSignedIn: clerkState.signedIn }),
 }))
 
 describe("LandingActions", () => {
+  beforeEach(() => {
+    clerkState.signInProps.mockClear()
+  })
+
   it("renders both action buttons", () => {
     clerkState.signedIn = false
 
@@ -37,6 +52,21 @@ describe("LandingActions", () => {
     expect(
       screen.getByRole("link", { name: /создать сыщика/i }),
     ).toHaveAttribute("href", "/characters?create=1")
+  })
+
+  it("returns signed-out users to the selected action", () => {
+    clerkState.signedIn = false
+
+    render(<LandingActions />)
+
+    expect(clerkState.signInProps).toHaveBeenCalledWith({
+      forceRedirectUrl: "/characters",
+      mode: "modal",
+    })
+    expect(clerkState.signInProps).toHaveBeenCalledWith({
+      forceRedirectUrl: "/characters?create=1",
+      mode: "modal",
+    })
   })
 
   it("accepts className and actionClassName props", () => {

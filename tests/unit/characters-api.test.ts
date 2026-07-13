@@ -2,6 +2,7 @@ import type { KyInstance } from "ky"
 import { describe, expect, it, vi } from "vitest"
 
 import {
+  createCharacterWithPortrait,
   normalizeCharacterListItem,
   uploadCharacterPortrait,
 } from "@/lib/api/characters"
@@ -85,5 +86,82 @@ describe("character portrait API", () => {
     expect(path).toBe("api/characters/character-1/")
     expect(options.body).toBeInstanceOf(FormData)
     expect((options.body as FormData).get("portrait")).toBe(portrait)
+  })
+})
+
+describe("character creation workflow", () => {
+  const created = {
+    age: null,
+    id: "character-1",
+    name: "Armitage",
+    portrait_url: null,
+    sex: null,
+  }
+
+  it("reports when no portrait was requested", async () => {
+    const post = vi.fn(() => ({ json: vi.fn(async () => created) }))
+    const api = { post } as unknown as KyInstance
+
+    await expect(
+      createCharacterWithPortrait(api, {
+        age: null,
+        name: created.name,
+        portrait: null,
+        sex: null,
+      }),
+    ).resolves.toEqual({
+      character: created,
+      portraitStatus: "not_requested",
+    })
+  })
+
+  it("returns the uploaded character after portrait success", async () => {
+    const portrait = new File(["portrait"], "portrait.png", {
+      type: "image/png",
+    })
+    const uploaded = {
+      ...created,
+      portrait_url: "http://localhost:8000/uploads/portrait.png",
+    }
+    const post = vi.fn(() => ({ json: vi.fn(async () => created) }))
+    const patch = vi.fn(() => ({ json: vi.fn(async () => uploaded) }))
+    const api = { patch, post } as unknown as KyInstance
+
+    await expect(
+      createCharacterWithPortrait(api, {
+        age: null,
+        name: created.name,
+        portrait,
+        sex: null,
+      }),
+    ).resolves.toEqual({
+      character: uploaded,
+      portraitStatus: "uploaded",
+    })
+  })
+
+  it("keeps successful creation when portrait upload fails", async () => {
+    const portrait = new File(["portrait"], "portrait.png", {
+      type: "image/png",
+    })
+    const post = vi.fn(() => ({ json: vi.fn(async () => created) }))
+    const patch = vi.fn(() => ({
+      json: vi.fn(async () => {
+        throw new Error("upload failed")
+      }),
+    }))
+    const api = { patch, post } as unknown as KyInstance
+
+    await expect(
+      createCharacterWithPortrait(api, {
+        age: null,
+        name: created.name,
+        portrait,
+        sex: null,
+      }),
+    ).resolves.toEqual({
+      character: created,
+      portraitStatus: "failed",
+    })
   })
 })
