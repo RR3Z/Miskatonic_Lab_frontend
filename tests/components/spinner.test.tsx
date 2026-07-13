@@ -1,0 +1,14 @@
+import { render, screen } from "@testing-library/react"
+import { describe, expect, it } from "vitest"
+
+import { Spinner } from "@/components/ui/spinner"
+
+describe("Spinner", () => {
+  it("exposes an accessible loading status", () => {
+    render(<Spinner />)
+
+    const spinner = screen.getByRole("status", { name: "Загрузка" })
+    expect(spinner).toHaveAttribute("data-slot", "spinner")
+    expect(spinner).toHaveClass("animate-spin")
+  })
+})

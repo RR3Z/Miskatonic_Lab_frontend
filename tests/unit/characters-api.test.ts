@@ -1,6 +1,10 @@
-import { describe, expect, it } from "vitest"
+import type { KyInstance } from "ky"
+import { describe, expect, it, vi } from "vitest"
 
-import { normalizeCharacterListItem } from "@/lib/api/characters"
+import {
+  normalizeCharacterListItem,
+  uploadCharacterPortrait,
+} from "@/lib/api/characters"
 import type { CharacterApiListItem } from "@/types/character"
 
 describe("character API normalization", () => {
@@ -54,5 +58,32 @@ describe("character API normalization", () => {
       sanity: { current: 0, max: 0 },
       luck: { current: 0, starting: 0 },
     })
+  })
+})
+
+describe("character portrait API", () => {
+  it("sends the selected file as portrait multipart field", async () => {
+    const response = {
+      id: "character-1",
+      name: "Lavinia",
+      age: null,
+      sex: "female",
+      portrait_url: "http://localhost:8000/uploads/portraits/portrait.png",
+    }
+    const json = vi.fn(async () => response)
+    const patch = vi.fn(() => ({ json }))
+    const api = { patch } as unknown as KyInstance
+    const portrait = new File(["portrait"], "portrait.png", {
+      type: "image/png",
+    })
+
+    await expect(
+      uploadCharacterPortrait(api, "character-1", portrait),
+    ).resolves.toEqual(response)
+
+    const [path, options] = patch.mock.calls[0]
+    expect(path).toBe("api/characters/character-1/")
+    expect(options.body).toBeInstanceOf(FormData)
+    expect((options.body as FormData).get("portrait")).toBe(portrait)
   })
 })

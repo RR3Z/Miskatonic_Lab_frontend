@@ -12,7 +12,18 @@ describe("CreateCharacterCard", () => {
 
     const card = screen.getByRole("button", { name: /создать нового сыщика/i })
     expect(card).toBeEnabled()
-    expect(card).toHaveClass("h-[104px]")
+    const cardShell = card.closest('[data-slot="card"]')
+    expect(cardShell).toHaveClass("h-[104px]")
+    expect(cardShell).toHaveAttribute("data-size", "sm")
+    const tentacle = screen.getByTestId("character-card-tentacle")
+    expect(tentacle).toHaveClass(
+      "pointer-events-none",
+      "absolute",
+      "inset-0",
+      "bg-cover",
+      "opacity-[0.11]",
+    )
+    expect(tentacle.style.backgroundImage).toContain("character-card-tentacle")
 
     await user.click(card)
     expect(onCreate).toHaveBeenCalledOnce()

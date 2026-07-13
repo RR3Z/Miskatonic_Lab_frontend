@@ -80,6 +80,9 @@ describe("LandingPage", () => {
     expect(screen.getByText("Маски Ньярлатхотепа")).toBeVisible()
     expect(screen.getByLabelText("Возможности Miskatonic Lab")).toBeVisible()
     expect(screen.getByTestId("infinite-marquee-track")).toBeVisible()
+    expect(
+      document.querySelector('[data-slot="motion-reveal"]'),
+    ).toContainElement(screen.getByRole("heading", { name: /miskatonic lab/i }))
 
     openSidebar()
     expect(screen.getByRole("button", { name: /войти/i })).toBeVisible()

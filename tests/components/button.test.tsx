@@ -36,6 +36,15 @@ describe("Button", () => {
     expect(button).toHaveAttribute("data-size", "sm")
   })
 
+  it("supports semantic success actions", () => {
+    render(<Button variant="success">Accept</Button>)
+
+    expect(screen.getByRole("button", { name: "Accept" })).toHaveAttribute(
+      "data-variant",
+      "success",
+    )
+  })
+
   it("renders as child element with asChild prop", () => {
     render(
       <Button asChild>

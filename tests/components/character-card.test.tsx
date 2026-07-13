@@ -28,6 +28,16 @@ describe("CharacterCard", () => {
 
     const card = screen.getByRole("article")
     expect(card).toHaveClass("h-[104px]", "p-[6px]")
+    expect(card).toHaveAttribute("data-slot", "card")
+    const tentacle = screen.getByTestId("character-card-tentacle")
+    expect(tentacle).toHaveClass(
+      "pointer-events-none",
+      "absolute",
+      "inset-0",
+      "bg-cover",
+      "opacity-[0.09]",
+    )
+    expect(tentacle.style.backgroundImage).toContain("character-card-tentacle")
     expect(screen.getByAltText("Мужской портрет")).toBeVisible()
     expect(screen.getByTestId("character-stats")).toHaveClass(
       "grid",
@@ -54,8 +64,13 @@ describe("CharacterCard", () => {
     expect(actions).toHaveClass("hidden", "sm:inline-flex")
 
     await user.click(actions)
-    await user.click(screen.getByRole("menuitem", { name: "Удалить" }))
-    expect(screen.getByRole("alertdialog")).toBeVisible()
+    const deleteItem = screen.getByRole("menuitem", { name: "Удалить" })
+    expect(deleteItem).toHaveAttribute("data-slot", "dropdown-menu-item")
+    await user.click(deleteItem)
+    expect(screen.getByRole("alertdialog")).toHaveAttribute(
+      "data-slot",
+      "alert-dialog-content",
+    )
 
     await user.click(screen.getByRole("button", { name: "Отмена" }))
     expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument()

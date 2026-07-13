@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { HttpResponse, http } from "msw"
+import { delay, HttpResponse, http } from "msw"
 import type * as React from "react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
@@ -70,6 +70,64 @@ describe("CharacterListPage", () => {
     })
   })
 
+  it("renders one accessible loading status and decorative skeleton cards", () => {
+    server.use(
+      http.get("http://localhost:8000/api/characters/", async () => {
+        await delay(200)
+        return HttpResponse.json([])
+      }),
+    )
+    renderWithQuery(<CharacterListPage />)
+
+    expect(screen.getByRole("status")).toHaveTextContent("Загрузка персонажей…")
+    expect(
+      screen.getByRole("region", { name: "Список персонажей" }),
+    ).toHaveAttribute("aria-busy", "true")
+    const skeletons = document.querySelectorAll('[data-slot="skeleton"]')
+    expect(skeletons).toHaveLength(6)
+    for (const skeleton of skeletons) {
+      expect(skeleton).toHaveAttribute("aria-hidden", "true")
+    }
+  })
+
+  it("shows a persistent load error and retries the request", async () => {
+    const user = userEvent.setup()
+    let shouldFail = true
+    server.use(
+      http.get("http://localhost:8000/api/characters/", () => {
+        if (shouldFail) {
+          return HttpResponse.json({ message: "unavailable" }, { status: 400 })
+        }
+        return HttpResponse.json([apiCharacter()])
+      }),
+    )
+    renderWithQuery(<CharacterListPage />)
+
+    const alert = await screen.findByRole("alert", undefined, {
+      timeout: 3_000,
+    })
+    expect(alert).toHaveTextContent("Не удалось загрузить персонажей")
+    expect(alert).toHaveTextContent(
+      "Проверьте подключение и попробуйте получить список ещё раз.",
+    )
+    expect(
+      screen.getByRole("button", {
+        name: "Создание персонажа недоступно: список не загружен",
+      }),
+    ).toBeDisabled()
+    expect(
+      screen.queryByRole("button", { name: /создать нового сыщика/i }),
+    ).not.toBeInTheDocument()
+
+    shouldFail = false
+    await user.click(screen.getByRole("button", { name: "Повторить" }))
+
+    await screen.findByRole("heading", {
+      name: /список персонажей \(1\/30\)/i,
+    })
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument()
+  })
+
   it("renders fetched characters and keeps active create card last", async () => {
     server.use(
       http.get("http://localhost:8000/api/characters/", () =>
@@ -84,6 +142,12 @@ describe("CharacterListPage", () => {
     const buttons = screen.getAllByRole("button")
     expect(buttons.at(-1)).toHaveTextContent("Создать нового сыщика")
     expect(buttons.at(-1)).toBeEnabled()
+    expect(
+      document.querySelectorAll('[data-slot="character-motion-item"]'),
+    ).toHaveLength(1)
+    expect(
+      document.querySelector('[data-slot="create-character-motion-item"]'),
+    ).toContainElement(buttons.at(-1) ?? null)
   })
 
   it("shows only 0/30 and create card for an empty list", async () => {
@@ -170,7 +234,8 @@ describe("CharacterListPage", () => {
     ).toBeVisible()
 
     await user.type(screen.getByLabelText("Имя"), "Армитедж")
-    await user.selectOptions(screen.getByLabelText("Пол"), "male")
+    await user.click(screen.getByLabelText("Пол"))
+    await user.click(screen.getByRole("option", { name: "Мужчина" }))
     await user.type(screen.getByLabelText("Возраст"), "56")
     await user.click(screen.getByRole("button", { name: "Создать персонажа" }))
 
@@ -198,12 +263,78 @@ describe("CharacterListPage", () => {
     const age = screen.getByLabelText("Возраст")
     const sex = screen.getByLabelText("Пол")
     const portrait = screen.getByLabelText("Выбрать изображение")
+    expect(name).toHaveAttribute("data-slot", "input")
+    expect(sex).toHaveAttribute("data-slot", "select-trigger")
+    expect(document.querySelector('[data-slot="attachment"]')).toHaveAttribute(
+      "data-state",
+      "idle",
+    )
+    expect(screen.getByText("1 файл").parentElement).toHaveTextContent(
+      /1 файл.*JPEG, PNG или WebP.*до 5 МБ/,
+    )
     expect(name).toBeRequired()
     expect(name).toHaveAttribute("placeholder", "Например, Харви Уолтерс")
     expect(age).not.toBeRequired()
+    expect(age).toHaveClass("[appearance:textfield]")
     expect(age).toHaveAttribute("placeholder", "Например, 42")
     expect(sex).not.toBeRequired()
     expect(portrait).not.toBeRequired()
+  })
+
+  it("keeps the modal open while using the select dropdown", async () => {
+    const user = userEvent.setup()
+    server.use(
+      http.get("http://localhost:8000/api/characters/", () =>
+        HttpResponse.json([]),
+      ),
+    )
+    renderWithQuery(<CharacterListPage />)
+
+    await user.click(
+      await screen.findByRole("button", { name: /создать нового сыщика/i }),
+    )
+    const dialog = screen.getByRole("dialog", { name: /новый персонаж/i })
+
+    await user.click(screen.getByLabelText("Пол"))
+    const selectContent = screen.getByRole("listbox")
+    expect(selectContent).toHaveAttribute("data-side", "bottom")
+    await user.click(screen.getByRole("option", { name: "Мужчина" }))
+
+    expect(dialog).toBeVisible()
+    expect(screen.getByLabelText("Пол")).toHaveTextContent("Мужчина")
+  })
+
+  it("highlights the required name only after a failed submit", async () => {
+    const user = userEvent.setup()
+    server.use(
+      http.get("http://localhost:8000/api/characters/", () =>
+        HttpResponse.json([]),
+      ),
+    )
+    renderWithQuery(<CharacterListPage />)
+
+    await user.click(
+      await screen.findByRole("button", { name: /создать нового сыщика/i }),
+    )
+    const name = screen.getByLabelText("Имя")
+    expect(name).toHaveAttribute("aria-invalid", "false")
+    expect(screen.getByRole("button", { name: "Отмена" })).toHaveAttribute(
+      "data-variant",
+      "destructive",
+    )
+    expect(
+      screen.getByRole("button", { name: "Создать персонажа" }),
+    ).toHaveAttribute("data-variant", "success")
+
+    await user.click(screen.getByRole("button", { name: "Создать персонажа" }))
+
+    expect(name).toHaveAttribute("aria-invalid", "true")
+    expect(name).toHaveFocus()
+    expect(screen.getByText("Укажите имя персонажа")).toBeVisible()
+
+    await user.type(name, "А")
+    expect(name).toHaveAttribute("aria-invalid", "false")
+    expect(screen.queryByText("Укажите имя персонажа")).not.toBeInTheDocument()
   })
 
   it("accepts a portrait file and shows the selected state", async () => {
@@ -248,7 +379,8 @@ describe("CharacterListPage", () => {
       await screen.findByRole("button", { name: /создать нового сыщика/i }),
     )
     await user.type(screen.getByLabelText("Имя"), "Лавиния")
-    await user.selectOptions(screen.getByLabelText("Пол"), "female")
+    await user.click(screen.getByLabelText("Пол"))
+    await user.click(screen.getByRole("option", { name: "Женщина" }))
     await user.upload(
       screen.getByLabelText("Выбрать изображение"),
       new File([new Uint8Array([0x89, 0x50, 0x4e, 0x47])], "portrait.png", {
@@ -256,28 +388,14 @@ describe("CharacterListPage", () => {
       }),
     )
     expect(URL.createObjectURL).toHaveBeenCalledOnce()
+    expect(document.querySelector('[data-slot="attachment"]')).toHaveAttribute(
+      "data-state",
+      "done",
+    )
+    expect(screen.getByText("portrait.png")).toBeVisible()
     expect(
       screen.getByRole("button", { name: "Удалить выбранный портрет" }),
     ).toBeVisible()
-  })
-
-  it("reports list loading failure through a deduplicated Sonner toast", async () => {
-    server.use(
-      http.get("http://localhost:8000/api/characters/", () =>
-        HttpResponse.json({ error: "failed" }, { status: 400 }),
-      ),
-    )
-    renderWithQuery(<CharacterListPage />)
-
-    await waitFor(
-      () =>
-        expect(mocks.toastError).toHaveBeenCalledWith(
-          "Не удалось загрузить персонажей. Попробуйте позже.",
-          { id: "characters-load-error" },
-        ),
-      { timeout: 4000 },
-    )
-    expect(screen.queryByRole("alert")).not.toBeInTheDocument()
   })
 
   it("deletes a character after confirmation and refreshes the list", async () => {
