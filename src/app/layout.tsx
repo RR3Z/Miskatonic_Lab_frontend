@@ -6,6 +6,7 @@ import {
   Spectral,
 } from "next/font/google"
 import { ClerkProvider } from "@/components/auth/clerk-provider"
+import { Toaster } from "@/components/ui/sonner"
 import { QueryProvider } from "@/lib/api/provider"
 import "./globals.css"
 
@@ -64,6 +65,7 @@ export default function RootLayout({
         <ClerkProvider>
           <QueryProvider>{children}</QueryProvider>
         </ClerkProvider>
+        <Toaster />
       </body>
     </html>
   )
