@@ -96,7 +96,7 @@ describe("CreateCharacterModal", () => {
     await waitFor(() =>
       expect(screen.queryByRole("dialog")).not.toBeInTheDocument(),
     )
-    expect(mocks.toastSuccess).toHaveBeenCalledWith("Персонаж создан")
+    expect(mocks.toastSuccess).not.toHaveBeenCalled()
   })
 
   it("marks only the name as required and shows creation placeholders", () => {

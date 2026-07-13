@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react"
+import { screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { delay, HttpResponse, http } from "msw"
 import { describe, expect, it, vi } from "vitest"
@@ -98,8 +98,78 @@ describe("CharacterListPage", () => {
       document.querySelectorAll('[data-slot="character-motion-item"]'),
     ).toHaveLength(1)
     expect(
+      document.querySelector('[data-slot="character-delete-overlay"]'),
+    ).toHaveClass(
+      "pointer-events-none",
+      "absolute",
+      "inset-0",
+      "bg-destructive",
+    )
+    expect(
       document.querySelector('[data-slot="create-character-motion-item"]'),
     ).toContainElement(buttons.at(-1) ?? null)
+  })
+
+  it("updates the list immediately after delete while refetch stays pending", async () => {
+    const user = userEvent.setup()
+    let deleted = false
+
+    server.use(
+      http.get("http://localhost:8000/api/characters/", async () => {
+        if (deleted) await delay(1_000)
+        return HttpResponse.json(
+          deleted
+            ? [createApiCharacter("character-2")]
+            : [
+                createApiCharacter("character-1"),
+                createApiCharacter("character-2"),
+              ],
+        )
+      }),
+      http.delete("http://localhost:8000/api/characters/character-1/", () => {
+        deleted = true
+        return new HttpResponse(null, { status: 204 })
+      }),
+    )
+    renderWithQuery(<CharacterListPage />)
+
+    await screen.findByRole("heading", {
+      name: /список персонажей \(2\/30\)/i,
+    })
+    await user.click(
+      screen.getByRole("button", {
+        name: "Действия персонажа Сыщик character-1",
+      }),
+    )
+    await user.click(screen.getByRole("menuitem", { name: "Удалить" }))
+    await user.click(screen.getByRole("button", { name: "Удалить" }))
+
+    await screen.findByRole("heading", {
+      name: /список персонажей \(1\/30\)/i,
+    })
+    expect(
+      screen.getByRole("region", { name: "Список персонажей" }),
+    ).toHaveAttribute("aria-busy", "true")
+    expect(
+      screen.getByRole("heading", { name: "Сыщик character-2" }),
+    ).toBeVisible()
+    await waitFor(
+      () =>
+        expect(
+          screen.queryByRole("heading", { name: "Сыщик character-1" }),
+        ).not.toBeInTheDocument(),
+      { timeout: 800 },
+    )
+    const list = screen.getByRole("region", { name: "Список персонажей" })
+    expect(list.lastElementChild).toHaveAttribute(
+      "data-slot",
+      "create-character-motion-item",
+    )
+    expect(
+      document.querySelector('[data-slot="create-character-motion-item"]'),
+    ).toContainElement(
+      screen.getByRole("button", { name: /создать нового сыщика/i }),
+    )
   })
 
   it("shows only 0/30 and create card for an empty list", async () => {

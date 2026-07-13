@@ -22,28 +22,40 @@ describe("Toaster", () => {
     expect(toaster).toHaveAttribute("data-y-position", "top")
   })
 
+  it("uses a uniform one-pixel border", async () => {
+    render(<Toaster />)
+    act(() => {
+      toast.success("Проверка рамки")
+    })
+
+    const title = await screen.findByText("Проверка рамки")
+    const notification = title.closest("[data-sonner-toast]")
+    expect(notification?.className).toContain("border!")
+    expect(notification?.className).not.toContain("border-l-4!")
+  })
+
   it.each([
     [
       "success",
       () => toast.success("Персонаж создан"),
       "Персонаж создан",
-      "success-bg",
+      "success",
     ],
     [
       "error",
       () => toast.error("Не удалось создать"),
       "Не удалось создать",
-      "error-bg",
+      "error",
     ],
     [
       "warning",
       () => toast.warning("Портрет не загружен"),
       "Портрет не загружен",
-      "warning-bg",
+      "warning",
     ],
   ])(
     "applies project colors to %s notifications",
-    async (_, show, message, token) => {
+    async (_, show, message, type) => {
       render(<Toaster />)
 
       act(() => {
@@ -52,7 +64,10 @@ describe("Toaster", () => {
 
       const title = await screen.findByText(message)
       const notification = title.closest("[data-sonner-toast]")
-      expect(notification?.className).toContain(`--ml-toast-${token}`)
+      expect(notification?.className).toContain(`--ml-toast-${type}-bg`)
+      expect(notification?.className).toContain(`--ml-toast-${type}-border`)
+      expect(notification?.className).toContain(`--ml-toast-${type}-accent`)
+      expect(notification?.className).toContain("--ml-ink-primary")
     },
   )
 })

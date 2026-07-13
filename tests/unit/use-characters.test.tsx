@@ -116,9 +116,16 @@ describe("character query hooks", () => {
     expect(apiMocks.fetchCharacters).toHaveBeenCalledTimes(2)
   })
 
-  it("invalidates only the current user after delete", async () => {
+  it("removes the deleted character from the current user cache and invalidates it", async () => {
     apiMocks.deleteCharacter.mockResolvedValue(undefined)
     const queryClient = createQueryClient()
+    queryClient.setQueryData(characterQueryKeys.list("user-a"), [
+      character("character-1"),
+      character("character-2"),
+    ])
+    queryClient.setQueryData(characterQueryKeys.list("user-b"), [
+      character("character-1"),
+    ])
     const invalidateQueries = vi.spyOn(queryClient, "invalidateQueries")
     const { result } = renderHook(() => useDeleteCharacter(), {
       wrapper: wrapper(queryClient),
@@ -129,6 +136,38 @@ describe("character query hooks", () => {
     expect(invalidateQueries).toHaveBeenCalledWith({
       queryKey: characterQueryKeys.list("user-a"),
     })
+    expect(queryClient.getQueryData(characterQueryKeys.list("user-a"))).toEqual(
+      [character("character-2")],
+    )
+    expect(queryClient.getQueryData(characterQueryKeys.list("user-b"))).toEqual(
+      [character("character-1")],
+    )
+  })
+
+  it("keeps the cached list unchanged when delete fails", async () => {
+    apiMocks.deleteCharacter.mockRejectedValue(new Error("failed"))
+    const queryClient = createQueryClient()
+    const cachedCharacters = [
+      character("character-1"),
+      character("character-2"),
+    ]
+    queryClient.setQueryData(
+      characterQueryKeys.list("user-a"),
+      cachedCharacters,
+    )
+    const invalidateQueries = vi.spyOn(queryClient, "invalidateQueries")
+    const { result } = renderHook(() => useDeleteCharacter(), {
+      wrapper: wrapper(queryClient),
+    })
+
+    await expect(
+      act(() => result.current.mutateAsync("character-1")),
+    ).rejects.toThrow("failed")
+
+    expect(queryClient.getQueryData(characterQueryKeys.list("user-a"))).toEqual(
+      cachedCharacters,
+    )
+    expect(invalidateQueries).not.toHaveBeenCalled()
   })
 
   it("invalidates only the current user after create settles", async () => {

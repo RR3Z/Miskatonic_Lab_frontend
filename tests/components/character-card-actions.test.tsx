@@ -6,11 +6,13 @@ import { CharacterCardActions } from "@/components/character/character-card-acti
 
 const mocks = vi.hoisted(() => ({
   toastError: vi.fn(),
+  toastSuccess: vi.fn(),
 }))
 
 vi.mock("sonner", () => ({
   toast: {
     error: mocks.toastError,
+    success: mocks.toastSuccess,
   },
 }))
 
@@ -30,6 +32,7 @@ async function openDeleteDialog() {
 describe("CharacterCardActions", () => {
   beforeEach(() => {
     mocks.toastError.mockClear()
+    mocks.toastSuccess.mockClear()
   })
 
   it("deletes the selected character after confirmation", async () => {
@@ -43,6 +46,7 @@ describe("CharacterCardActions", () => {
       expect(onDelete).toHaveBeenCalledExactlyOnceWith(character.id),
     )
     expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument()
+    expect(mocks.toastSuccess).not.toHaveBeenCalled()
   })
 
   it("shows only an accessible spinner while deletion is pending", async () => {
@@ -84,5 +88,6 @@ describe("CharacterCardActions", () => {
       ),
     )
     expect(screen.getByRole("alertdialog")).toBeVisible()
+    expect(mocks.toastSuccess).not.toHaveBeenCalled()
   })
 })
