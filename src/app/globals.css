@@ -70,15 +70,39 @@
   --ml-accent-warning: #c59a32;
   --ml-border-aged: #5d5231;
   --ml-border-subtle: #39352c;
-  --ml-toast-success-bg: #263c2d;
-  --ml-toast-success-fg: #e8f5eb;
-  --ml-toast-success-border: #69aa79;
-  --ml-toast-error-bg: #472321;
-  --ml-toast-error-fg: #ffe4e0;
-  --ml-toast-error-border: #d65e56;
-  --ml-toast-warning-bg: #46391f;
-  --ml-toast-warning-fg: #fff0bd;
-  --ml-toast-warning-border: #d9ad43;
+  --ml-toast-success-accent: #69aa79;
+  --ml-toast-success-bg: color-mix(
+    in srgb,
+    var(--ml-surface-panel) 96%,
+    var(--ml-toast-success-accent) 4%
+  );
+  --ml-toast-success-border: color-mix(
+    in srgb,
+    var(--ml-border-subtle) 82%,
+    var(--ml-toast-success-accent) 18%
+  );
+  --ml-toast-error-accent: #d65e56;
+  --ml-toast-error-bg: color-mix(
+    in srgb,
+    var(--ml-surface-panel) 96%,
+    var(--ml-toast-error-accent) 4%
+  );
+  --ml-toast-error-border: color-mix(
+    in srgb,
+    var(--ml-border-subtle) 82%,
+    var(--ml-toast-error-accent) 18%
+  );
+  --ml-toast-warning-accent: #d9ad43;
+  --ml-toast-warning-bg: color-mix(
+    in srgb,
+    var(--ml-surface-panel) 96%,
+    var(--ml-toast-warning-accent) 4%
+  );
+  --ml-toast-warning-border: color-mix(
+    in srgb,
+    var(--ml-border-subtle) 82%,
+    var(--ml-toast-warning-accent) 18%
+  );
   --ml-clerk-badge-bg: #332d24;
   --ml-clerk-badge-border: #746842;
   --ml-clerk-badge-fg: #d8c783;
@@ -146,15 +170,39 @@
   --ml-accent-warning: #9a6b05;
   --ml-border-aged: #9b9274;
   --ml-border-subtle: #c9c0aa;
-  --ml-toast-success-bg: #d9ebdd;
-  --ml-toast-success-fg: #183e23;
-  --ml-toast-success-border: #2f6b3f;
-  --ml-toast-error-bg: #f0d8d5;
-  --ml-toast-error-fg: #681b18;
-  --ml-toast-error-border: #8b211f;
-  --ml-toast-warning-bg: #efe1b8;
-  --ml-toast-warning-fg: #5c4307;
-  --ml-toast-warning-border: #9a6b05;
+  --ml-toast-success-accent: #2f6b3f;
+  --ml-toast-success-bg: color-mix(
+    in srgb,
+    var(--ml-surface-panel) 96%,
+    var(--ml-toast-success-accent) 4%
+  );
+  --ml-toast-success-border: color-mix(
+    in srgb,
+    var(--ml-border-subtle) 82%,
+    var(--ml-toast-success-accent) 18%
+  );
+  --ml-toast-error-accent: #8b211f;
+  --ml-toast-error-bg: color-mix(
+    in srgb,
+    var(--ml-surface-panel) 96%,
+    var(--ml-toast-error-accent) 4%
+  );
+  --ml-toast-error-border: color-mix(
+    in srgb,
+    var(--ml-border-subtle) 82%,
+    var(--ml-toast-error-accent) 18%
+  );
+  --ml-toast-warning-accent: #9a6b05;
+  --ml-toast-warning-bg: color-mix(
+    in srgb,
+    var(--ml-surface-panel) 96%,
+    var(--ml-toast-warning-accent) 4%
+  );
+  --ml-toast-warning-border: color-mix(
+    in srgb,
+    var(--ml-border-subtle) 82%,
+    var(--ml-toast-warning-accent) 18%
+  );
   --ml-clerk-badge-bg: #e4dcc8;
   --ml-clerk-badge-border: #9b9274;
   --ml-clerk-badge-fg: #4b4529;
