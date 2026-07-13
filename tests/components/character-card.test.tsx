@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react"
-import { describe, expect, it } from "vitest"
+import userEvent from "@testing-library/user-event"
+import { describe, expect, it, vi } from "vitest"
 
 import { CharacterCard } from "@/components/character/character-card"
 import type { CharacterListItem } from "@/types/character"
@@ -22,14 +23,42 @@ const character: CharacterListItem = {
 }
 
 describe("CharacterCard", () => {
-  it("renders character identity, default male portrait, and stats", () => {
-    render(<CharacterCard character={character} />)
+  it("renders the reference-sized card and four-column stats", () => {
+    render(<CharacterCard character={character} onDelete={vi.fn()} />)
 
-    expect(screen.getByRole("heading", { name: character.name })).toBeVisible()
+    const card = screen.getByRole("article")
+    expect(card).toHaveClass("h-[104px]", "p-[6px]")
     expect(screen.getByAltText("Мужской портрет")).toBeVisible()
+    expect(screen.getByTestId("character-stats")).toHaveClass(
+      "grid",
+      "grid-cols-4",
+    )
     expect(screen.getByText("6/20")).toBeVisible()
     expect(screen.getByText("9/25")).toBeVisible()
     expect(screen.getByText("15/30")).toBeVisible()
     expect(screen.getByText("80/100")).toBeVisible()
+    expect(screen.getByTitle("Здоровье")).toBeVisible()
+    expect(screen.getByTitle("Магия")).toBeVisible()
+    expect(screen.getByTitle("Рассудок")).toBeVisible()
+    expect(screen.getByTitle("Удача")).toBeVisible()
+  })
+
+  it("keeps the desktop-only delete menu and cancel behavior", async () => {
+    const user = userEvent.setup()
+    const onDelete = vi.fn()
+    render(<CharacterCard character={character} onDelete={onDelete} />)
+
+    const actions = screen.getByRole("button", {
+      name: `Действия персонажа ${character.name}`,
+    })
+    expect(actions).toHaveClass("hidden", "sm:inline-flex")
+
+    await user.click(actions)
+    await user.click(screen.getByRole("menuitem", { name: "Удалить" }))
+    expect(screen.getByRole("alertdialog")).toBeVisible()
+
+    await user.click(screen.getByRole("button", { name: "Отмена" }))
+    expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument()
+    expect(onDelete).not.toHaveBeenCalled()
   })
 })
