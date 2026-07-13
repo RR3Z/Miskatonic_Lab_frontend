@@ -1,4 +1,5 @@
 import type { KyInstance } from "ky"
+import type { CreateCharacterPayload } from "@/dto/character/create-character.dto"
 import type {
   CharacterApiListItem,
   CharacterApiLuckValue,
@@ -6,6 +7,7 @@ import type {
   CharacterListItem,
   CharacterLuckValue,
   CharacterStatValue,
+  CreatedCharacter,
 } from "@/types/character"
 
 export async function fetchCharacters(
@@ -23,6 +25,30 @@ export async function deleteCharacter(
   characterId: string,
 ): Promise<void> {
   await api.delete(`api/characters/${characterId}/`)
+}
+
+export async function createCharacter(
+  api: KyInstance,
+  input: CreateCharacterPayload,
+): Promise<CreatedCharacter> {
+  return api
+    .post("api/characters/", {
+      json: { name: input.name, age: input.age, sex: input.sex },
+    })
+    .json<CreatedCharacter>()
+}
+
+export async function uploadCharacterPortrait(
+  api: KyInstance,
+  characterId: string,
+  portrait: File,
+): Promise<CreatedCharacter> {
+  const body = new FormData()
+  body.set("portrait", portrait)
+
+  return api
+    .patch(`api/characters/${characterId}/`, { body })
+    .json<CreatedCharacter>()
 }
 
 export function normalizeCharacterListItem(

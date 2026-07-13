@@ -60,4 +60,12 @@ export type CharacterListItem = {
   luck: CharacterLuckValue
 }
 
+export type CreatedCharacter = {
+  id: string
+  name: string
+  age: number | null
+  sex: string | null
+  portrait_url: string | null
+}
+
 export type PortraitKind = "male" | "female"

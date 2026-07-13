@@ -1,10 +1,25 @@
 "use client"
 
 import { Ellipsis, Trash2 } from "lucide-react"
-import { AlertDialog, DropdownMenu } from "radix-ui"
 import { useRef, useState } from "react"
 import { toast } from "sonner"
 
+import {
+  AlertDialog,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import type { CharacterListItem } from "@/types/character"
 
 type CharacterCardActionsProps = {
@@ -38,74 +53,65 @@ export function CharacterCardActions({
   }
 
   return (
-    <AlertDialog.Root
+    <AlertDialog
       onOpenChange={(open) => {
         if (!isDeleting) setDialogOpen(open)
       }}
       open={dialogOpen}
     >
-      <DropdownMenu.Root>
-        <DropdownMenu.Trigger asChild>
-          <button
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
             aria-label={`Действия персонажа ${character.name}`}
-            className="hidden size-7 shrink-0 items-center justify-center rounded-sm text-[var(--ml-ink-muted)] transition-colors hover:bg-[var(--ml-surface-panel-raised)] hover:text-[var(--ml-ink-primary)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--ml-focus-ring)] sm:inline-flex"
+            className="hidden shrink-0 sm:inline-flex"
             ref={triggerRef}
+            size="icon-sm"
             type="button"
+            variant="ghost"
           >
-            <Ellipsis aria-hidden="true" className="size-5" />
-          </button>
-        </DropdownMenu.Trigger>
-        <DropdownMenu.Portal>
-          <DropdownMenu.Content
-            align="end"
-            className="z-50 min-w-36 rounded-md border border-[var(--ml-border-aged)] bg-[var(--ml-surface-panel-raised)] p-1 text-[var(--ml-ink-primary)] shadow-xl outline-none"
-            sideOffset={5}
+            <Ellipsis aria-hidden="true" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="min-w-36" sideOffset={5}>
+          <DropdownMenuItem
+            variant="destructive"
+            onSelect={() => {
+              setDialogOpen(true)
+            }}
           >
-            <DropdownMenu.Item
-              className="flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 font-body text-sm text-[var(--ml-clerk-danger)] outline-none data-[highlighted]:bg-[var(--ml-clerk-danger-bg)]"
-              onSelect={() => {
-                setDialogOpen(true)
-              }}
-            >
-              <Trash2 aria-hidden="true" className="size-4" />
-              Удалить
-            </DropdownMenu.Item>
-          </DropdownMenu.Content>
-        </DropdownMenu.Portal>
-      </DropdownMenu.Root>
+            <Trash2 aria-hidden="true" />
+            Удалить
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
 
-      <AlertDialog.Portal>
-        <AlertDialog.Overlay className="fixed inset-0 z-50 bg-black/65 backdrop-blur-[1px] data-[state=closed]:animate-out data-[state=open]:animate-in" />
-        <AlertDialog.Content className="fixed top-1/2 left-1/2 z-50 w-[min(92vw,28rem)] -translate-x-1/2 -translate-y-1/2 rounded-md border border-[var(--ml-border-aged)] bg-[var(--ml-surface-panel)] p-5 text-[var(--ml-ink-primary)] shadow-2xl outline-none">
-          <AlertDialog.Title className="font-heading text-xl">
+      <AlertDialogContent className="border border-[var(--ml-border-aged)] bg-[var(--ml-surface-panel)] shadow-2xl sm:max-w-md">
+        <AlertDialogHeader>
+          <AlertDialogTitle className="text-xl">
             Удалить персонажа?
-          </AlertDialog.Title>
-          <AlertDialog.Description className="mt-2 font-body text-sm leading-relaxed text-[var(--ml-ink-muted)]">
+          </AlertDialogTitle>
+          <AlertDialogDescription>
             Персонаж «{character.name}» будет удалён без возможности
             восстановления.
-          </AlertDialog.Description>
-          <div className="mt-5 flex justify-end gap-2">
-            <AlertDialog.Cancel asChild>
-              <button
-                className="rounded-md border border-[var(--ml-border-subtle)] px-3 py-2 font-body text-sm transition-colors hover:bg-[var(--ml-surface-panel-raised)] disabled:cursor-wait disabled:opacity-50"
-                disabled={isDeleting}
-                onClick={() => triggerRef.current?.focus()}
-                type="button"
-              >
-                Отмена
-              </button>
-            </AlertDialog.Cancel>
-            <button
-              className="rounded-md border border-[var(--ml-clerk-danger-border)] bg-[var(--ml-clerk-danger-bg)] px-3 py-2 font-body text-sm text-[var(--ml-clerk-danger)] transition-colors hover:brightness-110 disabled:cursor-wait disabled:opacity-60"
-              disabled={isDeleting}
-              onClick={handleDelete}
-              type="button"
-            >
-              {isDeleting ? "Удаление…" : "Удалить"}
-            </button>
-          </div>
-        </AlertDialog.Content>
-      </AlertDialog.Portal>
-    </AlertDialog.Root>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel
+            disabled={isDeleting}
+            onClick={() => triggerRef.current?.focus()}
+          >
+            Отмена
+          </AlertDialogCancel>
+          <Button
+            disabled={isDeleting}
+            onClick={handleDelete}
+            type="button"
+            variant="destructive"
+          >
+            {isDeleting ? "Удаление…" : "Удалить"}
+          </Button>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   )
 }
