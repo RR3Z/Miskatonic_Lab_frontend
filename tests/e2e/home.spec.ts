@@ -25,6 +25,8 @@ for (const viewport of viewports) {
       page.getByRole("heading", { name: /to get started/i }),
     ).toHaveCount(0)
 
+    // Next can finish navigation before the client responsive providers hydrate.
+    await page.waitForTimeout(300)
     await page
       .getByRole("button", { name: "Переключить боковую панель" })
       .click()

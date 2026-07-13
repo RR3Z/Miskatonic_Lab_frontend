@@ -71,14 +71,33 @@ describe("CharacterCard", () => {
     await user.click(actions)
     const deleteItem = screen.getByRole("menuitem", { name: "Удалить" })
     expect(deleteItem).toHaveAttribute("data-slot", "dropdown-menu-item")
-    expect(deleteItem).toHaveClass("text-[var(--ml-clerk-danger)]!")
+    expect(deleteItem).toHaveClass(
+      "cursor-pointer",
+      "text-[var(--ml-clerk-danger)]!",
+    )
     await user.click(deleteItem)
     expect(screen.getByRole("alertdialog")).toHaveAttribute(
       "data-slot",
       "alert-dialog-content",
     )
+    expect(
+      screen
+        .getByRole("alertdialog")
+        .querySelector('[data-slot="alert-dialog-footer"]'),
+    ).toHaveClass("sm:justify-stretch")
 
-    await user.click(screen.getByRole("button", { name: "Отмена" }))
+    const cancelButton = screen.getByRole("button", { name: "Отмена" })
+    const confirmButton = screen.getByRole("button", { name: "Удалить" })
+    expect(cancelButton).toHaveAttribute("data-variant", "secondary")
+    expect(cancelButton).toHaveClass(
+      "w-full",
+      "sm:flex-1",
+      "border-[var(--ml-border-aged)]",
+      "hover:border-[var(--ml-accent-brass-strong)]",
+    )
+    expect(confirmButton).toHaveAttribute("data-variant", "destructive")
+    expect(confirmButton).toHaveClass("w-full", "sm:flex-1")
+    await user.click(cancelButton)
     expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument()
     expect(onDelete).not.toHaveBeenCalled()
   })

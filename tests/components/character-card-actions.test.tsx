@@ -45,6 +45,31 @@ describe("CharacterCardActions", () => {
     expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument()
   })
 
+  it("shows only an accessible spinner while deletion is pending", async () => {
+    let resolveDelete: (() => void) | undefined
+    const onDelete = vi.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveDelete = resolve
+        }),
+    )
+    render(<CharacterCardActions character={character} onDelete={onDelete} />)
+    const user = await openDeleteDialog()
+
+    await user.click(screen.getByRole("button", { name: "Удалить" }))
+
+    expect(
+      screen.getByRole("status", { name: "Удаление персонажа" }),
+    ).toBeVisible()
+    expect(screen.queryByText("Удаление…")).not.toBeInTheDocument()
+    expect(screen.getByRole("button", { name: "Отмена" })).toBeDisabled()
+
+    resolveDelete?.()
+    await waitFor(() =>
+      expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument(),
+    )
+  })
+
   it("keeps the dialog open and reports a delete failure", async () => {
     const onDelete = vi.fn().mockRejectedValue(new Error("failed"))
     render(<CharacterCardActions character={character} onDelete={onDelete} />)
