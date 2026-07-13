@@ -85,9 +85,12 @@ describe("AppSidebar", () => {
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument()
     expect(sidebarGap).toHaveClass("w-(--sidebar-width-icon)")
 
-    expect(screen.getByRole("link", { name: "Главная" })).toHaveAttribute(
-      "aria-current",
-      "page",
+    const homeLink = screen.getByRole("link", { name: "Главная" })
+    expect(homeLink).toHaveAttribute("aria-current", "page")
+    expect(homeLink).toHaveAttribute("data-active", "true")
+    expect(homeLink).toHaveClass(
+      "data-active:bg-[var(--sidebar-active)]",
+      "data-active:text-[var(--sidebar-active-foreground)]",
     )
     expect(screen.getByRole("button", { name: /Справочник/i })).toBeDisabled()
     expect(screen.getByText("WIP")).toBeVisible()

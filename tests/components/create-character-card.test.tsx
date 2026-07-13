@@ -13,7 +13,7 @@ describe("CreateCharacterCard", () => {
     const card = screen.getByRole("button", { name: /создать нового сыщика/i })
     expect(card).toBeEnabled()
     const cardShell = card.closest('[data-slot="card"]')
-    expect(cardShell).toHaveClass("h-[104px]")
+    expect(cardShell).toHaveClass("h-[120px]")
     expect(cardShell).toHaveAttribute("data-size", "sm")
     const tentacle = screen.getByTestId("character-card-tentacle")
     expect(tentacle).toHaveClass(

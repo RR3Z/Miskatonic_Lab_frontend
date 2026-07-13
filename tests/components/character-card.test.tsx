@@ -27,7 +27,7 @@ describe("CharacterCard", () => {
     render(<CharacterCard character={character} onDelete={vi.fn()} />)
 
     const card = screen.getByRole("article")
-    expect(card).toHaveClass("h-[104px]", "p-[6px]")
+    expect(card).toHaveClass("h-[120px]", "p-[6px]")
     expect(card).toHaveAttribute("data-slot", "card")
     const tentacle = screen.getByTestId("character-card-tentacle")
     expect(tentacle).toHaveClass(
@@ -51,6 +51,11 @@ describe("CharacterCard", () => {
     expect(screen.getByTitle("Магия")).toBeVisible()
     expect(screen.getByTitle("Рассудок")).toBeVisible()
     expect(screen.getByTitle("Удача")).toBeVisible()
+    expect(
+      [...screen.getByTestId("character-stats").children].map((stat) =>
+        stat.getAttribute("title"),
+      ),
+    ).toEqual(["Здоровье", "Рассудок", "Магия", "Удача"])
   })
 
   it("keeps the desktop-only delete menu and cancel behavior", async () => {
@@ -66,6 +71,7 @@ describe("CharacterCard", () => {
     await user.click(actions)
     const deleteItem = screen.getByRole("menuitem", { name: "Удалить" })
     expect(deleteItem).toHaveAttribute("data-slot", "dropdown-menu-item")
+    expect(deleteItem).toHaveClass("text-[var(--ml-clerk-danger)]!")
     await user.click(deleteItem)
     expect(screen.getByRole("alertdialog")).toHaveAttribute(
       "data-slot",
