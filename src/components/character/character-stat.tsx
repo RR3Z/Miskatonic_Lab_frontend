@@ -33,19 +33,19 @@ export function CharacterStat({
         <Image
           alt=""
           aria-hidden="true"
-          className={cn("size-5 shrink-0", imageClassName)}
-          height={20}
+          className={cn("size-6 shrink-0", imageClassName)}
+          height={24}
           src={image}
           style={imageFilter ? { filter: imageFilter } : undefined}
-          width={20}
+          width={24}
         />
       ) : Icon ? (
         <Icon
           aria-hidden="true"
-          className={cn("size-5 shrink-0", iconClassName)}
+          className={cn("size-6 shrink-0", iconClassName)}
         />
       ) : null}
-      <span className="whitespace-nowrap font-body text-xs text-[var(--ml-ink-primary)] tabular-nums">
+      <span className="whitespace-nowrap font-body text-base text-[var(--ml-ink-primary)] tabular-nums">
         {current}/{max}
       </span>
     </div>

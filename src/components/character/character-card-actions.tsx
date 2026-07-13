@@ -74,6 +74,7 @@ export function CharacterCardActions({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="min-w-36" sideOffset={5}>
           <DropdownMenuItem
+            className="text-[var(--ml-clerk-danger)]! [&_svg]:text-[var(--ml-clerk-danger)]!"
             variant="destructive"
             onSelect={() => {
               setDialogOpen(true)

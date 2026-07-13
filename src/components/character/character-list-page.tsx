@@ -97,7 +97,7 @@ export function CharacterListPage() {
               <Skeleton
                 aria-hidden="true"
                 key={key}
-                className="h-[104px] rounded-md border border-[var(--ml-border-subtle)] bg-[var(--ml-surface-panel)]/80"
+                className="h-[120px] rounded-md border border-[var(--ml-border-subtle)] bg-[var(--ml-surface-panel)]/80"
               />
             ))}
           </>

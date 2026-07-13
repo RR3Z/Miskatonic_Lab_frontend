@@ -1,4 +1,4 @@
-import { Brain, Plus } from "lucide-react"
+import { Plus } from "lucide-react"
 import Image from "next/image"
 
 import { CharacterCardActions } from "@/components/character/character-card-actions"
@@ -8,6 +8,7 @@ import { getPortraitKind, getPortraitUrl } from "@/lib/utils/portrait.util"
 import type { CharacterListItem } from "@/types/character"
 import cardTentacle from "../../../assets/character-card-tentacle.svg"
 import luckIcon from "../../../assets/icons/luck.svg"
+import sanityIcon from "../../../assets/icons/sanity.svg"
 import magicIcon from "../../../assets/symbols/black/sigil-angular-eye.svg"
 
 type CharacterCardProps = {
@@ -17,6 +18,8 @@ type CharacterCardProps = {
 
 const magicIconFilter =
   "brightness(0) saturate(100%) invert(52%) sepia(92%) saturate(1538%) hue-rotate(165deg) brightness(96%) contrast(101%)"
+const sanityIconFilter =
+  "brightness(0) saturate(100%) invert(27%) sepia(58%) saturate(1392%) hue-rotate(208deg) brightness(85%) contrast(93%)"
 const luckIconFilter =
   "brightness(0) saturate(100%) invert(40%) sepia(31%) saturate(1176%) hue-rotate(72deg) brightness(91%) contrast(86%)"
 const cardTentacleUrl =
@@ -41,7 +44,7 @@ export function CharacterCard({ character, onDelete }: CharacterCardProps) {
   return (
     <Card
       asChild
-      className="relative h-[104px] flex-row gap-0 rounded-md border border-[var(--ml-border-subtle)] bg-[var(--ml-surface-panel)] p-[6px] py-[6px] ring-0 transition-colors hover:border-[var(--ml-border-aged)]"
+      className="relative h-[120px] flex-row gap-0 rounded-md border border-[var(--ml-border-subtle)] bg-[var(--ml-surface-panel)] p-[6px] py-[6px] ring-0 transition-colors hover:border-[var(--ml-border-aged)]"
       size="sm"
     >
       <article>
@@ -51,24 +54,24 @@ export function CharacterCard({ character, onDelete }: CharacterCardProps) {
           data-testid="character-card-tentacle"
           style={{ backgroundImage: `url(${cardTentacleUrl})` }}
         />
-        <div className="relative my-auto size-20 shrink-0 overflow-hidden rounded-sm border border-[var(--ml-border-subtle)] bg-[var(--ml-surface-panel-raised)]">
+        <div className="relative my-auto size-[92px] shrink-0 overflow-hidden rounded-sm border border-[var(--ml-border-subtle)] bg-[var(--ml-surface-panel-raised)]">
           <Image
             alt={`${portraitKind === "female" ? "Женский" : "Мужской"} портрет`}
             className="object-cover"
             fill
-            sizes="80px"
+            sizes="92px"
             src={portraitSrc}
             unoptimized={Boolean(character.portrait_url)}
           />
         </div>
         <div className="relative ml-[6px] flex min-w-0 flex-1 flex-col py-0.5">
           <div className="flex min-w-0 items-start gap-1">
-            <h3 className="min-w-0 flex-1 truncate font-heading text-[1.05rem] font-medium leading-tight text-[var(--ml-ink-primary)]">
+            <h3 className="min-w-0 flex-1 truncate font-heading text-xl font-medium leading-tight text-[var(--ml-ink-primary)]">
               {character.name}
             </h3>
             <CharacterCardActions character={character} onDelete={onDelete} />
           </div>
-          <p className="mt-0.5 truncate font-body text-xs text-[var(--ml-ink-muted)]">
+          <p className="mt-0.5 truncate font-body text-base text-[var(--ml-ink-muted)]">
             {subtitle || "Данные сыщика не заполнены"}
           </p>
           <div
@@ -83,18 +86,18 @@ export function CharacterCard({ character, onDelete }: CharacterCardProps) {
               max={character.hp.max}
             />
             <CharacterStat
+              current={character.sanity.current}
+              image={sanityIcon}
+              imageFilter={sanityIconFilter}
+              label="Рассудок"
+              max={character.sanity.max}
+            />
+            <CharacterStat
               current={character.mp.current}
               image={magicIcon}
               imageFilter={magicIconFilter}
               label="Магия"
               max={character.mp.max}
-            />
-            <CharacterStat
-              current={character.sanity.current}
-              icon={Brain}
-              iconClassName="text-[#3547a5]"
-              label="Рассудок"
-              max={character.sanity.max}
             />
             <CharacterStat
               current={character.luck.current}
