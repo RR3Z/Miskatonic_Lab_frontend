@@ -1,19 +1,19 @@
 "use client"
 
+import { CharacterSectionsPanel } from "@/components/character/detail/layout/character-sections-panel"
 import {
   DEFAULT_CHARACTER_SHEET_LAYOUT,
   SECTIONS_PANEL_ID,
   SKILLS_PANEL_ID,
 } from "@/components/character/detail/layout/character-sheet-layout-definitions"
+import { CharacterSkillsPanel } from "@/components/character/detail/layout/character-skills-panel"
 import { useCharacterSheetLayout } from "@/components/character/detail/layout/use-character-sheet-layout"
-import { CharacterSkills } from "@/components/character/detail/skills/character-skills"
-import { CharacterSheetTabs } from "@/components/character/detail/tabs/character-sheet-tabs"
+import { useDesktopCharacterSheet } from "@/components/character/detail/layout/use-desktop-character-sheet"
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import type { CharacterDetail } from "@/types/character"
 
 export function CharacterSheetWorkspace({
@@ -21,7 +21,24 @@ export function CharacterSheetWorkspace({
 }: {
   character: CharacterDetail
 }) {
+  const isDesktop = useDesktopCharacterSheet()
   const { groupRef, saveLayout } = useCharacterSheetLayout(character.id)
+
+  if (!isDesktop) {
+    return (
+      <div
+        className="flex min-w-0 flex-col gap-3"
+        data-testid="character-sheet-stacked-workspace"
+      >
+        <section className="h-[320px] overflow-hidden rounded-md border border-[var(--ml-border-aged)] bg-[var(--ml-surface-panel)] sm:h-[360px]">
+          <CharacterSkillsPanel character={character} />
+        </section>
+        <section className="h-[720px] overflow-hidden rounded-md border border-[var(--ml-border-aged)] bg-[var(--ml-surface-panel)] sm:h-[760px]">
+          <CharacterSectionsPanel character={character} />
+        </section>
+      </div>
+    )
+  }
 
   return (
     <ResizablePanelGroup
@@ -38,14 +55,7 @@ export function CharacterSheetWorkspace({
         maxSize="68%"
         minSize="45%"
       >
-        <ScrollArea className="h-full" data-testid="character-skills-panel">
-          <div className="p-4">
-            <CharacterSkills
-              characterId={character.id}
-              skills={character.skills}
-            />
-          </div>
-        </ScrollArea>
+        <CharacterSkillsPanel character={character} />
       </ResizablePanel>
 
       <ResizableHandle
@@ -60,18 +70,7 @@ export function CharacterSheetWorkspace({
         maxSize="55%"
         minSize="32%"
       >
-        <div
-          className="flex h-full min-w-0 flex-col"
-          data-testid="character-sections-panel"
-        >
-          <CharacterSheetTabs
-            backstory={character.backstory}
-            characterId={character.id}
-            finances={character.finances}
-            notes={character.notes}
-            skills={character.skills}
-          />
-        </div>
+        <CharacterSectionsPanel character={character} />
       </ResizablePanel>
     </ResizablePanelGroup>
   )

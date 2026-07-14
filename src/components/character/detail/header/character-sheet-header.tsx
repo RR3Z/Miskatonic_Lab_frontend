@@ -15,35 +15,35 @@ export function CharacterSheetHeader({
 }) {
   return (
     <header
-      className="relative grid shrink-0 grid-cols-[minmax(360px,1fr)_1px_minmax(260px,0.95fr)_1px_minmax(150px,0.55fr)_1px_minmax(492px,1.4fr)] items-stretch gap-2 overflow-hidden rounded-md border border-[var(--ml-border-aged)] bg-[var(--ml-surface-panel)] p-2 shadow-[0_18px_45px_rgba(0,0,0,0.18)]"
+      className="relative grid shrink-0 grid-cols-1 items-stretch gap-3 overflow-hidden rounded-md border border-[var(--ml-border-aged)] bg-[var(--ml-surface-panel)] p-2 shadow-[0_18px_45px_rgba(0,0,0,0.18)] md:grid-cols-2 md:gap-2 xl:grid-cols-[minmax(330px,1fr)_1px_minmax(220px,0.95fr)_1px_minmax(125px,0.55fr)_1px_minmax(430px,1.4fr)]"
       data-testid="character-sheet-header"
     >
       <CharacterIdentitySection character={character} />
 
       <Separator
-        className="my-1 bg-[var(--ml-border-subtle)]"
+        className="my-1 hidden bg-[var(--ml-border-subtle)] xl:block"
         orientation="vertical"
       />
 
       <CharacterCharacteristicsSection character={character} />
 
       <Separator
-        className="my-1 bg-[var(--ml-border-subtle)]"
+        className="my-1 hidden bg-[var(--ml-border-subtle)] xl:block"
         orientation="vertical"
       />
 
       <CharacterDerivedStatsSection character={character} />
 
       <Separator
-        className="my-1 bg-[var(--ml-border-subtle)]"
+        className="my-1 hidden bg-[var(--ml-border-subtle)] xl:block"
         orientation="vertical"
       />
 
-      <div className="grid h-full min-w-0 self-stretch grid-cols-[minmax(175px,0.7fr)_1px_minmax(300px,1.3fr)] items-stretch gap-2">
+      <div className="grid h-full min-w-0 self-stretch grid-cols-1 items-stretch gap-3 sm:grid-cols-[minmax(150px,0.7fr)_1px_minmax(260px,1.3fr)] sm:gap-2 md:col-span-2 xl:col-span-1">
         <CharacterResourcesSection character={character} />
 
         <Separator
-          className="my-1 bg-[var(--ml-border-subtle)]"
+          className="my-1 hidden bg-[var(--ml-border-subtle)] sm:block"
           orientation="vertical"
         />
 

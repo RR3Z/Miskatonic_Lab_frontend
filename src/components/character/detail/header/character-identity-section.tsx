@@ -36,7 +36,7 @@ export function CharacterIdentitySection({
   }
 
   return (
-    <section className="flex h-full min-w-0 self-stretch items-center gap-3">
+    <section className="flex h-full min-w-0 self-stretch items-center gap-3 md:col-span-2 xl:col-span-1">
       <CharacterPortraitEditor
         alt={`${portraitKind === "female" ? "Женский" : "Мужской"} портрет ${character.name}`}
         characterId={character.id}
