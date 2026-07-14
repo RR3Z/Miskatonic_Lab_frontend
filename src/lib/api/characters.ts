@@ -7,6 +7,7 @@ import type {
   CharacterApiListItem,
   CharacterApiLuckValue,
   CharacterApiStatValue,
+  CharacterDetail,
   CharacterListItem,
   CharacterLuckValue,
   CharacterStatValue,
@@ -26,6 +27,13 @@ export async function fetchCharacters(
     .json<CharacterApiListItem[]>()
 
   return characters.map(normalizeCharacterListItem)
+}
+
+export async function fetchCharacter(
+  api: KyInstance,
+  characterId: string,
+): Promise<CharacterDetail> {
+  return api.get(`api/characters/${characterId}/`).json<CharacterDetail>()
 }
 
 export async function deleteCharacter(
