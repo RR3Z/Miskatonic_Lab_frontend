@@ -1,7 +1,6 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -13,10 +12,15 @@ import {
   createCharacterNoteDefaultValues,
   createCharacterNoteSchema,
 } from "@/dto/character/create-character-note.dto"
-import { useCreateCharacterNote } from "@/lib/api/use-characters"
+import { useCreateCharacterNote } from "@/lib/api/use-character-notes"
 
-export function useCreateCharacterNoteDialog(characterId: string) {
-  const [open, setOpen] = useState(false)
+export function useCreateCharacterNoteForm({
+  characterId,
+  onCreated,
+}: {
+  characterId: string
+  onCreated: () => void
+}) {
   const mutation = useCreateCharacterNote(characterId)
   const form = useForm<
     CreateCharacterNoteInput,
@@ -30,21 +34,12 @@ export function useCreateCharacterNoteDialog(characterId: string) {
   })
   const isPending = mutation.isPending || form.formState.isSubmitting
 
-  function handleOpenChange(nextOpen: boolean) {
-    if (isPending) return
-    setOpen(nextOpen)
-    if (!nextOpen) {
-      form.reset()
-      mutation.reset()
-    }
-  }
-
   async function handleSubmit(data: CreateCharacterNoteDto) {
     try {
       await mutation.mutateAsync(data)
       toast.success("Заметка добавлена")
       form.reset()
-      setOpen(false)
+      onCreated()
     } catch {
       toast.error("Не удалось добавить заметку. Попробуйте ещё раз.", {
         id: "character-note-create-error",
@@ -52,11 +47,5 @@ export function useCreateCharacterNoteDialog(characterId: string) {
     }
   }
 
-  return {
-    form,
-    handleOpenChange,
-    handleSubmit,
-    isPending,
-    open,
-  }
+  return { form, handleSubmit, isPending }
 }

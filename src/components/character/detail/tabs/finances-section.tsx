@@ -1,43 +1,41 @@
-import { EditableSectionHeader } from "@/components/character/detail/tabs/editable-section-header"
-import { FinanceCard } from "@/components/character/detail/tabs/finance-card"
-import type { CharacterFinances } from "@/types/character"
+"use client"
 
-export function FinancesSection({ finances }: { finances: CharacterFinances }) {
+import { DeleteResourceButton } from "@/components/character/detail/editors/delete-resource-button"
+import { FinanceFieldsGrid } from "@/components/character/detail/tabs/finance-fields-grid"
+import { SectionTitle } from "@/components/character/detail/tabs/section-title"
+import { useDeleteCharacterFinances } from "@/lib/api/use-character-finances"
+import type { CharacterFinances, CharacterSkill } from "@/types/character"
+
+export function FinancesSection({
+  characterId,
+  finances,
+  skills,
+}: {
+  characterId: string
+  finances: CharacterFinances
+  skills: CharacterSkill[] | null
+}) {
+  const deleteFinances = useDeleteCharacterFinances(characterId)
+
   return (
     <section className="space-y-3" data-testid="character-finances-content">
-      <EditableSectionHeader
-        editLabel="Редактировать имущество"
-        title="Имущество"
-        tooltip="Редактирование имущества будет добавлено позже"
-      />
-      <div className="grid grid-cols-2 gap-3">
-        <FinanceCard
-          className="min-h-20"
-          label="Карманные деньги"
-          value={finances.spending_limit}
-        />
-        <FinanceCard
-          className="min-h-20"
-          label="Наличные"
-          value={finances.cash}
-        />
-        <FinanceCard
-          className="col-span-2 min-h-20"
-          label="Кредитный рейтинг"
-          value={
-            finances.credit_rating ? (
-              <span className="font-mono font-semibold tabular-nums">
-                {finances.credit_rating.value}%
-              </span>
-            ) : null
-          }
-        />
-        <FinanceCard
-          className="col-span-2 min-h-32"
-          label="Активы"
-          value={finances.assets}
-        />
+      <div className="flex items-center justify-between gap-3">
+        <SectionTitle>Имущество</SectionTitle>
+        {finances.id ? (
+          <DeleteResourceButton
+            ariaLabel="Удалить имущество"
+            description="Денежные значения, активы и связь с кредитным рейтингом будут удалены."
+            errorMessage="Не удалось удалить имущество"
+            onDelete={() => deleteFinances.mutateAsync()}
+            title="Удалить имущество?"
+          />
+        ) : null}
       </div>
+      <FinanceFieldsGrid
+        characterId={characterId}
+        finances={finances}
+        skills={skills}
+      />
     </section>
   )
 }

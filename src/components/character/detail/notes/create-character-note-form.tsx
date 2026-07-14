@@ -3,9 +3,8 @@
 import { useId } from "react"
 import { Controller } from "react-hook-form"
 
-import type { CreateCharacterNoteFormProps } from "@/components/character/detail/notes/create-character-note-form.types"
+import { useCreateCharacterNoteForm } from "@/components/character/detail/notes/use-create-character-note-form"
 import { Button } from "@/components/ui/button"
-import { DialogFooter } from "@/components/ui/dialog"
 import { Field, FieldError, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
@@ -13,17 +12,28 @@ import { Textarea } from "@/components/ui/textarea"
 import { MAX_CHARACTER_NOTE_TITLE_LENGTH } from "@/dto/character/create-character-note.dto"
 
 export function CreateCharacterNoteForm({
-  form,
-  isPending,
+  characterId,
   onCancel,
-  onSubmit,
-}: CreateCharacterNoteFormProps) {
+  onCreated,
+}: {
+  characterId: string
+  onCancel: () => void
+  onCreated: () => void
+}) {
   const titleId = useId()
   const bodyId = useId()
+  const { form, handleSubmit, isPending } = useCreateCharacterNoteForm({
+    characterId,
+    onCreated,
+  })
 
   return (
-    <form noValidate onSubmit={form.handleSubmit(onSubmit)}>
-      <div className="grid gap-4">
+    <form
+      className="rounded-sm border border-[var(--ml-border-aged)] bg-[var(--ml-bg-page)]/20 p-3"
+      noValidate
+      onSubmit={form.handleSubmit(handleSubmit)}
+    >
+      <div className="grid gap-3">
         <Controller
           control={form.control}
           name="title"
@@ -33,11 +43,11 @@ export function CreateCharacterNoteForm({
               <Input
                 {...field}
                 aria-invalid={fieldState.invalid}
-                className="bg-[var(--ml-surface-panel-raised)]"
+                className="bg-[var(--ml-surface-panel-raised)] font-heading font-semibold"
                 disabled={isPending}
                 id={titleId}
                 maxLength={MAX_CHARACTER_NOTE_TITLE_LENGTH}
-                placeholder="Например, Зацепка в архиве"
+                placeholder="Новая заметка"
                 required
               />
               <FieldError errors={[fieldState.error]} />
@@ -53,7 +63,7 @@ export function CreateCharacterNoteForm({
               <Textarea
                 {...field}
                 aria-invalid={fieldState.invalid}
-                className="min-h-36 bg-[var(--ml-surface-panel-raised)]"
+                className="min-h-28 bg-[var(--ml-surface-panel-raised)]"
                 disabled={isPending}
                 id={bodyId}
                 placeholder="Что важно запомнить?"
@@ -65,22 +75,16 @@ export function CreateCharacterNoteForm({
         />
       </div>
 
-      <DialogFooter className="mt-5 sm:justify-stretch">
+      <div className="mt-3 flex justify-end gap-2">
         <Button
-          className="w-full sm:flex-1"
           disabled={isPending}
           onClick={onCancel}
           type="button"
-          variant="destructive"
+          variant="secondary"
         >
           Отмена
         </Button>
-        <Button
-          className="w-full sm:flex-1"
-          disabled={isPending}
-          type="submit"
-          variant="success"
-        >
+        <Button disabled={isPending} type="submit" variant="success">
           {isPending ? (
             <>
               <Spinner aria-hidden="true" data-icon="inline-start" />
@@ -90,7 +94,7 @@ export function CreateCharacterNoteForm({
             "Добавить"
           )}
         </Button>
-      </DialogFooter>
+      </div>
     </form>
   )
 }

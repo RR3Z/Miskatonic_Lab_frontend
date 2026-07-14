@@ -14,6 +14,7 @@ import type {
   CharacterBackstory,
   CharacterFinances,
   CharacterNote,
+  CharacterSkill,
 } from "@/types/character"
 
 export function CharacterSheetTabs({
@@ -21,11 +22,13 @@ export function CharacterSheetTabs({
   characterId,
   finances,
   notes,
+  skills,
 }: {
   backstory: CharacterBackstory
   characterId: string
   finances: CharacterFinances
   notes: CharacterNote[] | null
+  skills: CharacterSkill[] | null
 }) {
   return (
     <Tabs className="min-h-0 flex-1 gap-0" defaultValue="history-finances">
@@ -46,7 +49,12 @@ export function CharacterSheetTabs({
       </TabsList>
 
       <ScrollableTabsContent value="history-finances">
-        <HistoryFinancesTab backstory={backstory} finances={finances} />
+        <HistoryFinancesTab
+          backstory={backstory}
+          characterId={characterId}
+          finances={finances}
+          skills={skills}
+        />
       </ScrollableTabsContent>
       <ScrollableTabsContent value="inventory">
         <InventoryTab />

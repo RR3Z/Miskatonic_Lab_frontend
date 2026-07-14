@@ -66,6 +66,7 @@ export function CharacterSheetWorkspace({
             characterId={character.id}
             finances={character.finances}
             notes={character.notes}
+            skills={character.skills}
           />
         </div>
       </ResizablePanel>

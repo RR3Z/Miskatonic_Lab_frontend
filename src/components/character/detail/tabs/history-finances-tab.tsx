@@ -1,14 +1,22 @@
 import { FinancesSection } from "@/components/character/detail/tabs/finances-section"
 import { HistorySection } from "@/components/character/detail/tabs/history-section"
 import { TooltipProvider } from "@/components/ui/tooltip"
-import type { CharacterBackstory, CharacterFinances } from "@/types/character"
+import type {
+  CharacterBackstory,
+  CharacterFinances,
+  CharacterSkill,
+} from "@/types/character"
 
 export function HistoryFinancesTab({
   backstory,
+  characterId,
   finances,
+  skills,
 }: {
   backstory: CharacterBackstory
+  characterId: string
   finances: CharacterFinances
+  skills: CharacterSkill[] | null
 }) {
   return (
     <TooltipProvider delayDuration={200}>
@@ -16,8 +24,12 @@ export function HistoryFinancesTab({
         className="space-y-5"
         data-testid="character-history-finances-content"
       >
-        <HistorySection backstory={backstory} />
-        <FinancesSection finances={finances} />
+        <HistorySection backstory={backstory} characterId={characterId} />
+        <FinancesSection
+          characterId={characterId}
+          finances={finances}
+          skills={skills}
+        />
       </div>
     </TooltipProvider>
   )
