@@ -12,6 +12,7 @@ import {
   type CharacterStateRule,
   characterStateRules,
 } from "@/components/character/detail/character-state-rules"
+import { Separator } from "@/components/ui/separator"
 import {
   Tooltip,
   TooltipContent,
@@ -118,7 +119,7 @@ function ResourceStat({
 function CompactStat({ label, title, value }: CompactStatProps) {
   return (
     <div
-      className="min-w-0 rounded-sm border border-[var(--ml-border-subtle)] bg-[var(--ml-bg-page)]/25 px-2 py-1 text-center"
+      className="flex min-h-0 min-w-0 flex-col items-center justify-center rounded-sm border border-[var(--ml-border-subtle)] bg-[var(--ml-bg-page)]/25 px-2 py-1 text-center"
       title={title}
     >
       <span className="block truncate font-body text-[0.65rem] uppercase tracking-[0.12em] text-[var(--ml-ink-muted)]">
@@ -307,13 +308,13 @@ export function CharacterSheetHeader({ character }: CharacterSheetHeaderProps) {
     : null
 
   const characteristics = [
-    ["СИЛА", "Сила", character.characteristics.strength],
-    ["ТЕЛ", "Телосложение", character.characteristics.constitution],
-    ["РАЗМ", "Размер", character.characteristics.size],
-    ["ЛОВ", "Ловкость", character.characteristics.dexterity],
-    ["ВНЕ", "Внешность", character.characteristics.appearance],
+    ["СИЛ", "Сила", character.characteristics.strength],
+    ["ВЫН", "Выносливость", character.characteristics.constitution],
+    ["ТЕЛ", "Телосложение", character.characteristics.size],
+    ["ЛВК", "Ловкость", character.characteristics.dexterity],
+    ["НАР", "Наружность", character.characteristics.appearance],
     ["ИНТ", "Интеллект", character.characteristics.intelligence],
-    ["ВОЛ", "Сила воли", character.characteristics.power],
+    ["МОЩ", "Мощь", character.characteristics.power],
     ["ОБР", "Образование", character.characteristics.education],
   ] as const
 
@@ -357,10 +358,10 @@ export function CharacterSheetHeader({ character }: CharacterSheetHeaderProps) {
 
   return (
     <header
-      className="relative grid shrink-0 grid-cols-[minmax(360px,1fr)_minmax(260px,0.95fr)_minmax(150px,0.55fr)_minmax(490px,1.4fr)] items-stretch gap-2 overflow-hidden rounded-md border border-[var(--ml-border-aged)] bg-[var(--ml-surface-panel)] p-2 shadow-[0_18px_45px_rgba(0,0,0,0.18)]"
+      className="relative grid shrink-0 grid-cols-[minmax(360px,1fr)_1px_minmax(260px,0.95fr)_1px_minmax(150px,0.55fr)_1px_minmax(490px,1.4fr)] items-stretch gap-2 overflow-hidden rounded-md border border-[var(--ml-border-aged)] bg-[var(--ml-surface-panel)] p-2 shadow-[0_18px_45px_rgba(0,0,0,0.18)]"
       data-testid="character-sheet-header"
     >
-      <section className="flex min-w-0 items-start gap-3">
+      <section className="flex h-full min-w-0 self-stretch items-center gap-3">
         <div className="relative size-24 shrink-0 overflow-hidden rounded-sm border border-[var(--ml-border-aged)] bg-[var(--ml-surface-panel-raised)]">
           <Image
             alt={`${portraitKind === "female" ? "Женский" : "Мужской"} портрет ${character.name}`}
@@ -404,9 +405,14 @@ export function CharacterSheetHeader({ character }: CharacterSheetHeaderProps) {
         </div>
       </section>
 
-      <section className="h-full min-w-0 self-stretch rounded-md border border-[var(--ml-border-subtle)] bg-[var(--ml-surface-panel-raised)]/35 p-2">
+      <Separator
+        className="my-1 bg-[var(--ml-border-subtle)]"
+        orientation="vertical"
+      />
+
+      <section className="flex h-full min-w-0 self-stretch flex-col py-1">
         <SectionTitle>Характеристики</SectionTitle>
-        <div className="grid grid-cols-4 gap-1.5">
+        <div className="grid min-h-0 flex-1 auto-rows-fr grid-cols-4 gap-1.5">
           {characteristics.map(([label, title, value]) => (
             <CompactStat
               key={label}
@@ -418,20 +424,30 @@ export function CharacterSheetHeader({ character }: CharacterSheetHeaderProps) {
         </div>
       </section>
 
-      <section className="h-full min-w-0 self-stretch rounded-md border border-[var(--ml-border-subtle)] bg-[var(--ml-surface-panel-raised)]/35 p-2">
+      <Separator
+        className="my-1 bg-[var(--ml-border-subtle)]"
+        orientation="vertical"
+      />
+
+      <section className="flex h-full min-w-0 self-stretch flex-col py-1">
         <SectionTitle>Производные</SectionTitle>
-        <div className="grid grid-cols-2 gap-1.5">
+        <div className="grid min-h-0 flex-1 auto-rows-fr grid-cols-2 gap-1.5">
           {derivedStats.map(([label, value]) => (
             <CompactStat key={label} label={label} value={value} />
           ))}
         </div>
       </section>
 
-      <div className="grid h-full min-w-0 self-stretch grid-cols-[minmax(175px,0.7fr)_minmax(300px,1.3fr)] items-stretch gap-2">
-        <section className="h-full min-w-0 self-stretch rounded-md border border-[var(--ml-border-subtle)] bg-[var(--ml-surface-panel-raised)]/35 p-2">
+      <Separator
+        className="my-1 bg-[var(--ml-border-subtle)]"
+        orientation="vertical"
+      />
+
+      <div className="grid h-full min-w-0 self-stretch grid-cols-[minmax(175px,0.7fr)_1px_minmax(300px,1.3fr)] items-stretch gap-2">
+        <section className="flex h-full min-w-0 self-stretch flex-col py-1">
           <SectionTitle>Ресурсы</SectionTitle>
           <div
-            className="grid grid-cols-2 gap-1.5"
+            className="grid min-h-0 flex-1 auto-rows-fr grid-cols-2 gap-1.5"
             data-testid="character-resource-grid"
           >
             {resources.map((resource) => (
@@ -440,7 +456,12 @@ export function CharacterSheetHeader({ character }: CharacterSheetHeaderProps) {
           </div>
         </section>
 
-        <section className="flex h-full min-w-0 self-stretch flex-col rounded-md border border-[var(--ml-border-subtle)] bg-[var(--ml-surface-panel-raised)]/35 p-2">
+        <Separator
+          className="my-1 bg-[var(--ml-border-subtle)]"
+          orientation="vertical"
+        />
+
+        <section className="flex h-full min-w-0 self-stretch flex-col py-1">
           <SectionTitle>Состояния</SectionTitle>
           <CharacterStates
             initialValues={{
