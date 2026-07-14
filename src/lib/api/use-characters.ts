@@ -12,6 +12,7 @@ import {
   fetchCharacters,
 } from "@/lib/api/characters"
 import { createApiClient } from "@/lib/api/client"
+import { removeCharacterSheetLayout } from "@/lib/utils/character-sheet-layout.util"
 import type { CharacterListItem } from "@/types/character"
 
 export class CharacterSessionRequiredError extends Error {
@@ -58,6 +59,7 @@ export function useDeleteCharacter() {
       return deleteCharacter(api, characterId)
     },
     onSuccess: (_, characterId) => {
+      removeCharacterSheetLayout(characterId)
       if (queryKey) {
         queryClient.setQueryData<CharacterListItem[]>(queryKey, (characters) =>
           characters?.filter((character) => character.id !== characterId),
