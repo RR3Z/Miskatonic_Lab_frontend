@@ -40,10 +40,7 @@ export function CharacterDetailPage({ characterId }: CharacterDetailPageProps) {
     <div className="flex h-[100svh] w-full min-w-[1180px] flex-col px-4 py-4">
       <div className="flex min-h-0 flex-1 flex-col gap-3">
         <CharacterSheetHeader character={data} />
-        <CharacterSheetWorkspace
-          characterId={characterId}
-          skills={data.skills}
-        />
+        <CharacterSheetWorkspace character={data} />
       </div>
     </div>
   )

@@ -387,14 +387,11 @@ export function CharacterSheetHeader({ character }: CharacterSheetHeaderProps) {
               testId="character-age"
               value={character.age}
             />
-            <IdentityLine label="Игрок" value={character.player_name} />
+            <IdentityLine
+              label="Место жительства"
+              value={character.residence}
+            />
             <IdentityLine label="Пол" testId="character-sex" value={sexLabel} />
-            <div className="col-span-2">
-              <IdentityLine
-                label="Место жительства"
-                value={character.residence}
-              />
-            </div>
             <div className="col-span-2">
               <IdentityLine
                 label="Место рождения"
