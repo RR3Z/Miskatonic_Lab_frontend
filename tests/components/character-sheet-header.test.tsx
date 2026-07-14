@@ -99,6 +99,26 @@ describe("CharacterSheetHeader", () => {
     )
   })
 
+  it("rejects an invalid numeric characteristic without a request", async () => {
+    const user = userEvent.setup()
+    render(<CharacterSheetHeader character={characterDetailFixture()} />)
+
+    await user.click(
+      screen.getByRole("button", { name: "Редактировать характеристику Сила" }),
+    )
+    const input = screen.getByRole("textbox", {
+      name: "Редактировать характеристику Сила",
+    })
+    await user.clear(input)
+    await user.type(input, "-1{Enter}")
+
+    expect(mutations.updateCharacteristics.mutateAsync).not.toHaveBeenCalled()
+    expect(input).toHaveAttribute("aria-invalid", "true")
+    expect(
+      screen.getByText("Введите целое неотрицательное число"),
+    ).toBeVisible()
+  })
+
   it("updates a resource value through its backend subresource", async () => {
     const user = userEvent.setup()
     render(<CharacterSheetHeader character={characterDetailFixture()} />)

@@ -69,6 +69,7 @@ import { CharacterDetailPage } from "@/components/character/detail/character-det
 
 describe("CharacterDetailPage", () => {
   beforeEach(() => {
+    setDesktopCharacterSheet(true)
     queryState.data = undefined
     queryState.error = null
     queryState.isFetching = false
@@ -136,6 +137,24 @@ describe("CharacterDetailPage", () => {
     expect(screen.getByText("Загрузка листа персонажа…")).toBeInTheDocument()
   })
 
+  it("stacks the workspace below the desktop breakpoint", () => {
+    setDesktopCharacterSheet(false)
+    queryState.data = characterDetailFixture()
+
+    render(<CharacterDetailPage characterId="character-1" />)
+
+    expect(
+      screen.getByTestId("character-sheet-stacked-workspace"),
+    ).toBeVisible()
+    expect(screen.getByTestId("character-skills-panel")).toBeVisible()
+    expect(screen.getByTestId("character-sections-panel")).toBeVisible()
+    expect(
+      screen.queryByRole("separator", {
+        name: "Изменить ширину панелей листа",
+      }),
+    ).not.toBeInTheDocument()
+  })
+
   it("renders characteristics, derived stats, and character states", () => {
     const baseCharacter = characterDetailFixture()
     queryState.data = characterDetailFixture({
@@ -174,7 +193,9 @@ describe("CharacterDetailPage", () => {
     expect(screen.getByRole("heading", { name: "Производные" })).toBeVisible()
     expect(screen.getByRole("heading", { name: "Состояния" })).toBeVisible()
     expect(screen.getByTestId("character-sheet-header")).toHaveClass(
-      "grid-cols-[minmax(360px,1fr)_1px_minmax(260px,0.95fr)_1px_minmax(150px,0.55fr)_1px_minmax(492px,1.4fr)]",
+      "grid-cols-1",
+      "md:grid-cols-2",
+      "xl:grid-cols-[minmax(330px,1fr)_1px_minmax(220px,0.95fr)_1px_minmax(125px,0.55fr)_1px_minmax(430px,1.4fr)]",
     )
     expect(screen.getByText("Комплекция")).toHaveClass("w-full", "min-w-0")
     expect(
@@ -353,6 +374,30 @@ describe("CharacterDetailPage", () => {
     })
   })
 
+  it("rolls back a character state when persistence fails", async () => {
+    const user = userEvent.setup()
+    queryState.data = characterDetailFixture()
+    resourceMutation.mutateAsync.mockRejectedValueOnce(
+      new Error("network failed"),
+    )
+
+    render(<CharacterDetailPage characterId="character-1" />)
+
+    const state = screen.getByTestId("character-state-major-wound")
+    const toggle = screen.getByRole("button", { name: "Серьёзная рана" })
+    await user.click(toggle)
+
+    expect(resourceMutation.mutateAsync).toHaveBeenCalledWith({
+      resource: "hp",
+      values: { major_wound: true },
+    })
+    await waitFor(() => {
+      expect(toggle).toHaveAttribute("aria-pressed", "false")
+      expect(state).toHaveAttribute("data-active", "false")
+      expect(toggle).toBeEnabled()
+    })
+  })
+
   it("renders the not-found state for a 404 response", () => {
     queryState.error = { response: new Response(null, { status: 404 }) }
 
@@ -375,3 +420,15 @@ describe("CharacterDetailPage", () => {
     expect(queryState.refetch).toHaveBeenCalledOnce()
   })
 })
+
+function setDesktopCharacterSheet(matches: boolean) {
+  window.matchMedia = vi.fn().mockImplementation(
+    (query: string) =>
+      ({
+        addEventListener: vi.fn(),
+        matches: query === "(min-width: 1280px)" ? matches : false,
+        media: query,
+        removeEventListener: vi.fn(),
+      }) as unknown as MediaQueryList,
+  )
+}

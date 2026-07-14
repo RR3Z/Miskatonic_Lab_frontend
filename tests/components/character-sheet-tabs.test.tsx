@@ -106,7 +106,9 @@ describe("CharacterSheetTabs", () => {
       "relative",
       "h-10",
       "border-b",
-      "overflow-visible",
+      "overflow-x-auto",
+      "overflow-y-hidden",
+      "xl:overflow-visible",
     )
     expect(
       screen
@@ -308,6 +310,33 @@ describe("CharacterSheetTabs", () => {
     expect(
       screen.queryByRole("dialog", { name: "Новая заметка" }),
     ).not.toBeInTheDocument()
+  })
+
+  it("keeps the add-note action visually distinct and keyboard focusable", async () => {
+    const user = userEvent.setup()
+    const character = characterDetailFixture()
+
+    render(
+      <CharacterSheetTabs
+        backstory={character.backstory}
+        characterId={character.id}
+        finances={character.finances}
+        notes={null}
+        skills={character.skills}
+      />,
+    )
+
+    await user.click(screen.getByRole("tab", { name: "Заметки" }))
+    const addNote = screen.getByRole("button", { name: "Добавить заметку" })
+    expect(addNote).toHaveAttribute("data-variant", "default")
+    expect(addNote).toHaveClass(
+      "bg-[var(--ml-ink-on-paper)]",
+      "text-[var(--ml-surface-paper)]",
+      "focus-visible:ring-3",
+    )
+
+    addNote.focus()
+    expect(addNote).toHaveFocus()
   })
 
   it("edits and deletes an existing note inline", async () => {
