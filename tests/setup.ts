@@ -42,6 +42,10 @@ Object.defineProperty(globalThis, "ResizeObserver", {
 })
 
 Object.defineProperties(HTMLElement.prototype, {
+  getAnimations: {
+    configurable: true,
+    value: vi.fn(() => []),
+  },
   hasPointerCapture: {
     configurable: true,
     value: vi.fn(() => false),

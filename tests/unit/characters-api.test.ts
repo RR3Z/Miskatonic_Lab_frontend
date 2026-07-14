@@ -2,6 +2,7 @@ import type { KyInstance } from "ky"
 import { describe, expect, it, vi } from "vitest"
 
 import {
+  createCharacterNote,
   createCharacterWithPortrait,
   fetchCharacter,
   normalizeCharacterListItem,
@@ -73,6 +74,32 @@ describe("character API normalization", () => {
   })
 })
 
+describe("character note API", () => {
+  it("creates a note under the selected character", async () => {
+    const note = {
+      body: "Inspect the archive.",
+      character_id: "character-1",
+      created_at: "2026-01-01T00:00:00Z",
+      id: "note-1",
+      title: "Lead",
+      updated_at: "2026-01-01T00:00:00Z",
+    }
+    const json = vi.fn(async () => note)
+    const post = vi.fn(() => ({ json }))
+    const api = { post } as unknown as KyInstance
+
+    await expect(
+      createCharacterNote(api, "character-1", {
+        body: note.body,
+        title: note.title,
+      }),
+    ).resolves.toEqual(note)
+    expect(post).toHaveBeenCalledWith("api/characters/character-1/notes/", {
+      json: { body: note.body, title: note.title },
+    })
+  })
+})
+
 describe("character portrait API", () => {
   it("sends the selected file as portrait multipart field", async () => {
     const response = {
@@ -83,7 +110,9 @@ describe("character portrait API", () => {
       portrait_url: "http://localhost:8000/uploads/portraits/portrait.png",
     }
     const json = vi.fn(async () => response)
-    const patch = vi.fn(() => ({ json }))
+    const patch = vi.fn((_path: string, _options: { body: FormData }) => ({
+      json,
+    }))
     const api = { patch } as unknown as KyInstance
     const portrait = new File(["portrait"], "portrait.png", {
       type: "image/png",

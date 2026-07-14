@@ -5,6 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import type { CreateCharacterFormDto } from "@/dto/character/create-character.dto"
 import { characterQueryKeys } from "@/lib/api/character-query-keys"
+import { characterSheetLayoutStorageKey } from "@/lib/utils/character-sheet-layout.util"
 import type {
   CharacterDetail,
   CharacterListItem,
@@ -18,6 +19,7 @@ const authState = vi.hoisted(() => ({
 }))
 
 const apiMocks = vi.hoisted(() => ({
+  createCharacterNote: vi.fn(),
   createCharacterWithPortrait: vi.fn(),
   deleteCharacter: vi.fn(),
   fetchCharacter: vi.fn(),
@@ -35,6 +37,7 @@ import {
   useCharacter,
   useCharacters,
   useCreateCharacter,
+  useCreateCharacterNote,
   useDeleteCharacter,
 } from "@/lib/api/use-characters"
 
@@ -189,9 +192,11 @@ function wrapper(queryClient: QueryClient) {
 
 describe("character query hooks", () => {
   beforeEach(() => {
+    window.localStorage.clear()
     authState.getToken.mockClear()
     authState.isLoaded = true
     authState.userId = "user-a"
+    apiMocks.createCharacterNote.mockReset()
     apiMocks.createCharacterWithPortrait.mockReset()
     apiMocks.deleteCharacter.mockReset()
     apiMocks.fetchCharacter.mockReset()
@@ -239,6 +244,8 @@ describe("character query hooks", () => {
 
   it("removes the deleted character from the current user cache and invalidates it", async () => {
     apiMocks.deleteCharacter.mockResolvedValue(undefined)
+    const layoutKey = characterSheetLayoutStorageKey("character-1")
+    window.localStorage.setItem(layoutKey, '{"character-core":42}')
     const queryClient = createQueryClient()
     queryClient.setQueryData(characterQueryKeys.list("user-a"), [
       character("character-1"),
@@ -263,10 +270,13 @@ describe("character query hooks", () => {
     expect(queryClient.getQueryData(characterQueryKeys.list("user-b"))).toEqual(
       [character("character-1")],
     )
+    expect(window.localStorage.getItem(layoutKey)).toBeNull()
   })
 
   it("keeps the cached list unchanged when delete fails", async () => {
     apiMocks.deleteCharacter.mockRejectedValue(new Error("failed"))
+    const layoutKey = characterSheetLayoutStorageKey("character-1")
+    window.localStorage.setItem(layoutKey, '{"character-core":42}')
     const queryClient = createQueryClient()
     const cachedCharacters = [
       character("character-1"),
@@ -289,6 +299,7 @@ describe("character query hooks", () => {
       cachedCharacters,
     )
     expect(invalidateQueries).not.toHaveBeenCalled()
+    expect(window.localStorage.getItem(layoutKey)).not.toBeNull()
   })
 
   it("invalidates only the current user after create settles", async () => {
@@ -309,6 +320,42 @@ describe("character query hooks", () => {
     })
   })
 
+  it("appends a created note to the active character detail cache", async () => {
+    const note = {
+      body: "Проверить архив.",
+      character_id: "character-1",
+      created_at: "2026-01-01T00:00:00Z",
+      id: "note-1",
+      title: "Зацепка",
+      updated_at: "2026-01-01T00:00:00Z",
+    }
+    apiMocks.createCharacterNote.mockResolvedValue(note)
+    const queryClient = createQueryClient()
+    const queryKey = characterQueryKeys.detail("user-a", "character-1")
+    queryClient.setQueryData(queryKey, characterDetail("character-1"))
+    const invalidateQueries = vi.spyOn(queryClient, "invalidateQueries")
+    const { result } = renderHook(() => useCreateCharacterNote("character-1"), {
+      wrapper: wrapper(queryClient),
+    })
+
+    await act(() =>
+      result.current.mutateAsync({
+        body: note.body,
+        title: note.title,
+      }),
+    )
+
+    expect(apiMocks.createCharacterNote).toHaveBeenCalledWith(
+      expect.anything(),
+      "character-1",
+      { body: note.body, title: note.title },
+    )
+    expect(queryClient.getQueryData<CharacterDetail>(queryKey)?.notes).toEqual([
+      note,
+    ])
+    expect(invalidateQueries).toHaveBeenCalledWith({ queryKey })
+  })
+
   it("blocks character mutations after the session disappears", async () => {
     authState.userId = null
     const queryClient = createQueryClient()
@@ -318,6 +365,10 @@ describe("character query hooks", () => {
     const createHook = renderHook(() => useCreateCharacter(), {
       wrapper: wrapper(queryClient),
     })
+    const createNoteHook = renderHook(
+      () => useCreateCharacterNote("character-1"),
+      { wrapper: wrapper(queryClient) },
+    )
 
     await expect(
       act(() => deleteHook.result.current.mutateAsync("character-1")),
@@ -325,7 +376,16 @@ describe("character query hooks", () => {
     await expect(
       act(() => createHook.result.current.mutateAsync(createInput)),
     ).rejects.toBeInstanceOf(CharacterSessionRequiredError)
+    await expect(
+      act(() =>
+        createNoteHook.result.current.mutateAsync({
+          body: "Текст",
+          title: "Заметка",
+        }),
+      ),
+    ).rejects.toBeInstanceOf(CharacterSessionRequiredError)
     expect(apiMocks.deleteCharacter).not.toHaveBeenCalled()
     expect(apiMocks.createCharacterWithPortrait).not.toHaveBeenCalled()
+    expect(apiMocks.createCharacterNote).not.toHaveBeenCalled()
   })
 })
