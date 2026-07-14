@@ -1,5 +1,8 @@
+"use client"
+
 import { Info } from "lucide-react"
 import Image from "next/image"
+import { useState } from "react"
 
 import {
   type CharacterStatVisualKey,
@@ -39,9 +42,19 @@ type CompactStatProps = {
 
 type CharacterStateProps = {
   active: boolean
+  onToggle: () => void
   rule: CharacterStateRule
   testId: string
-  tone?: "danger" | "warning"
+  tone?: "danger" | "sanity" | "warning"
+}
+
+type CharacterStateValues = {
+  dead: boolean
+  dying: boolean
+  indefiniteInsanity: boolean
+  majorWound: boolean
+  temporaryInsanity: boolean
+  unconscious: boolean
 }
 
 const toneClasses = {
@@ -120,19 +133,23 @@ function CompactStat({ label, title, value }: CompactStatProps) {
 
 function CharacterState({
   active,
+  onToggle,
   rule,
   testId,
   tone = "warning",
 }: CharacterStateProps) {
-  const activeClass =
-    tone === "danger"
-      ? "border-[var(--ml-accent-danger)] bg-[var(--ml-accent-danger)]/20 text-[#d46a72]"
-      : "border-[var(--ml-accent-warning)] bg-[var(--ml-accent-warning)]/15 text-[var(--ml-accent-warning)]"
+  const activeClass = {
+    danger:
+      "border-[var(--ml-accent-danger)] bg-[var(--ml-accent-danger)]/20 text-[#d46a72]",
+    sanity: "border-[#3d4f8b] bg-[#3d4f8b]/20 text-[#7f91d6]",
+    warning:
+      "border-[var(--ml-accent-warning)] bg-[var(--ml-accent-warning)]/15 text-[var(--ml-accent-warning)]",
+  }[tone]
 
   return (
     <div
       className={cn(
-        "flex min-h-7 min-w-0 items-center gap-1 rounded-sm border py-1 pr-1 pl-2 font-body text-[0.68rem] leading-tight uppercase tracking-normal",
+        "flex min-h-7 min-w-0 items-center gap-1 rounded-sm border font-body text-[0.68rem] leading-tight uppercase tracking-normal",
         active
           ? activeClass
           : "border-[var(--ml-border-subtle)] text-[var(--ml-ink-muted)] opacity-60",
@@ -140,21 +157,28 @@ function CharacterState({
       data-active={active}
       data-testid={testId}
     >
-      <span className="min-w-0 flex-1 whitespace-normal" title={rule.label}>
-        {rule.label}
-      </span>
+      <button
+        aria-pressed={active}
+        className="flex min-w-0 flex-1 self-stretch cursor-pointer items-center px-2 py-1 text-left transition-colors hover:bg-[var(--ml-surface-panel-raised)]/45 focus-visible:outline-1 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--ml-focus-ring)]"
+        onClick={onToggle}
+        type="button"
+      >
+        <span className="min-w-0 flex-1 whitespace-normal" title={rule.label}>
+          {rule.label}
+        </span>
+      </button>
       <Tooltip>
         <TooltipTrigger asChild>
           <button
             aria-label={`Информация о состоянии: ${rule.label}`}
-            className="grid size-5 shrink-0 place-items-center rounded-sm text-current opacity-75 transition-opacity hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-[var(--ml-focus-ring)]"
+            className="mr-1 grid size-5 shrink-0 place-items-center rounded-sm text-current opacity-75 transition-opacity hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-[var(--ml-focus-ring)]"
             type="button"
           >
             <Info aria-hidden="true" className="size-3.5" />
           </button>
         </TooltipTrigger>
         <TooltipContent
-          className="flex max-w-90 flex-col items-start gap-2 bg-[var(--ml-ink-primary)] p-3 text-left text-[var(--ml-bg-page)]"
+          className="flex max-w-90 flex-col items-start gap-2 border border-[#5d5231] bg-[#171411] p-3 text-left text-[#d9d2c5] shadow-[0_14px_40px_rgba(0,0,0,0.55)] [&>span>svg]:bg-[#171411] [&>span>svg]:fill-[#171411]"
           side="bottom"
           sideOffset={6}
         >
@@ -170,6 +194,78 @@ function CharacterState({
         </TooltipContent>
       </Tooltip>
     </div>
+  )
+}
+
+function CharacterStates({
+  initialValues,
+}: {
+  initialValues: CharacterStateValues
+}) {
+  const [states, setStates] = useState(initialValues)
+  const toggleState = (state: keyof CharacterStateValues) => {
+    setStates((current) => ({ ...current, [state]: !current[state] }))
+  }
+
+  return (
+    <TooltipProvider delayDuration={200}>
+      <div className="grid min-h-0 flex-1 grid-cols-[1.15fr_0.85fr] items-stretch gap-2">
+        <div className="flex min-h-0 flex-col">
+          <h3 className="mb-0.5 font-body text-[0.64rem] uppercase tracking-[0.12em] text-[var(--ml-ink-muted)]">
+            Здоровье
+          </h3>
+          <div className="grid min-h-0 flex-1 auto-rows-fr grid-cols-2 gap-1.5">
+            <CharacterState
+              active={states.majorWound}
+              onToggle={() => toggleState("majorWound")}
+              rule={characterStateRules.majorWound}
+              testId="character-state-major-wound"
+            />
+            <CharacterState
+              active={states.unconscious}
+              onToggle={() => toggleState("unconscious")}
+              rule={characterStateRules.unconscious}
+              testId="character-state-unconscious"
+            />
+            <CharacterState
+              active={states.dying}
+              onToggle={() => toggleState("dying")}
+              rule={characterStateRules.dying}
+              testId="character-state-dying"
+              tone="danger"
+            />
+            <CharacterState
+              active={states.dead}
+              onToggle={() => toggleState("dead")}
+              rule={characterStateRules.dead}
+              testId="character-state-dead"
+              tone="danger"
+            />
+          </div>
+        </div>
+        <div className="flex min-h-0 flex-col">
+          <h3 className="mb-0.5 font-body text-[0.64rem] uppercase tracking-[0.12em] text-[var(--ml-ink-muted)]">
+            Рассудок
+          </h3>
+          <div className="grid min-h-0 flex-1 auto-rows-fr grid-cols-1 gap-1.5">
+            <CharacterState
+              active={states.temporaryInsanity}
+              onToggle={() => toggleState("temporaryInsanity")}
+              rule={characterStateRules.temporaryInsanity}
+              testId="character-state-temporary-insanity"
+              tone="sanity"
+            />
+            <CharacterState
+              active={states.indefiniteInsanity}
+              onToggle={() => toggleState("indefiniteInsanity")}
+              rule={characterStateRules.indefiniteInsanity}
+              testId="character-state-indefinite-insanity"
+              tone="sanity"
+            />
+          </div>
+        </div>
+      </div>
+    </TooltipProvider>
   )
 }
 
@@ -346,56 +442,17 @@ export function CharacterSheetHeader({ character }: CharacterSheetHeaderProps) {
 
         <section className="flex h-full min-w-0 self-stretch flex-col rounded-md border border-[var(--ml-border-subtle)] bg-[var(--ml-surface-panel-raised)]/35 p-2">
           <SectionTitle>Состояния</SectionTitle>
-          <TooltipProvider delayDuration={200}>
-            <div className="grid min-h-0 flex-1 grid-cols-[1.15fr_0.85fr] items-stretch gap-2">
-              <div className="flex min-h-0 flex-col">
-                <h3 className="mb-0.5 font-body text-[0.64rem] uppercase tracking-[0.12em] text-[var(--ml-ink-muted)]">
-                  Здоровье
-                </h3>
-                <div className="grid min-h-0 flex-1 auto-rows-fr grid-cols-2 gap-1.5">
-                  <CharacterState
-                    active={character.hp.major_wound}
-                    rule={characterStateRules.majorWound}
-                    testId="character-state-major-wound"
-                  />
-                  <CharacterState
-                    active={character.hp.unconscious}
-                    rule={characterStateRules.unconscious}
-                    testId="character-state-unconscious"
-                  />
-                  <CharacterState
-                    active={character.hp.dying}
-                    rule={characterStateRules.dying}
-                    testId="character-state-dying"
-                    tone="danger"
-                  />
-                  <CharacterState
-                    active={character.hp.dead}
-                    rule={characterStateRules.dead}
-                    testId="character-state-dead"
-                    tone="danger"
-                  />
-                </div>
-              </div>
-              <div className="flex min-h-0 flex-col">
-                <h3 className="mb-0.5 font-body text-[0.64rem] uppercase tracking-[0.12em] text-[var(--ml-ink-muted)]">
-                  Рассудок
-                </h3>
-                <div className="grid min-h-0 flex-1 auto-rows-fr grid-cols-1 gap-1.5">
-                  <CharacterState
-                    active={character.sanity.temp_insanity}
-                    rule={characterStateRules.temporaryInsanity}
-                    testId="character-state-temporary-insanity"
-                  />
-                  <CharacterState
-                    active={character.sanity.indef_insanity}
-                    rule={characterStateRules.indefiniteInsanity}
-                    testId="character-state-indefinite-insanity"
-                  />
-                </div>
-              </div>
-            </div>
-          </TooltipProvider>
+          <CharacterStates
+            initialValues={{
+              dead: character.hp.dead,
+              dying: character.hp.dying,
+              indefiniteInsanity: character.sanity.indef_insanity,
+              majorWound: character.hp.major_wound,
+              temporaryInsanity: character.sanity.temp_insanity,
+              unconscious: character.hp.unconscious,
+            }}
+            key={character.id}
+          />
         </section>
       </div>
     </header>
