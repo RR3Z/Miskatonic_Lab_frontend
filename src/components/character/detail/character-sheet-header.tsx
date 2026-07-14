@@ -344,15 +344,15 @@ export function CharacterSheetHeader({ character }: CharacterSheetHeaderProps) {
           </div>
         </section>
 
-        <section className="h-full min-w-0 self-stretch rounded-md border border-[var(--ml-border-subtle)] bg-[var(--ml-surface-panel-raised)]/35 p-2">
+        <section className="flex h-full min-w-0 self-stretch flex-col rounded-md border border-[var(--ml-border-subtle)] bg-[var(--ml-surface-panel-raised)]/35 p-2">
           <SectionTitle>Состояния</SectionTitle>
           <TooltipProvider delayDuration={200}>
-            <div className="grid grid-cols-[1.15fr_0.85fr] items-start gap-2">
-              <div>
+            <div className="grid min-h-0 flex-1 grid-cols-[1.15fr_0.85fr] items-stretch gap-2">
+              <div className="flex min-h-0 flex-col">
                 <h3 className="mb-0.5 font-body text-[0.64rem] uppercase tracking-[0.12em] text-[var(--ml-ink-muted)]">
                   Здоровье
                 </h3>
-                <div className="grid grid-cols-2 gap-1.5">
+                <div className="grid min-h-0 flex-1 auto-rows-fr grid-cols-2 gap-1.5">
                   <CharacterState
                     active={character.hp.major_wound}
                     rule={characterStateRules.majorWound}
@@ -377,11 +377,11 @@ export function CharacterSheetHeader({ character }: CharacterSheetHeaderProps) {
                   />
                 </div>
               </div>
-              <div>
+              <div className="flex min-h-0 flex-col">
                 <h3 className="mb-0.5 font-body text-[0.64rem] uppercase tracking-[0.12em] text-[var(--ml-ink-muted)]">
                   Рассудок
                 </h3>
-                <div className="grid grid-cols-1 gap-1.5">
+                <div className="grid min-h-0 flex-1 auto-rows-fr grid-cols-1 gap-1.5">
                   <CharacterState
                     active={character.sanity.temp_insanity}
                     rule={characterStateRules.temporaryInsanity}
