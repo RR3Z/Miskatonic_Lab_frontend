@@ -3,6 +3,7 @@ import type {
   CreateCharacterFormDto,
   CreateCharacterPayload,
 } from "@/dto/character/create-character.dto"
+import type { CreateCharacterNoteDto } from "@/dto/character/create-character-note.dto"
 import type {
   CharacterApiListItem,
   CharacterApiLuckValue,
@@ -10,6 +11,7 @@ import type {
   CharacterDetail,
   CharacterListItem,
   CharacterLuckValue,
+  CharacterNote,
   CharacterStatValue,
   CreatedCharacter,
 } from "@/types/character"
@@ -34,6 +36,16 @@ export async function fetchCharacter(
   characterId: string,
 ): Promise<CharacterDetail> {
   return api.get(`api/characters/${characterId}/`).json<CharacterDetail>()
+}
+
+export async function createCharacterNote(
+  api: KyInstance,
+  characterId: string,
+  input: CreateCharacterNoteDto,
+): Promise<CharacterNote> {
+  return api
+    .post(`api/characters/${characterId}/notes/`, { json: input })
+    .json<CharacterNote>()
 }
 
 export async function deleteCharacter(
