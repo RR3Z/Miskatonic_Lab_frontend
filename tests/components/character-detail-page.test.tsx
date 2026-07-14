@@ -14,11 +14,29 @@ const queryState = vi.hoisted(() => ({
 
 vi.mock("@/lib/api/use-characters", () => ({
   useCharacter: () => queryState,
+}))
+
+vi.mock("@/lib/api/use-character-notes", () => ({
   useCreateCharacterNote: () => ({
     isPending: false,
     mutateAsync: vi.fn(),
     reset: vi.fn(),
   }),
+  useDeleteCharacterNote: () => ({ mutateAsync: vi.fn() }),
+  useUpdateCharacterNote: () => ({ mutateAsync: vi.fn() }),
+}))
+
+vi.mock("@/lib/api/use-character-backstory", () => ({
+  useCreateCharacterBackstoryItem: () => ({ mutateAsync: vi.fn() }),
+  useDeleteCharacterBackstory: () => ({ mutateAsync: vi.fn() }),
+  useDeleteCharacterBackstoryItem: () => ({ mutateAsync: vi.fn() }),
+  useUpdateCharacterBackstoryItem: () => ({ mutateAsync: vi.fn() }),
+  useUpsertCharacterBackstory: () => ({ mutateAsync: vi.fn() }),
+}))
+
+vi.mock("@/lib/api/use-character-finances", () => ({
+  useDeleteCharacterFinances: () => ({ mutateAsync: vi.fn() }),
+  useUpdateCharacterFinances: () => ({ mutateAsync: vi.fn() }),
 }))
 
 import { CharacterDetailPage } from "@/components/character/detail/character-detail-page"

@@ -31,13 +31,16 @@ vi.mock("@clerk/nextjs", () => ({
 }))
 
 vi.mock("@/lib/api/characters", () => apiMocks)
+vi.mock("@/lib/api/character-notes", () => ({
+  createCharacterNote: apiMocks.createCharacterNote,
+}))
 
+import { CharacterSessionRequiredError } from "@/lib/api/character-session-required-error"
+import { useCreateCharacterNote } from "@/lib/api/use-character-notes"
 import {
-  CharacterSessionRequiredError,
   useCharacter,
   useCharacters,
   useCreateCharacter,
-  useCreateCharacterNote,
   useDeleteCharacter,
 } from "@/lib/api/use-characters"
 

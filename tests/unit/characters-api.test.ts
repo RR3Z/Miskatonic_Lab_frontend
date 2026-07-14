@@ -1,8 +1,7 @@
 import type { KyInstance } from "ky"
 import { describe, expect, it, vi } from "vitest"
-
+import { createCharacterNote } from "@/lib/api/character-notes"
 import {
-  createCharacterNote,
   createCharacterWithPortrait,
   fetchCharacter,
   normalizeCharacterListItem,

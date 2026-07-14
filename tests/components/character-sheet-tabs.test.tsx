@@ -1,25 +1,49 @@
-import { render, screen, within } from "@testing-library/react"
+import { render, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { CharacterSheetTabs } from "@/components/character/detail/tabs/character-sheet-tabs"
 import { characterDetailFixture } from "../fixtures/character-detail"
 
-const noteMutation = vi.hoisted(() => ({
-  isPending: false,
-  mutateAsync: vi.fn(),
-  reset: vi.fn(),
+const mutations = vi.hoisted(() => ({
+  createBackstoryItem: { mutateAsync: vi.fn() },
+  createNote: { isPending: false, mutateAsync: vi.fn(), reset: vi.fn() },
+  deleteBackstory: { mutateAsync: vi.fn() },
+  deleteBackstoryItem: { mutateAsync: vi.fn() },
+  deleteFinances: { mutateAsync: vi.fn() },
+  deleteNote: { mutateAsync: vi.fn() },
+  updateBackstoryItem: { mutateAsync: vi.fn() },
+  updateFinances: { mutateAsync: vi.fn() },
+  updateNote: { mutateAsync: vi.fn() },
+  upsertBackstory: { mutateAsync: vi.fn() },
 }))
 
-vi.mock("@/lib/api/use-characters", () => ({
-  useCreateCharacterNote: () => noteMutation,
+vi.mock("@/lib/api/use-character-notes", () => ({
+  useCreateCharacterNote: () => mutations.createNote,
+  useDeleteCharacterNote: () => mutations.deleteNote,
+  useUpdateCharacterNote: () => mutations.updateNote,
+}))
+
+vi.mock("@/lib/api/use-character-backstory", () => ({
+  useCreateCharacterBackstoryItem: () => mutations.createBackstoryItem,
+  useDeleteCharacterBackstory: () => mutations.deleteBackstory,
+  useDeleteCharacterBackstoryItem: () => mutations.deleteBackstoryItem,
+  useUpdateCharacterBackstoryItem: () => mutations.updateBackstoryItem,
+  useUpsertCharacterBackstory: () => mutations.upsertBackstory,
+}))
+
+vi.mock("@/lib/api/use-character-finances", () => ({
+  useDeleteCharacterFinances: () => mutations.deleteFinances,
+  useUpdateCharacterFinances: () => mutations.updateFinances,
 }))
 
 describe("CharacterSheetTabs", () => {
   beforeEach(() => {
-    noteMutation.isPending = false
-    noteMutation.mutateAsync.mockReset()
-    noteMutation.reset.mockReset()
+    mutations.createNote.isPending = false
+    for (const mutation of Object.values(mutations)) {
+      mutation.mutateAsync.mockReset()
+    }
+    mutations.createNote.reset.mockReset()
   })
 
   it("renders history and finances together in the initially selected tab", () => {
@@ -42,6 +66,7 @@ describe("CharacterSheetTabs", () => {
           personal_description: "Высокий мужчина в строгом костюме.",
         }}
         characterId={character.id}
+        skills={character.skills}
         finances={{
           ...character.finances,
           assets: "Дом и библиотека редких книг",
@@ -101,24 +126,27 @@ describe("CharacterSheetTabs", () => {
     expect(screen.getByText("Описание")).toBeVisible()
     expect(screen.getByText("Высокий мужчина в строгом костюме.")).toBeVisible()
     expect(screen.getByText("Идеалы и принципы")).toBeVisible()
-    expect(screen.getByText("Рационалист")).toBeVisible()
     expect(
       screen.getByText("Истина скрывается в старых архивах."),
     ).toBeVisible()
     expect(screen.getByText("$10")).toBeVisible()
     expect(screen.getByText("$45")).toBeVisible()
-    expect(screen.getByText("55%")).toBeVisible()
+    expect(
+      screen.getByRole("combobox", { name: "Редактировать кредитный рейтинг" }),
+    ).toHaveTextContent("55%")
     expect(screen.getByText("Дом и библиотека редких книг")).toBeVisible()
     expect(screen.getByRole("heading", { name: "Имущество" })).toBeVisible()
     expect(
       screen.queryByRole("heading", { name: "Наличные и активы" }),
     ).not.toBeInTheDocument()
     expect(
-      screen.getByRole("button", { name: "Редактировать биографию" }),
-    ).toHaveAttribute("aria-disabled", "true")
+      screen.getByRole("button", { name: "Редактировать раздел Описание" }),
+    ).toBeEnabled()
     expect(
-      screen.getByRole("button", { name: "Редактировать имущество" }),
-    ).toHaveAttribute("aria-disabled", "true")
+      screen.getByRole("button", {
+        name: "Редактировать поле Карманные деньги",
+      }),
+    ).toBeEnabled()
     const financeCards = screen.getAllByTestId("finance-card")
     expect(financeCards).toHaveLength(4)
     expect(
@@ -152,7 +180,7 @@ describe("CharacterSheetTabs", () => {
     ])
   })
 
-  it("explains future biography and property editing on hover and focus", async () => {
+  it("edits biography and finances inline", async () => {
     const user = userEvent.setup()
     const character = characterDetailFixture()
 
@@ -162,36 +190,42 @@ describe("CharacterSheetTabs", () => {
         characterId={character.id}
         finances={character.finances}
         notes={character.notes}
+        skills={character.skills}
       />,
     )
 
-    const biographyEdit = screen.getByRole("button", {
-      name: "Редактировать биографию",
+    await user.click(
+      screen.getByRole("button", { name: "Редактировать раздел Описание" }),
+    )
+    const description = screen.getByRole("textbox", {
+      name: "Редактировать раздел Описание",
     })
-    const financesEdit = screen.getByRole("button", {
-      name: "Редактировать имущество",
+    await user.clear(description)
+    await user.type(description, "Новое описание{Control>}{Enter}{/Control}")
+
+    await waitFor(() =>
+      expect(mutations.upsertBackstory.mutateAsync).toHaveBeenCalledWith({
+        personal_description: "Новое описание",
+      }),
+    )
+
+    await user.click(
+      screen.getByRole("button", {
+        name: "Редактировать поле Карманные деньги",
+      }),
+    )
+    const spendingLimit = screen.getByRole("textbox", {
+      name: "Редактировать поле Карманные деньги",
     })
+    await user.clear(spendingLimit)
+    await user.type(spendingLimit, "$20")
+    await user.tab()
 
-    expect(biographyEdit).toHaveAttribute("tabindex", "0")
-    expect(biographyEdit).toHaveAttribute("aria-disabled", "true")
-    expect(financesEdit).toHaveAttribute("aria-disabled", "true")
-
-    await user.hover(biographyEdit)
-    expect(
-      await screen.findByText(
-        "Редактирование биографии будет добавлено позже",
-        { selector: '[data-slot="tooltip-content"]' },
-      ),
-    ).toBeVisible()
-
-    await user.unhover(biographyEdit)
-    financesEdit.focus()
-    expect(
-      await screen.findByText(
-        "Редактирование имущества будет добавлено позже",
-        { selector: '[data-slot="tooltip-content"]' },
-      ),
-    ).toBeVisible()
+    await waitFor(() =>
+      expect(mutations.updateFinances.mutateAsync).toHaveBeenCalledWith({
+        spending_limit: "$20",
+      }),
+    )
   })
 
   it("switches between inventory, notes, and the backend placeholder", async () => {
@@ -213,6 +247,7 @@ describe("CharacterSheetTabs", () => {
             updated_at: "2026-01-01T00:00:00Z",
           },
         ]}
+        skills={character.skills}
       />,
     )
 
@@ -238,7 +273,7 @@ describe("CharacterSheetTabs", () => {
   it("creates a note from the notes tab", async () => {
     const user = userEvent.setup()
     const character = characterDetailFixture()
-    noteMutation.mutateAsync.mockResolvedValue({
+    mutations.createNote.mutateAsync.mockResolvedValue({
       body: "Изучить дневник профессора.",
       character_id: character.id,
       created_at: "2026-01-01T00:00:00Z",
@@ -253,6 +288,7 @@ describe("CharacterSheetTabs", () => {
         characterId={character.id}
         finances={character.finances}
         notes={null}
+        skills={character.skills}
       />,
     )
 
@@ -265,13 +301,98 @@ describe("CharacterSheetTabs", () => {
     )
     await user.click(screen.getByRole("button", { name: "Добавить" }))
 
-    expect(noteMutation.mutateAsync).toHaveBeenCalledWith({
+    expect(mutations.createNote.mutateAsync).toHaveBeenCalledWith({
       body: "Изучить дневник профессора.",
       title: "Следующий шаг",
     })
     expect(
       screen.queryByRole("dialog", { name: "Новая заметка" }),
     ).not.toBeInTheDocument()
+  })
+
+  it("edits and deletes an existing note inline", async () => {
+    const user = userEvent.setup()
+    const character = characterDetailFixture()
+    const note = {
+      body: "Старый текст",
+      character_id: character.id,
+      created_at: "2026-01-01T00:00:00Z",
+      id: "note-1",
+      title: "Старый заголовок",
+      updated_at: "2026-01-01T00:00:00Z",
+    }
+
+    render(
+      <CharacterSheetTabs
+        backstory={character.backstory}
+        characterId={character.id}
+        finances={character.finances}
+        notes={[note]}
+        skills={character.skills}
+      />,
+    )
+
+    await user.click(screen.getByRole("tab", { name: "Заметки" }))
+    await user.click(
+      screen.getByRole("button", {
+        name: "Редактировать заголовок заметки Старый заголовок",
+      }),
+    )
+    const title = screen.getByRole("textbox", {
+      name: "Редактировать заголовок заметки Старый заголовок",
+    })
+    await user.clear(title)
+    await user.type(title, "Новый заголовок{Enter}")
+
+    await waitFor(() =>
+      expect(mutations.updateNote.mutateAsync).toHaveBeenCalledWith({
+        body: note.body,
+        title: "Новый заголовок",
+      }),
+    )
+
+    await user.click(
+      screen.getByRole("button", { name: "Удалить заметку Старый заголовок" }),
+    )
+    const dialog = screen.getByRole("alertdialog", {
+      name: "Удалить заметку?",
+    })
+    await user.click(within(dialog).getByRole("button", { name: "Удалить" }))
+
+    await waitFor(() =>
+      expect(mutations.deleteNote.mutateAsync).toHaveBeenCalledOnce(),
+    )
+  })
+
+  it("creates a fixed history section from its text area", async () => {
+    const user = userEvent.setup()
+    const character = characterDetailFixture()
+
+    render(
+      <CharacterSheetTabs
+        backstory={character.backstory}
+        characterId={character.id}
+        finances={character.finances}
+        notes={character.notes}
+        skills={character.skills}
+      />,
+    )
+
+    await user.click(
+      screen.getByRole("button", { name: "Редактировать раздел Черты" }),
+    )
+    await user.type(
+      screen.getByRole("textbox", { name: "Редактировать раздел Черты" }),
+      "Наблюдательный{Control>}{Enter}{/Control}",
+    )
+
+    await waitFor(() =>
+      expect(mutations.createBackstoryItem.mutateAsync).toHaveBeenCalledWith({
+        section: "traits",
+        text: "Наблюдательный",
+        title: "Черты",
+      }),
+    )
   })
 
   it("supports keyboard tab navigation and empty states", async () => {
@@ -284,6 +405,7 @@ describe("CharacterSheetTabs", () => {
         characterId={character.id}
         finances={character.finances}
         notes={null}
+        skills={character.skills}
       />,
     )
 
