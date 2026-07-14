@@ -43,6 +43,11 @@ describe("CharacterCard", () => {
       "grid",
       "grid-cols-4",
     )
+    expect(
+      screen.getByRole("link", {
+        name: character.name,
+      }),
+    ).toHaveAttribute("href", "/characters/character-1")
     expect(screen.getByText("6/20")).toBeVisible()
     expect(screen.getByText("9/25")).toBeVisible()
     expect(screen.getByText("15/30")).toBeVisible()

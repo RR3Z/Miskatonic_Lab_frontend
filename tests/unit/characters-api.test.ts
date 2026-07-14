@@ -3,12 +3,23 @@ import { describe, expect, it, vi } from "vitest"
 
 import {
   createCharacterWithPortrait,
+  fetchCharacter,
   normalizeCharacterListItem,
   uploadCharacterPortrait,
 } from "@/lib/api/characters"
 import type { CharacterApiListItem } from "@/types/character"
 
 describe("character API normalization", () => {
+  it("fetches the full character aggregate by id", async () => {
+    const detail = { id: "character-1", name: "Armitage" }
+    const json = vi.fn(async () => detail)
+    const get = vi.fn(() => ({ json }))
+    const api = { get } as unknown as KyInstance
+
+    await expect(fetchCharacter(api, "character-1")).resolves.toBe(detail)
+    expect(get).toHaveBeenCalledWith("api/characters/character-1/")
+  })
+
   it("normalizes backend snake-case stats into card values", () => {
     const apiCharacter: CharacterApiListItem = {
       id: "character-1",
