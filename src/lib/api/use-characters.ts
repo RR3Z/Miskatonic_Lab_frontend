@@ -4,10 +4,9 @@ import { useAuth } from "@clerk/nextjs"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useMemo } from "react"
 import type { CreateCharacterFormDto } from "@/dto/character/create-character.dto"
-import type { CreateCharacterNoteDto } from "@/dto/character/create-character-note.dto"
 import { characterQueryKeys } from "@/lib/api/character-query-keys"
+import { CharacterSessionRequiredError } from "@/lib/api/character-session-required-error"
 import {
-  createCharacterNote,
   createCharacterWithPortrait,
   deleteCharacter,
   fetchCharacter,
@@ -15,14 +14,7 @@ import {
 } from "@/lib/api/characters"
 import { createApiClient } from "@/lib/api/client"
 import { removeCharacterSheetLayout } from "@/lib/utils/character-sheet-layout.util"
-import type { CharacterDetail, CharacterListItem } from "@/types/character"
-
-export class CharacterSessionRequiredError extends Error {
-  constructor() {
-    super("an authenticated user is required for character mutations")
-    this.name = "CharacterSessionRequiredError"
-  }
-}
+import type { CharacterListItem } from "@/types/character"
 
 export function useCharacters() {
   const { getToken, isLoaded, userId } = useAuth()
@@ -85,32 +77,6 @@ export function useCreateCharacter() {
     },
     onSettled: () => {
       if (queryKey) void queryClient.invalidateQueries({ queryKey })
-    },
-  })
-}
-
-export function useCreateCharacterNote(characterId: string) {
-  const { getToken, userId } = useAuth()
-  const api = useMemo(() => createApiClient(getToken), [getToken])
-  const queryClient = useQueryClient()
-  const queryKey = userId
-    ? characterQueryKeys.detail(userId, characterId)
-    : null
-
-  return useMutation({
-    mutationFn: (input: CreateCharacterNoteDto) => {
-      if (!userId) throw new CharacterSessionRequiredError()
-      return createCharacterNote(api, characterId, input)
-    },
-    onSuccess: (note) => {
-      if (!queryKey) return
-
-      queryClient.setQueryData<CharacterDetail>(queryKey, (character) =>
-        character
-          ? { ...character, notes: [...(character.notes ?? []), note] }
-          : character,
-      )
-      void queryClient.invalidateQueries({ queryKey })
     },
   })
 }
