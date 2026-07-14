@@ -8,12 +8,14 @@ import { Button } from "@/components/ui/button"
 
 export function DeleteResourceButton({
   ariaLabel,
+  className,
   description,
   errorMessage,
   onDelete,
   title,
 }: {
   ariaLabel: string
+  className?: string
   description: string
   errorMessage: string
   onDelete: () => Promise<unknown>
@@ -25,6 +27,7 @@ export function DeleteResourceButton({
     <>
       <Button
         aria-label={ariaLabel}
+        className={className}
         onClick={() => setOpen(true)}
         size="icon-sm"
         type="button"

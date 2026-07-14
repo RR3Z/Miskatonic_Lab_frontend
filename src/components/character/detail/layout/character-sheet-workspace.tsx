@@ -40,7 +40,10 @@ export function CharacterSheetWorkspace({
       >
         <ScrollArea className="h-full" data-testid="character-skills-panel">
           <div className="p-4">
-            <CharacterSkills skills={character.skills} />
+            <CharacterSkills
+              characterId={character.id}
+              skills={character.skills}
+            />
           </div>
         </ScrollArea>
       </ResizablePanel>

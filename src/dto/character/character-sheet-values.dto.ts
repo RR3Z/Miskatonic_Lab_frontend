@@ -1,0 +1,76 @@
+import { z } from "zod"
+
+export const characterNullableIntegerTextSchema = z
+  .string()
+  .trim()
+  .refine(
+    (value) => value === "" || /^\d+$/.test(value),
+    "Введите целое неотрицательное число",
+  )
+  .refine(
+    (value) => value === "" || Number(value) <= 32_767,
+    "Значение слишком большое",
+  )
+
+export const characterIntegerTextSchema =
+  characterNullableIntegerTextSchema.refine(
+    (value) => value !== "",
+    "Введите значение",
+  )
+
+export const characterDamageBonusSchema = z
+  .string()
+  .trim()
+  .min(1, "Введите бонус урона")
+  .max(16, "Значение слишком длинное")
+  .regex(/^(-2|-1|0|\+.+)$/, "Используйте -2, -1, 0 или значение с +")
+
+export type UpdateCharacterCharacteristicsDto = {
+  appearance: number | null
+  constitution: number | null
+  dexterity: number | null
+  education: number | null
+  intelligence: number | null
+  power: number | null
+  size: number | null
+  strength: number | null
+}
+
+export type UpdateCharacterDerivedStatsDto = {
+  damage_bonus?: string
+  dodge_value?: number
+  physique?: number
+  speed?: number
+}
+
+export type CharacterResourceUpdate =
+  | {
+      resource: "hp"
+      values: Partial<{
+        current_hp: number
+        dead: boolean
+        dying: boolean
+        major_wound: boolean
+        max_hp: number
+        unconscious: boolean
+      }>
+    }
+  | {
+      resource: "mp"
+      values: Partial<{ current_mp: number; max_mp: number }>
+    }
+  | {
+      resource: "sanity"
+      values: Partial<{
+        current_sanity: number
+        indef_insanity: boolean
+        max_sanity: number
+        temp_insanity: boolean
+      }>
+    }
+  | {
+      resource: "luck"
+      values: Partial<{ current_luck: number; starting_luck: number }>
+    }
+
+export type CharacterResourceKey = CharacterResourceUpdate["resource"]

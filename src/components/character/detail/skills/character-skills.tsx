@@ -5,8 +5,10 @@ import { groupCharacterSkills } from "@/components/character/detail/skills/group
 import type { CharacterSkill } from "@/types/character"
 
 export function CharacterSkills({
+  characterId,
   skills,
 }: {
+  characterId: string
   skills: CharacterSkill[] | null
 }) {
   const groups = groupCharacterSkills(skills ?? [])
@@ -52,7 +54,11 @@ export function CharacterSkills({
               </div>
               <ul className="space-y-1.5">
                 {group.skills.map((skill) => (
-                  <CharacterSkillRow key={skill.id} skill={skill} />
+                  <CharacterSkillRow
+                    characterId={characterId}
+                    key={skill.id}
+                    skill={skill}
+                  />
                 ))}
               </ul>
             </section>

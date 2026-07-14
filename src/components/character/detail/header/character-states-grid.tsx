@@ -1,21 +1,50 @@
 "use client"
 
 import { useState } from "react"
+import { toast } from "sonner"
 import { characterStateRules } from "@/components/character/detail/character-state-rules"
 import { CharacterState } from "@/components/character/detail/header/character-state"
 import { CHARACTER_STATE_GROUPS } from "@/components/character/detail/header/character-state-group-definitions"
 import type { CharacterStateValues } from "@/components/character/detail/header/character-state-types"
+import { createCharacterResourceUpdate } from "@/components/character/detail/header/create-character-resource-update"
 import { TooltipProvider } from "@/components/ui/tooltip"
+import { useUpdateCharacterResource } from "@/lib/api/use-character-resources"
 import { cn } from "@/lib/utils/cn.util"
 
 export function CharacterStatesGrid({
+  characterId,
   initialValues,
 }: {
+  characterId: string
   initialValues: CharacterStateValues
 }) {
   const [states, setStates] = useState(initialValues)
-  const toggleState = (state: keyof CharacterStateValues) => {
-    setStates((current) => ({ ...current, [state]: !current[state] }))
+  const [pendingState, setPendingState] = useState<
+    keyof CharacterStateValues | null
+  >(null)
+  const mutation = useUpdateCharacterResource(characterId)
+
+  async function toggleState(
+    state: keyof CharacterStateValues,
+    resource: "hp" | "sanity",
+    backendField: string,
+  ) {
+    if (pendingState) return
+    const previousValue = states[state]
+    const nextValue = !previousValue
+    setPendingState(state)
+    setStates((current) => ({ ...current, [state]: nextValue }))
+
+    try {
+      await mutation.mutateAsync(
+        createCharacterResourceUpdate(resource, backendField, nextValue),
+      )
+    } catch {
+      setStates((current) => ({ ...current, [state]: previousValue }))
+      toast.error("Не удалось сохранить состояние персонажа")
+    } finally {
+      setPendingState(null)
+    }
   }
 
   return (
@@ -35,8 +64,15 @@ export function CharacterStatesGrid({
               {group.states.map((state) => (
                 <CharacterState
                   active={states[state.key]}
+                  disabled={pendingState === state.key}
                   key={state.key}
-                  onToggle={() => toggleState(state.key)}
+                  onToggle={() =>
+                    void toggleState(
+                      state.key,
+                      state.resource,
+                      state.backendField,
+                    )
+                  }
                   rule={characterStateRules[state.key]}
                   testId={state.testId}
                   tone={state.tone}

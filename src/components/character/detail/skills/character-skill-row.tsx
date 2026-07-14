@@ -1,7 +1,19 @@
+"use client"
+
+import { DeleteResourceButton } from "@/components/character/detail/editors/delete-resource-button"
 import { SkillDevelopmentMark } from "@/components/character/detail/skills/skill-development-mark"
+import { useDeleteCharacterSkill } from "@/lib/api/use-character-skills"
 import type { CharacterSkill } from "@/types/character"
 
-export function CharacterSkillRow({ skill }: { skill: CharacterSkill }) {
+export function CharacterSkillRow({
+  characterId,
+  skill,
+}: {
+  characterId: string
+  skill: CharacterSkill
+}) {
+  const deleteMutation = useDeleteCharacterSkill(characterId)
+
   return (
     <li
       className="flex min-w-0 items-center gap-2 rounded-sm border border-[var(--ml-border-subtle)] bg-[var(--ml-bg-page)]/20 px-2 py-1.5"
@@ -42,6 +54,14 @@ export function CharacterSkillRow({ skill }: { skill: CharacterSkill }) {
         <span className="sr-only">Значение навыка: </span>
         {skill.value}%
       </span>
+      <DeleteResourceButton
+        ariaLabel={`Удалить навык ${skill.name}`}
+        className="size-7 opacity-60 hover:opacity-100"
+        description={`Навык «${skill.name}» будет удалён у персонажа.`}
+        errorMessage="Не удалось удалить навык. Возможно, он используется в имуществе."
+        onDelete={() => deleteMutation.mutateAsync(skill.id)}
+        title="Удалить навык?"
+      />
     </li>
   )
 }

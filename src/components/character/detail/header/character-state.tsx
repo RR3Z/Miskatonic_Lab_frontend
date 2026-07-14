@@ -11,12 +11,14 @@ import { cn } from "@/lib/utils/cn.util"
 
 export function CharacterState({
   active,
+  disabled,
   onToggle,
   rule,
   testId,
   tone = "warning",
 }: {
   active: boolean
+  disabled: boolean
   onToggle: () => void
   rule: CharacterStateRule
   testId: string
@@ -36,6 +38,7 @@ export function CharacterState({
       <button
         aria-pressed={active}
         className="flex min-w-0 flex-1 self-stretch cursor-pointer items-center px-2 py-1 text-left transition-colors hover:bg-[var(--ml-surface-panel-raised)]/45 focus-visible:outline-1 focus-visible:outline-offset-[-2px] focus-visible:outline-[var(--ml-focus-ring)]"
+        disabled={disabled}
         onClick={onToggle}
         type="button"
       >
