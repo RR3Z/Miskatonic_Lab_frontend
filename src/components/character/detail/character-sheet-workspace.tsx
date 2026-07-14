@@ -7,15 +7,18 @@ import type {
   LayoutChangedMeta,
 } from "react-resizable-panels"
 
+import { CharacterSkills } from "@/components/character/detail/character-skills"
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable"
 import { characterSheetLayoutStorageKey } from "@/lib/utils/character-sheet-layout.util"
+import type { CharacterSkill } from "@/types/character"
 
 type CharacterSheetWorkspaceProps = {
   characterId: string
+  skills: CharacterSkill[] | null
 }
 
 const SKILLS_PANEL_ID = "character-skills"
@@ -73,6 +76,7 @@ function WorkspaceSection({
 
 export function CharacterSheetWorkspace({
   characterId,
+  skills,
 }: CharacterSheetWorkspaceProps) {
   const groupRef = useRef<GroupImperativeHandle>(null)
   const storageKey = characterSheetLayoutStorageKey(characterId)
@@ -111,9 +115,7 @@ export function CharacterSheetWorkspace({
           className="h-full overflow-y-auto p-4"
           data-testid="character-skills-panel"
         >
-          <WorkspaceSection title="Навыки">
-            Алфавитные секции навыков появятся на следующем этапе.
-          </WorkspaceSection>
+          <CharacterSkills skills={skills} />
         </div>
       </ResizablePanel>
 
