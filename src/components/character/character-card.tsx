@@ -1,9 +1,11 @@
 import { Plus } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 
 import { CharacterCardActions } from "@/components/character/character-card-actions"
 import { CharacterStat } from "@/components/character/character-stat"
 import { Card } from "@/components/ui/card"
+import { appRoutes } from "@/lib/routes/app-routes"
 import { getPortraitKind, getPortraitUrl } from "@/lib/utils/portrait.util"
 import type { CharacterListItem } from "@/types/character"
 import cardTentacle from "../../../assets/character-card-tentacle.svg"
@@ -47,7 +49,7 @@ export function CharacterCard({ character, onDelete }: CharacterCardProps) {
       className="relative h-[120px] flex-row gap-0 rounded-md border border-[var(--ml-border-subtle)] bg-[var(--ml-surface-panel)] p-[6px] py-[6px] ring-0 transition-colors hover:border-[var(--ml-border-aged)]"
       size="sm"
     >
-      <article>
+      <article className="group">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 h-full w-full bg-cover opacity-[0.09]"
@@ -67,7 +69,12 @@ export function CharacterCard({ character, onDelete }: CharacterCardProps) {
         <div className="relative ml-[6px] flex min-w-0 flex-1 flex-col py-0.5">
           <div className="flex min-w-0 items-start gap-1">
             <h3 className="min-w-0 flex-1 truncate font-heading text-xl font-medium leading-tight text-[var(--ml-ink-primary)]">
-              {character.name}
+              <Link
+                className="after:absolute after:inset-0 focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--ml-focus-ring)]"
+                href={appRoutes.character(character.id)}
+              >
+                {character.name}
+              </Link>
             </h3>
             <CharacterCardActions character={character} onDelete={onDelete} />
           </div>
