@@ -18,11 +18,11 @@ type CharacterSheetWorkspaceProps = {
   characterId: string
 }
 
-const LEFT_PANEL_ID = "character-core"
-const RIGHT_PANEL_ID = "character-content"
+const SKILLS_PANEL_ID = "character-skills"
+const SECTIONS_PANEL_ID = "character-sections"
 const DEFAULT_LAYOUT: Layout = {
-  [LEFT_PANEL_ID]: 42,
-  [RIGHT_PANEL_ID]: 58,
+  [SKILLS_PANEL_ID]: 58,
+  [SECTIONS_PANEL_ID]: 42,
 }
 
 function parseStoredLayout(value: string | null): Layout | null {
@@ -30,22 +30,25 @@ function parseStoredLayout(value: string | null): Layout | null {
 
   try {
     const layout = JSON.parse(value) as Partial<Layout>
-    const left = layout[LEFT_PANEL_ID]
-    const right = layout[RIGHT_PANEL_ID]
+    const skills = layout[SKILLS_PANEL_ID]
+    const sections = layout[SECTIONS_PANEL_ID]
 
     if (
-      typeof left !== "number" ||
-      typeof right !== "number" ||
-      left < 32 ||
-      left > 55 ||
-      right < 45 ||
-      right > 68 ||
-      Math.abs(left + right - 100) > 0.1
+      typeof skills !== "number" ||
+      typeof sections !== "number" ||
+      skills < 45 ||
+      skills > 68 ||
+      sections < 32 ||
+      sections > 55 ||
+      Math.abs(skills + sections - 100) > 0.1
     ) {
       return null
     }
 
-    return { [LEFT_PANEL_ID]: left, [RIGHT_PANEL_ID]: right }
+    return {
+      [SKILLS_PANEL_ID]: skills,
+      [SECTIONS_PANEL_ID]: sections,
+    }
   } catch {
     return null
   }
@@ -91,7 +94,7 @@ export function CharacterSheetWorkspace({
 
   return (
     <ResizablePanelGroup
-      className="h-[calc(100svh-15.5rem)] min-h-[620px] overflow-hidden rounded-md border border-[var(--ml-border-aged)] bg-[var(--ml-surface-panel)]"
+      className="min-h-[620px] flex-1 overflow-hidden rounded-md border border-[var(--ml-border-aged)] bg-[var(--ml-surface-panel)]"
       defaultLayout={DEFAULT_LAYOUT}
       groupRef={groupRef}
       id={`character-sheet-${characterId}`}
@@ -99,70 +102,60 @@ export function CharacterSheetWorkspace({
       orientation="horizontal"
     >
       <ResizablePanel
-        defaultSize="42%"
-        id={LEFT_PANEL_ID}
-        maxSize="55%"
-        minSize="32%"
+        defaultSize="58%"
+        id={SKILLS_PANEL_ID}
+        maxSize="68%"
+        minSize="45%"
       >
         <div
-          className="flex h-full flex-col gap-3 overflow-y-auto p-4"
-          data-testid="character-core-panel"
+          className="h-full overflow-y-auto p-4"
+          data-testid="character-skills-panel"
         >
-          <WorkspaceSection title="Характеристики">
-            Значения характеристик появятся на следующем этапе.
-          </WorkspaceSection>
-          <WorkspaceSection title="Производные параметры">
-            Скорость, телосложение, бонус к урону и уклонение.
-          </WorkspaceSection>
-          <WorkspaceSection title="Состояния">
-            Раны, сознание и состояния рассудка.
+          <WorkspaceSection title="Навыки">
+            Алфавитные секции навыков появятся на следующем этапе.
           </WorkspaceSection>
         </div>
       </ResizablePanel>
 
       <ResizableHandle
         aria-label="Изменить ширину панелей листа"
-        className="bg-[var(--ml-border-aged)] transition-colors hover:bg-[var(--ml-accent-brass-strong)] focus-visible:bg-[var(--ml-accent-brass-strong)]"
+        className="w-0.5 cursor-col-resize bg-[var(--ml-border-aged)] transition-colors hover:bg-[var(--ml-accent-brass-strong)] focus-visible:bg-[var(--ml-accent-brass-strong)]"
         withHandle
       />
 
       <ResizablePanel
-        defaultSize="58%"
-        id={RIGHT_PANEL_ID}
-        maxSize="68%"
-        minSize="45%"
+        defaultSize="42%"
+        id={SECTIONS_PANEL_ID}
+        maxSize="55%"
+        minSize="32%"
       >
         <div
           className="flex h-full min-w-0 flex-col"
-          data-testid="character-content-panel"
+          data-testid="character-sections-panel"
         >
           <nav
             aria-label="Разделы листа персонажа"
             className="flex shrink-0 gap-1 border-b border-[var(--ml-border-subtle)] px-4 pt-3"
           >
-            {[
-              "Навыки",
-              "История",
-              "Имущество",
-              "Заметки",
-              "Оружие и атаки",
-            ].map((label, index) => (
-              <span
-                aria-current={index === 0 ? "page" : undefined}
-                className={
-                  index === 0
-                    ? "border-b-2 border-[var(--ml-accent-brass-strong)] px-3 py-2 font-body text-sm text-[var(--ml-ink-primary)]"
-                    : "px-3 py-2 font-body text-sm text-[var(--ml-ink-muted)]"
-                }
-                key={label}
-              >
-                {label}
-              </span>
-            ))}
+            {["История", "Имущество", "Заметки", "Оружие и атаки"].map(
+              (label, index) => (
+                <span
+                  aria-current={index === 0 ? "page" : undefined}
+                  className={
+                    index === 0
+                      ? "border-b-2 border-[var(--ml-accent-brass-strong)] px-3 py-2 font-body text-sm text-[var(--ml-ink-primary)]"
+                      : "px-3 py-2 font-body text-sm text-[var(--ml-ink-muted)]"
+                  }
+                  key={label}
+                >
+                  {label}
+                </span>
+              ),
+            )}
           </nav>
           <div className="min-h-0 flex-1 overflow-y-auto p-4">
-            <WorkspaceSection title="Навыки">
-              Алфавитные секции навыков появятся на следующем этапе.
+            <WorkspaceSection title="История">
+              История персонажа появится на этапе наполнения вкладок.
             </WorkspaceSection>
           </div>
         </div>

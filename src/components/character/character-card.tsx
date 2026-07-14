@@ -1,29 +1,20 @@
-import { Plus } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 
 import { CharacterCardActions } from "@/components/character/character-card-actions"
 import { CharacterStat } from "@/components/character/character-stat"
+import { characterStatVisuals } from "@/components/character/character-stat-visuals"
 import { Card } from "@/components/ui/card"
 import { appRoutes } from "@/lib/routes/app-routes"
 import { getPortraitKind, getPortraitUrl } from "@/lib/utils/portrait.util"
 import type { CharacterListItem } from "@/types/character"
 import cardTentacle from "../../../assets/character-card-tentacle.svg"
-import luckIcon from "../../../assets/icons/luck.svg"
-import sanityIcon from "../../../assets/icons/sanity.svg"
-import magicIcon from "../../../assets/symbols/black/sigil-angular-eye.svg"
 
 type CharacterCardProps = {
   character: CharacterListItem
   onDelete: (characterId: string) => Promise<void>
 }
 
-const magicIconFilter =
-  "brightness(0) saturate(100%) invert(52%) sepia(92%) saturate(1538%) hue-rotate(165deg) brightness(96%) contrast(101%)"
-const sanityIconFilter =
-  "brightness(0) saturate(100%) invert(27%) sepia(58%) saturate(1392%) hue-rotate(208deg) brightness(85%) contrast(93%)"
-const luckIconFilter =
-  "brightness(0) saturate(100%) invert(40%) sepia(31%) saturate(1176%) hue-rotate(72deg) brightness(91%) contrast(86%)"
 const cardTentacleUrl =
   typeof cardTentacle === "string" ? cardTentacle : cardTentacle.src
 
@@ -87,31 +78,27 @@ export function CharacterCard({ character, onDelete }: CharacterCardProps) {
           >
             <CharacterStat
               current={character.hp.current}
-              icon={Plus}
-              iconClassName="text-[#b51f2e] [stroke-width:4]"
               label="Здоровье"
               max={character.hp.max}
+              {...characterStatVisuals.health}
             />
             <CharacterStat
               current={character.sanity.current}
-              image={sanityIcon}
-              imageFilter={sanityIconFilter}
               label="Рассудок"
               max={character.sanity.max}
+              {...characterStatVisuals.sanity}
             />
             <CharacterStat
               current={character.mp.current}
-              image={magicIcon}
-              imageFilter={magicIconFilter}
               label="Магия"
               max={character.mp.max}
+              {...characterStatVisuals.magic}
             />
             <CharacterStat
               current={character.luck.current}
-              image={luckIcon}
-              imageFilter={luckIconFilter}
               label="Удача"
               max={character.luck.starting}
+              {...characterStatVisuals.luck}
             />
           </div>
         </div>

@@ -2,13 +2,12 @@ import { Skeleton } from "@/components/ui/skeleton"
 
 export function CharacterDetailLoading() {
   return (
-    <div className="mx-auto w-full min-w-[1180px] max-w-[1720px] px-8 py-6">
+    <div className="flex h-[100svh] w-full min-w-[1180px] flex-col px-4 py-4">
       <output className="sr-only" aria-live="polite">
         Загрузка листа персонажа…
       </output>
-      <Skeleton className="h-8 w-52" />
-      <Skeleton className="mt-3 h-32 w-full border border-[var(--ml-border-subtle)]" />
-      <div className="mt-4 grid h-[620px] grid-cols-[42fr_58fr] gap-1">
+      <Skeleton className="h-40 w-full shrink-0 border border-[var(--ml-border-subtle)]" />
+      <div className="mt-3 grid min-h-[620px] flex-1 grid-cols-[58fr_42fr] gap-1">
         <Skeleton className="border border-[var(--ml-border-subtle)]" />
         <Skeleton className="border border-[var(--ml-border-subtle)]" />
       </div>

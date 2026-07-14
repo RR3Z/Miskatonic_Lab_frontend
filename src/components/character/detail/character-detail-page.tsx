@@ -1,15 +1,10 @@
 "use client"
 
-import { ArrowLeft } from "lucide-react"
-import Link from "next/link"
-
 import { CharacterDetailError } from "@/components/character/detail/character-detail-error"
 import { CharacterDetailLoading } from "@/components/character/detail/character-detail-loading"
 import { CharacterSheetHeader } from "@/components/character/detail/character-sheet-header"
 import { CharacterSheetWorkspace } from "@/components/character/detail/character-sheet-workspace"
-import { Button } from "@/components/ui/button"
 import { useCharacter } from "@/lib/api/use-characters"
-import { appRoutes } from "@/lib/routes/app-routes"
 
 type CharacterDetailPageProps = {
   characterId: string
@@ -42,13 +37,8 @@ export function CharacterDetailPage({ characterId }: CharacterDetailPageProps) {
   }
 
   return (
-    <div className="mx-auto w-full min-w-[1180px] max-w-[1720px] px-8 py-6">
-      <Button asChild size="sm" variant="ghost">
-        <Link href={appRoutes.characters}>
-          <ArrowLeft aria-hidden="true" />К списку персонажей
-        </Link>
-      </Button>
-      <div className="mt-3 space-y-4">
+    <div className="flex h-[100svh] w-full min-w-[1180px] flex-col px-4 py-4">
+      <div className="flex min-h-0 flex-1 flex-col gap-3">
         <CharacterSheetHeader character={data} />
         <CharacterSheetWorkspace characterId={characterId} />
       </div>
