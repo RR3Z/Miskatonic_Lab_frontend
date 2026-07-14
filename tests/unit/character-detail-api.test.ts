@@ -16,6 +16,17 @@ import {
   deleteCharacterNote,
   updateCharacterNote,
 } from "@/lib/api/character-notes"
+import { updateCharacterProfile } from "@/lib/api/character-profile"
+import {
+  deleteCharacterResource,
+  updateCharacterResource,
+} from "@/lib/api/character-resources"
+import { deleteCharacterSkill } from "@/lib/api/character-skills"
+import {
+  deleteCharacterCharacteristics,
+  updateCharacterCharacteristics,
+  updateCharacterDerivedStats,
+} from "@/lib/api/character-statistics"
 
 describe("character detail write API", () => {
   it("updates and deletes a note", async () => {
@@ -142,6 +153,93 @@ describe("character detail write API", () => {
     })
     expect(deleteRequest).toHaveBeenCalledWith(
       "api/characters/character-1/finances/",
+    )
+  })
+
+  it("updates the complete character profile", async () => {
+    const profile = {
+      age: 48,
+      birthplace: "Boston",
+      name: "Armitage",
+      occupation: "Professor",
+      player_name: null,
+      residence: "Arkham",
+      sex: "male" as const,
+    }
+    const json = vi.fn(async () => ({ id: "character-1", ...profile }))
+    const put = vi.fn(() => ({ json }))
+    const api = { put } as unknown as KyInstance
+
+    await updateCharacterProfile(api, "character-1", profile)
+
+    expect(put).toHaveBeenCalledWith("api/characters/character-1/", {
+      json: profile,
+    })
+  })
+
+  it("updates and deletes character statistics", async () => {
+    const characteristics = {
+      appearance: 40,
+      constitution: 50,
+      dexterity: 60,
+      education: 70,
+      intelligence: 80,
+      power: 55,
+      size: 65,
+      strength: 75,
+    }
+    const json = vi.fn(async () => characteristics)
+    const put = vi.fn(() => ({ json }))
+    const deleteRequest = vi.fn(async () => undefined)
+    const api = { delete: deleteRequest, put } as unknown as KyInstance
+
+    await updateCharacterCharacteristics(api, "character-1", characteristics)
+    await updateCharacterDerivedStats(api, "character-1", { speed: 8 })
+    await deleteCharacterCharacteristics(api, "character-1")
+
+    expect(put).toHaveBeenNthCalledWith(
+      1,
+      "api/characters/character-1/characteristics/",
+      { json: characteristics },
+    )
+    expect(put).toHaveBeenNthCalledWith(
+      2,
+      "api/characters/character-1/derived-stats/",
+      { json: { speed: 8 } },
+    )
+    expect(deleteRequest).toHaveBeenCalledWith(
+      "api/characters/character-1/characteristics/",
+    )
+  })
+
+  it("routes resource writes and deletes to the matching subresource", async () => {
+    const json = vi.fn(async () => ({ current_hp: 7, max_hp: 20 }))
+    const put = vi.fn(() => ({ json }))
+    const deleteRequest = vi.fn(async () => undefined)
+    const api = { delete: deleteRequest, put } as unknown as KyInstance
+
+    await updateCharacterResource(api, "character-1", {
+      resource: "hp",
+      values: { current_hp: 7 },
+    })
+    await deleteCharacterResource(api, "character-1", "sanity")
+
+    expect(put).toHaveBeenCalledWith("api/characters/character-1/health/", {
+      json: { current_hp: 7 },
+    })
+    expect(deleteRequest).toHaveBeenCalledWith(
+      "api/characters/character-1/sanity/",
+    )
+  })
+
+  it("deletes a skill by character and skill id", async () => {
+    const deleteRequest = vi.fn(async () => undefined)
+    const api = { delete: deleteRequest } as unknown as KyInstance
+
+    await deleteCharacterSkill(api, "character-1", "skill-1")
+
+    expect(deleteRequest).toHaveBeenCalledWith(
+      "api/characters/character-1/skills/skill-1/",
     )
   })
 })

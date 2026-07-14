@@ -1,8 +1,15 @@
-import { render, screen, within } from "@testing-library/react"
-import { describe, expect, it } from "vitest"
+import { render, screen, waitFor, within } from "@testing-library/react"
+import userEvent from "@testing-library/user-event"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { CharacterSkills } from "@/components/character/detail/skills/character-skills"
 import type { CharacterSkill } from "@/types/character"
+
+const deleteSkillMutation = vi.hoisted(() => ({ mutateAsync: vi.fn() }))
+
+vi.mock("@/lib/api/use-character-skills", () => ({
+  useDeleteCharacterSkill: () => deleteSkillMutation,
+}))
 
 function characterSkill(
   overrides: Partial<CharacterSkill> & Pick<CharacterSkill, "id" | "name">,
@@ -21,9 +28,15 @@ function characterSkill(
 }
 
 describe("CharacterSkills", () => {
+  beforeEach(() => {
+    deleteSkillMutation.mutateAsync.mockReset()
+    deleteSkillMutation.mutateAsync.mockResolvedValue(undefined)
+  })
+
   it("groups and sorts skills by their Russian initial", () => {
     render(
       <CharacterSkills
+        characterId="character-1"
         skills={[
           characterSkill({ id: "library", name: "Библиотечное дело" }),
           characterSkill({ id: "archaeology", name: "Археология" }),
@@ -55,6 +68,7 @@ describe("CharacterSkills", () => {
   it("renders the current, base, development, category, and specialty data", () => {
     render(
       <CharacterSkills
+        characterId="character-1"
         skills={[
           characterSkill({
             base_value: 1,
@@ -96,7 +110,7 @@ describe("CharacterSkills", () => {
   })
 
   it.each([null, []])("renders an empty state for %j", (skills) => {
-    render(<CharacterSkills skills={skills} />)
+    render(<CharacterSkills characterId="character-1" skills={skills} />)
 
     expect(
       screen.getByText("Навыки персонажа пока не добавлены."),
@@ -104,5 +118,28 @@ describe("CharacterSkills", () => {
     expect(
       screen.getByRole("button", { name: "Добавить собственный навык" }),
     ).toBeDisabled()
+  })
+
+  it("deletes an existing skill after confirmation", async () => {
+    const user = userEvent.setup()
+    render(
+      <CharacterSkills
+        characterId="character-1"
+        skills={[characterSkill({ id: "library", name: "Библиотека" })]}
+      />,
+    )
+
+    await user.click(
+      screen.getByRole("button", { name: "Удалить навык Библиотека" }),
+    )
+    await user.click(
+      within(
+        screen.getByRole("alertdialog", { name: "Удалить навык?" }),
+      ).getByRole("button", { name: "Удалить" }),
+    )
+
+    await waitFor(() =>
+      expect(deleteSkillMutation.mutateAsync).toHaveBeenCalledWith("library"),
+    )
   })
 })

@@ -12,6 +12,8 @@ const queryState = vi.hoisted(() => ({
   refetch: vi.fn(),
 }))
 
+const resourceMutation = vi.hoisted(() => ({ mutateAsync: vi.fn() }))
+
 vi.mock("@/lib/api/use-characters", () => ({
   useCharacter: () => queryState,
 }))
@@ -39,6 +41,30 @@ vi.mock("@/lib/api/use-character-finances", () => ({
   useUpdateCharacterFinances: () => ({ mutateAsync: vi.fn() }),
 }))
 
+vi.mock("@/lib/api/use-character-profile", () => ({
+  useUpdateCharacterPortrait: () => ({
+    isPending: false,
+    mutateAsync: vi.fn(),
+  }),
+  useUpdateCharacterProfile: () => ({ mutateAsync: vi.fn() }),
+}))
+
+vi.mock("@/lib/api/use-character-statistics", () => ({
+  useDeleteCharacterCharacteristics: () => ({ mutateAsync: vi.fn() }),
+  useDeleteCharacterDerivedStats: () => ({ mutateAsync: vi.fn() }),
+  useUpdateCharacterCharacteristics: () => ({ mutateAsync: vi.fn() }),
+  useUpdateCharacterDerivedStats: () => ({ mutateAsync: vi.fn() }),
+}))
+
+vi.mock("@/lib/api/use-character-resources", () => ({
+  useDeleteCharacterResource: () => ({ mutateAsync: vi.fn() }),
+  useUpdateCharacterResource: () => resourceMutation,
+}))
+
+vi.mock("@/lib/api/use-character-skills", () => ({
+  useDeleteCharacterSkill: () => ({ mutateAsync: vi.fn() }),
+}))
+
 import { CharacterDetailPage } from "@/components/character/detail/character-detail-page"
 
 describe("CharacterDetailPage", () => {
@@ -48,6 +74,8 @@ describe("CharacterDetailPage", () => {
     queryState.isFetching = false
     queryState.isPending = false
     queryState.refetch.mockReset()
+    resourceMutation.mutateAsync.mockReset()
+    resourceMutation.mutateAsync.mockResolvedValue(undefined)
   })
 
   it("renders the loaded character sheet", () => {
@@ -71,8 +99,9 @@ describe("CharacterDetailPage", () => {
       "Пол: Женщина",
     )
     expect(screen.queryByText(/^Игрок:/)).not.toBeInTheDocument()
-    expect(screen.getByText("6/20")).toBeVisible()
-    expect(screen.getByText("15/30")).toBeVisible()
+    const resources = screen.getAllByTestId("character-resource")
+    expect(resources[0]).toHaveTextContent("6/20")
+    expect(resources[1]).toHaveTextContent("15/30")
     const skillsPanel = screen.getByTestId("character-skills-panel")
     const sectionsPanel = screen.getByTestId("character-sections-panel")
     expect(skillsPanel).toBeVisible()
@@ -148,7 +177,9 @@ describe("CharacterDetailPage", () => {
       "grid-cols-[minmax(360px,1fr)_1px_minmax(260px,0.95fr)_1px_minmax(150px,0.55fr)_1px_minmax(492px,1.4fr)]",
     )
     expect(screen.getByText("Комплекция")).toHaveClass("w-full", "min-w-0")
-    expect(screen.getByText("80")).toBeVisible()
+    expect(
+      screen.getByRole("button", { name: "Редактировать характеристику Сила" }),
+    ).toHaveTextContent("80")
     expect(screen.getByText("+1d4")).toBeVisible()
     for (const [title, abbreviation] of [
       ["Сила", "СИЛ"],
@@ -278,8 +309,7 @@ describe("CharacterDetailPage", () => {
     expect(hoverText).toContain("Книга хранителя, глава 6 «Бой», стр. 118.")
 
     await user.unhover(majorWoundInfo)
-    await user.tab()
-    await user.tab()
+    majorWoundInfo.focus()
     expect(majorWoundInfo).toHaveFocus()
     const focusTooltip = await waitFor(() => {
       const tooltip = document.querySelector<HTMLElement>(
@@ -293,7 +323,7 @@ describe("CharacterDetailPage", () => {
     ).toContain("Опасное повреждение, способное привести к смерти.")
   })
 
-  it("toggles character states locally without a backend request", async () => {
+  it("persists character state toggles", async () => {
     const user = userEvent.setup()
     queryState.data = characterDetailFixture()
 
@@ -308,12 +338,19 @@ describe("CharacterDetailPage", () => {
 
     expect(toggle).toHaveAttribute("aria-pressed", "true")
     expect(state).toHaveAttribute("data-active", "true")
-    expect(queryState.refetch).not.toHaveBeenCalled()
+    expect(resourceMutation.mutateAsync).toHaveBeenLastCalledWith({
+      resource: "hp",
+      values: { major_wound: true },
+    })
 
     await user.click(toggle)
 
     expect(toggle).toHaveAttribute("aria-pressed", "false")
     expect(state).toHaveAttribute("data-active", "false")
+    expect(resourceMutation.mutateAsync).toHaveBeenLastCalledWith({
+      resource: "hp",
+      values: { major_wound: false },
+    })
   })
 
   it("renders the not-found state for a 404 response", () => {
