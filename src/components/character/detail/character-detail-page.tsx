@@ -2,22 +2,13 @@
 
 import { CharacterDetailError } from "@/components/character/detail/character-detail-error"
 import { CharacterDetailLoading } from "@/components/character/detail/character-detail-loading"
-import { CharacterSheetHeader } from "@/components/character/detail/character-sheet-header"
-import { CharacterSheetWorkspace } from "@/components/character/detail/character-sheet-workspace"
+import { CharacterSheetHeader } from "@/components/character/detail/header/character-sheet-header"
+import { isCharacterNotFoundError } from "@/components/character/detail/is-character-not-found-error"
+import { CharacterSheetWorkspace } from "@/components/character/detail/layout/character-sheet-workspace"
 import { useCharacter } from "@/lib/api/use-characters"
 
 type CharacterDetailPageProps = {
   characterId: string
-}
-
-function isNotFoundError(error: unknown) {
-  return (
-    typeof error === "object" &&
-    error !== null &&
-    "response" in error &&
-    error.response instanceof Response &&
-    error.response.status === 404
-  )
 }
 
 export function CharacterDetailPage({ characterId }: CharacterDetailPageProps) {
@@ -30,7 +21,7 @@ export function CharacterDetailPage({ characterId }: CharacterDetailPageProps) {
     return (
       <CharacterDetailError
         isFetching={isFetching}
-        notFound={isNotFoundError(error)}
+        notFound={isCharacterNotFoundError(error)}
         onRetry={() => void refetch()}
       />
     )
