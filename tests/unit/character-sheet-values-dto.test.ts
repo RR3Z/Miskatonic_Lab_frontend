@@ -19,6 +19,10 @@ describe("character sheet value schemas", () => {
 
   it("accepts nullable characteristics but requires resource values", () => {
     expect(characterNullableIntegerTextSchema.parse("")).toBe("")
+    expect(characterNullableIntegerTextSchema.parse("100")).toBe("100")
+    expect(characterNullableIntegerTextSchema.safeParse("101").success).toBe(
+      false,
+    )
     expect(characterIntegerTextSchema.safeParse("").success).toBe(false)
     expect(characterIntegerTextSchema.parse("42")).toBe("42")
   })

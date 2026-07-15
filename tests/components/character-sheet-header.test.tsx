@@ -38,6 +38,11 @@ vi.mock("@/lib/api/use-character-resources", () => ({
 
 describe("CharacterSheetHeader", () => {
   beforeEach(() => {
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 1024,
+      writable: true,
+    })
     toastMocks.error.mockReset()
     for (const mutation of Object.values(mutations)) {
       mutation.mutateAsync.mockReset()
@@ -179,6 +184,120 @@ describe("CharacterSheetHeader", () => {
     expect(
       screen.queryByText("Введите целое неотрицательное число"),
     ).not.toBeInTheDocument()
+  })
+
+  it("shows desktop characteristic thresholds and saves all values from the editor dialog", async () => {
+    const user = userEvent.setup()
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 1280,
+      writable: true,
+    })
+    const base = characterDetailFixture()
+    const character = characterDetailFixture({
+      characteristics: {
+        ...base.characteristics,
+        appearance: 40,
+        constitution: 45,
+        dexterity: 55,
+        education: 70,
+        intelligence: 65,
+        power: 60,
+        size: 75,
+        strength: 53,
+      },
+    })
+    render(<CharacterSheetHeader character={character} />)
+
+    expect(screen.getByTestId("characteristic-card-СИЛ")).toHaveTextContent(
+      "53",
+    )
+    expect(screen.getByTestId("characteristic-card-СИЛ")).toHaveTextContent(
+      "26",
+    )
+    expect(screen.getByTestId("characteristic-card-СИЛ")).toHaveTextContent(
+      "10",
+    )
+
+    const editButton = screen.getByRole("button", {
+      name: "Редактировать характеристики",
+    })
+    expect(editButton).toHaveAttribute("title", "Изменить")
+    await user.click(editButton)
+
+    const strengthInput = screen.getByRole("textbox", { name: "Сила" })
+    expect(strengthInput).toHaveValue("53")
+    await user.clear(strengthInput)
+    await user.type(strengthInput, "60")
+    await user.click(screen.getByRole("button", { name: "Сохранить" }))
+
+    await waitFor(() =>
+      expect(mutations.updateCharacteristics.mutateAsync).toHaveBeenCalledWith({
+        appearance: 40,
+        constitution: 45,
+        dexterity: 55,
+        education: 70,
+        intelligence: 65,
+        power: 60,
+        size: 75,
+        strength: 60,
+      }),
+    )
+  })
+
+  it("keeps only digits in characteristic editor fields", async () => {
+    const user = userEvent.setup()
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 1280,
+      writable: true,
+    })
+    render(<CharacterSheetHeader character={characterDetailFixture()} />)
+
+    await user.click(
+      screen.getByRole("button", { name: "Редактировать характеристики" }),
+    )
+    const strengthInput = screen.getByRole("textbox", { name: "Сила" })
+    await user.clear(strengthInput)
+    await user.type(strengthInput, "1a2")
+    expect(strengthInput).toHaveValue("12")
+    await user.clear(strengthInput)
+    await user.type(strengthInput, "999")
+    expect(strengthInput).toHaveValue("100")
+    await user.click(screen.getByRole("button", { name: "Сохранить" }))
+
+    await waitFor(() =>
+      expect(mutations.updateCharacteristics.mutateAsync).toHaveBeenCalledWith(
+        expect.objectContaining({ strength: 100 }),
+      ),
+    )
+  })
+
+  it("discards editor changes after cancellation", async () => {
+    const user = userEvent.setup()
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 1280,
+      writable: true,
+    })
+    const base = characterDetailFixture()
+    const character = characterDetailFixture({
+      characteristics: { ...base.characteristics, strength: 50 },
+    })
+    render(<CharacterSheetHeader character={character} />)
+
+    const editButton = screen.getByRole("button", {
+      name: "Редактировать характеристики",
+    })
+    await user.click(editButton)
+    const strengthInput = screen.getByRole("textbox", { name: "Сила" })
+    await user.clear(strengthInput)
+    await user.type(strengthInput, "60")
+    await user.click(screen.getByRole("button", { name: "Отмена" }))
+    await user.click(editButton)
+
+    expect(screen.getByRole("textbox", { name: "Сила" })).toHaveValue("50")
+    expect(mutations.updateCharacteristics.mutateAsync).not.toHaveBeenCalled()
   })
 
   it("updates a resource value through its backend subresource", async () => {

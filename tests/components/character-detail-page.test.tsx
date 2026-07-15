@@ -198,9 +198,9 @@ describe("CharacterDetailPage", () => {
       "xl:grid-cols-[minmax(330px,1fr)_1px_minmax(220px,0.95fr)_1px_minmax(125px,0.55fr)_1px_minmax(430px,1.4fr)]",
     )
     expect(screen.getByText("Комплекция")).toHaveClass("w-full", "min-w-0")
-    expect(
-      screen.getByRole("button", { name: "Редактировать характеристику Сила" }),
-    ).toHaveTextContent("80")
+    expect(screen.getByTestId("characteristic-card-СИЛ")).toHaveTextContent(
+      "80",
+    )
     expect(screen.getByText("+1d4")).toBeVisible()
     for (const [title, abbreviation] of [
       ["Сила", "СИЛ"],
