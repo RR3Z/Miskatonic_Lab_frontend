@@ -11,5 +11,6 @@ export type InlineTextEditorProps = {
   onSave: (value: string) => Promise<unknown>
   placeholder: string
   schema: ZodType<string>
+  showEditIcon?: boolean
   value: string | null
 }

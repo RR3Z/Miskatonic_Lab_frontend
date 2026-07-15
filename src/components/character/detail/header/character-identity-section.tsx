@@ -1,6 +1,7 @@
 "use client"
 
 import { buildCharacterProfileInput } from "@/components/character/detail/header/build-character-profile-input"
+import { CharacterAgeInfo } from "@/components/character/detail/header/character-age-info"
 import { CharacterNameEditor } from "@/components/character/detail/header/character-name-editor"
 import { CharacterPortraitEditor } from "@/components/character/detail/header/character-portrait-editor"
 import { CharacterSexEditor } from "@/components/character/detail/header/character-sex-editor"
@@ -52,17 +53,34 @@ export function CharacterIdentitySection({
           }
         />
         <div className="mt-1.5 grid grid-cols-2 gap-x-4 gap-y-0.5">
-          {CHARACTER_IDENTITY_TEXT_FIELDS.slice(0, 3).map((field) => (
-            <IdentityLine
-              ariaLabel={`Редактировать поле ${field.label}`}
-              key={field.key}
-              label={field.label}
-              onSave={(value) => saveTextField(field.key, value)}
-              schema={field.schema}
-              testId={"testId" in field ? field.testId : undefined}
-              value={identityFieldValue(character, field.key)}
-            />
-          ))}
+          <IdentityLine
+            ariaLabel={`Редактировать поле ${CHARACTER_IDENTITY_TEXT_FIELDS[0].label}`}
+            className="col-span-2"
+            label={CHARACTER_IDENTITY_TEXT_FIELDS[0].label}
+            onSave={(value) =>
+              saveTextField(CHARACTER_IDENTITY_TEXT_FIELDS[0].key, value)
+            }
+            schema={CHARACTER_IDENTITY_TEXT_FIELDS[0].schema}
+            testId={CHARACTER_IDENTITY_TEXT_FIELDS[0].testId}
+            value={identityFieldValue(
+              character,
+              CHARACTER_IDENTITY_TEXT_FIELDS[0].key,
+            )}
+          />
+          <IdentityLine
+            ariaLabel={`Редактировать поле ${CHARACTER_IDENTITY_TEXT_FIELDS[1].label}`}
+            label={CHARACTER_IDENTITY_TEXT_FIELDS[1].label}
+            labelAccessory={<CharacterAgeInfo />}
+            onSave={(value) =>
+              saveTextField(CHARACTER_IDENTITY_TEXT_FIELDS[1].key, value)
+            }
+            schema={CHARACTER_IDENTITY_TEXT_FIELDS[1].schema}
+            testId={CHARACTER_IDENTITY_TEXT_FIELDS[1].testId}
+            value={identityFieldValue(
+              character,
+              CHARACTER_IDENTITY_TEXT_FIELDS[1].key,
+            )}
+          />
           <div data-testid="character-sex">
             <CharacterSexEditor
               onSave={(sex) =>
@@ -73,18 +91,32 @@ export function CharacterIdentitySection({
               value={character.sex}
             />
           </div>
-          <div className="col-span-2">
-            {CHARACTER_IDENTITY_TEXT_FIELDS.slice(3).map((field) => (
-              <IdentityLine
-                ariaLabel={`Редактировать поле ${field.label}`}
-                key={field.key}
-                label={field.label}
-                onSave={(value) => saveTextField(field.key, value)}
-                schema={field.schema}
-                value={identityFieldValue(character, field.key)}
-              />
-            ))}
-          </div>
+          <IdentityLine
+            ariaLabel={`Редактировать поле ${CHARACTER_IDENTITY_TEXT_FIELDS[2].label}`}
+            className="col-span-2"
+            label={CHARACTER_IDENTITY_TEXT_FIELDS[2].label}
+            onSave={(value) =>
+              saveTextField(CHARACTER_IDENTITY_TEXT_FIELDS[2].key, value)
+            }
+            schema={CHARACTER_IDENTITY_TEXT_FIELDS[2].schema}
+            value={identityFieldValue(
+              character,
+              CHARACTER_IDENTITY_TEXT_FIELDS[2].key,
+            )}
+          />
+          <IdentityLine
+            ariaLabel={`Редактировать поле ${CHARACTER_IDENTITY_TEXT_FIELDS[3].label}`}
+            className="col-span-2"
+            label={CHARACTER_IDENTITY_TEXT_FIELDS[3].label}
+            onSave={(value) =>
+              saveTextField(CHARACTER_IDENTITY_TEXT_FIELDS[3].key, value)
+            }
+            schema={CHARACTER_IDENTITY_TEXT_FIELDS[3].schema}
+            value={identityFieldValue(
+              character,
+              CHARACTER_IDENTITY_TEXT_FIELDS[3].key,
+            )}
+          />
         </div>
       </div>
     </section>

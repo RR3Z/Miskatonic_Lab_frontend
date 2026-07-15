@@ -20,6 +20,7 @@ export function InlineTextEditor({
   onSave,
   placeholder,
   schema,
+  showEditIcon = true,
   value,
 }: InlineTextEditorProps) {
   const { cancelEditing, form, isEditing, isPending, startEditing, submit } =
@@ -48,10 +49,12 @@ export function InlineTextEditor({
         >
           {value || placeholder}
         </span>
-        <PencilLine
-          aria-hidden="true"
-          className="mt-1 size-3.5 shrink-0 opacity-0 transition-opacity group-hover/editor:opacity-70 group-focus-visible/editor:opacity-70"
-        />
+        {showEditIcon ? (
+          <PencilLine
+            aria-hidden="true"
+            className="mt-1 size-3.5 shrink-0 opacity-0 transition-opacity group-hover/editor:opacity-70 group-focus-visible/editor:opacity-70"
+          />
+        ) : null}
       </button>
     )
   }
