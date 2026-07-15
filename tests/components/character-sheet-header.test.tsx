@@ -72,6 +72,46 @@ describe("CharacterSheetHeader", () => {
     )
   })
 
+  it("accepts only digits for age and saves an empty age as null", async () => {
+    const user = userEvent.setup()
+    const character = characterDetailFixture({ age: 48 })
+    render(<CharacterSheetHeader character={character} />)
+
+    await user.click(
+      screen.getByRole("button", { name: "Редактировать поле Возраст" }),
+    )
+    const input = screen.getByRole("textbox", {
+      name: "Редактировать поле Возраст",
+    })
+    expect(input).toHaveAttribute("inputmode", "numeric")
+    expect(input).toHaveAttribute("pattern", "[0-9]*")
+
+    await user.clear(input)
+    await user.type(input, "12years3{Enter}")
+
+    await waitFor(() =>
+      expect(mutations.profile.mutateAsync).toHaveBeenCalledWith(
+        expect.objectContaining({ age: 123 }),
+      ),
+    )
+
+    mutations.profile.mutateAsync.mockClear()
+    await user.click(
+      screen.getByRole("button", { name: "Редактировать поле Возраст" }),
+    )
+    const emptyInput = screen.getByRole("textbox", {
+      name: "Редактировать поле Возраст",
+    })
+    await user.clear(emptyInput)
+    await user.keyboard("{Enter}")
+
+    await waitFor(() =>
+      expect(mutations.profile.mutateAsync).toHaveBeenCalledWith(
+        expect.objectContaining({ age: null }),
+      ),
+    )
+  })
+
   it("upserts a characteristic without clearing the other values", async () => {
     const user = userEvent.setup()
     const character = characterDetailFixture({
