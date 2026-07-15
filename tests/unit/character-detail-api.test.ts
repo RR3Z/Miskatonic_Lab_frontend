@@ -8,6 +8,7 @@ import {
   updateCharacterBackstoryItem,
   upsertCharacterBackstory,
 } from "@/lib/api/character-backstory"
+import { makeCharacterDiceRoll } from "@/lib/api/character-dice-rolls"
 import {
   deleteCharacterFinances,
   updateCharacterFinances,
@@ -233,5 +234,18 @@ describe("character detail write API", () => {
     expect(deleteRequest).toHaveBeenCalledWith(
       "api/characters/character-1/skills/skill-1/",
     )
+  })
+
+  it("rolls a d100 for a character", async () => {
+    const roll = { result: 42 }
+    const json = vi.fn(async () => roll)
+    const post = vi.fn(() => ({ json }))
+    const api = { post } as unknown as KyInstance
+
+    await expect(makeCharacterDiceRoll(api, "character-1")).resolves.toBe(roll)
+
+    expect(post).toHaveBeenCalledWith("api/dice-roll/character-1/", {
+      json: { expression: "1d100" },
+    })
   })
 })
