@@ -353,7 +353,7 @@ describe("CharacterDetailPage", () => {
     ])
     const icons = within(resourceGrid).getAllByTestId("character-resource-icon")
     expect(icons).toHaveLength(4)
-    for (const icon of icons) expect(icon).toHaveClass("opacity-[0.16]")
+    for (const icon of icons) expect(icon).toHaveClass("opacity-[0.32]")
   })
 
   it("shows state rules on hover and keyboard focus", async () => {

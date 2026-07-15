@@ -13,7 +13,10 @@ const mutations = vi.hoisted(() => ({
   resource: { mutateAsync: vi.fn() },
   updateCharacteristics: { mutateAsync: vi.fn() },
 }))
-const diceMutation = vi.hoisted(() => ({ mutateAsync: vi.fn() }))
+const diceMutation = vi.hoisted(() => ({
+  isPending: false,
+  mutateAsync: vi.fn(),
+}))
 const toastMocks = vi.hoisted(() => Object.assign(vi.fn(), { error: vi.fn() }))
 
 vi.mock("sonner", () => ({ toast: toastMocks }))
@@ -517,27 +520,197 @@ describe("CharacterSheetHeader", () => {
     expect(mutations.updateCharacteristics.mutateAsync).not.toHaveBeenCalled()
   })
 
-  it("updates a resource value through its backend subresource", async () => {
+  it("keeps resource changes in a draft until saving both values", async () => {
     const user = userEvent.setup()
     render(<CharacterSheetHeader character={characterDetailFixture()} />)
+    const healthCard = screen
+      .getAllByTestId("character-resource")
+      .find((resource) => resource.dataset.resource === "hp")
+    expect(healthCard).toBeDefined()
 
     await user.click(
       screen.getByRole("button", {
-        name: "Редактировать текущее значение Здоровье",
+        name: "Изменить ресурс Здоровье",
       }),
     )
+    expect(
+      screen.getByRole("dialog", { name: "Изменить ресурс: Здоровье" }),
+    ).toHaveClass("fixed")
     const input = screen.getByRole("textbox", {
-      name: "Редактировать текущее значение Здоровье",
+      name: "Текущее значение ресурса",
     })
     await user.clear(input)
-    await user.type(input, "7{Enter}")
+    await user.type(input, "7")
+
+    expect(mutations.resource.mutateAsync).not.toHaveBeenCalled()
+    expect(healthCard).toHaveTextContent("6/20")
+
+    await user.click(screen.getByRole("button", { name: "Сохранить" }))
 
     await waitFor(() =>
       expect(mutations.resource.mutateAsync).toHaveBeenCalledWith({
         resource: "hp",
-        values: { current_hp: 7 },
+        values: { current_hp: 7, max_hp: 20 },
       }),
     )
+  })
+
+  it("removes resource inline controls and discards a cancelled draft", async () => {
+    const user = userEvent.setup()
+    render(<CharacterSheetHeader character={characterDetailFixture()} />)
+
+    const resourceGrid = screen.getByTestId("character-resource-grid")
+    expect(resourceGrid.querySelectorAll("input")).toHaveLength(0)
+    expect(
+      screen.queryByRole("button", { name: "Удалить ресурс Здоровье" }),
+    ).not.toBeInTheDocument()
+
+    const health = screen.getByRole("button", {
+      name: "Изменить ресурс Здоровье",
+    })
+    await user.click(health)
+    const current = screen.getByRole("textbox", {
+      name: "Текущее значение ресурса",
+    })
+    await user.clear(current)
+    await user.type(current, "7")
+    await user.click(screen.getByRole("button", { name: "Отмена" }))
+    await user.click(health)
+
+    expect(
+      screen.getByRole("textbox", { name: "Текущее значение ресурса" }),
+    ).toHaveValue("6")
+    expect(mutations.resource.mutateAsync).not.toHaveBeenCalled()
+  })
+
+  it("closes the resource calculator from its header button", async () => {
+    const user = userEvent.setup()
+    render(<CharacterSheetHeader character={characterDetailFixture()} />)
+
+    await user.click(
+      screen.getByRole("button", { name: "Изменить ресурс Здоровье" }),
+    )
+    await user.click(
+      screen.getByRole("button", { name: "Закрыть калькулятор ресурса" }),
+    )
+
+    expect(
+      screen.queryByRole("dialog", { name: "Изменить ресурс: Здоровье" }),
+    ).not.toBeInTheDocument()
+    expect(mutations.resource.mutateAsync).not.toHaveBeenCalled()
+  })
+
+  it("blocks a resource draft when current exceeds maximum", async () => {
+    const user = userEvent.setup()
+    render(<CharacterSheetHeader character={characterDetailFixture()} />)
+
+    await user.click(
+      screen.getByRole("button", { name: "Изменить ресурс Здоровье" }),
+    )
+    const current = screen.getByRole("textbox", {
+      name: "Текущее значение ресурса",
+    })
+    await user.clear(current)
+    await user.type(current, "21")
+
+    expect(
+      screen.getByText("Текущее значение не может быть больше максимального"),
+    ).toBeVisible()
+    expect(screen.getByRole("button", { name: "Сохранить" })).toBeDisabled()
+    expect(mutations.resource.mutateAsync).not.toHaveBeenCalled()
+  })
+
+  it("adjusts each resource draft value by one with plus and minus buttons", async () => {
+    const user = userEvent.setup()
+    render(<CharacterSheetHeader character={characterDetailFixture()} />)
+
+    await user.click(
+      screen.getByRole("button", { name: "Изменить ресурс Здоровье" }),
+    )
+    await user.click(
+      screen.getByRole("button", {
+        name: "Увеличить текущее значение ресурса",
+      }),
+    )
+    await user.click(
+      screen.getByRole("button", {
+        name: "Уменьшить максимальное значение ресурса",
+      }),
+    )
+
+    expect(
+      screen.getByRole("textbox", { name: "Текущее значение ресурса" }),
+    ).toHaveValue("7")
+    expect(
+      screen.getByRole("textbox", { name: "Максимальное значение ресурса" }),
+    ).toHaveValue("19")
+  })
+
+  it("applies a health damage roll only to the draft until saving", async () => {
+    const user = userEvent.setup()
+    diceMutation.mutateAsync.mockResolvedValueOnce({
+      expression: "1d3",
+      result: 3,
+    })
+    render(<CharacterSheetHeader character={characterDetailFixture()} />)
+
+    await user.click(
+      screen.getByRole("button", {
+        name: "Изменить ресурс Здоровье",
+      }),
+    )
+    expect(screen.getByText("Урон")).toBeVisible()
+    expect(screen.queryByText("Правила CoC 7e")).not.toBeInTheDocument()
+    expect(screen.getByRole("textbox", { name: "Формула броска" })).toHaveValue(
+      "1d3",
+    )
+
+    await user.click(screen.getByRole("button", { name: "Бросить" }))
+
+    await waitFor(() =>
+      expect(diceMutation.mutateAsync).toHaveBeenCalledWith("1d3"),
+    )
+    expect(
+      screen.getByRole("textbox", { name: "Текущее значение ресурса" }),
+    ).toHaveValue("3")
+    expect(mutations.resource.mutateAsync).not.toHaveBeenCalled()
+
+    await user.click(screen.getByRole("button", { name: "Сохранить" }))
+
+    await waitFor(() =>
+      expect(mutations.resource.mutateAsync).toHaveBeenCalledWith({
+        resource: "hp",
+        values: { current_hp: 3, max_hp: 20 },
+      }),
+    )
+  })
+
+  it("adds a SAN insanity reminder after a loss of five or more", async () => {
+    const user = userEvent.setup()
+    diceMutation.mutateAsync.mockResolvedValueOnce({
+      expression: "1d6",
+      result: 5,
+    })
+    render(<CharacterSheetHeader character={characterDetailFixture()} />)
+
+    await user.click(
+      screen.getByRole("button", {
+        name: "Изменить ресурс Рассудок",
+      }),
+    )
+    const formula = screen.getByRole("textbox", {
+      name: "Формула броска",
+    })
+    await user.clear(formula)
+    await user.type(formula, "1d6")
+    await user.click(screen.getByRole("button", { name: "Бросить" }))
+
+    expect(
+      await screen.findByText(
+        "Потеря 5+ пунктов рассудка от одного источника: проведите проверку ИНТ.",
+      ),
+    ).toBeVisible()
+    expect(mutations.resource.mutateAsync).not.toHaveBeenCalled()
   })
 
   it("validates and uploads a new portrait", async () => {
