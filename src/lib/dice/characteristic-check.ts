@@ -17,6 +17,21 @@ export type CharacteristicCheckResult = {
   thresholds: CharacteristicCheckThresholds
 }
 
+const outcomeLabels: Record<CharacteristicCheckOutcome, string> = {
+  critical_success: "критический успех",
+  extreme_success: "чрезвычайный успех",
+  failure: "провал",
+  fumble: "крах",
+  hard_success: "трудный успех",
+  regular_success: "обычный успех",
+}
+
+export function getCharacteristicCheckOutcomeLabel(
+  outcome: CharacteristicCheckOutcome,
+) {
+  return outcomeLabels[outcome]
+}
+
 export function getCharacteristicCheckThresholds(
   base: number,
 ): CharacteristicCheckThresholds {
