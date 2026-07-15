@@ -264,6 +264,12 @@
 }
 
 @layer components {
+  [data-sonner-toast].dice-roll-toast,
+  [data-sonner-toast].dice-roll-toast [data-close-button] {
+    /* biome-ignore lint/complexity/noImportantStyles: Overrides the shared Sonner border utility for outcome-specific dice colors. */
+    border-color: var(--dice-roll-border-color) !important;
+  }
+
   .cl-card .cl-socialButtonsBlockButton:hover,
   .cl-card .cl-socialButtonsBlockButton:focus-visible,
   .cl-card .cl-alternativeMethodsBlockButton:hover,

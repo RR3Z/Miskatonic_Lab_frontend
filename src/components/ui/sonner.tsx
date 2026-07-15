@@ -5,19 +5,22 @@ import { Toaster as Sonner, type ToasterProps } from "sonner"
 export const DICE_RESULT_TOASTER_ID = "dice-results"
 export const TOAST_DURATION_MS = 30_000
 
-export function Toaster(props: ToasterProps) {
+export function Toaster({ id, toastOptions, ...props }: ToasterProps) {
+  const isDiceResultToaster = id === DICE_RESULT_TOASTER_ID
+
   return (
     <Sonner
       closeButton
       containerAriaLabel="Уведомления"
       duration={TOAST_DURATION_MS}
+      id={id}
       position="top-center"
       theme="dark"
       toastOptions={{
+        ...toastOptions,
         closeButtonAriaLabel: "Закрыть уведомление",
         classNames: {
-          toast:
-            "w-[min(26rem,calc(100vw-2rem))]! rounded-lg! border! border-[var(--ml-border-aged)]! bg-[var(--ml-surface-panel-raised)]! p-4! font-body! text-[var(--ml-ink-primary)]! shadow-[0_16px_40px_rgba(0,0,0,0.42)]!",
+          toast: `${isDiceResultToaster ? "w-[min(21rem,calc(100vw-2rem))]!" : "w-[min(26rem,calc(100vw-2rem))]!"} rounded-lg! border! border-[var(--ml-border-aged)]! bg-[var(--ml-surface-panel-raised)]! p-4! font-body! text-[var(--ml-ink-primary)]! shadow-[0_16px_40px_rgba(0,0,0,0.42)]!`,
           title: "text-base! leading-snug! font-semibold!",
           description: "text-sm! text-current! opacity-80!",
           content: "gap-0.5!",
@@ -30,6 +33,7 @@ export function Toaster(props: ToasterProps) {
             "border-[var(--ml-toast-error-border)]! bg-[var(--ml-toast-error-bg)]! text-[var(--ml-ink-primary)]! [&_[data-icon]]:text-[var(--ml-toast-error-accent)]!",
           warning:
             "border-[var(--ml-toast-warning-border)]! bg-[var(--ml-toast-warning-bg)]! text-[var(--ml-ink-primary)]! [&_[data-icon]]:text-[var(--ml-toast-warning-accent)]!",
+          ...toastOptions?.classNames,
         },
       }}
       {...props}
