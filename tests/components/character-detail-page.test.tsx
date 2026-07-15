@@ -49,6 +49,10 @@ vi.mock("@/lib/api/use-character-profile", () => ({
   useUpdateCharacterProfile: () => ({ mutateAsync: vi.fn() }),
 }))
 
+vi.mock("@/lib/api/use-character-dice-rolls", () => ({
+  useMakeCharacterDiceRoll: () => ({ mutateAsync: vi.fn() }),
+}))
+
 vi.mock("@/lib/api/use-character-statistics", () => ({
   useDeleteCharacterCharacteristics: () => ({ mutateAsync: vi.fn() }),
   useDeleteCharacterDerivedStats: () => ({ mutateAsync: vi.fn() }),

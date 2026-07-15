@@ -23,6 +23,9 @@ describe("character sheet value schemas", () => {
     expect(characterNullableIntegerTextSchema.safeParse("101").success).toBe(
       false,
     )
+    expect(
+      characterNullableIntegerTextSchema.safeParse("not-a-number").success,
+    ).toBe(false)
     expect(characterIntegerTextSchema.safeParse("").success).toBe(false)
     expect(characterIntegerTextSchema.parse("42")).toBe("42")
   })

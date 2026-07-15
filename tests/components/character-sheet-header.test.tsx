@@ -15,13 +15,18 @@ const mutations = vi.hoisted(() => ({
   updateCharacteristics: { mutateAsync: vi.fn() },
   updateDerivedStats: { mutateAsync: vi.fn() },
 }))
-const toastMocks = vi.hoisted(() => ({ error: vi.fn() }))
+const diceMutation = vi.hoisted(() => ({ mutateAsync: vi.fn() }))
+const toastMocks = vi.hoisted(() => Object.assign(vi.fn(), { error: vi.fn() }))
 
 vi.mock("sonner", () => ({ toast: toastMocks }))
 
 vi.mock("@/lib/api/use-character-profile", () => ({
   useUpdateCharacterPortrait: () => mutations.portrait,
   useUpdateCharacterProfile: () => mutations.profile,
+}))
+
+vi.mock("@/lib/api/use-character-dice-rolls", () => ({
+  useMakeCharacterDiceRoll: () => diceMutation,
 }))
 
 vi.mock("@/lib/api/use-character-statistics", () => ({
@@ -43,6 +48,9 @@ describe("CharacterSheetHeader", () => {
       value: 1024,
       writable: true,
     })
+    diceMutation.mutateAsync.mockReset()
+    diceMutation.mutateAsync.mockResolvedValue({ result: 42 })
+    toastMocks.mockReset()
     toastMocks.error.mockReset()
     for (const mutation of Object.values(mutations)) {
       mutation.mutateAsync.mockReset()
@@ -243,6 +251,111 @@ describe("CharacterSheetHeader", () => {
         strength: 60,
       }),
     )
+  })
+
+  it("rolls only the clicked characteristic and sends its result to the dice toaster", async () => {
+    const user = userEvent.setup()
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 1280,
+      writable: true,
+    })
+    const base = characterDetailFixture()
+    const character = characterDetailFixture({
+      characteristics: {
+        ...base.characteristics,
+        constitution: 40,
+        strength: 53,
+      },
+    })
+    render(<CharacterSheetHeader character={character} />)
+
+    const strengthCard = screen.getByRole("button", {
+      name: "Бросить характеристику Сила",
+    })
+    const constitutionCard = screen.getByRole("button", {
+      name: "Бросить характеристику Выносливость",
+    })
+    let resolveRoll: (result: { result: number }) => void = () => undefined
+    diceMutation.mutateAsync.mockImplementationOnce(
+      () =>
+        new Promise<{ result: number }>((resolve) => {
+          resolveRoll = resolve
+        }),
+    )
+    await user.click(strengthCard)
+
+    await waitFor(() =>
+      expect(diceMutation.mutateAsync).toHaveBeenCalledTimes(1),
+    )
+    expect(strengthCard).toBeDisabled()
+    expect(constitutionCard).not.toBeDisabled()
+    resolveRoll({ result: 42 })
+
+    await waitFor(() => expect(strengthCard).not.toBeDisabled())
+    expect(toastMocks).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        classNames: expect.objectContaining({
+          toast: expect.stringContaining("dice-roll-toast"),
+        }),
+        duration: 30000,
+        style: { "--dice-roll-border-color": "#537653" },
+        toasterId: "dice-results",
+      }),
+    )
+  })
+
+  it("does not request a roll for an unfilled characteristic", async () => {
+    const user = userEvent.setup()
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 1280,
+      writable: true,
+    })
+    render(<CharacterSheetHeader character={characterDetailFixture()} />)
+
+    const emptyStrengthCard = screen.getByTestId("characteristic-card-СИЛ")
+    expect(emptyStrengthCard).not.toHaveAttribute("role", "button")
+
+    await user.click(emptyStrengthCard)
+
+    expect(diceMutation.mutateAsync).not.toHaveBeenCalled()
+    expect(toastMocks).not.toHaveBeenCalled()
+  })
+
+  it("unlocks the card and uses the normal error toast when a roll fails", async () => {
+    const user = userEvent.setup()
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 1280,
+      writable: true,
+    })
+    diceMutation.mutateAsync.mockRejectedValueOnce(new Error("network failed"))
+    const base = characterDetailFixture()
+    const character = characterDetailFixture({
+      characteristics: {
+        ...base.characteristics,
+        constitution: 40,
+        strength: 53,
+      },
+    })
+    render(<CharacterSheetHeader character={character} />)
+
+    const strengthCard = screen.getByRole("button", {
+      name: "Бросить характеристику Сила",
+    })
+    const constitutionCard = screen.getByRole("button", {
+      name: "Бросить характеристику Выносливость",
+    })
+    await user.click(strengthCard)
+
+    await waitFor(() =>
+      expect(toastMocks.error).toHaveBeenCalledWith("Не удалось бросить d100"),
+    )
+    expect(strengthCard).not.toBeDisabled()
+    expect(constitutionCard).not.toBeDisabled()
+    expect(toastMocks).not.toHaveBeenCalled()
   })
 
   it("keeps only digits in characteristic editor fields", async () => {

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 
 import {
   classifyCharacteristicCheck,
+  getCharacteristicCheckOutcomeLabel,
   getCharacteristicCheckThresholds,
 } from "@/lib/dice/characteristic-check"
 
@@ -28,5 +29,15 @@ describe("characteristic checks", () => {
     expect(classifyCharacteristicCheck(50, 96).outcome).toBe("failure")
     expect(classifyCharacteristicCheck(50, 99).outcome).toBe("failure")
     expect(classifyCharacteristicCheck(50, 100).outcome).toBe("fumble")
+  })
+
+  it("uses Russian labels in the dice result", () => {
+    expect(getCharacteristicCheckOutcomeLabel("critical_success")).toBe(
+      "критический успех",
+    )
+    expect(getCharacteristicCheckOutcomeLabel("fumble")).toBe("крах")
+    expect(getCharacteristicCheckOutcomeLabel("regular_success")).toBe(
+      "обычный успех",
+    )
   })
 })
