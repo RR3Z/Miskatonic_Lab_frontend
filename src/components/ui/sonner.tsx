@@ -10,6 +10,7 @@ export function Toaster({ id, toastOptions, ...props }: ToasterProps) {
 
   return (
     <Sonner
+      className={isDiceResultToaster ? "z-[100]" : undefined}
       closeButton
       containerAriaLabel="Уведомления"
       duration={TOAST_DURATION_MS}
