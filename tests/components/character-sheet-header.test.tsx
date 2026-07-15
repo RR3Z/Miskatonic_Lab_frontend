@@ -15,6 +15,9 @@ const mutations = vi.hoisted(() => ({
   updateCharacteristics: { mutateAsync: vi.fn() },
   updateDerivedStats: { mutateAsync: vi.fn() },
 }))
+const toastMocks = vi.hoisted(() => ({ error: vi.fn() }))
+
+vi.mock("sonner", () => ({ toast: toastMocks }))
 
 vi.mock("@/lib/api/use-character-profile", () => ({
   useUpdateCharacterPortrait: () => mutations.portrait,
@@ -35,13 +38,40 @@ vi.mock("@/lib/api/use-character-resources", () => ({
 
 describe("CharacterSheetHeader", () => {
   beforeEach(() => {
+    toastMocks.error.mockReset()
     for (const mutation of Object.values(mutations)) {
       mutation.mutateAsync.mockReset()
       mutation.mutateAsync.mockResolvedValue(undefined)
     }
   })
 
-  it("updates the name with the complete profile payload", async () => {
+  it("shows a profile save failure through Sonner", async () => {
+    const user = userEvent.setup()
+    mutations.profile.mutateAsync.mockRejectedValueOnce(
+      new Error("network failed"),
+    )
+    render(<CharacterSheetHeader character={characterDetailFixture()} />)
+
+    await user.click(
+      screen.getByRole("button", { name: "Редактировать поле Профессия" }),
+    )
+    const input = screen.getByRole("textbox", {
+      name: "Редактировать поле Профессия",
+    })
+    await user.clear(input)
+    await user.type(input, "Архивист{Enter}")
+
+    await waitFor(() =>
+      expect(toastMocks.error).toHaveBeenCalledWith(
+        "Не удалось сохранить личные данные",
+      ),
+    )
+    expect(
+      screen.queryByText("Не удалось сохранить личные данные"),
+    ).not.toBeInTheDocument()
+  })
+
+  it("updates the name with a single-field profile patch", async () => {
     const user = userEvent.setup()
     const character = characterDetailFixture({
       age: 48,
@@ -61,13 +91,7 @@ describe("CharacterSheetHeader", () => {
 
     await waitFor(() =>
       expect(mutations.profile.mutateAsync).toHaveBeenCalledWith({
-        age: 48,
-        birthplace: "Бостон",
         name: "Генри Армитедж",
-        occupation: "Антиквар",
-        player_name: "Игрок",
-        residence: "Нью-Йорк",
-        sex: "male",
       }),
     )
   })
@@ -90,9 +114,7 @@ describe("CharacterSheetHeader", () => {
     await user.type(input, "12years3{Enter}")
 
     await waitFor(() =>
-      expect(mutations.profile.mutateAsync).toHaveBeenCalledWith(
-        expect.objectContaining({ age: 123 }),
-      ),
+      expect(mutations.profile.mutateAsync).toHaveBeenCalledWith({ age: 123 }),
     )
 
     mutations.profile.mutateAsync.mockClear()
@@ -106,9 +128,7 @@ describe("CharacterSheetHeader", () => {
     await user.keyboard("{Enter}")
 
     await waitFor(() =>
-      expect(mutations.profile.mutateAsync).toHaveBeenCalledWith(
-        expect.objectContaining({ age: null }),
-      ),
+      expect(mutations.profile.mutateAsync).toHaveBeenCalledWith({ age: null }),
     )
   })
 
@@ -139,7 +159,7 @@ describe("CharacterSheetHeader", () => {
     )
   })
 
-  it("rejects an invalid numeric characteristic without a request", async () => {
+  it("shows an invalid numeric characteristic through Sonner", async () => {
     const user = userEvent.setup()
     render(<CharacterSheetHeader character={characterDetailFixture()} />)
 
@@ -153,10 +173,12 @@ describe("CharacterSheetHeader", () => {
     await user.type(input, "-1{Enter}")
 
     expect(mutations.updateCharacteristics.mutateAsync).not.toHaveBeenCalled()
-    expect(input).toHaveAttribute("aria-invalid", "true")
+    expect(toastMocks.error).toHaveBeenCalledWith(
+      "Введите целое неотрицательное число",
+    )
     expect(
-      screen.getByText("Введите целое неотрицательное число"),
-    ).toBeVisible()
+      screen.queryByText("Введите целое неотрицательное число"),
+    ).not.toBeInTheDocument()
   })
 
   it("updates a resource value through its backend subresource", async () => {

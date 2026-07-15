@@ -156,23 +156,15 @@ describe("character detail write API", () => {
     )
   })
 
-  it("updates the complete character profile", async () => {
-    const profile = {
-      age: 48,
-      birthplace: "Boston",
-      name: "Armitage",
-      occupation: "Professor",
-      player_name: null,
-      residence: "Arkham",
-      sex: "male" as const,
-    }
+  it("patches only the provided character profile fields", async () => {
+    const profile = { occupation: "Professor" }
     const json = vi.fn(async () => ({ id: "character-1", ...profile }))
-    const put = vi.fn(() => ({ json }))
-    const api = { put } as unknown as KyInstance
+    const patch = vi.fn(() => ({ json }))
+    const api = { patch } as unknown as KyInstance
 
     await updateCharacterProfile(api, "character-1", profile)
 
-    expect(put).toHaveBeenCalledWith("api/characters/character-1/", {
+    expect(patch).toHaveBeenCalledWith("api/characters/character-1/", {
       json: profile,
     })
   })

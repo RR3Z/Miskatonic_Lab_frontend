@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
-import { act, renderHook } from "@testing-library/react"
+import { act, renderHook, waitFor } from "@testing-library/react"
 import type { ReactNode } from "react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
@@ -58,7 +58,7 @@ describe("character detail mutation cache", () => {
     apiMocks.updateCharacterResource.mockReset()
   })
 
-  it("patches and invalidates only the active user's profile cache", async () => {
+  it("merges only the submitted patch into the active user's profile cache", async () => {
     const queryClient = createQueryClient()
     const activeKey = characterQueryKeys.detail("user-a", "character-1")
     const foreignKey = characterQueryKeys.detail("user-b", "character-1")
@@ -68,6 +68,7 @@ describe("character detail mutation cache", () => {
     const invalidateQueries = vi.spyOn(queryClient, "invalidateQueries")
     apiMocks.updateCharacterProfile.mockResolvedValue({
       ...original,
+      age: 99,
       name: "Генри Армитедж",
     })
     const { result } = renderHook(
@@ -77,13 +78,7 @@ describe("character detail mutation cache", () => {
 
     await act(() =>
       result.current.mutateAsync({
-        age: original.age,
-        birthplace: original.birthplace,
         name: "Генри Армитедж",
-        occupation: original.occupation,
-        player_name: original.player_name,
-        residence: original.residence,
-        sex: original.sex as "female" | "male" | null,
       }),
     )
 
@@ -93,7 +88,75 @@ describe("character detail mutation cache", () => {
     expect(queryClient.getQueryData<CharacterDetail>(foreignKey)?.name).toBe(
       original.name,
     )
+    expect(queryClient.getQueryData<CharacterDetail>(activeKey)?.age).toBe(
+      original.age,
+    )
     expect(invalidateQueries).toHaveBeenCalledWith({ queryKey: activeKey })
+  })
+
+  it("serializes rapid profile patches for the same character", async () => {
+    const queryClient = createQueryClient()
+    const queryKey = characterQueryKeys.detail("user-a", "character-1")
+    const original = characterDetailFixture()
+    queryClient.setQueryData(queryKey, original)
+    let resolveFirst: (value: CharacterDetail) => void = () => undefined
+    let resolveSecond: (value: CharacterDetail) => void = () => undefined
+    apiMocks.updateCharacterProfile
+      .mockImplementationOnce(
+        () =>
+          new Promise<CharacterDetail>((resolve) => {
+            resolveFirst = resolve
+          }),
+      )
+      .mockImplementationOnce(
+        () =>
+          new Promise<CharacterDetail>((resolve) => {
+            resolveSecond = resolve
+          }),
+      )
+    const { result } = renderHook(
+      () => useUpdateCharacterProfile("character-1"),
+      { wrapper: wrapper(queryClient) },
+    )
+    let firstSave: Promise<unknown>
+    let secondSave: Promise<unknown>
+
+    act(() => {
+      firstSave = result.current.mutateAsync({ occupation: "Антиквар" })
+      secondSave = result.current.mutateAsync({ age: 42 })
+    })
+
+    await waitFor(() =>
+      expect(apiMocks.updateCharacterProfile).toHaveBeenCalledTimes(1),
+    )
+    await act(async () => {
+      resolveFirst({ ...original, occupation: "Антиквар" })
+      await firstSave
+    })
+    await waitFor(() =>
+      expect(apiMocks.updateCharacterProfile).toHaveBeenCalledTimes(2),
+    )
+    await act(async () => {
+      resolveSecond({ ...original, age: 42 })
+      await secondSave
+    })
+
+    expect(apiMocks.updateCharacterProfile).toHaveBeenNthCalledWith(
+      1,
+      expect.anything(),
+      "character-1",
+      { occupation: "Антиквар" },
+    )
+    expect(apiMocks.updateCharacterProfile).toHaveBeenNthCalledWith(
+      2,
+      expect.anything(),
+      "character-1",
+      { age: 42 },
+    )
+    expect(queryClient.getQueryData<CharacterDetail>(queryKey)).toMatchObject({
+      age: 42,
+      occupation: "Антиквар",
+    })
   })
 
   it("patches the matching resource and leaves cache unchanged on failure", async () => {

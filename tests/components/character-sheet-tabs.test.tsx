@@ -17,6 +17,13 @@ const mutations = vi.hoisted(() => ({
   updateNote: { mutateAsync: vi.fn() },
   upsertBackstory: { mutateAsync: vi.fn() },
 }))
+const toastMocks = vi.hoisted(() => ({
+  error: vi.fn(),
+  success: vi.fn(),
+  warning: vi.fn(),
+}))
+
+vi.mock("sonner", () => ({ toast: toastMocks }))
 
 vi.mock("@/lib/api/use-character-notes", () => ({
   useCreateCharacterNote: () => mutations.createNote,
@@ -39,6 +46,9 @@ vi.mock("@/lib/api/use-character-finances", () => ({
 
 describe("CharacterSheetTabs", () => {
   beforeEach(() => {
+    toastMocks.error.mockReset()
+    toastMocks.success.mockReset()
+    toastMocks.warning.mockReset()
     mutations.createNote.isPending = false
     for (const mutation of Object.values(mutations)) {
       mutation.mutateAsync.mockReset()
@@ -270,6 +280,31 @@ describe("CharacterSheetTabs", () => {
         "Оружие и атаки пока не поддерживаются Backend-моделью персонажа.",
       ),
     ).toBeVisible()
+  })
+
+  it("shows note validation errors through Sonner", async () => {
+    const user = userEvent.setup()
+    const character = characterDetailFixture()
+    render(
+      <CharacterSheetTabs
+        backstory={character.backstory}
+        characterId={character.id}
+        finances={character.finances}
+        notes={null}
+        skills={character.skills}
+      />,
+    )
+
+    await user.click(screen.getByRole("tab", { name: "Заметки" }))
+    await user.click(screen.getByRole("button", { name: "Добавить заметку" }))
+    await user.click(screen.getByRole("button", { name: "Добавить" }))
+
+    expect(toastMocks.error).toHaveBeenCalledWith("Укажите заголовок заметки", {
+      id: "character-note-validation-error",
+    })
+    expect(
+      screen.queryByText("Укажите заголовок заметки"),
+    ).not.toBeInTheDocument()
   })
 
   it("creates a note from the notes tab", async () => {

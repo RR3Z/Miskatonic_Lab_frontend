@@ -1,9 +1,13 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 import { z } from "zod"
 
 import { InlineTextEditor } from "@/components/character/detail/editors/inline-text-editor"
+
+const toastMocks = vi.hoisted(() => ({ error: vi.fn() }))
+
+vi.mock("sonner", () => ({ toast: toastMocks }))
 
 const schema = z.string().trim().min(1, "Добавьте значение")
 
@@ -30,6 +34,10 @@ function renderEditor({
 }
 
 describe("InlineTextEditor", () => {
+  beforeEach(() => {
+    toastMocks.error.mockReset()
+  })
+
   it("opens on click, saves a trimmed single-line value with Enter", async () => {
     const user = userEvent.setup()
     const { onSave } = renderEditor()
@@ -65,7 +73,7 @@ describe("InlineTextEditor", () => {
     ).toHaveTextContent("Исходное значение")
   })
 
-  it("keeps invalid input open and shows its validation error", async () => {
+  it("keeps invalid input open and shows its validation error through Sonner", async () => {
     const user = userEvent.setup()
     const { onSave } = renderEditor()
 
@@ -79,8 +87,8 @@ describe("InlineTextEditor", () => {
     await user.keyboard("{Enter}")
 
     expect(onSave).not.toHaveBeenCalled()
-    expect(input).toHaveAttribute("aria-invalid", "true")
-    expect(screen.getByText("Добавьте значение")).toBeVisible()
+    expect(toastMocks.error).toHaveBeenCalledWith("Добавьте значение")
+    expect(screen.queryByText("Добавьте значение")).not.toBeInTheDocument()
   })
 
   it("locks a pending save and keeps a failed draft editable", async () => {
@@ -110,6 +118,11 @@ describe("InlineTextEditor", () => {
 
     await waitFor(() => expect(input).toBeEnabled())
     expect(input).toHaveValue("Новый текст")
-    expect(screen.getByText("Не удалось сохранить значение")).toBeVisible()
+    expect(toastMocks.error).toHaveBeenCalledWith(
+      "Не удалось сохранить значение",
+    )
+    expect(
+      screen.queryByText("Не удалось сохранить значение"),
+    ).not.toBeInTheDocument()
   })
 })

@@ -138,7 +138,7 @@ describe("CreateCharacterModal", () => {
     expect(screen.getByLabelText("Пол")).toHaveTextContent("Мужчина")
   })
 
-  it("highlights the required name only after a failed submit", async () => {
+  it("shows the required-name validation through Sonner", async () => {
     const user = userEvent.setup()
     renderModal()
     const name = screen.getByLabelText("Имя")
@@ -155,7 +155,10 @@ describe("CreateCharacterModal", () => {
 
     expect(name).toHaveAttribute("aria-invalid", "true")
     expect(name).toHaveFocus()
-    expect(screen.getByText("Укажите имя персонажа")).toBeVisible()
+    expect(mocks.toastError).toHaveBeenCalledWith("Укажите имя персонажа", {
+      id: "character-create-validation-error",
+    })
+    expect(screen.queryByText("Укажите имя персонажа")).not.toBeInTheDocument()
 
     await user.type(name, "А")
     expect(name).toHaveAttribute("aria-invalid", "false")
