@@ -5,8 +5,12 @@ import {
 } from "@/dto/character/character-sheet-values.dto"
 import type { CharacterDetail } from "@/types/character"
 
-export type CharacteristicDefinition = Omit<CompactStatDefinition, "key"> & {
+export type CharacteristicDefinition = Omit<
+  CompactStatDefinition,
+  "key" | "value"
+> & {
   key: keyof UpdateCharacterCharacteristicsDto
+  value: number | null
 }
 
 export function getCharacterCharacteristics(
