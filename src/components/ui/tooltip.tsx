@@ -54,7 +54,14 @@ function TooltipContent({
         {...props}
       >
         {scrollable ? (
-          <ScrollArea className={scrollAreaClassName}>{children}</ScrollArea>
+          <ScrollArea
+            className={cn(
+              "overflow-hidden [&>[data-slot=scroll-area-viewport]]:h-auto [&>[data-slot=scroll-area-viewport]]:max-h-[inherit]",
+              scrollAreaClassName,
+            )}
+          >
+            {children}
+          </ScrollArea>
         ) : (
           children
         )}
