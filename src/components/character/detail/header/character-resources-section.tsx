@@ -4,10 +4,8 @@ import { getCharacterResources } from "@/components/character/detail/header/char
 import { CharacterSheetSectionTitle } from "@/components/character/detail/header/character-sheet-section-title"
 import { createCharacterResourceUpdate } from "@/components/character/detail/header/create-character-resource-update"
 import { ResourceStat } from "@/components/character/detail/header/resource-stat"
-import {
-  useDeleteCharacterResource,
-  useUpdateCharacterResource,
-} from "@/lib/api/use-character-resources"
+import { useMakeCharacterDiceRoll } from "@/lib/api/use-character-dice-rolls"
+import { useUpdateCharacterResource } from "@/lib/api/use-character-resources"
 import type { CharacterDetail } from "@/types/character"
 
 export function CharacterResourcesSection({
@@ -15,8 +13,8 @@ export function CharacterResourcesSection({
 }: {
   character: CharacterDetail
 }) {
+  const diceMutation = useMakeCharacterDiceRoll(character.id)
   const updateMutation = useUpdateCharacterResource(character.id)
-  const deleteMutation = useDeleteCharacterResource(character.id)
 
   return (
     <section className="flex h-full min-w-0 self-stretch flex-col py-1">
@@ -29,13 +27,17 @@ export function CharacterResourcesSection({
           <ResourceStat
             key={resource.visualKey}
             {...resource}
-            onDelete={() => deleteMutation.mutateAsync(resource.resource)}
-            onSave={(field, value) =>
+            character={character}
+            isRolling={diceMutation.isPending}
+            onRoll={(expression) => diceMutation.mutateAsync(expression)}
+            onSave={(current, max) =>
               updateMutation.mutateAsync(
-                createCharacterResourceUpdate(resource.resource, field, value),
+                createCharacterResourceUpdate(resource.resource, {
+                  [resource.currentField]: current,
+                  [resource.maxField]: max,
+                }),
               )
             }
-            showDelete={Boolean(character[resource.resource].id)}
           />
         ))}
       </div>

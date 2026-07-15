@@ -42,6 +42,7 @@ export function CharacterPortraitEditor({
         alt={alt}
         className="object-cover"
         fill
+        loading="eager"
         sizes="96px"
         src={portraitUrl}
         unoptimized={!portraitUrl.startsWith("/")}

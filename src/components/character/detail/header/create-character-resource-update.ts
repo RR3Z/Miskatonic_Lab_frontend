@@ -5,8 +5,13 @@ import type {
 
 export function createCharacterResourceUpdate(
   resource: CharacterResourceKey,
-  field: string,
-  value: boolean | number,
+  fieldOrValues: string | Record<string, boolean | number>,
+  value?: boolean | number,
 ): CharacterResourceUpdate {
-  return { resource, values: { [field]: value } } as CharacterResourceUpdate
+  const values =
+    typeof fieldOrValues === "string"
+      ? { [fieldOrValues]: value }
+      : fieldOrValues
+
+  return { resource, values } as CharacterResourceUpdate
 }

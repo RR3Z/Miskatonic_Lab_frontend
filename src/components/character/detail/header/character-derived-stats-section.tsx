@@ -1,5 +1,6 @@
 "use client"
 
+import type { CSSProperties } from "react"
 import { toast } from "sonner"
 
 import { getCharacterDerivedStats } from "@/components/character/detail/header/character-derived-stat-definitions"
@@ -50,7 +51,7 @@ export function CharacterDerivedStatsSection({
               "dice-roll-toast min-h-24! items-stretch! border-2! border-[#b6a367]! bg-[linear-gradient(135deg,#3a3221,#211d18)]! p-3! text-[var(--ml-ink-primary)]! shadow-[0_20px_48px_rgba(0,0,0,0.72)]!",
           },
           duration: TOAST_DURATION_MS,
-          style: { "--dice-roll-border-color": "#b6a367" },
+          style: { "--dice-roll-border-color": "#b6a367" } as CSSProperties,
           toasterId: DICE_RESULT_TOASTER_ID,
         },
       )
