@@ -20,13 +20,6 @@ export const characterIntegerTextSchema =
     "Введите значение",
   )
 
-export const characterDamageBonusSchema = z
-  .string()
-  .trim()
-  .min(1, "Введите бонус урона")
-  .max(16, "Значение слишком длинное")
-  .regex(/^(-2|-1|0|\+.+)$/, "Используйте -2, -1, 0 или значение с +")
-
 export type UpdateCharacterCharacteristicsDto = {
   appearance: number | null
   constitution: number | null
@@ -36,13 +29,6 @@ export type UpdateCharacterCharacteristicsDto = {
   power: number | null
   size: number | null
   strength: number | null
-}
-
-export type UpdateCharacterDerivedStatsDto = {
-  damage_bonus?: string
-  dodge_value?: number
-  physique?: number
-  speed?: number
 }
 
 export type CharacterResourceUpdate =

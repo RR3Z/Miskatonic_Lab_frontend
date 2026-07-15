@@ -3,13 +3,10 @@ import type { CharacterStatVisualKey } from "@/components/character/character-st
 import type {
   CharacterResourceKey,
   UpdateCharacterCharacteristicsDto,
-  UpdateCharacterDerivedStatsDto,
 } from "@/dto/character/character-sheet-values.dto"
 
 export type CompactStatDefinition = {
-  key:
-    | keyof UpdateCharacterCharacteristicsDto
-    | keyof UpdateCharacterDerivedStatsDto
+  key: keyof UpdateCharacterCharacteristicsDto
   label: string
   schema: ZodType<string>
   title?: string
