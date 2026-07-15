@@ -1,6 +1,6 @@
+import { CharacterSheetTooltipProvider } from "@/components/character/detail/character-sheet-tooltip"
 import { FinancesSection } from "@/components/character/detail/tabs/finances-section"
 import { HistorySection } from "@/components/character/detail/tabs/history-section"
-import { TooltipProvider } from "@/components/ui/tooltip"
 import type {
   CharacterBackstory,
   CharacterFinances,
@@ -19,7 +19,7 @@ export function HistoryFinancesTab({
   skills: CharacterSkill[] | null
 }) {
   return (
-    <TooltipProvider delayDuration={200}>
+    <CharacterSheetTooltipProvider>
       <div
         className="space-y-5"
         data-testid="character-history-finances-content"
@@ -31,6 +31,6 @@ export function HistoryFinancesTab({
           skills={skills}
         />
       </div>
-    </TooltipProvider>
+    </CharacterSheetTooltipProvider>
   )
 }

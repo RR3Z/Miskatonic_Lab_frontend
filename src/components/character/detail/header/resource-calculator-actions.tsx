@@ -6,6 +6,10 @@ import type { CSSProperties } from "react"
 import { useState } from "react"
 import { toast } from "sonner"
 import {
+  CharacterSheetTooltip,
+  CharacterSheetTooltipProvider,
+} from "@/components/character/detail/character-sheet-tooltip"
+import {
   DiceRollResultToast,
   FormulaDiceRollResultToast,
   getDiceRollToastClassName,
@@ -19,12 +23,6 @@ import {
   DICE_RESULT_TOASTER_ID,
   TOAST_DURATION_MS,
 } from "@/components/ui/sonner"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
 import type { CharacterResourceKey } from "@/dto/character/character-sheet-values.dto"
 import type { CharacterDiceRoll } from "@/lib/api/character-dice-rolls"
 import { classifyCharacteristicCheck } from "@/lib/dice/characteristic-check"
@@ -139,7 +137,7 @@ export function ResourceCalculatorActions({
   }
 
   return (
-    <TooltipProvider delayDuration={200}>
+    <CharacterSheetTooltipProvider>
       <section
         className="relative z-10 mt-1 grid gap-3"
         data-testid="resource-calculator-actions"
@@ -311,7 +309,7 @@ export function ResourceCalculatorActions({
           </CalculatorActionGroup>
         ) : null}
       </section>
-    </TooltipProvider>
+    </CharacterSheetTooltipProvider>
   )
 }
 
@@ -331,8 +329,10 @@ function CalculatorActionGroup({
           {title}
         </p>
         {description ? (
-          <Tooltip>
-            <TooltipTrigger asChild>
+          <CharacterSheetTooltip
+            contentClassName="max-w-72"
+            side="top"
+            trigger={
               <Button
                 aria-label={`Справка: ${title}`}
                 className="size-6 shrink-0 rounded-full border border-[var(--ml-border-aged)] text-[var(--ml-ink-muted)] hover:border-[var(--ml-accent-aged-gold)] hover:text-[var(--ml-accent-aged-gold)]"
@@ -342,14 +342,10 @@ function CalculatorActionGroup({
               >
                 <Info aria-hidden="true" className="size-3.5" />
               </Button>
-            </TooltipTrigger>
-            <TooltipContent
-              className="max-w-72 border border-[var(--ml-border-aged)] bg-[var(--ml-surface-panel)] text-[var(--ml-ink-primary)] shadow-xl"
-              side="top"
-            >
-              {description}
-            </TooltipContent>
-          </Tooltip>
+            }
+          >
+            {description}
+          </CharacterSheetTooltip>
         ) : null}
       </div>
       {children}

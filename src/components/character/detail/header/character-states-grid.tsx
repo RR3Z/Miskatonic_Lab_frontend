@@ -2,12 +2,12 @@
 
 import { useState } from "react"
 import { toast } from "sonner"
+import { CharacterSheetTooltipProvider } from "@/components/character/detail/character-sheet-tooltip"
 import { characterStateRules } from "@/components/character/detail/character-state-rules"
 import { CharacterState } from "@/components/character/detail/header/character-state"
 import { CHARACTER_STATE_GROUPS } from "@/components/character/detail/header/character-state-group-definitions"
 import type { CharacterStateValues } from "@/components/character/detail/header/character-state-types"
 import { createCharacterResourceUpdate } from "@/components/character/detail/header/create-character-resource-update"
-import { TooltipProvider } from "@/components/ui/tooltip"
 import { useUpdateCharacterResource } from "@/lib/api/use-character-resources"
 import { cn } from "@/lib/utils/cn.util"
 
@@ -48,7 +48,7 @@ export function CharacterStatesGrid({
   }
 
   return (
-    <TooltipProvider delayDuration={200}>
+    <CharacterSheetTooltipProvider>
       <div className="grid min-h-0 flex-1 grid-cols-[1.15fr_0.85fr] items-stretch gap-2">
         {CHARACTER_STATE_GROUPS.map((group) => (
           <div className="flex min-h-0 flex-col" key={group.label}>
@@ -82,6 +82,6 @@ export function CharacterStatesGrid({
           </div>
         ))}
       </div>
-    </TooltipProvider>
+    </CharacterSheetTooltipProvider>
   )
 }
