@@ -12,7 +12,6 @@ import {
   characterOptionalAgeTextSchema,
   characterOptionalTextSchema,
 } from "@/dto/character/character-profile.dto"
-import { characterDamageBonusSchema } from "@/dto/character/character-sheet-values.dto"
 
 describe("character detail DTO schemas", () => {
   it("normalizes optional profile values and enforces backend limits", () => {
@@ -49,10 +48,5 @@ describe("character detail DTO schemas", () => {
     )
     expect(characterFinanceMoneySchema.safeParse(" ").success).toBe(false)
     expect(characterFinanceAssetsSchema.safeParse(" ").success).toBe(false)
-  })
-
-  it("rejects unsupported damage bonus syntax", () => {
-    expect(characterDamageBonusSchema.safeParse("1d4").success).toBe(false)
-    expect(characterDamageBonusSchema.safeParse("+1d4").success).toBe(true)
   })
 })

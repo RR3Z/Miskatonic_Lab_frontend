@@ -55,9 +55,7 @@ vi.mock("@/lib/api/use-character-dice-rolls", () => ({
 
 vi.mock("@/lib/api/use-character-statistics", () => ({
   useDeleteCharacterCharacteristics: () => ({ mutateAsync: vi.fn() }),
-  useDeleteCharacterDerivedStats: () => ({ mutateAsync: vi.fn() }),
   useUpdateCharacterCharacteristics: () => ({ mutateAsync: vi.fn() }),
-  useUpdateCharacterDerivedStats: () => ({ mutateAsync: vi.fn() }),
 }))
 
 vi.mock("@/lib/api/use-character-resources", () => ({

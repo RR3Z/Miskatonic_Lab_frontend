@@ -42,7 +42,7 @@ describe("useMakeCharacterDiceRoll", () => {
     apiMocks.makeCharacterDiceRoll.mockReset()
   })
 
-  it("makes a d100 roll for the selected character", async () => {
+  it("makes the requested roll for the selected character", async () => {
     const queryClient = createQueryClient()
     apiMocks.makeCharacterDiceRoll.mockResolvedValue({ result: 42 })
     const { result } = renderHook(
@@ -50,11 +50,12 @@ describe("useMakeCharacterDiceRoll", () => {
       { wrapper: wrapper(queryClient) },
     )
 
-    await act(() => result.current.mutateAsync())
+    await act(() => result.current.mutateAsync("+1d4"))
 
     expect(apiMocks.makeCharacterDiceRoll).toHaveBeenCalledWith(
       expect.anything(),
       "character-1",
+      "+1d4",
     )
   })
 })

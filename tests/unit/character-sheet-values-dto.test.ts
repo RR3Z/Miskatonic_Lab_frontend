@@ -5,7 +5,6 @@ import {
   characterOptionalAgeTextSchema,
 } from "@/dto/character/character-profile.dto"
 import {
-  characterDamageBonusSchema,
   characterIntegerTextSchema,
   characterNullableIntegerTextSchema,
 } from "@/dto/character/character-sheet-values.dto"
@@ -29,11 +28,4 @@ describe("character sheet value schemas", () => {
     expect(characterIntegerTextSchema.safeParse("").success).toBe(false)
     expect(characterIntegerTextSchema.parse("42")).toBe("42")
   })
-
-  it.each(["-2", "-1", "0", "+1d4"])(
-    "accepts backend-compatible damage bonus %s",
-    (value) => {
-      expect(characterDamageBonusSchema.parse(value)).toBe(value)
-    },
-  )
 })

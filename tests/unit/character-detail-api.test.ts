@@ -26,7 +26,6 @@ import { deleteCharacterSkill } from "@/lib/api/character-skills"
 import {
   deleteCharacterCharacteristics,
   updateCharacterCharacteristics,
-  updateCharacterDerivedStats,
 } from "@/lib/api/character-statistics"
 
 describe("character detail write API", () => {
@@ -170,7 +169,7 @@ describe("character detail write API", () => {
     })
   })
 
-  it("updates and deletes character statistics", async () => {
+  it("updates and deletes characteristics", async () => {
     const characteristics = {
       appearance: 40,
       constitution: 50,
@@ -187,18 +186,12 @@ describe("character detail write API", () => {
     const api = { delete: deleteRequest, put } as unknown as KyInstance
 
     await updateCharacterCharacteristics(api, "character-1", characteristics)
-    await updateCharacterDerivedStats(api, "character-1", { speed: 8 })
     await deleteCharacterCharacteristics(api, "character-1")
 
     expect(put).toHaveBeenNthCalledWith(
       1,
       "api/characters/character-1/characteristics/",
       { json: characteristics },
-    )
-    expect(put).toHaveBeenNthCalledWith(
-      2,
-      "api/characters/character-1/derived-stats/",
-      { json: { speed: 8 } },
     )
     expect(deleteRequest).toHaveBeenCalledWith(
       "api/characters/character-1/characteristics/",
@@ -236,16 +229,18 @@ describe("character detail write API", () => {
     )
   })
 
-  it("rolls a d100 for a character", async () => {
-    const roll = { result: 42 }
+  it("rolls a requested formula for a character", async () => {
+    const roll = { expression: "+1d4", result: 3 }
     const json = vi.fn(async () => roll)
     const post = vi.fn(() => ({ json }))
     const api = { post } as unknown as KyInstance
 
-    await expect(makeCharacterDiceRoll(api, "character-1")).resolves.toBe(roll)
+    await expect(
+      makeCharacterDiceRoll(api, "character-1", "+1d4"),
+    ).resolves.toBe(roll)
 
     expect(post).toHaveBeenCalledWith("api/dice-roll/character-1/", {
-      json: { expression: "1d100" },
+      json: { expression: "+1d4" },
     })
   })
 })

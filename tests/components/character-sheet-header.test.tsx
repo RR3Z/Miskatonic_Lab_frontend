@@ -7,13 +7,11 @@ import { characterDetailFixture } from "../fixtures/character-detail"
 
 const mutations = vi.hoisted(() => ({
   deleteCharacteristics: { mutateAsync: vi.fn() },
-  deleteDerivedStats: { mutateAsync: vi.fn() },
   deleteResource: { mutateAsync: vi.fn() },
   portrait: { isPending: false, mutateAsync: vi.fn() },
   profile: { mutateAsync: vi.fn() },
   resource: { mutateAsync: vi.fn() },
   updateCharacteristics: { mutateAsync: vi.fn() },
-  updateDerivedStats: { mutateAsync: vi.fn() },
 }))
 const diceMutation = vi.hoisted(() => ({ mutateAsync: vi.fn() }))
 const toastMocks = vi.hoisted(() => Object.assign(vi.fn(), { error: vi.fn() }))
@@ -31,9 +29,7 @@ vi.mock("@/lib/api/use-character-dice-rolls", () => ({
 
 vi.mock("@/lib/api/use-character-statistics", () => ({
   useDeleteCharacterCharacteristics: () => mutations.deleteCharacteristics,
-  useDeleteCharacterDerivedStats: () => mutations.deleteDerivedStats,
   useUpdateCharacterCharacteristics: () => mutations.updateCharacteristics,
-  useUpdateCharacterDerivedStats: () => mutations.updateDerivedStats,
 }))
 
 vi.mock("@/lib/api/use-character-resources", () => ({
@@ -288,6 +284,7 @@ describe("CharacterSheetHeader", () => {
     await waitFor(() =>
       expect(diceMutation.mutateAsync).toHaveBeenCalledTimes(1),
     )
+    expect(diceMutation.mutateAsync).toHaveBeenCalledWith("1d100")
     expect(strengthCard).toBeDisabled()
     expect(constitutionCard).not.toBeDisabled()
     resolveRoll({ result: 42 })
@@ -301,6 +298,113 @@ describe("CharacterSheetHeader", () => {
         }),
         duration: 30000,
         style: { "--dice-roll-border-color": "#537653" },
+        toasterId: "dice-results",
+      }),
+    )
+  })
+
+  it("rolls a dice damage bonus and shows a neutral dice toast", async () => {
+    const user = userEvent.setup()
+    const base = characterDetailFixture()
+    const character = characterDetailFixture({
+      derived_stats: {
+        ...base.derived_stats,
+        damage_bonus: "+1d4",
+      },
+    })
+    diceMutation.mutateAsync.mockResolvedValueOnce({
+      expression: "+1d4",
+      result: 3,
+    })
+    render(<CharacterSheetHeader character={character} />)
+
+    await user.click(
+      screen.getByRole("button", { name: "Бросить бонус урона +1d4" }),
+    )
+
+    await waitFor(() =>
+      expect(diceMutation.mutateAsync).toHaveBeenCalledWith("+1d4"),
+    )
+    expect(toastMocks).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        duration: 30000,
+        style: { "--dice-roll-border-color": "#b6a367" },
+        toasterId: "dice-results",
+      }),
+    )
+  })
+
+  it("does not roll a numeric damage bonus", async () => {
+    const user = userEvent.setup()
+    const base = characterDetailFixture()
+    const character = characterDetailFixture({
+      derived_stats: {
+        ...base.derived_stats,
+        damage_bonus: "-1",
+      },
+    })
+    render(<CharacterSheetHeader character={character} />)
+
+    const damageBonus = screen.getByTestId("damage-bonus-stat")
+    expect(damageBonus).not.toHaveAttribute("role", "button")
+    await user.click(damageBonus)
+
+    expect(diceMutation.mutateAsync).not.toHaveBeenCalled()
+  })
+
+  it("keeps derived stats read-only even when the backend row exists", () => {
+    const base = characterDetailFixture()
+    const character = characterDetailFixture({
+      derived_stats: {
+        ...base.derived_stats,
+        id: "derived-1",
+        physique: 1,
+        speed: 8,
+      },
+    })
+    render(<CharacterSheetHeader character={character} />)
+
+    expect(
+      screen.queryByRole("button", { name: "Удалить производные показатели" }),
+    ).not.toBeInTheDocument()
+    expect(
+      screen.queryByRole("button", {
+        name: "Редактировать показатель Скорость",
+      }),
+    ).not.toBeInTheDocument()
+    expect(screen.getByTestId("derived-stat-Скорость")).toHaveTextContent("8")
+    expect(screen.getByTestId("derived-stat-Комплекция")).toHaveTextContent("1")
+  })
+
+  it("rolls dodge as a d100 characteristic check", async () => {
+    const user = userEvent.setup()
+    const base = characterDetailFixture()
+    const character = characterDetailFixture({
+      derived_stats: {
+        ...base.derived_stats,
+        dodge_value: 55,
+      },
+    })
+    diceMutation.mutateAsync.mockResolvedValueOnce({ result: 20 })
+    render(<CharacterSheetHeader character={character} />)
+
+    const dodgeCard = screen.getByRole("button", {
+      name: "Бросить характеристику Уклонение",
+    })
+    expect(dodgeCard).toHaveTextContent("55")
+    expect(dodgeCard).toHaveTextContent("27")
+    expect(dodgeCard).toHaveTextContent("11")
+
+    await user.click(dodgeCard)
+
+    await waitFor(() =>
+      expect(diceMutation.mutateAsync).toHaveBeenCalledWith("1d100"),
+    )
+    expect(toastMocks).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        style: { "--dice-roll-border-color": "#71846c" },
         toasterId: "dice-results",
       }),
     )
