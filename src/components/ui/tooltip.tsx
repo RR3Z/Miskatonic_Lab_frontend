@@ -3,6 +3,7 @@
 import { Tooltip as TooltipPrimitive } from "radix-ui"
 import type * as React from "react"
 
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils/cn.util"
 
 function TooltipProvider({
@@ -33,9 +34,14 @@ function TooltipTrigger({
 function TooltipContent({
   className,
   sideOffset = 0,
+  scrollable = false,
+  scrollAreaClassName,
   children,
   ...props
-}: React.ComponentProps<typeof TooltipPrimitive.Content>) {
+}: React.ComponentProps<typeof TooltipPrimitive.Content> & {
+  scrollable?: boolean
+  scrollAreaClassName?: string
+}) {
   return (
     <TooltipPrimitive.Portal>
       <TooltipPrimitive.Content
@@ -47,7 +53,11 @@ function TooltipContent({
         )}
         {...props}
       >
-        {children}
+        {scrollable ? (
+          <ScrollArea className={scrollAreaClassName}>{children}</ScrollArea>
+        ) : (
+          children
+        )}
         <TooltipPrimitive.Arrow className="z-50 size-2.5 translate-y-[calc(-50%_-_2px)] rotate-45 rounded-[2px] bg-foreground fill-foreground" />
       </TooltipPrimitive.Content>
     </TooltipPrimitive.Portal>
