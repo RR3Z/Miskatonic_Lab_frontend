@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useEffect } from "react"
+import type { FieldErrors } from "react-hook-form"
 import { FormProvider, useForm } from "react-hook-form"
 import { toast } from "sonner"
 
@@ -75,9 +76,19 @@ export function CreateCharacterForm({
     }
   }
 
+  function handleInvalid(errors: FieldErrors<CreateCharacterFormInput>) {
+    const error = errors.name ?? errors.sex ?? errors.age ?? errors.portrait
+    toast.error(error?.message ?? "Проверьте данные формы", {
+      id: "character-create-validation-error",
+    })
+  }
+
   return (
     <FormProvider {...form}>
-      <form noValidate onSubmit={form.handleSubmit(handleSubmit)}>
+      <form
+        noValidate
+        onSubmit={form.handleSubmit(handleSubmit, handleInvalid)}
+      >
         <FieldGroup className="gap-4">
           <CharacterPortraitField disabled={isPending} />
           <CharacterIdentityFields disabled={isPending} />

@@ -3,6 +3,7 @@
 import { ImagePlus, X } from "lucide-react"
 import { useEffect, useId, useState } from "react"
 import { useFormContext } from "react-hook-form"
+import { toast } from "sonner"
 
 import {
   Attachment,
@@ -14,12 +15,7 @@ import {
   AttachmentTitle,
   AttachmentTrigger,
 } from "@/components/ui/attachment"
-import {
-  Field,
-  FieldDescription,
-  FieldError,
-  FieldLabel,
-} from "@/components/ui/field"
+import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import {
   type CreateCharacterFormDto,
@@ -45,7 +41,6 @@ export function CharacterPortraitField({
   >()
   const portrait = form.watch("portrait")
   const sex = form.watch("sex")
-  const portraitError = form.formState.errors.portrait
   const fallbackPortrait = getPortraitUrl(null, sex || null)
 
   useEffect(() => {
@@ -68,10 +63,11 @@ export function CharacterPortraitField({
 
     const result = characterPortraitSchema.safeParse(file)
     if (!result.success) {
-      form.setError("portrait", {
-        message: result.error.issues[0]?.message,
-        type: "validate",
-      })
+      form.clearErrors("portrait")
+      toast.error(
+        result.error.issues[0]?.message ?? "Не удалось выбрать портрет",
+        { id: "character-portrait-validation-error" },
+      )
       return
     }
 
@@ -82,12 +78,12 @@ export function CharacterPortraitField({
   }
 
   return (
-    <Field data-invalid={Boolean(portraitError)}>
+    <Field>
       <FieldLabel htmlFor={portraitId}>Портрет</FieldLabel>
       <Attachment
         className="w-full flex-nowrap rounded-lg border-[var(--ml-border-subtle)] bg-[var(--ml-surface-panel-raised)]"
         size="sm"
-        state={portraitError ? "error" : portrait ? "done" : "idle"}
+        state={portrait ? "done" : "idle"}
       >
         <AttachmentMedia
           className="w-16! rounded-md border border-[var(--ml-border-aged)]"
@@ -153,7 +149,6 @@ export function CharacterPortraitField({
         <span aria-hidden="true">•</span>
         <span>до 5 МБ</span>
       </FieldDescription>
-      <FieldError errors={[portraitError]} />
     </Field>
   )
 }

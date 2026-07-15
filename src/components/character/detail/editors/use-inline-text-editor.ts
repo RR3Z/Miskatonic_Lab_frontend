@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 import type { ZodType } from "zod"
 
 type InlineTextForm = {
@@ -45,7 +46,9 @@ export function useInlineTextEditor({
 
     const parsed = schema.safeParse(form.getValues("value"))
     if (!parsed.success) {
-      form.setError("value", { message: parsed.error.issues[0]?.message })
+      toast.error(
+        parsed.error.issues[0]?.message ?? "Проверьте введённое значение",
+      )
       return
     }
 
@@ -60,7 +63,7 @@ export function useInlineTextEditor({
       await onSave(parsed.data)
       setIsEditing(false)
     } catch {
-      form.setError("value", { message: errorMessage })
+      toast.error(errorMessage)
     } finally {
       saveLock.current = false
       setIsPending(false)

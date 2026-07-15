@@ -1,6 +1,5 @@
 "use client"
 
-import { buildCharacterProfileInput } from "@/components/character/detail/header/build-character-profile-input"
 import { CharacterAgeInfo } from "@/components/character/detail/header/character-age-info"
 import { CharacterNameEditor } from "@/components/character/detail/header/character-name-editor"
 import { CharacterPortraitEditor } from "@/components/character/detail/header/character-portrait-editor"
@@ -30,12 +29,18 @@ export function CharacterIdentitySection({
 
   function saveTextField(key: CharacterIdentityTextKey, value: string) {
     const nextValue = value === "" ? null : value
-    return mutation.mutateAsync(
-      buildCharacterProfileInput(character, {
-        [key]:
-          key === "age" && nextValue !== null ? Number(nextValue) : nextValue,
-      }),
-    )
+    switch (key) {
+      case "age":
+        return mutation.mutateAsync({
+          age: nextValue === null ? null : Number(nextValue),
+        })
+      case "birthplace":
+        return mutation.mutateAsync({ birthplace: nextValue })
+      case "occupation":
+        return mutation.mutateAsync({ occupation: nextValue })
+      case "residence":
+        return mutation.mutateAsync({ residence: nextValue })
+    }
   }
 
   return (
@@ -48,11 +53,7 @@ export function CharacterIdentitySection({
       <div className="min-w-0 flex-1">
         <CharacterNameEditor
           name={character.name}
-          onSave={(name) =>
-            mutation.mutateAsync(
-              buildCharacterProfileInput(character, { name }),
-            )
-          }
+          onSave={(name) => mutation.mutateAsync({ name })}
         />
         <div className="mt-1.5 grid grid-cols-2 gap-x-4 gap-y-0.5">
           <IdentityLine
@@ -88,11 +89,7 @@ export function CharacterIdentitySection({
           />
           <div data-testid="character-sex">
             <CharacterSexEditor
-              onSave={(sex) =>
-                mutation.mutateAsync(
-                  buildCharacterProfileInput(character, { sex }),
-                )
-              }
+              onSave={(sex) => mutation.mutateAsync({ sex })}
               value={character.sex}
             />
           </div>

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { toast } from "sonner"
 
 import {
   Select,
@@ -19,18 +20,16 @@ export function CharacterSexEditor({
   onSave: (sex: "female" | "male" | null) => Promise<unknown>
   value: string | null
 }) {
-  const [error, setError] = useState<string | null>(null)
   const [isPending, setIsPending] = useState(false)
 
   async function handleChange(nextValue: string) {
-    setError(null)
     setIsPending(true)
     try {
       await onSave(
         nextValue === EMPTY_SEX_VALUE ? null : (nextValue as "female" | "male"),
       )
     } catch {
-      setError("Не удалось сохранить пол")
+      toast.error("Не удалось сохранить пол")
     } finally {
       setIsPending(false)
     }
@@ -59,7 +58,6 @@ export function CharacterSexEditor({
             <SelectItem value="female">Женщина</SelectItem>
           </SelectContent>
         </Select>
-        {error ? <p className="text-xs text-destructive">{error}</p> : null}
       </div>
     </div>
   )

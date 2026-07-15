@@ -25,12 +25,12 @@ export const characterOptionalAgeTextSchema = z
     "Возраст слишком большой",
   )
 
-export type UpdateCharacterProfileDto = {
-  age: number | null
-  birthplace: string | null
-  name: string
-  occupation: string | null
-  player_name: string | null
-  residence: string | null
-  sex: "female" | "male" | null
+export type CharacterProfilePatch = {
+  age?: number | null
+  birthplace?: string | null
+  name?: string
+  occupation?: string | null
+  player_name?: string | null
+  residence?: string | null
+  sex?: "female" | "male" | null
 }

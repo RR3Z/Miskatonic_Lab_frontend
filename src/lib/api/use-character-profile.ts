@@ -2,7 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query"
 
-import type { UpdateCharacterProfileDto } from "@/dto/character/character-profile.dto"
+import type { CharacterProfilePatch } from "@/dto/character/character-profile.dto"
 import { updateCharacterProfile } from "@/lib/api/character-profile"
 import { uploadCharacterPortrait } from "@/lib/api/characters"
 import { useCharacterMutationContext } from "@/lib/api/use-character-mutation-context"
@@ -11,13 +11,14 @@ export function useUpdateCharacterProfile(characterId: string) {
   const context = useCharacterMutationContext(characterId)
 
   return useMutation({
-    mutationFn: (input: UpdateCharacterProfileDto) => {
+    scope: { id: `character-profile:${characterId}` },
+    mutationFn: (input: CharacterProfilePatch) => {
       context.requireSession()
       return updateCharacterProfile(context.api, characterId, input)
     },
-    onSuccess: (profile) => {
+    onSuccess: (_profile, patch) => {
       context.updateDetail((character) =>
-        character ? { ...character, ...profile } : character,
+        character ? { ...character, ...patch } : character,
       )
       context.invalidateDetail()
     },

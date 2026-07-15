@@ -1,11 +1,13 @@
 "use client"
 
 import { useId } from "react"
+import type { FieldErrors } from "react-hook-form"
 import { Controller } from "react-hook-form"
+import { toast } from "sonner"
 
 import { useCreateCharacterNoteForm } from "@/components/character/detail/notes/use-create-character-note-form"
 import { Button } from "@/components/ui/button"
-import { Field, FieldError, FieldLabel } from "@/components/ui/field"
+import { Field, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
 import { Textarea } from "@/components/ui/textarea"
@@ -27,11 +29,18 @@ export function CreateCharacterNoteForm({
     onCreated,
   })
 
+  function handleInvalid(errors: FieldErrors<{ body: string; title: string }>) {
+    const error = errors.title ?? errors.body
+    toast.error(error?.message ?? "Проверьте данные заметки", {
+      id: "character-note-validation-error",
+    })
+  }
+
   return (
     <form
       className="rounded-sm border border-[var(--ml-border-aged)] bg-[var(--ml-bg-page)]/20 p-3"
       noValidate
-      onSubmit={form.handleSubmit(handleSubmit)}
+      onSubmit={form.handleSubmit(handleSubmit, handleInvalid)}
     >
       <div className="grid gap-3">
         <Controller
@@ -50,7 +59,6 @@ export function CreateCharacterNoteForm({
                 placeholder="Новая заметка"
                 required
               />
-              <FieldError errors={[fieldState.error]} />
             </Field>
           )}
         />
@@ -69,7 +77,6 @@ export function CreateCharacterNoteForm({
                 placeholder="Что важно запомнить?"
                 required
               />
-              <FieldError errors={[fieldState.error]} />
             </Field>
           )}
         />

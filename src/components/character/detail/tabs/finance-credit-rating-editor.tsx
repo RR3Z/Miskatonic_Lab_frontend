@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { toast } from "sonner"
 
 import {
   Select,
@@ -22,7 +22,6 @@ export function FinanceCreditRatingEditor({
   skills: CharacterSkill[] | null
 }) {
   const mutation = useUpdateCharacterFinances(characterId)
-  const [error, setError] = useState<string | null>(null)
   const selectableSkills =
     currentSkill &&
     !(skills ?? []).some((skill) => skill.id === currentSkill.id)
@@ -31,12 +30,11 @@ export function FinanceCreditRatingEditor({
 
   async function handleChange(skillId: string) {
     if (skillId === currentSkill?.id) return
-    setError(null)
 
     try {
       await mutation.mutateAsync({ credit_rating_skill_id: skillId })
     } catch {
-      setError("Не удалось сохранить кредитный рейтинг")
+      toast.error("Не удалось сохранить кредитный рейтинг")
     }
   }
 
@@ -61,9 +59,6 @@ export function FinanceCreditRatingEditor({
           ))}
         </SelectContent>
       </Select>
-      {error ? (
-        <p className="mt-1 font-body text-xs text-destructive">{error}</p>
-      ) : null}
     </div>
   )
 }

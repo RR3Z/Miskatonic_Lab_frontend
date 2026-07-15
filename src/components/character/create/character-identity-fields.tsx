@@ -3,7 +3,7 @@
 import { useId } from "react"
 import { Controller, useFormContext } from "react-hook-form"
 
-import { Field, FieldError, FieldLabel } from "@/components/ui/field"
+import { Field, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -52,7 +52,6 @@ export function CharacterIdentityFields({
               placeholder="Например, Харви Уолтерс"
               required
             />
-            <FieldError errors={[fieldState.error]} />
           </Field>
         )}
       />
@@ -85,7 +84,6 @@ export function CharacterIdentityFields({
                   <SelectItem value="female">Женщина</SelectItem>
                 </SelectContent>
               </Select>
-              <FieldError errors={[fieldState.error]} />
             </Field>
           )}
         />
@@ -105,7 +103,6 @@ export function CharacterIdentityFields({
                 placeholder="Например, 42"
                 type="number"
               />
-              <FieldError errors={[fieldState.error]} />
             </Field>
           )}
         />

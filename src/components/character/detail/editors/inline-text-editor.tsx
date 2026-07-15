@@ -73,11 +73,10 @@ export function InlineTextEditor({
       <Controller
         control={form.control}
         name="value"
-        render={({ field, fieldState }) => {
+        render={({ field }) => {
           const sharedProps = {
             ...field,
             "aria-label": ariaLabel,
-            "aria-invalid": fieldState.invalid,
             autoFocus: true,
             className: cn(
               "bg-[var(--ml-surface-panel-raised)]",
@@ -116,23 +115,14 @@ export function InlineTextEditor({
             placeholder,
           }
 
-          return (
-            <>
-              {multiline ? (
-                <Textarea {...sharedProps} />
-              ) : (
-                <Input
-                  {...sharedProps}
-                  inputMode={inputMode}
-                  pattern={inputPattern}
-                />
-              )}
-              {fieldState.error ? (
-                <p className="mt-1 font-body text-xs text-destructive">
-                  {fieldState.error.message}
-                </p>
-              ) : null}
-            </>
+          return multiline ? (
+            <Textarea {...sharedProps} />
+          ) : (
+            <Input
+              {...sharedProps}
+              inputMode={inputMode}
+              pattern={inputPattern}
+            />
           )
         }}
       />
