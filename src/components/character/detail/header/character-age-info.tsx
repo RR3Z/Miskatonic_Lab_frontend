@@ -27,16 +27,16 @@ export function CharacterAgeInfo() {
         </TooltipTrigger>
         <TooltipContent
           className="w-[min(24rem,calc(100vw-2rem))] max-w-none border border-[#5d5231] bg-[#171411] p-0 text-left text-[#d9d2c5] shadow-[0_14px_40px_rgba(0,0,0,0.55)] [&>span>svg]:bg-[#171411] [&>span>svg]:fill-[#171411]"
-          scrollAreaClassName="max-h-[min(32rem,var(--radix-tooltip-content-available-height))] p-3 pr-4 [&_[data-slot=scroll-area-scrollbar]]:border-l-[#5d5231]/70 [&_[data-slot=scroll-area-thumb]]:bg-[#b6a367]/70 [&_[data-slot=scroll-area-thumb]]:hover:bg-[#e8d9b4]"
+          scrollAreaClassName="max-h-[min(32rem,var(--radix-tooltip-content-available-height))] [&_[data-slot=scroll-area-scrollbar]]:border-l-[#5d5231]/70 [&_[data-slot=scroll-area-thumb]]:bg-[#b6a367]/70 [&_[data-slot=scroll-area-thumb]]:hover:bg-[#e8d9b4]"
           scrollable
           side="bottom"
           sideOffset={6}
         >
-          <div className="flex flex-col items-start gap-2">
+          <div className="flex flex-col items-start gap-2 p-3 pr-4">
             <p className="font-heading text-base font-semibold">
               Возраст: модификаторы
             </p>
-            <dl className="space-y-2 text-xs leading-relaxed">
+            <dl className="space-y-2 text-sm leading-relaxed">
               {CHARACTER_AGE_RULES.map((rule) => (
                 <div key={rule.age}>
                   <dt className="font-semibold text-[#e8d9b4]">{rule.age}</dt>
@@ -44,10 +44,10 @@ export function CharacterAgeInfo() {
                 </div>
               ))}
             </dl>
-            <p className="border-t border-[#5d5231]/70 pt-2 text-xs leading-relaxed">
+            <p className="border-t border-[#5d5231]/70 pt-2 text-sm leading-relaxed">
               {CHARACTER_AGE_IMPROVEMENT_RULE}
             </p>
-            <p className="text-xs leading-relaxed text-[#e8d9b4]">
+            <p className="text-sm leading-relaxed text-[#e8d9b4]">
               Система не применяет возрастные модификаторы автоматически. Игрок
               изменяет характеристики, ОБР, Удачу и СКО вручную.
             </p>
