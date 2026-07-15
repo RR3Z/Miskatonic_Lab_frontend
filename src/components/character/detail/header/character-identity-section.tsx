@@ -19,6 +19,8 @@ type CharacterIdentitySectionProps = {
   character: CharacterDetail
 }
 
+const digitsOnly = (value: string) => value.replace(/\D/g, "")
+
 export function CharacterIdentitySection({
   character,
 }: CharacterIdentitySectionProps) {
@@ -71,6 +73,9 @@ export function CharacterIdentitySection({
             ariaLabel={`Редактировать поле ${CHARACTER_IDENTITY_TEXT_FIELDS[1].label}`}
             label={CHARACTER_IDENTITY_TEXT_FIELDS[1].label}
             labelAccessory={<CharacterAgeInfo />}
+            inputMode="numeric"
+            inputPattern="[0-9]*"
+            normalizeInput={digitsOnly}
             onSave={(value) =>
               saveTextField(CHARACTER_IDENTITY_TEXT_FIELDS[1].key, value)
             }

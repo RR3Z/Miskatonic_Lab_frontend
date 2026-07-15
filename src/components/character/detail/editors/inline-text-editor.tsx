@@ -15,8 +15,11 @@ export function InlineTextEditor({
   displayClassName,
   errorMessage,
   inputClassName,
+  inputMode,
+  inputPattern,
   maxLength,
   multiline = true,
+  normalizeInput,
   onSave,
   placeholder,
   schema,
@@ -83,6 +86,13 @@ export function InlineTextEditor({
             ),
             disabled: isPending,
             maxLength,
+            onChange: (
+              event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+            ) => {
+              field.onChange(
+                normalizeInput ? normalizeInput(event.target.value) : event,
+              )
+            },
             onBlur: () => {
               field.onBlur()
               submit()
@@ -111,7 +121,11 @@ export function InlineTextEditor({
               {multiline ? (
                 <Textarea {...sharedProps} />
               ) : (
-                <Input {...sharedProps} />
+                <Input
+                  {...sharedProps}
+                  inputMode={inputMode}
+                  pattern={inputPattern}
+                />
               )}
               {fieldState.error ? (
                 <p className="mt-1 font-body text-xs text-destructive">
