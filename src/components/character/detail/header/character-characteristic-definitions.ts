@@ -1,10 +1,17 @@
 import type { CompactStatDefinition } from "@/components/character/detail/header/character-stat-types"
-import { characterNullableIntegerTextSchema } from "@/dto/character/character-sheet-values.dto"
+import {
+  characterNullableIntegerTextSchema,
+  type UpdateCharacterCharacteristicsDto,
+} from "@/dto/character/character-sheet-values.dto"
 import type { CharacterDetail } from "@/types/character"
+
+export type CharacteristicDefinition = Omit<CompactStatDefinition, "key"> & {
+  key: keyof UpdateCharacterCharacteristicsDto
+}
 
 export function getCharacterCharacteristics(
   character: CharacterDetail,
-): CompactStatDefinition[] {
+): CharacteristicDefinition[] {
   return [
     {
       key: "strength",
