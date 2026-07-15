@@ -1,5 +1,7 @@
 import { z } from "zod"
 
+export const MAX_CHARACTERISTIC_VALUE = 100
+
 export const characterNullableIntegerTextSchema = z
   .string()
   .trim()
@@ -8,8 +10,8 @@ export const characterNullableIntegerTextSchema = z
     "Введите целое неотрицательное число",
   )
   .refine(
-    (value) => value === "" || Number(value) <= 32_767,
-    "Значение слишком большое",
+    (value) => value === "" || Number(value) <= MAX_CHARACTERISTIC_VALUE,
+    `Введите значение от 0 до ${MAX_CHARACTERISTIC_VALUE}`,
   )
 
 export const characterIntegerTextSchema =
