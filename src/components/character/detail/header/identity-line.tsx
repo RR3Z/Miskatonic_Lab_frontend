@@ -33,10 +33,10 @@ export function IdentityLine({
       {labelAccessory}
       <InlineTextEditor
         ariaLabel={ariaLabel}
-        className="min-w-0 flex-1 gap-0 rounded-none border-0 px-0 py-0 hover:border-transparent hover:bg-transparent focus-visible:border-transparent focus-visible:outline-1 focus-visible:outline-[var(--ml-focus-ring)] focus-visible:outline-offset-1"
+        className="h-6 min-w-0 flex-1 items-center gap-0 rounded-sm px-1.5 py-0"
         displayClassName="truncate whitespace-nowrap leading-5 text-[var(--ml-ink-primary)]"
         errorMessage="Не удалось сохранить личные данные"
-        inputClassName="h-6 px-0 py-0 text-sm"
+        inputClassName="h-6 px-1.5 py-0 text-sm leading-5"
         multiline={false}
         onSave={onSave}
         placeholder="—"
