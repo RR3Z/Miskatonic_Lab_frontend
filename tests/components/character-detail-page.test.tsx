@@ -267,6 +267,56 @@ describe("CharacterDetailPage", () => {
     )
   })
 
+  it("shows the age rulebook tooltip without identity edit icons", async () => {
+    const user = userEvent.setup()
+    queryState.data = characterDetailFixture({ age: 42 })
+
+    render(<CharacterDetailPage characterId="character-1" />)
+
+    expect(
+      screen
+        .getByRole("button", { name: "Редактировать имя персонажа" })
+        .querySelector("svg"),
+    ).not.toBeInTheDocument()
+    expect(
+      screen
+        .getByRole("button", { name: "Редактировать поле Профессия" })
+        .querySelector("svg"),
+    ).not.toBeInTheDocument()
+
+    const ageInfo = screen.getByRole("button", {
+      name: "Информация о возрастных модификаторах",
+    })
+    await user.hover(ageInfo)
+
+    const tooltip = await waitFor(() => {
+      const element = document.querySelector<HTMLElement>(
+        '[data-slot="tooltip-content"]:not([data-state="closed"])',
+      )
+      expect(element).toBeVisible()
+      return element as HTMLElement
+    })
+
+    expect(tooltip).toHaveTextContent("Возраст: модификаторы")
+    expect(tooltip).toHaveTextContent("15–19")
+    expect(tooltip).toHaveTextContent("80–89")
+    expect(tooltip).toHaveTextContent("Проверка улучшения ОБР")
+    expect(tooltip).toHaveTextContent(
+      "Система не применяет возрастные модификаторы автоматически.",
+    )
+
+    await user.unhover(ageInfo)
+    ageInfo.focus()
+    expect(ageInfo).toHaveFocus()
+    await waitFor(() => {
+      expect(
+        document.querySelector(
+          '[data-slot="tooltip-content"]:not([data-state="closed"])',
+        ),
+      ).toBeVisible()
+    })
+  })
+
   it("renders missing values without hiding zeroes", () => {
     const baseCharacter = characterDetailFixture()
     queryState.data = characterDetailFixture({
