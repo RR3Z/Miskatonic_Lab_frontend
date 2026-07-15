@@ -24,4 +24,21 @@ describe("Tooltip", () => {
       "text-sm",
     )
   })
+
+  it("wraps content in ScrollArea only when scrollable", () => {
+    render(
+      <TooltipProvider>
+        <Tooltip open>
+          <TooltipTrigger>Scroll tooltip</TooltipTrigger>
+          <TooltipContent scrollable>Long tooltip</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>,
+    )
+
+    expect(screen.getByRole("tooltip")).toBeVisible()
+    expect(document.querySelector('[data-slot="scroll-area"]')).toBeVisible()
+    expect(
+      document.querySelector('[data-slot="scroll-area-viewport"]'),
+    ).toHaveTextContent("Long tooltip")
+  })
 })
