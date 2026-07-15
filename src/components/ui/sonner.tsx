@@ -2,11 +2,15 @@
 
 import { Toaster as Sonner, type ToasterProps } from "sonner"
 
+export const DICE_RESULT_TOASTER_ID = "dice-results"
+export const TOAST_DURATION_MS = 30_000
+
 export function Toaster(props: ToasterProps) {
   return (
     <Sonner
       closeButton
       containerAriaLabel="Уведомления"
+      duration={TOAST_DURATION_MS}
       position="top-center"
       theme="dark"
       toastOptions={{
