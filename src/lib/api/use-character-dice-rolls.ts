@@ -9,9 +9,9 @@ export function useMakeCharacterDiceRoll(characterId: string) {
   const context = useCharacterMutationContext(characterId)
 
   return useMutation({
-    mutationFn: () => {
+    mutationFn: (expression: string) => {
       context.requireSession()
-      return makeCharacterDiceRoll(context.api, characterId)
+      return makeCharacterDiceRoll(context.api, characterId, expression)
     },
   })
 }

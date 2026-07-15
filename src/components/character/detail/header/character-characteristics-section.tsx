@@ -48,7 +48,7 @@ export function CharacterCharacteristicsSection({
     setRollingKeys((keys) => new Set(keys).add(stat.key))
 
     try {
-      const roll = await rollMutation.mutateAsync()
+      const roll = await rollMutation.mutateAsync("1d100")
       const check = classifyCharacteristicCheck(stat.value, roll.result)
 
       toast(
