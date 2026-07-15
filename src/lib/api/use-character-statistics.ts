@@ -7,19 +7,37 @@ import {
   deleteCharacterCharacteristics,
   updateCharacterCharacteristics,
 } from "@/lib/api/character-statistics"
+import { fetchCharacter } from "@/lib/api/characters"
 import { useCharacterMutationContext } from "@/lib/api/use-character-mutation-context"
 
 export function useUpdateCharacterCharacteristics(characterId: string) {
   const context = useCharacterMutationContext(characterId)
 
   return useMutation({
-    mutationFn: (input: UpdateCharacterCharacteristicsDto) => {
+    mutationFn: async (input: UpdateCharacterCharacteristicsDto) => {
       context.requireSession()
-      return updateCharacterCharacteristics(context.api, characterId, input)
+      const characteristics = await updateCharacterCharacteristics(
+        context.api,
+        characterId,
+        input,
+      )
+
+      try {
+        const character = await fetchCharacter(context.api, characterId)
+        return { characteristics, derivedStats: character.derived_stats }
+      } catch {
+        return { characteristics, derivedStats: null }
+      }
     },
-    onSuccess: (characteristics) => {
+    onSuccess: ({ characteristics, derivedStats }) => {
       context.updateDetail((character) =>
-        character ? { ...character, characteristics } : character,
+        character
+          ? {
+              ...character,
+              characteristics,
+              ...(derivedStats ? { derived_stats: derivedStats } : {}),
+            }
+          : character,
       )
       context.invalidateDetail()
     },

@@ -13,6 +13,8 @@ const authState = vi.hoisted(() => ({
 }))
 
 const apiMocks = vi.hoisted(() => ({
+  fetchCharacter: vi.fn(),
+  updateCharacterCharacteristics: vi.fn(),
   updateCharacterProfile: vi.fn(),
   updateCharacterResource: vi.fn(),
 }))
@@ -23,6 +25,15 @@ vi.mock("@clerk/nextjs", () => ({
 
 vi.mock("@/lib/api/character-profile", () => ({
   updateCharacterProfile: apiMocks.updateCharacterProfile,
+}))
+
+vi.mock("@/lib/api/character-statistics", () => ({
+  deleteCharacterCharacteristics: vi.fn(),
+  updateCharacterCharacteristics: apiMocks.updateCharacterCharacteristics,
+}))
+
+vi.mock("@/lib/api/characters", () => ({
+  fetchCharacter: apiMocks.fetchCharacter,
 }))
 
 vi.mock("@/lib/api/character-resources", async (importOriginal) => {
@@ -36,6 +47,7 @@ vi.mock("@/lib/api/character-resources", async (importOriginal) => {
 
 import { useUpdateCharacterProfile } from "@/lib/api/use-character-profile"
 import { useUpdateCharacterResource } from "@/lib/api/use-character-resources"
+import { useUpdateCharacterCharacteristics } from "@/lib/api/use-character-statistics"
 
 function createQueryClient() {
   return new QueryClient({
@@ -54,6 +66,8 @@ function wrapper(queryClient: QueryClient) {
 describe("character detail mutation cache", () => {
   beforeEach(() => {
     authState.userId = "user-a"
+    apiMocks.fetchCharacter.mockReset()
+    apiMocks.updateCharacterCharacteristics.mockReset()
     apiMocks.updateCharacterProfile.mockReset()
     apiMocks.updateCharacterResource.mockReset()
   })
@@ -207,5 +221,58 @@ describe("character detail mutation cache", () => {
 
     expect(queryClient.getQueryData(queryKey)).toEqual(cachedAfterSuccess)
     expect(invalidateQueries).not.toHaveBeenCalled()
+  })
+
+  it("refreshes derived stats from the backend after characteristics change", async () => {
+    const queryClient = createQueryClient()
+    const queryKey = characterQueryKeys.detail("user-a", "character-1")
+    const original = characterDetailFixture()
+    const characteristics = {
+      ...original.characteristics,
+      dexterity: 80,
+      size: 40,
+      strength: 70,
+    }
+    const derivedStats = {
+      ...original.derived_stats,
+      damage_bonus: "+1d4",
+      dodge_value: 40,
+      physique: 1,
+      speed: 9,
+    }
+    queryClient.setQueryData(queryKey, original)
+    apiMocks.updateCharacterCharacteristics.mockResolvedValue(characteristics)
+    apiMocks.fetchCharacter.mockResolvedValue({
+      ...original,
+      characteristics,
+      derived_stats: derivedStats,
+    })
+
+    const { result } = renderHook(
+      () => useUpdateCharacterCharacteristics("character-1"),
+      { wrapper: wrapper(queryClient) },
+    )
+
+    await act(() =>
+      result.current.mutateAsync({
+        appearance: characteristics.appearance,
+        constitution: characteristics.constitution,
+        dexterity: characteristics.dexterity,
+        education: characteristics.education,
+        intelligence: characteristics.intelligence,
+        power: characteristics.power,
+        size: characteristics.size,
+        strength: characteristics.strength,
+      }),
+    )
+
+    expect(apiMocks.fetchCharacter).toHaveBeenCalledWith(
+      expect.anything(),
+      "character-1",
+    )
+    expect(queryClient.getQueryData<CharacterDetail>(queryKey)).toMatchObject({
+      characteristics,
+      derived_stats: derivedStats,
+    })
   })
 })
