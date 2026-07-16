@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react"
+import { fireEvent, render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
@@ -283,7 +283,10 @@ describe("CharacterSheetHeader", () => {
     await waitFor(() =>
       expect(diceMutation.mutateAsync).toHaveBeenCalledTimes(1),
     )
-    expect(diceMutation.mutateAsync).toHaveBeenCalledWith("1d100")
+    expect(diceMutation.mutateAsync).toHaveBeenCalledWith({
+      expression: "1d100",
+      d100Mode: "normal",
+    })
     expect(strengthCard).toBeDisabled()
     expect(constitutionCard).not.toBeDisabled()
     resolveRoll({ result: 42 })
@@ -298,6 +301,49 @@ describe("CharacterSheetHeader", () => {
         duration: 30000,
         style: { "--dice-roll-border-color": "#537653" },
         toasterId: "dice-results",
+      }),
+    )
+  })
+
+  it("selects bonus and penalty d100 modes from the characteristic menu", async () => {
+    const user = userEvent.setup()
+    Object.defineProperty(window, "innerWidth", {
+      configurable: true,
+      value: 1280,
+      writable: true,
+    })
+    const base = characterDetailFixture()
+    render(
+      <CharacterSheetHeader
+        character={characterDetailFixture({
+          characteristics: { ...base.characteristics, strength: 53 },
+        })}
+      />,
+    )
+
+    const strengthCard = screen.getByTestId("characteristic-card-СИЛ")
+    fireEvent.contextMenu(strengthCard)
+    expect(await screen.findByText("Броски")).toBeVisible()
+    const bonusRoll = await screen.findByText("Бросок с преимуществом")
+    expect(bonusRoll).toHaveClass("text-[var(--ml-accent-success)]")
+    await user.click(bonusRoll)
+
+    await waitFor(() =>
+      expect(diceMutation.mutateAsync).toHaveBeenCalledWith({
+        expression: "1d100",
+        d100Mode: "bonus",
+      }),
+    )
+
+    fireEvent.contextMenu(strengthCard)
+    const penaltyRoll = await screen.findByText("Бросок с помехой")
+    expect(penaltyRoll).toHaveClass("text-[var(--ml-accent-danger)]")
+    await user.click(penaltyRoll)
+
+    await waitFor(() =>
+      expect(diceMutation.mutateAsync).toHaveBeenLastCalledWith({
+        expression: "1d100",
+        d100Mode: "penalty",
       }),
     )
   })
@@ -398,7 +444,10 @@ describe("CharacterSheetHeader", () => {
     await user.click(dodgeCard)
 
     await waitFor(() =>
-      expect(diceMutation.mutateAsync).toHaveBeenCalledWith("1d100"),
+      expect(diceMutation.mutateAsync).toHaveBeenCalledWith({
+        expression: "1d100",
+        d100Mode: "normal",
+      }),
     )
     expect(toastMocks).toHaveBeenCalledWith(
       expect.anything(),

@@ -58,4 +58,26 @@ describe("useMakeCharacterDiceRoll", () => {
       "+1d4",
     )
   })
+
+  it("passes selected d100 mode to the API", async () => {
+    const queryClient = createQueryClient()
+    apiMocks.makeCharacterDiceRoll.mockResolvedValue({ result: 42 })
+    const { result } = renderHook(
+      () => useMakeCharacterDiceRoll("character-1"),
+      { wrapper: wrapper(queryClient) },
+    )
+
+    await act(() =>
+      result.current.mutateAsync({
+        expression: "1d100",
+        d100Mode: "penalty",
+      }),
+    )
+
+    expect(apiMocks.makeCharacterDiceRoll).toHaveBeenCalledWith(
+      expect.anything(),
+      "character-1",
+      { expression: "1d100", d100Mode: "penalty" },
+    )
+  })
 })

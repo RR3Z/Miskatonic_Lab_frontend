@@ -243,4 +243,22 @@ describe("character detail write API", () => {
       json: { expression: "+1d4" },
     })
   })
+
+  it("sends selected d100 mode with a characteristic roll", async () => {
+    const roll = { expression: "1d100", result: 42 }
+    const json = vi.fn(async () => roll)
+    const post = vi.fn(() => ({ json }))
+    const api = { post } as unknown as KyInstance
+
+    await expect(
+      makeCharacterDiceRoll(api, "character-1", {
+        expression: "1d100",
+        d100Mode: "bonus",
+      }),
+    ).resolves.toBe(roll)
+
+    expect(post).toHaveBeenCalledWith("api/dice-roll/character-1/", {
+      json: { expression: "1d100", d100_mode: "bonus" },
+    })
+  })
 })
