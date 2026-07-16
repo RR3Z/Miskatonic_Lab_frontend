@@ -19,6 +19,7 @@ import {
   DICE_RESULT_TOAST_DURATION_MS,
   DICE_RESULT_TOASTER_ID,
 } from "@/components/ui/sonner/constants"
+import type { D100Mode } from "@/lib/api/character-dice-rolls"
 import { useMakeCharacterDiceRoll } from "@/lib/api/use-character-dice-rolls"
 import { classifyCharacteristicCheck } from "@/lib/dice/characteristic-check"
 import type { CharacterDetail } from "@/types/character"
@@ -61,11 +62,14 @@ export function CharacterDerivedStatsSection({
     }
   }
 
-  async function rollDodge() {
+  async function rollDodge(mode: D100Mode) {
     if (typeof dodge.value !== "number") return
 
     try {
-      const roll = await dodgeRollMutation.mutateAsync("1d100")
+      const roll = await dodgeRollMutation.mutateAsync({
+        expression: "1d100",
+        d100Mode: mode,
+      })
       const check = classifyCharacteristicCheck(dodge.value, roll.result)
 
       toast(
@@ -106,7 +110,7 @@ export function CharacterDerivedStatsSection({
         />
         <CharacteristicDiceCard
           label={dodge.label}
-          onRoll={() => void rollDodge()}
+          onRoll={(mode) => void rollDodge(mode)}
           rolling={dodgeRollMutation.isPending}
           title={dodge.label}
           value={typeof dodge.value === "number" ? dodge.value : null}

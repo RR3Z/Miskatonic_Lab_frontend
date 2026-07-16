@@ -25,6 +25,7 @@ import {
   DICE_RESULT_TOAST_DURATION_MS,
   DICE_RESULT_TOASTER_ID,
 } from "@/components/ui/sonner/constants"
+import type { D100Mode } from "@/lib/api/character-dice-rolls"
 import { useMakeCharacterDiceRoll } from "@/lib/api/use-character-dice-rolls"
 import { useUpdateCharacterCharacteristics } from "@/lib/api/use-character-statistics"
 import { classifyCharacteristicCheck } from "@/lib/dice/characteristic-check"
@@ -42,13 +43,19 @@ export function CharacterCharacteristicsSection({
   const updateMutation = useUpdateCharacterCharacteristics(character.id)
   const characteristics = getCharacterCharacteristics(character)
 
-  async function rollCharacteristic(stat: CharacteristicDefinition) {
+  async function rollCharacteristic(
+    stat: CharacteristicDefinition,
+    mode: D100Mode,
+  ) {
     if (stat.value === null) return
 
     setRollingKeys((keys) => new Set(keys).add(stat.key))
 
     try {
-      const roll = await rollMutation.mutateAsync("1d100")
+      const roll = await rollMutation.mutateAsync({
+        expression: "1d100",
+        d100Mode: mode,
+      })
       const check = classifyCharacteristicCheck(stat.value, roll.result)
 
       toast(
@@ -132,7 +139,7 @@ export function CharacterCharacteristicsSection({
               <CharacteristicDiceCard
                 key={stat.key}
                 label={stat.label}
-                onRoll={() => void rollCharacteristic(stat)}
+                onRoll={(mode) => void rollCharacteristic(stat, mode)}
                 rolling={rollingKeys.has(stat.key)}
                 title={stat.title ?? stat.label}
                 value={stat.value}
