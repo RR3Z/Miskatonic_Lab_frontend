@@ -175,7 +175,7 @@ function D100RollDetailsComparison({ details }: { details: D100RollDetails }) {
                   : "border-[var(--ml-border-subtle)] bg-[var(--ml-bg-page)]/35"
               }`}
               data-testid={`d100-roll-candidate-${index}`}
-              key={`${details.tens[index]}-${candidate}`}
+              key={`${details.tens[index]}-${candidate}-${index}`}
             >
               <span
                 className={`block font-mono text-[0.58rem] font-bold tracking-[0.1em] uppercase ${

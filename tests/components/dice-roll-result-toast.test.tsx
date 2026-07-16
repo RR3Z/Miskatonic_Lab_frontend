@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react"
-import { describe, expect, it } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 
 import { DiceRollResultToast } from "@/components/character/detail/header/dice-roll-result-toast"
 
@@ -110,6 +110,33 @@ describe("DiceRollResultToast", () => {
     expect(screen.getByTestId("d100-roll-candidate-1")).toHaveClass(
       "border-[var(--ml-accent-success)]",
     )
+  })
+
+  it("renders identical d100 candidates without duplicate React keys", () => {
+    const consoleError = vi.spyOn(console, "error").mockImplementation(() => {})
+
+    try {
+      render(
+        <DiceRollResultToast
+          details={{
+            mode: "bonus",
+            units: 5,
+            tens: [0, 0],
+            candidates: [5, 5],
+            selected: 5,
+          }}
+          outcome="regular_success"
+          result={5}
+          title="Сила"
+        />,
+      )
+
+      expect(screen.getByTestId("d100-roll-candidate-0")).toBeVisible()
+      expect(screen.getByTestId("d100-roll-candidate-1")).toBeVisible()
+      expect(consoleError).not.toHaveBeenCalled()
+    } finally {
+      consoleError.mockRestore()
+    }
   })
 
   it("does not show comparison details for a normal d100 roll", () => {
