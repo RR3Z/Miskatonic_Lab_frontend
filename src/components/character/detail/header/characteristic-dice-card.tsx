@@ -14,6 +14,7 @@ import {
 import { Spinner } from "@/components/ui/spinner"
 import type { D100Mode } from "@/lib/api/character-dice-rolls"
 import { getCharacteristicCheckThresholds } from "@/lib/dice/characteristic-check"
+import { cn } from "@/lib/utils/cn.util"
 
 export function CharacteristicDiceCard({
   label,
@@ -34,7 +35,14 @@ export function CharacteristicDiceCard({
   const content = (
     <>
       <div className="flex min-w-0 flex-col items-center justify-center px-2 py-1 text-center">
-        <span className="block w-full min-w-0 break-words font-body text-[0.65rem] leading-tight uppercase tracking-[0.12em] text-[var(--ml-ink-muted)]">
+        <span
+          className={cn(
+            "block w-full min-w-0 font-body leading-tight uppercase text-[var(--ml-ink-muted)]",
+            label.length > 5
+              ? "whitespace-nowrap text-[0.55rem] tracking-[0.04em]"
+              : "break-words text-[0.65rem] tracking-[0.12em]",
+          )}
+        >
           {label}
         </span>
         <span className="font-mono text-base font-semibold tabular-nums text-[var(--ml-ink-primary)]">
