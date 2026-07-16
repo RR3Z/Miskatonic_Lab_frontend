@@ -80,31 +80,23 @@ export function CharacteristicDiceCard({
         </CharacterSheetStatButton>
       </ContextMenuTrigger>
       <ContextMenuContent>
-        <ContextMenuLabel>
-          {"\u0411\u0440\u043e\u0441\u043a\u0438"}
-        </ContextMenuLabel>
+        <ContextMenuLabel>Броски</ContextMenuLabel>
         <ContextMenuItem disabled={rolling} onSelect={() => onRoll("normal")}>
-          {
-            "\u041e\u0431\u044b\u0447\u043d\u044b\u0439 \u0431\u0440\u043e\u0441\u043e\u043a"
-          }
+          Обычный бросок
         </ContextMenuItem>
         <ContextMenuItem
           className="text-[var(--ml-accent-success)] focus:bg-[color-mix(in_srgb,var(--ml-accent-success)_18%,transparent)] focus:text-[var(--ml-ink-primary)]"
           disabled={rolling}
           onSelect={() => onRoll("bonus")}
         >
-          {
-            "\u0411\u0440\u043e\u0441\u043e\u043a \u0441 \u043f\u0440\u0435\u0438\u043c\u0443\u0449\u0435\u0441\u0442\u0432\u043e\u043c"
-          }
+          Бросок с преимуществом
         </ContextMenuItem>
         <ContextMenuItem
           className="text-[var(--ml-accent-danger)] focus:bg-[color-mix(in_srgb,var(--ml-accent-danger)_18%,transparent)] focus:text-[var(--ml-ink-primary)]"
           disabled={rolling}
           onSelect={() => onRoll("penalty")}
         >
-          {
-            "\u0411\u0440\u043e\u0441\u043e\u043a \u0441 \u043f\u043e\u043c\u0435\u0445\u043e\u0439"
-          }
+          Бросок с помехой
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>

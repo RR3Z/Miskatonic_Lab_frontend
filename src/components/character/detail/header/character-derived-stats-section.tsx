@@ -19,7 +19,10 @@ import {
   DICE_RESULT_TOAST_DURATION_MS,
   DICE_RESULT_TOASTER_ID,
 } from "@/components/ui/sonner/constants"
-import type { D100Mode } from "@/lib/api/character-dice-rolls"
+import {
+  type D100Mode,
+  parseD100RollDetails,
+} from "@/lib/api/character-dice-rolls"
 import { useMakeCharacterDiceRoll } from "@/lib/api/use-character-dice-rolls"
 import { classifyCharacteristicCheck } from "@/lib/dice/characteristic-check"
 import type { CharacterDetail } from "@/types/character"
@@ -74,6 +77,7 @@ export function CharacterDerivedStatsSection({
 
       toast(
         <DiceRollResultToast
+          details={parseD100RollDetails(roll.details)}
           outcome={check.outcome}
           result={roll.result}
           title={dodge.label}

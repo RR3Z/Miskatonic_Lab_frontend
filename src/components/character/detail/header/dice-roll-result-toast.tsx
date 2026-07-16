@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react"
-
+import type { D100RollDetails } from "@/lib/api/character-dice-rolls"
 import {
   type CharacteristicCheckOutcome,
   getCharacteristicCheckOutcomeLabel,
@@ -90,10 +90,12 @@ export function getDiceRollToastStyle(
 }
 
 export function DiceRollResultToast({
+  details,
   outcome,
   result,
   title,
 }: {
+  details?: D100RollDetails | null
   outcome: CharacteristicCheckOutcome
   result: number
   title: string
@@ -129,6 +131,74 @@ export function DiceRollResultToast({
             {outcomeLabel}
           </strong>
         </div>
+        {details && details.mode !== "normal" ? (
+          <D100RollDetailsComparison details={details} />
+        ) : null}
+      </div>
+    </div>
+  )
+}
+
+function D100RollDetailsComparison({ details }: { details: D100RollDetails }) {
+  const isBonus = details.mode === "bonus"
+  const selectedIndex = details.candidates.indexOf(details.selected)
+  const mode = isBonus ? "Преимущество" : "Помеха"
+  const rule = isBonus ? "взят меньший результат" : "взят больший результат"
+  const accent = isBonus
+    ? "text-[var(--ml-accent-success)]"
+    : "text-[var(--ml-accent-danger)]"
+  const selectedCard = isBonus
+    ? "border-[var(--ml-accent-success)] bg-[color-mix(in_srgb,var(--ml-accent-success)_18%,transparent)]"
+    : "border-[var(--ml-accent-danger)] bg-[color-mix(in_srgb,var(--ml-accent-danger)_18%,transparent)]"
+
+  return (
+    <div className="mt-2 min-w-0" data-testid="d100-roll-details">
+      <p
+        className={`font-mono text-[0.62rem] font-bold tracking-[0.1em] uppercase ${accent}`}
+      >
+        {mode}
+        {" — "}
+        {rule}
+      </p>
+      <p className="mt-0.5 font-mono text-[0.62rem] text-[var(--ml-ink-muted)]">
+        Общая единица: {details.units}
+      </p>
+      <div className="mt-1.5 grid grid-cols-2 gap-1.5">
+        {details.candidates.map((candidate, index) => {
+          const isSelected = index === selectedIndex
+
+          return (
+            <div
+              className={`min-w-0 rounded-sm border px-2 py-1.5 ${
+                isSelected
+                  ? selectedCard
+                  : "border-[var(--ml-border-subtle)] bg-[var(--ml-bg-page)]/35"
+              }`}
+              data-testid={`d100-roll-candidate-${index}`}
+              key={`${details.tens[index]}-${candidate}`}
+            >
+              <span
+                className={`block font-mono text-[0.58rem] font-bold tracking-[0.1em] uppercase ${
+                  isSelected ? accent : "text-[var(--ml-ink-muted)]"
+                }`}
+              >
+                {isSelected ? "Взят" : "Не взят"}
+              </span>
+              <div className="mt-0.5 flex items-end justify-between gap-2">
+                <strong
+                  className={`font-mono text-xl leading-none font-bold tabular-nums ${
+                    isSelected ? accent : "text-[var(--ml-ink-primary)]"
+                  }`}
+                >
+                  {candidate}
+                </strong>
+                <span className="font-mono text-[0.58rem] text-[var(--ml-ink-muted)]">
+                  Десяток {details.tens[index]}
+                </span>
+              </div>
+            </div>
+          )
+        })}
       </div>
     </div>
   )
