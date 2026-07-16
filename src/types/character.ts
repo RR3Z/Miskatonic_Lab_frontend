@@ -119,23 +119,15 @@ export type CharacterLuck = CharacterRecordMeta & {
   current_luck: number
 }
 
-export type CharacterSkillSpecialty = {
-  id: string
-  name: string
-  description: string
-  base_value: number
-  created_at: string
-  updated_at: string
-}
-
 export type CharacterSkill = {
   id: string
   name: string
   base_value: number
   value: number
+  total_value: number
   checked: boolean
-  specialized: boolean
-  specialty: CharacterSkillSpecialty | null
+  is_protected: boolean
+  base_rule: "dodge" | "native_language" | null
   created_at: string
   updated_at: string
 }
