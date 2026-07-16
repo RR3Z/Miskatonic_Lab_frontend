@@ -1,5 +1,4 @@
 import { CharacterSkills } from "@/components/character/detail/skills/character-skills"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import type { CharacterDetail } from "@/types/character"
 
 export function CharacterSkillsPanel({
@@ -8,10 +7,15 @@ export function CharacterSkillsPanel({
   character: CharacterDetail
 }) {
   return (
-    <ScrollArea className="h-full" data-testid="character-skills-panel">
-      <div className="p-4">
-        <CharacterSkills characterId={character.id} skills={character.skills} />
-      </div>
-    </ScrollArea>
+    <div
+      className="h-full min-h-0 overflow-hidden p-4"
+      data-testid="character-skills-panel"
+    >
+      <CharacterSkills
+        characterId={character.id}
+        characteristics={character.characteristics}
+        skills={character.skills}
+      />
+    </div>
   )
 }

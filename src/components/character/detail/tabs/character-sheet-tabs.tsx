@@ -31,7 +31,10 @@ export function CharacterSheetTabs({
   skills: CharacterSkill[] | null
 }) {
   return (
-    <Tabs className="min-h-0 flex-1 gap-0" defaultValue="history-finances">
+    <Tabs
+      className="h-full min-h-0 flex-1 gap-0 overflow-hidden"
+      defaultValue="history-finances"
+    >
       <TabsList
         aria-label="Разделы листа персонажа"
         className="relative h-10 w-full shrink-0 justify-start gap-0 overflow-x-auto overflow-y-hidden rounded-none border-b border-[var(--ml-border-subtle)] bg-transparent p-0 px-3 xl:overflow-visible"

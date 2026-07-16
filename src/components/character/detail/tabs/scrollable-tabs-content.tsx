@@ -10,7 +10,10 @@ export function ScrollableTabsContent({
 }) {
   return (
     <TabsContent className="min-h-0 overflow-hidden" value={value}>
-      <ScrollArea className="h-full">
+      <ScrollArea
+        className="h-full min-h-0"
+        data-testid={`character-tab-${value}-scroll-area`}
+      >
         <div className="p-4">{children}</div>
       </ScrollArea>
     </TabsContent>
