@@ -16,7 +16,6 @@ function characterSkill(
 ): CharacterSkill {
   return {
     base_value: 20,
-    category: "Исследование",
     checked: false,
     created_at: "2026-01-01T00:00:00Z",
     specialized: false,
@@ -65,14 +64,13 @@ describe("CharacterSkills", () => {
     ).toEqual(["Антропология", "Археология"])
   })
 
-  it("renders the current, base, development, category, and specialty data", () => {
+  it("renders the current, base, development, and specialty data", () => {
     render(
       <CharacterSkills
         characterId="character-1"
         skills={[
           characterSkill({
             base_value: 1,
-            category: "Языки",
             checked: true,
             id: "latin",
             name: "Иностранный язык",
@@ -92,7 +90,6 @@ describe("CharacterSkills", () => {
     )
 
     const skill = screen.getByTestId("character-skill")
-    expect(skill).toHaveAttribute("title", "Языки")
     expect(within(skill).getByText("Иностранный язык")).toBeVisible()
     expect(within(skill).getByText("Латынь")).toHaveAttribute(
       "title",

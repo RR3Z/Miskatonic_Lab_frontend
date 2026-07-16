@@ -134,7 +134,6 @@ export type CharacterSkill = {
   base_value: number
   value: number
   checked: boolean
-  category: string
   specialized: boolean
   specialty: CharacterSkillSpecialty | null
   created_at: string

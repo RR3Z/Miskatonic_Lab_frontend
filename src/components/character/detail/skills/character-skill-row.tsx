@@ -18,7 +18,6 @@ export function CharacterSkillRow({
     <li
       className="flex min-w-0 items-center gap-2 rounded-sm border border-[var(--ml-border-subtle)] bg-[var(--ml-bg-page)]/20 px-2 py-1.5"
       data-testid="character-skill"
-      title={skill.category || undefined}
     >
       <SkillDevelopmentMark checked={skill.checked} />
 
