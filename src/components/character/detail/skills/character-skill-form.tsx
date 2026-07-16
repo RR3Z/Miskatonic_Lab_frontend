@@ -105,11 +105,7 @@ export function CharacterSkillForm({
           placeholder="Название навыка"
           value={name}
         />
-      ) : (
-        <p className="font-body text-sm font-medium text-[var(--ml-ink-primary)]">
-          {initialValue.name}
-        </p>
-      )}
+      ) : null}
       <div className="grid grid-cols-[1fr_1fr_auto] items-end gap-2">
         <label
           className="grid gap-1 font-body text-xs text-[var(--ml-ink-muted)]"
