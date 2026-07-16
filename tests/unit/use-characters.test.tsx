@@ -157,7 +157,6 @@ function characterDetail(id: string): CharacterDetail {
     name: id,
     notes: [],
     occupation: null,
-    player_name: null,
     portrait_url: null,
     residence: null,
     sanity: {

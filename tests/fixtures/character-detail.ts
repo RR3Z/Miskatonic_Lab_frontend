@@ -81,7 +81,6 @@ export function characterDetailFixture(
     name: "Артур Кэллахан",
     notes: [],
     occupation: "Антиквар",
-    player_name: "Игрок",
     portrait_url: null,
     residence: "Нью-Йорк",
     sanity: {

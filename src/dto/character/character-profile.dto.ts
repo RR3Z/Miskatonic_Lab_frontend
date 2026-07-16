@@ -30,7 +30,6 @@ export type CharacterProfilePatch = {
   birthplace?: string | null
   name?: string
   occupation?: string | null
-  player_name?: string | null
   residence?: string | null
   sex?: "female" | "male" | null
 }

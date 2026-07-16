@@ -6,7 +6,6 @@ import type { CreatedCharacter } from "@/types/character"
 type CharacterProfileResponse = CreatedCharacter & {
   birthplace: string | null
   occupation: string | null
-  player_name: string | null
   residence: string | null
 }
 
