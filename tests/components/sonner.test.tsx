@@ -4,18 +4,20 @@ import { toast } from "sonner"
 import { afterEach, describe, expect, it } from "vitest"
 
 import {
+  DICE_RESULT_TOAST_DURATION_MS,
   DICE_RESULT_TOASTER_ID,
-  TOAST_DURATION_MS,
-  Toaster,
-} from "@/components/ui/sonner"
+  GENERIC_TOAST_DURATION_MS,
+} from "@/components/ui/sonner/constants"
+import { DiceResultToaster } from "@/components/ui/sonner/dice-result-toaster"
+import { GenericToaster } from "@/components/ui/sonner/generic-toaster"
 
-describe("Toaster", () => {
+describe("Sonner toasters", () => {
   afterEach(() => {
     toast.dismiss()
   })
 
   it("renders notifications at the top center", async () => {
-    render(<Toaster />)
+    render(<GenericToaster />)
     act(() => {
       toast("Проверка позиции")
     })
@@ -28,7 +30,7 @@ describe("Toaster", () => {
   })
 
   it("uses a uniform one-pixel border", async () => {
-    render(<Toaster />)
+    render(<GenericToaster />)
     act(() => {
       toast.success("Проверка рамки")
     })
@@ -41,14 +43,7 @@ describe("Toaster", () => {
 
   it("renders dice results at the bottom right with a close button", async () => {
     const user = userEvent.setup()
-    render(
-      <Toaster
-        containerAriaLabel="Результаты бросков"
-        duration={TOAST_DURATION_MS}
-        id={DICE_RESULT_TOASTER_ID}
-        position="bottom-right"
-      />,
-    )
+    render(<DiceResultToaster />)
     act(() => {
       toast("Сила 53 · d100: 42 · обычный успех · 53 / 26 / 10", {
         toasterId: DICE_RESULT_TOASTER_ID,
@@ -64,7 +59,7 @@ describe("Toaster", () => {
     )
     expect(toaster).toBeInTheDocument()
     expect(notification?.className).toContain(
-      "w-[min(21rem,calc(100vw-2rem))]!",
+      "w-[min(30rem,calc(100vw-2rem))]!",
     )
     expect(notification?.className).not.toContain(
       "w-[min(26rem,calc(100vw-2rem))]!",
@@ -81,12 +76,8 @@ describe("Toaster", () => {
   it("keeps dice results separate from ordinary notifications", async () => {
     render(
       <>
-        <Toaster />
-        <Toaster
-          containerAriaLabel="Результаты бросков"
-          id={DICE_RESULT_TOASTER_ID}
-          position="bottom-right"
-        />
+        <GenericToaster />
+        <DiceResultToaster />
       </>,
     )
     act(() => {
@@ -107,8 +98,9 @@ describe("Toaster", () => {
     expect(diceToast).toHaveAttribute("data-y-position", "bottom")
   })
 
-  it("keeps standard notifications for at least 30 seconds", () => {
-    expect(TOAST_DURATION_MS).toBe(30_000)
+  it("uses short generic notifications and persistent dice results", () => {
+    expect(GENERIC_TOAST_DURATION_MS).toBe(6_000)
+    expect(DICE_RESULT_TOAST_DURATION_MS).toBe(30_000)
   })
 
   it.each([
@@ -133,7 +125,7 @@ describe("Toaster", () => {
   ])(
     "applies project colors to %s notifications",
     async (_, show, message, type) => {
-      render(<Toaster />)
+      render(<GenericToaster />)
 
       act(() => {
         show()

@@ -216,15 +216,11 @@ describe("CharacterSheetHeader", () => {
     })
     render(<CharacterSheetHeader character={character} />)
 
-    expect(screen.getByTestId("characteristic-card-СИЛ")).toHaveTextContent(
-      "53",
-    )
-    expect(screen.getByTestId("characteristic-card-СИЛ")).toHaveTextContent(
-      "26",
-    )
-    expect(screen.getByTestId("characteristic-card-СИЛ")).toHaveTextContent(
-      "10",
-    )
+    const strengthCard = screen.getByTestId("characteristic-card-СИЛ")
+    expect(strengthCard).toHaveTextContent("53")
+    expect(strengthCard).toHaveTextContent("26")
+    expect(strengthCard).toHaveTextContent("10")
+    expect(strengthCard).toHaveClass("grid-cols-[minmax(0,1fr)_auto]")
 
     const editButton = screen.getByRole("button", {
       name: "Редактировать характеристики",

@@ -319,6 +319,34 @@ describe("CharacterDetailPage", () => {
     })
   })
 
+  it("shows profession bonuses without applying them automatically", async () => {
+    const user = userEvent.setup()
+    queryState.data = characterDetailFixture({ occupation: "Антиквар" })
+
+    render(<CharacterDetailPage characterId="character-1" />)
+
+    const occupationInfo = screen.getByRole("button", {
+      name: "Информация о бонусах профессии",
+    })
+    await user.hover(occupationInfo)
+
+    const tooltip = await waitFor(() => {
+      const element = document.querySelector<HTMLElement>(
+        '[data-slot="tooltip-content"]:not([data-state="closed"])',
+      )
+      expect(element).toBeVisible()
+      return element as HTMLElement
+    })
+
+    expect(tooltip).toHaveTextContent("Профессия: дополнительные возможности")
+    expect(tooltip).toHaveTextContent("Очки профессиональных навыков")
+    expect(tooltip).toHaveTextContent("Диапазон Средств и кредитного рейтинга")
+    expect(tooltip).toHaveTextContent("Полезные связи и круг общения")
+    expect(tooltip).toHaveTextContent(
+      "Приложение не применяет бонусы автоматически",
+    )
+  })
+
   it("renders missing values without hiding zeroes", () => {
     const baseCharacter = characterDetailFixture()
     queryState.data = characterDetailFixture({

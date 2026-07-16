@@ -31,4 +31,21 @@ describe("DiceRollResultToast", () => {
     expect(screen.getByText("обычный успех")).toHaveClass("uppercase")
     expect(screen.queryByText("База")).not.toBeInTheDocument()
   })
+
+  it("keeps long characteristic outcomes on the structured two-line layout", () => {
+    render(
+      <DiceRollResultToast
+        outcome="critical_success"
+        result={1}
+        title="Очень длинное название характеристики"
+      />,
+    )
+
+    expect(
+      screen.getByText("Очень длинное название характеристики"),
+    ).toHaveClass("whitespace-nowrap")
+    expect(screen.getByText("критический успех")).toHaveClass(
+      "whitespace-nowrap",
+    )
+  })
 })

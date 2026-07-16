@@ -108,6 +108,7 @@ describe("CreateCharacterModal", () => {
     const portrait = screen.getByLabelText("Выбрать изображение")
     expect(name).toHaveAttribute("data-slot", "input")
     expect(sex).toHaveAttribute("data-slot", "select-trigger")
+    expect(sex).toHaveClass("cursor-pointer")
     expect(document.querySelector('[data-slot="attachment"]')).toHaveAttribute(
       "data-state",
       "idle",
