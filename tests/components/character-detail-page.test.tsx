@@ -64,7 +64,13 @@ vi.mock("@/lib/api/use-character-resources", () => ({
 }))
 
 vi.mock("@/lib/api/use-character-skills", () => ({
+  useCreateCharacterSkill: () => ({ isPending: false, mutateAsync: vi.fn() }),
   useDeleteCharacterSkill: () => ({ mutateAsync: vi.fn() }),
+  useUpdateCharacterSkill: () => ({
+    isPending: false,
+    mutate: vi.fn(),
+    mutateAsync: vi.fn(),
+  }),
 }))
 
 import { CharacterDetailPage } from "@/components/character/detail/character-detail-page"
@@ -108,16 +114,37 @@ describe("CharacterDetailPage", () => {
     const skillsPanel = screen.getByTestId("character-skills-panel")
     const sectionsPanel = screen.getByTestId("character-sections-panel")
     expect(skillsPanel).toBeVisible()
-    expect(skillsPanel).toHaveAttribute("data-slot", "scroll-area")
+    expect(skillsPanel).not.toHaveAttribute("data-slot", "scroll-area")
+    const skillsScrollArea = within(skillsPanel).getByTestId(
+      "character-skills-scroll-area",
+    )
+    expect(skillsScrollArea).toHaveAttribute("data-slot", "scroll-area")
+    expect(skillsScrollArea).toHaveClass("min-h-0", "flex-1")
     expect(
-      skillsPanel.querySelector('[data-slot="scroll-area-viewport"]'),
-    ).toBeInTheDocument()
+      within(skillsScrollArea).queryByRole("heading", { name: "Навыки" }),
+    ).not.toBeInTheDocument()
+    expect(
+      within(skillsScrollArea).getByText("Навыки персонажа пока не добавлены."),
+    ).toBeVisible()
+    const skillsViewport = skillsScrollArea.querySelector(
+      '[data-slot="scroll-area-viewport"]',
+    )
+    expect(skillsViewport).toBeInTheDocument()
+    expect(skillsViewport).toHaveClass(
+      "[scrollbar-width:none]",
+      "[&::-webkit-scrollbar]:hidden",
+    )
     expect(sectionsPanel).toBeVisible()
+    expect(sectionsPanel).toHaveClass("min-h-0", "overflow-hidden")
+    const sectionsScrollArea = within(sectionsPanel).getByTestId(
+      "character-tab-history-finances-scroll-area",
+    )
+    expect(sectionsScrollArea).toHaveAttribute("data-slot", "scroll-area")
+    expect(sectionsScrollArea).toHaveClass("h-full", "min-h-0")
     expect(
-      sectionsPanel.querySelector(
-        '[role="tabpanel"] [data-slot="scroll-area-viewport"]',
-      ),
+      sectionsScrollArea.querySelector('[data-slot="scroll-area-viewport"]'),
     ).toBeInTheDocument()
+    expect(sectionsScrollArea).not.toBe(skillsScrollArea)
     expect(screen.getByRole("heading", { name: "Навыки" })).toBeVisible()
     expect(
       screen.getByRole("tab", { name: "История и имущество" }),

@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react"
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
@@ -437,6 +443,11 @@ describe("CharacterSheetHeader", () => {
     const dodgeCard = screen.getByRole("button", {
       name: "Бросить характеристику Уклонение",
     })
+    expect(within(dodgeCard).getByText("Уклонение")).toHaveClass(
+      "whitespace-nowrap",
+      "text-[0.55rem]",
+      "tracking-[0.04em]",
+    )
     expect(dodgeCard).toHaveTextContent("55")
     expect(dodgeCard).toHaveTextContent("27")
     expect(dodgeCard).toHaveTextContent("11")

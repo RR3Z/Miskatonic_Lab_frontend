@@ -4,7 +4,11 @@ import { describe, expect, it } from "vitest"
 
 const componentsDirectory = resolve(process.cwd(), "src/components")
 const nativeControlPattern = /<(?:input|textarea|select)\b/
-const allowedNativeControlFiles = new Set(["ui/input.tsx", "ui/textarea.tsx"])
+const allowedNativeControlFiles = new Set([
+  "ui/checkbox.tsx",
+  "ui/input.tsx",
+  "ui/textarea.tsx",
+])
 
 function componentFiles(directory: string): string[] {
   return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {

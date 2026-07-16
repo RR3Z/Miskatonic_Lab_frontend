@@ -87,8 +87,9 @@ describe("CharacterSheetTabs", () => {
             created_at: "2026-01-01T00:00:00Z",
             id: "credit-rating",
             name: "Кредитный рейтинг",
-            specialized: false,
-            specialty: null,
+            base_rule: null,
+            is_protected: false,
+            total_value: 20,
             updated_at: "2026-01-01T00:00:00Z",
             value: 55,
           },
@@ -124,6 +125,9 @@ describe("CharacterSheetTabs", () => {
         .getByRole("tabpanel")
         .querySelector('[data-slot="scroll-area-viewport"]'),
     ).toBeInTheDocument()
+    expect(
+      screen.getByTestId("character-tab-history-finances-scroll-area"),
+    ).toHaveClass("h-full", "min-h-0")
     expect(screen.getAllByRole("tab").map((tab) => tab.textContent)).toEqual([
       "История и имущество",
       "Инвентарь",
