@@ -8,11 +8,8 @@ import {
 import { ClerkProvider } from "@/components/auth/clerk-provider"
 import { SiteShell } from "@/components/layout/site-shell"
 import { MotionProvider } from "@/components/motion/motion-provider"
-import {
-  DICE_RESULT_TOASTER_ID,
-  TOAST_DURATION_MS,
-  Toaster,
-} from "@/components/ui/sonner"
+import { DiceResultToaster } from "@/components/ui/sonner/dice-result-toaster"
+import { GenericToaster } from "@/components/ui/sonner/generic-toaster"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { AuthQueryCacheBoundary } from "@/lib/api/auth-query-cache-boundary"
 import { QueryProvider } from "@/lib/api/provider"
@@ -80,13 +77,8 @@ export default function RootLayout({
               </QueryProvider>
             </TooltipProvider>
           </ClerkProvider>
-          <Toaster />
-          <Toaster
-            containerAriaLabel="Результаты бросков"
-            duration={TOAST_DURATION_MS}
-            id={DICE_RESULT_TOASTER_ID}
-            position="bottom-right"
-          />
+          <GenericToaster />
+          <DiceResultToaster />
         </MotionProvider>
       </body>
     </html>

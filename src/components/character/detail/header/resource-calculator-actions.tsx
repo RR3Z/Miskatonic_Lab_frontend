@@ -17,9 +17,9 @@ import { Button } from "@/components/ui/button"
 import { Field, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import {
+  DICE_RESULT_TOAST_DURATION_MS,
   DICE_RESULT_TOASTER_ID,
-  TOAST_DURATION_MS,
-} from "@/components/ui/sonner"
+} from "@/components/ui/sonner/constants"
 import type { CharacterResourceKey } from "@/dto/character/character-sheet-values.dto"
 import type { CharacterDiceRoll } from "@/lib/api/character-dice-rolls"
 import { classifyCharacteristicCheck } from "@/lib/dice/characteristic-check"
@@ -87,7 +87,7 @@ export function ResourceCalculatorActions({
             toast:
               "dice-roll-toast min-h-24! items-stretch! border-2! border-[#b6a367]! bg-[linear-gradient(135deg,#3a3221,#211d18)]! p-3! text-[var(--ml-ink-primary)]! shadow-[0_20px_48px_rgba(0,0,0,0.72)]!",
           },
-          duration: TOAST_DURATION_MS,
+          duration: DICE_RESULT_TOAST_DURATION_MS,
           style: { "--dice-roll-border-color": "#b6a367" } as CSSProperties,
           toasterId: DICE_RESULT_TOASTER_ID,
         },
@@ -122,7 +122,7 @@ export function ResourceCalculatorActions({
             title: "h-full! w-full!",
             toast: `dice-roll-toast min-h-24! items-stretch! border-2! p-3! text-[var(--ml-ink-primary)]! ${getDiceRollToastClassName(check.outcome)}`,
           },
-          duration: TOAST_DURATION_MS,
+          duration: DICE_RESULT_TOAST_DURATION_MS,
           style: getDiceRollToastStyle(check.outcome),
           toasterId: DICE_RESULT_TOASTER_ID,
         },

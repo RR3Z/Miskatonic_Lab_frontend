@@ -22,9 +22,9 @@ import {
 import { useDesktopCharacterSheet } from "@/components/character/detail/layout/use-desktop-character-sheet"
 import { Button } from "@/components/ui/button"
 import {
+  DICE_RESULT_TOAST_DURATION_MS,
   DICE_RESULT_TOASTER_ID,
-  TOAST_DURATION_MS,
-} from "@/components/ui/sonner"
+} from "@/components/ui/sonner/constants"
 import { useMakeCharacterDiceRoll } from "@/lib/api/use-character-dice-rolls"
 import { useUpdateCharacterCharacteristics } from "@/lib/api/use-character-statistics"
 import { classifyCharacteristicCheck } from "@/lib/dice/characteristic-check"
@@ -64,7 +64,7 @@ export function CharacterCharacteristicsSection({
             title: "h-full! w-full!",
             toast: `dice-roll-toast min-h-24! items-stretch! border-2! p-3! text-[var(--ml-ink-primary)]! ${getDiceRollToastClassName(check.outcome)}`,
           },
-          duration: TOAST_DURATION_MS,
+          duration: DICE_RESULT_TOAST_DURATION_MS,
           style: getDiceRollToastStyle(check.outcome),
           toasterId: DICE_RESULT_TOASTER_ID,
         },
