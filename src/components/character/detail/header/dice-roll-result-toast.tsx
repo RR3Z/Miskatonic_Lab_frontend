@@ -114,17 +114,17 @@ export function DiceRollResultToast({
       </span>
 
       <div className="flex min-w-0 flex-1 flex-col justify-center">
-        <strong className="truncate font-heading text-xl leading-none text-[#f4ead0]">
+        <strong className="whitespace-nowrap font-heading text-xl leading-none text-[#f4ead0]">
           {title}
         </strong>
-        <div className="mt-1 flex min-w-0 items-baseline gap-2">
+        <div className="mt-1 flex items-baseline gap-2 whitespace-nowrap">
           <span
             className={`shrink-0 font-mono text-xs font-bold tracking-[0.16em] ${styles.muted}`}
           >
             D100
           </span>
           <strong
-            className={`truncate font-heading text-lg leading-none font-bold tracking-[0.07em] uppercase ${styles.accent}`}
+            className={`whitespace-nowrap font-heading text-lg leading-none font-bold tracking-[0.07em] uppercase ${styles.accent}`}
           >
             {outcomeLabel}
           </strong>
@@ -153,10 +153,10 @@ export function FormulaDiceRollResultToast({
       </span>
 
       <div className="flex min-w-0 flex-1 flex-col justify-center">
-        <strong className="truncate font-heading text-xl leading-none text-[#f4ead0]">
+        <strong className="whitespace-nowrap font-heading text-xl leading-none text-[#f4ead0]">
           {title}
         </strong>
-        <span className="mt-1 truncate font-mono text-xs font-bold tracking-[0.16em] text-[#b7aa81]">
+        <span className="mt-1 whitespace-nowrap font-mono text-xs font-bold tracking-[0.16em] text-[#b7aa81]">
           {formula}
         </span>
       </div>
