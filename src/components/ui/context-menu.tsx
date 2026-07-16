@@ -37,6 +37,22 @@ function ContextMenuContent({
   )
 }
 
+function ContextMenuLabel({
+  className,
+  ...props
+}: React.ComponentProps<typeof ContextMenuPrimitive.Label>) {
+  return (
+    <ContextMenuPrimitive.Label
+      data-slot="context-menu-label"
+      className={cn(
+        "px-2 py-1 text-xs font-medium tracking-wide text-muted-foreground",
+        className,
+      )}
+      {...props}
+    />
+  )
+}
+
 function ContextMenuItem({
   className,
   ...props
@@ -53,4 +69,10 @@ function ContextMenuItem({
   )
 }
 
-export { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger }
+export {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuLabel,
+  ContextMenuTrigger,
+}
