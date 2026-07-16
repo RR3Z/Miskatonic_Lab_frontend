@@ -28,7 +28,7 @@ export function CharacterDetailPage({ characterId }: CharacterDetailPageProps) {
   }
 
   return (
-    <div className="flex min-h-[100svh] w-full min-w-0 flex-col px-3 py-3 sm:px-4 sm:py-4 xl:h-[100svh]">
+    <div className="flex min-h-[100svh] w-full min-w-0 flex-col px-3 py-3 sm:px-4 sm:py-4 xl:h-full xl:max-h-full xl:min-h-0 xl:flex-1 xl:overflow-hidden">
       <div className="flex min-h-0 flex-1 flex-col gap-3">
         <CharacterSheetHeader character={data} />
         <CharacterSheetWorkspace character={data} />

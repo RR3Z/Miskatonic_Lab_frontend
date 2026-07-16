@@ -42,7 +42,7 @@ export function CharacterSheetWorkspace({
 
   return (
     <ResizablePanelGroup
-      className="min-h-[620px] flex-1 overflow-hidden rounded-md border border-[var(--ml-border-aged)] bg-[var(--ml-surface-panel)]"
+      className="min-h-0 flex-1 overflow-hidden rounded-md border border-[var(--ml-border-aged)] bg-[var(--ml-surface-panel)]"
       defaultLayout={DEFAULT_CHARACTER_SHEET_LAYOUT}
       groupRef={groupRef}
       id={`character-sheet-${character.id}`}
@@ -50,6 +50,7 @@ export function CharacterSheetWorkspace({
       orientation="horizontal"
     >
       <ResizablePanel
+        className="min-h-0 overflow-hidden"
         defaultSize="58%"
         id={SKILLS_PANEL_ID}
         maxSize="68%"
@@ -65,6 +66,7 @@ export function CharacterSheetWorkspace({
       />
 
       <ResizablePanel
+        className="min-h-0 overflow-hidden"
         defaultSize="42%"
         id={SECTIONS_PANEL_ID}
         maxSize="55%"
