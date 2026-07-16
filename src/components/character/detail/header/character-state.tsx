@@ -1,5 +1,4 @@
-import { Info } from "lucide-react"
-import { CharacterSheetTooltip } from "@/components/character/detail/character-sheet-tooltip"
+import { CharacterInfoTooltip } from "@/components/character/detail/character-info-tooltip"
 import type { CharacterStateRule } from "@/components/character/detail/character-state-rules"
 import { CHARACTER_STATE_ACTIVE_CLASSES } from "@/components/character/detail/header/character-state-styles"
 import type { CharacterStateTone } from "@/components/character/detail/header/character-state-types"
@@ -42,16 +41,10 @@ export function CharacterState({
           {rule.label}
         </span>
       </button>
-      <CharacterSheetTooltip
-        trigger={
-          <button
-            aria-label={`Информация о состоянии: ${rule.label}`}
-            className="mr-1 grid size-5 shrink-0 place-items-center rounded-sm text-current opacity-75 transition-opacity hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-[var(--ml-focus-ring)]"
-            type="button"
-          >
-            <Info aria-hidden="true" className="size-3.5" />
-          </button>
-        }
+      <CharacterInfoTooltip
+        ariaLabel={`Информация о состоянии: ${rule.label}`}
+        iconClassName="size-3.5"
+        triggerClassName="mr-1 size-5 text-current"
       >
         <p className="font-heading text-base font-semibold">{rule.label}</p>
         <p>{rule.description}</p>
@@ -62,7 +55,7 @@ export function CharacterState({
           <strong>Последствие:</strong> {rule.consequence}
         </p>
         <p className="text-xs opacity-70">{rule.source}</p>
-      </CharacterSheetTooltip>
+      </CharacterInfoTooltip>
     </div>
   )
 }

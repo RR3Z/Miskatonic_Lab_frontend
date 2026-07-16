@@ -1,14 +1,11 @@
 "use client"
 
-import { Info } from "lucide-react"
 import type * as React from "react"
 import type { CSSProperties } from "react"
 import { useState } from "react"
 import { toast } from "sonner"
-import {
-  CharacterSheetTooltip,
-  CharacterSheetTooltipProvider,
-} from "@/components/character/detail/character-sheet-tooltip"
+import { CharacterInfoTooltip } from "@/components/character/detail/character-info-tooltip"
+import { CharacterSheetTooltipProvider } from "@/components/character/detail/character-sheet-tooltip"
 import {
   DiceRollResultToast,
   FormulaDiceRollResultToast,
@@ -329,23 +326,15 @@ function CalculatorActionGroup({
           {title}
         </p>
         {description ? (
-          <CharacterSheetTooltip
+          <CharacterInfoTooltip
+            ariaLabel={`Справка: ${title}`}
             contentClassName="max-w-72"
+            iconClassName="size-3.5"
             side="top"
-            trigger={
-              <Button
-                aria-label={`Справка: ${title}`}
-                className="size-6 shrink-0 rounded-full border border-[var(--ml-border-aged)] text-[var(--ml-ink-muted)] hover:border-[var(--ml-accent-aged-gold)] hover:text-[var(--ml-accent-aged-gold)]"
-                size="icon-xs"
-                type="button"
-                variant="ghost"
-              >
-                <Info aria-hidden="true" className="size-3.5" />
-              </Button>
-            }
+            triggerClassName="size-6 cursor-pointer rounded-full border border-[var(--ml-border-aged)] text-[var(--ml-ink-muted)] hover:border-[var(--ml-accent-aged-gold)] hover:text-[var(--ml-accent-aged-gold)]"
           >
             {description}
-          </CharacterSheetTooltip>
+          </CharacterInfoTooltip>
         ) : null}
       </div>
       {children}
