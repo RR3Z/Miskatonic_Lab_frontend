@@ -5,6 +5,7 @@ import { toast } from "sonner"
 
 import { getCharacterDerivedStats } from "@/components/character/detail/header/character-derived-stat-definitions"
 import { CharacterSheetSectionTitle } from "@/components/character/detail/header/character-sheet-section-title"
+import { CharacterSheetStatCard } from "@/components/character/detail/header/character-sheet-stat-card"
 import { CharacteristicDiceCard } from "@/components/character/detail/header/characteristic-dice-card"
 import { DamageBonusRoll } from "@/components/character/detail/header/damage-bonus-roll"
 import {
@@ -123,8 +124,8 @@ function DerivedStatCard({
   value: number | string | null
 }) {
   return (
-    <div
-      className="flex min-h-0 min-w-0 flex-col items-center justify-center rounded-sm border border-[var(--ml-border-subtle)] bg-[var(--ml-bg-page)]/25 px-2 py-1 text-center"
+    <CharacterSheetStatCard
+      className="flex flex-col items-center justify-center px-2 py-1"
       data-testid={`derived-stat-${label}`}
     >
       <span className="block w-full min-w-0 truncate font-body text-[0.65rem] uppercase tracking-[0.12em] text-[var(--ml-ink-muted)]">
@@ -133,6 +134,6 @@ function DerivedStatCard({
       <span className="font-mono text-base font-semibold tabular-nums text-[var(--ml-ink-primary)]">
         {value ?? "—"}
       </span>
-    </div>
+    </CharacterSheetStatCard>
   )
 }

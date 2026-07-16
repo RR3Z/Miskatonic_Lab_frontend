@@ -1,5 +1,9 @@
 "use client"
 
+import {
+  CharacterSheetStatButton,
+  CharacterSheetStatCard,
+} from "@/components/character/detail/header/character-sheet-stat-card"
 import { Spinner } from "@/components/ui/spinner"
 
 export function DamageBonusRoll({
@@ -25,25 +29,25 @@ export function DamageBonusRoll({
 
   if (formula === null) {
     return (
-      <div
-        className="flex min-h-0 min-w-0 flex-col items-center justify-center rounded-sm border border-[var(--ml-border-subtle)] bg-[var(--ml-bg-page)]/25 px-2 py-1 text-center"
+      <CharacterSheetStatCard
+        className="flex flex-col items-center justify-center px-2 py-1"
         data-testid="damage-bonus-stat"
       >
         {content}
-      </div>
+      </CharacterSheetStatCard>
     )
   }
 
   return (
-    <button
+    <CharacterSheetStatButton
       aria-label={`Бросить бонус урона ${formula}`}
-      className="flex min-h-0 min-w-0 cursor-pointer flex-col items-center justify-center rounded-sm border border-[var(--ml-border-subtle)] bg-[var(--ml-bg-page)]/25 px-2 py-1 text-center transition-colors hover:border-[var(--ml-border-aged)] hover:bg-[var(--ml-surface-panel-raised)]/45 focus-visible:border-[var(--ml-focus-ring)] focus-visible:outline-none disabled:cursor-wait disabled:opacity-70"
+      className="flex flex-col items-center justify-center px-2 py-1"
       data-testid="damage-bonus-stat"
       disabled={rolling}
       onClick={() => onRoll(formula)}
       type="button"
     >
       {content}
-    </button>
+    </CharacterSheetStatButton>
   )
 }

@@ -14,9 +14,12 @@ export function InlineTextEditor({
   className,
   displayClassName,
   errorMessage,
+  inputAlign,
   inputClassName,
   inputMode,
   inputPattern,
+  inputSize,
+  inputVariant = "inline",
   maxLength,
   multiline = true,
   normalizeInput,
@@ -78,11 +81,7 @@ export function InlineTextEditor({
             ...field,
             "aria-label": ariaLabel,
             autoFocus: true,
-            className: cn(
-              "bg-[var(--ml-surface-panel-raised)]",
-              multiline && "min-h-20 resize-y",
-              inputClassName,
-            ),
+            className: cn(inputClassName),
             disabled: isPending,
             maxLength,
             onChange: (
@@ -116,12 +115,20 @@ export function InlineTextEditor({
           }
 
           return multiline ? (
-            <Textarea {...sharedProps} />
+            <Textarea
+              {...sharedProps}
+              align={inputAlign}
+              size={inputSize}
+              variant={inputVariant}
+            />
           ) : (
             <Input
               {...sharedProps}
+              align={inputAlign}
               inputMode={inputMode}
               pattern={inputPattern}
+              size={inputSize}
+              variant={inputVariant}
             />
           )
         }}

@@ -300,13 +300,14 @@ function ResourceValueInput({
         </ResourceAdjustButton>
         <Input
           aria-label={valueName[0]?.toUpperCase() + valueName.slice(1)}
-          className="bg-[color-mix(in_srgb,var(--ml-bg-page)_88%,black)] text-center font-mono tabular-nums"
+          align="center"
           disabled={disabled}
           id={id}
           inputMode="numeric"
           maxLength={3}
           onChange={(event) => onChange(event.target.value.replace(/\D/g, ""))}
           pattern="[0-9]*"
+          variant="accent"
           value={value}
         />
         <ResourceAdjustButton
@@ -326,13 +327,7 @@ function ResourceAdjustButton({
   ...props
 }: React.ComponentProps<typeof Button>) {
   return (
-    <Button
-      {...props}
-      className="border border-[var(--ml-border-aged)] bg-[var(--ml-surface-panel-raised)] text-[var(--ml-ink-primary)] shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] hover:border-[var(--ml-accent-brass-strong)] hover:bg-[var(--ml-surface-panel)] hover:text-[var(--ml-accent-aged-gold)] disabled:border-[var(--ml-border-subtle)] disabled:bg-transparent disabled:text-[var(--ml-ink-muted)] disabled:opacity-30"
-      size="icon-xs"
-      type="button"
-      variant="ghost"
-    >
+    <Button {...props} size="icon-xs" type="button" variant="secondary">
       {children}
     </Button>
   )

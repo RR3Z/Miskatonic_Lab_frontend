@@ -1,15 +1,30 @@
 import type * as React from "react"
 
+import {
+  type ControlVariantProps,
+  controlVariants,
+} from "@/components/ui/control-variants"
 import { cn } from "@/lib/utils/cn.util"
 
-function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
+function Textarea({
+  align = "start",
+  className,
+  size = "default",
+  variant = "default",
+  ...props
+}: React.ComponentProps<"textarea"> & ControlVariantProps) {
   return (
     <textarea
       className={cn(
-        "flex min-h-24 w-full resize-y rounded-md border border-input bg-transparent px-3 py-2 font-body text-base text-foreground shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20",
+        "flex w-full resize-y",
+        controlVariants({ align, size, variant }),
+        "min-h-24 data-[size=xs]:min-h-16 data-[size=sm]:min-h-20 data-[size=lg]:min-h-32",
         className,
       )}
       data-slot="textarea"
+      data-align={align}
+      data-size={size}
+      data-variant={variant}
       {...props}
     />
   )

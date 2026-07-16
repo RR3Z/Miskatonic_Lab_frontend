@@ -45,7 +45,6 @@ export function CharacterIdentityFields({
             <Input
               {...field}
               aria-invalid={fieldState.invalid}
-              className="bg-[var(--ml-surface-panel-raised)]"
               disabled={disabled}
               id={nameId}
               maxLength={MAX_CHARACTER_NAME_LENGTH}
@@ -73,7 +72,7 @@ export function CharacterIdentityFields({
               >
                 <SelectTrigger
                   aria-invalid={fieldState.invalid}
-                  className="w-full bg-[var(--ml-surface-panel-raised)]"
+                  className="w-full"
                   id={sexId}
                 >
                   <SelectValue />
@@ -96,7 +95,6 @@ export function CharacterIdentityFields({
               <Input
                 {...field}
                 aria-invalid={fieldState.invalid}
-                className="bg-[var(--ml-surface-panel-raised)]"
                 disabled={disabled}
                 id={ageId}
                 min={0}

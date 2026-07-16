@@ -48,7 +48,9 @@ export function CharacterSexEditor({
         >
           <SelectTrigger
             aria-label="Редактировать пол персонажа"
-            className="h-6 w-full rounded-sm border-transparent bg-transparent px-1.5 py-0 text-sm leading-5 shadow-none hover:border-[var(--ml-border-aged)] hover:bg-[var(--ml-surface-panel-raised)]/45 focus-visible:border-[var(--ml-focus-ring)]"
+            className="w-full"
+            size="xs"
+            variant="inline"
           >
             <SelectValue />
           </SelectTrigger>

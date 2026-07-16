@@ -52,7 +52,7 @@ export function CreateCharacterNoteForm({
               <Input
                 {...field}
                 aria-invalid={fieldState.invalid}
-                className="bg-[var(--ml-surface-panel-raised)] font-heading font-semibold"
+                className="font-heading font-semibold"
                 disabled={isPending}
                 id={titleId}
                 maxLength={MAX_CHARACTER_NOTE_TITLE_LENGTH}
@@ -71,7 +71,7 @@ export function CreateCharacterNoteForm({
               <Textarea
                 {...field}
                 aria-invalid={fieldState.invalid}
-                className="min-h-28 bg-[var(--ml-surface-panel-raised)]"
+                size="lg"
                 disabled={isPending}
                 id={bodyId}
                 placeholder="Что важно запомнить?"

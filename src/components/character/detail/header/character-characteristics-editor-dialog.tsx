@@ -181,7 +181,6 @@ function CharacteristicInput({
           <Input
             {...field}
             aria-invalid={fieldState.invalid}
-            className="bg-[var(--ml-surface-panel-raised)]"
             disabled={disabled}
             id={id}
             inputMode="numeric"

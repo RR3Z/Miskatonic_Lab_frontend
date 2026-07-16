@@ -1,5 +1,9 @@
 "use client"
 
+import {
+  CharacterSheetStatButton,
+  CharacterSheetStatCard,
+} from "@/components/character/detail/header/character-sheet-stat-card"
 import { Spinner } from "@/components/ui/spinner"
 import { getCharacteristicCheckThresholds } from "@/lib/dice/characteristic-check"
 
@@ -42,20 +46,20 @@ export function CharacteristicDiceCard({
 
   if (value === null) {
     return (
-      <div
-        className="grid min-h-0 min-w-0 grid-cols-[minmax(0,1fr)_auto] overflow-hidden rounded-sm border border-[var(--ml-border-subtle)] bg-[var(--ml-bg-page)]/25"
+      <CharacterSheetStatCard
+        className="grid grid-cols-[minmax(0,1fr)_auto]"
         data-testid={`characteristic-card-${label}`}
         title={title}
       >
         {content}
-      </div>
+      </CharacterSheetStatCard>
     )
   }
 
   return (
-    <button
+    <CharacterSheetStatButton
       aria-label={`Бросить характеристику ${title}`}
-      className="grid min-h-0 min-w-0 cursor-pointer grid-cols-[minmax(0,1fr)_auto] overflow-hidden rounded-sm border border-[var(--ml-border-subtle)] bg-[var(--ml-bg-page)]/25 text-left transition-colors hover:border-[var(--ml-border-aged)] hover:bg-[var(--ml-surface-panel-raised)]/45 focus-visible:border-[var(--ml-focus-ring)] focus-visible:outline-none disabled:cursor-wait disabled:opacity-70"
+      className="grid grid-cols-[minmax(0,1fr)_auto] text-left"
       data-testid={`characteristic-card-${label}`}
       disabled={rolling}
       onClick={onRoll}
@@ -63,6 +67,6 @@ export function CharacteristicDiceCard({
       type="button"
     >
       {content}
-    </button>
+    </CharacterSheetStatButton>
   )
 }

@@ -47,7 +47,9 @@ export function FinanceCreditRatingEditor({
       >
         <SelectTrigger
           aria-label="Редактировать кредитный рейтинг"
-          className="mt-2 h-auto min-h-10 w-full rounded-sm border-transparent bg-transparent px-2 py-2 font-body text-sm text-[var(--ml-ink-muted)] hover:border-[var(--ml-border-aged)] hover:bg-[var(--ml-surface-panel-raised)]/45"
+          className="mt-2 w-full"
+          size="lg"
+          variant="inline"
         >
           <SelectValue placeholder="Выбрать навык" />
         </SelectTrigger>

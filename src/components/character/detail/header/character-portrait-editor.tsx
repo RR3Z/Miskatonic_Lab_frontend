@@ -5,6 +5,7 @@ import Image from "next/image"
 import { useId } from "react"
 import { toast } from "sonner"
 
+import { Input } from "@/components/ui/input"
 import { characterPortraitSchema } from "@/dto/character/create-character.dto"
 import { useUpdateCharacterPortrait } from "@/lib/api/use-character-profile"
 
@@ -53,7 +54,7 @@ export function CharacterPortraitEditor({
         htmlFor={inputId}
       >
         <Camera aria-hidden="true" className="size-6 text-white" />
-        <input
+        <Input
           accept="image/jpeg,image/png,image/webp"
           className="sr-only"
           disabled={mutation.isPending}

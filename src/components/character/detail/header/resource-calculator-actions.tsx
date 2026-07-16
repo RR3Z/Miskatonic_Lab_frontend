@@ -331,7 +331,7 @@ function CalculatorActionGroup({
             contentClassName="max-w-72"
             iconClassName="size-3.5"
             side="top"
-            triggerClassName="size-6 cursor-pointer rounded-full border border-[var(--ml-border-aged)] text-[var(--ml-ink-muted)] hover:border-[var(--ml-accent-aged-gold)] hover:text-[var(--ml-accent-aged-gold)]"
+            triggerClassName="size-5 cursor-pointer text-[var(--ml-ink-muted)] hover:text-[var(--ml-accent-aged-gold)]"
           >
             {description}
           </CharacterInfoTooltip>
@@ -365,10 +365,10 @@ function FormulaAction({
           {label}
         </FieldLabel>
         <Input
-          className="border-[var(--ml-accent-brass-strong)]/65 bg-[color-mix(in_srgb,var(--ml-bg-page)_88%,black)] font-mono text-base font-semibold text-[var(--ml-accent-aged-gold)] shadow-[inset_0_0_0_1px_rgba(0,0,0,0.45)] placeholder:text-[var(--ml-ink-muted)] focus-visible:border-[var(--ml-focus-ring)]"
           id={`${label}-formula`}
           onChange={(event) => onFormulaChange(event.target.value)}
           value={formula}
+          variant="accent"
         />
       </Field>
       <RuleButton disabled={disabled || !formula.trim()} onClick={onRoll}>
@@ -383,12 +383,7 @@ function RuleButton({
   ...props
 }: React.ComponentProps<typeof Button>) {
   return (
-    <Button
-      {...props}
-      className="h-9 border border-[var(--ml-accent-brass-strong)]/80 bg-[linear-gradient(180deg,rgba(92,73,45,0.75),rgba(50,41,29,0.9))] px-3 font-body text-sm font-semibold text-[var(--ml-ink-primary)] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] hover:border-[var(--ml-accent-aged-gold)] hover:bg-[var(--ml-surface-panel-raised)] disabled:border-[var(--ml-border-subtle)] disabled:bg-transparent disabled:text-[var(--ml-ink-muted)] disabled:opacity-40"
-      type="button"
-      variant="ghost"
-    >
+    <Button {...props} size="lg" type="button" variant="accent">
       {children}
     </Button>
   )

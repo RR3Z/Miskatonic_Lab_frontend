@@ -14,7 +14,9 @@ const buttonVariants = cva(
         outline:
           "border-[var(--ml-ink-on-paper)] bg-transparent text-[var(--ml-ink-on-paper)] hover:border-[var(--ml-accent-brass-strong)] hover:bg-[var(--ml-accent-brass-strong)] hover:text-[var(--ml-ink-on-paper)]",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
+          "border-[var(--ml-border-aged)] bg-[var(--ml-surface-panel-raised)] text-[var(--ml-ink-primary)] hover:border-[var(--ml-accent-brass-strong)] hover:bg-[var(--ml-surface-panel)] hover:text-[var(--ml-accent-aged-gold)] aria-expanded:bg-[var(--ml-surface-panel)]",
+        accent:
+          "border-[var(--ml-accent-brass-strong)]/80 bg-[linear-gradient(180deg,rgba(92,73,45,0.75),rgba(50,41,29,0.9))] text-[var(--ml-ink-primary)] shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] hover:border-[var(--ml-accent-aged-gold)] hover:bg-[var(--ml-surface-panel-raised)] disabled:border-[var(--ml-border-subtle)] disabled:bg-transparent disabled:text-[var(--ml-ink-muted)] disabled:opacity-40",
         ghost:
           "border-transparent bg-transparent text-[var(--ml-ink-muted)] hover:bg-[color-mix(in_srgb,var(--ml-surface-panel)_60%,transparent)] hover:text-[var(--ml-ink-primary)]",
         destructive:
