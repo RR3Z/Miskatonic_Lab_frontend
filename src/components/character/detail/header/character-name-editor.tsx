@@ -17,7 +17,7 @@ export function CharacterNameEditor({
         className="h-10 items-center gap-0 rounded-sm px-2 py-0"
         displayClassName="truncate font-heading text-3xl leading-none font-semibold tracking-wide text-[var(--ml-ink-primary)]"
         errorMessage="Не удалось сохранить имя персонажа"
-        inputClassName="h-10 px-2 py-0 font-heading text-3xl leading-none font-semibold"
+        inputClassName="h-10 px-2 py-0 font-heading text-3xl leading-none font-semibold md:text-3xl"
         multiline={false}
         onSave={onSave}
         placeholder="Имя персонажа"
