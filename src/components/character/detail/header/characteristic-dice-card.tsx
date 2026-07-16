@@ -34,7 +34,7 @@ export function CharacteristicDiceCard({
   const content = (
     <>
       <div className="flex min-w-0 flex-col items-center justify-center px-2 py-1 text-center">
-        <span className="block w-full min-w-0 truncate font-body text-[0.65rem] uppercase tracking-[0.12em] text-[var(--ml-ink-muted)]">
+        <span className="block w-full min-w-0 break-words font-body text-[0.65rem] leading-tight uppercase tracking-[0.12em] text-[var(--ml-ink-muted)]">
           {label}
         </span>
         <span className="font-mono text-base font-semibold tabular-nums text-[var(--ml-ink-primary)]">
