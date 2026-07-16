@@ -21,7 +21,7 @@ export function Toaster({ id, toastOptions, ...props }: ToasterProps) {
         ...toastOptions,
         closeButtonAriaLabel: "Закрыть уведомление",
         classNames: {
-          toast: `${isDiceResultToaster ? "w-[min(21rem,calc(100vw-2rem))]!" : "w-[min(26rem,calc(100vw-2rem))]!"} rounded-lg! border! border-[var(--ml-border-aged)]! bg-[var(--ml-surface-panel-raised)]! p-4! font-body! text-[var(--ml-ink-primary)]! shadow-[0_16px_40px_rgba(0,0,0,0.42)]!`,
+          toast: `${isDiceResultToaster ? "w-[min(30rem,calc(100vw-2rem))]!" : "w-[min(26rem,calc(100vw-2rem))]!"} rounded-lg! border! border-[var(--ml-border-aged)]! bg-[var(--ml-surface-panel-raised)]! p-4! font-body! text-[var(--ml-ink-primary)]! shadow-[0_16px_40px_rgba(0,0,0,0.42)]!`,
           title: "text-base! leading-snug! font-semibold!",
           description: "text-sm! text-current! opacity-80!",
           content: "gap-0.5!",
