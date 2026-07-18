@@ -137,7 +137,7 @@ describe("CharacterDetailPage", () => {
     expect(sectionsPanel).toBeVisible()
     expect(sectionsPanel).toHaveClass("min-h-0", "overflow-hidden")
     const sectionsScrollArea = within(sectionsPanel).getByTestId(
-      "character-tab-history-finances-scroll-area",
+      "character-tab-biography-scroll-area",
     )
     expect(sectionsScrollArea).toHaveAttribute("data-slot", "scroll-area")
     expect(sectionsScrollArea).toHaveClass("h-full", "min-h-0")
@@ -146,9 +146,10 @@ describe("CharacterDetailPage", () => {
     ).toBeInTheDocument()
     expect(sectionsScrollArea).not.toBe(skillsScrollArea)
     expect(screen.getByRole("heading", { name: "Навыки" })).toBeVisible()
-    expect(
-      screen.getByRole("tab", { name: "История и имущество" }),
-    ).toHaveAttribute("aria-selected", "true")
+    expect(screen.getByRole("tab", { name: "Биография" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    )
     const separator = screen.getByRole("separator", {
       name: "Изменить ширину панелей листа",
     })

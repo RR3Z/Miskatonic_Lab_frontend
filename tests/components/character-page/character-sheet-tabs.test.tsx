@@ -57,7 +57,8 @@ describe("CharacterSheetTabs", () => {
     mutations.createNote.reset.mockReset()
   })
 
-  it("renders history and finances together in the initially selected tab", () => {
+  it("renders biography first and finances in a separate tab", async () => {
+    const user = userEvent.setup()
     const character = characterDetailFixture()
 
     render(
@@ -77,34 +78,21 @@ describe("CharacterSheetTabs", () => {
           personal_description: "Высокий мужчина в строгом костюме.",
         }}
         characterId={character.id}
-        skills={character.skills}
         finances={{
           ...character.finances,
           assets: "Дом и библиотека редких книг",
           cash: "$45",
-          credit_rating: {
-            base_value: 0,
-            checked: false,
-            created_at: "2026-01-01T00:00:00Z",
-            id: "credit-rating",
-            name: "Кредитный рейтинг",
-            base_rule: null,
-            is_protected: false,
-            total_value: 20,
-            updated_at: "2026-01-01T00:00:00Z",
-            value: 55,
-          },
           spending_limit: "$10",
         }}
         notes={character.notes}
       />,
     )
 
-    const combinedTab = screen.getByRole("tab", {
-      name: "История и имущество",
+    const biographyTab = screen.getByRole("tab", {
+      name: "Биография",
     })
-    expect(combinedTab).toHaveAttribute("aria-selected", "true")
-    expect(combinedTab).toHaveClass(
+    expect(biographyTab).toHaveAttribute("aria-selected", "true")
+    expect(biographyTab).toHaveClass(
       "h-full",
       "items-center",
       "border-0",
@@ -127,17 +115,15 @@ describe("CharacterSheetTabs", () => {
         .querySelector('[data-slot="scroll-area-viewport"]'),
     ).toBeInTheDocument()
     expect(
-      screen.getByTestId("character-tab-history-finances-scroll-area"),
+      screen.getByTestId("character-tab-biography-scroll-area"),
     ).toHaveClass("h-full", "min-h-0")
     expect(screen.getAllByRole("tab").map((tab) => tab.textContent)).toEqual([
-      "История и имущество",
+      "Биография",
+      "Финансы",
       "Инвентарь",
       "Заметки",
       "Оружие и атаки",
     ])
-    expect(
-      screen.queryByRole("tab", { name: "Имущество" }),
-    ).not.toBeInTheDocument()
     expect(screen.getByRole("heading", { name: "Биография" })).toBeVisible()
     expect(screen.getByText("Описание")).toBeVisible()
     expect(screen.getByText("Высокий мужчина в строгом костюме.")).toBeVisible()
@@ -145,33 +131,9 @@ describe("CharacterSheetTabs", () => {
     expect(
       screen.getByText("Истина скрывается в старых архивах."),
     ).toBeVisible()
-    expect(screen.getByText("$10")).toBeVisible()
-    expect(screen.getByText("$45")).toBeVisible()
-    expect(
-      screen.getByRole("combobox", { name: "Редактировать кредитный рейтинг" }),
-    ).toHaveTextContent("55%")
-    expect(screen.getByText("Дом и библиотека редких книг")).toBeVisible()
-    expect(screen.getByRole("heading", { name: "Имущество" })).toBeVisible()
-    expect(
-      screen.queryByRole("heading", { name: "Наличные и активы" }),
-    ).not.toBeInTheDocument()
     expect(
       screen.getByRole("button", { name: "Редактировать раздел Описание" }),
     ).toBeEnabled()
-    expect(
-      screen.getByRole("button", {
-        name: "Редактировать поле Карманные деньги",
-      }),
-    ).toBeEnabled()
-    const financeCards = screen.getAllByTestId("finance-card")
-    expect(financeCards).toHaveLength(4)
-    expect(
-      financeCards.map(
-        (card) => within(card).getByRole("heading", { level: 3 }).textContent,
-      ),
-    ).toEqual(["Карманные деньги", "Наличные", "Кредитный рейтинг", "Активы"])
-    expect(financeCards[2]).toHaveClass("col-span-2")
-    expect(financeCards[3]).toHaveClass("col-span-2", "min-h-32")
     expect(
       screen.queryByTestId("character-inventory-content"),
     ).not.toBeInTheDocument()
@@ -194,6 +156,29 @@ describe("CharacterSheetTabs", () => {
       "Ценное имущество",
       "Встречи со сверхъестественным",
     ])
+
+    await user.click(screen.getByRole("tab", { name: "Финансы" }))
+
+    expect(
+      screen.getByTestId("character-tab-finances-scroll-area"),
+    ).toHaveClass("h-full", "min-h-0")
+    expect(screen.getByRole("heading", { name: "Финансы" })).toBeVisible()
+    expect(screen.getByText("$10")).toBeVisible()
+    expect(screen.getByText("$45")).toBeVisible()
+    expect(screen.getByText("Дом и библиотека редких книг")).toBeVisible()
+    expect(
+      screen.getByRole("button", {
+        name: "Редактировать поле Карманные деньги",
+      }),
+    ).toBeEnabled()
+    const financeCards = screen.getAllByTestId("finance-card")
+    expect(financeCards).toHaveLength(3)
+    expect(
+      financeCards.map(
+        (card) => within(card).getByRole("heading", { level: 3 }).textContent,
+      ),
+    ).toEqual(["Карманные деньги", "Наличные", "Активы"])
+    expect(financeCards[2]).toHaveClass("col-span-2", "min-h-32")
   })
 
   it("edits biography and finances inline", async () => {
@@ -206,7 +191,6 @@ describe("CharacterSheetTabs", () => {
         characterId={character.id}
         finances={character.finances}
         notes={character.notes}
-        skills={character.skills}
       />,
     )
 
@@ -224,6 +208,8 @@ describe("CharacterSheetTabs", () => {
         personal_description: "Новое описание",
       }),
     )
+
+    await user.click(screen.getByRole("tab", { name: "Финансы" }))
 
     await user.click(
       screen.getByRole("button", {
@@ -263,7 +249,6 @@ describe("CharacterSheetTabs", () => {
             updated_at: "2026-01-01T00:00:00Z",
           },
         ]}
-        skills={character.skills}
       />,
     )
 
@@ -295,7 +280,6 @@ describe("CharacterSheetTabs", () => {
         characterId={character.id}
         finances={character.finances}
         notes={null}
-        skills={character.skills}
       />,
     )
 
@@ -348,7 +332,6 @@ describe("CharacterSheetTabs", () => {
         characterId={character.id}
         finances={character.finances}
         notes={null}
-        skills={character.skills}
       />,
     )
 
@@ -381,7 +364,6 @@ describe("CharacterSheetTabs", () => {
         characterId={character.id}
         finances={character.finances}
         notes={null}
-        skills={character.skills}
       />,
     )
 
@@ -422,7 +404,6 @@ describe("CharacterSheetTabs", () => {
         characterId={character.id}
         finances={character.finances}
         notes={[note]}
-        skills={character.skills}
       />,
     )
 
@@ -487,7 +468,6 @@ describe("CharacterSheetTabs", () => {
         characterId={character.id}
         finances={character.finances}
         notes={character.notes}
-        skills={character.skills}
       />,
     )
 
@@ -518,15 +498,22 @@ describe("CharacterSheetTabs", () => {
         characterId={character.id}
         finances={character.finances}
         notes={null}
-        skills={character.skills}
       />,
     )
 
     expect(screen.getAllByTestId("backstory-section")).toHaveLength(10)
-    const combinedTab = screen.getByRole("tab", {
-      name: "История и имущество",
+    const biographyTab = screen.getByRole("tab", {
+      name: "Биография",
     })
-    combinedTab.focus()
+    biographyTab.focus()
+    await user.keyboard("{ArrowRight}{Enter}")
+
+    expect(screen.getByRole("tab", { name: "Финансы" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    )
+    expect(screen.getByTestId("character-finances-content")).toBeVisible()
+
     await user.keyboard("{ArrowRight}{Enter}")
 
     expect(screen.getByRole("tab", { name: "Инвентарь" })).toHaveAttribute(
