@@ -45,10 +45,11 @@ export function InventoryItemCard({
         </div>
         <Button
           aria-label={`Редактировать предмет ${item.name}`}
+          className="border-[var(--ml-accent-brass-strong)]/70 bg-[color-mix(in_srgb,var(--ml-accent-brass-strong)_10%,transparent)] text-[var(--ml-accent-aged-gold)] hover:border-[var(--ml-accent-aged-gold)] hover:bg-[color-mix(in_srgb,var(--ml-accent-brass-strong)_20%,transparent)] hover:text-[var(--ml-ink-primary)]"
           onClick={onEdit}
           size="icon-sm"
           type="button"
-          variant="ghost"
+          variant="secondary"
         >
           <PencilLine aria-hidden="true" />
         </Button>
