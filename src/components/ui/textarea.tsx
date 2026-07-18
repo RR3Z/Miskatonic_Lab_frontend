@@ -1,4 +1,4 @@
-import type * as React from "react"
+import * as React from "react"
 
 import {
   type ControlVariantProps,
@@ -6,15 +6,22 @@ import {
 } from "@/components/ui/control-variants"
 import { cn } from "@/lib/utils/cn.util"
 
-function Textarea({
-  align = "start",
-  className,
-  size = "default",
-  variant = "default",
-  ...props
-}: React.ComponentProps<"textarea"> & ControlVariantProps) {
+const Textarea = React.forwardRef<
+  HTMLTextAreaElement,
+  React.ComponentProps<"textarea"> & ControlVariantProps
+>(function Textarea(
+  {
+    align = "start",
+    className,
+    size = "default",
+    variant = "default",
+    ...props
+  },
+  ref,
+) {
   return (
     <textarea
+      ref={ref}
       className={cn(
         "flex w-full resize-y",
         controlVariants({ align, size, variant }),
@@ -28,6 +35,6 @@ function Textarea({
       {...props}
     />
   )
-}
+})
 
 export { Textarea }
