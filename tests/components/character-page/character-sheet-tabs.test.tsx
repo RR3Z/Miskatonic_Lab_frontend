@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event"
 import { characterDetailFixture } from "@tests/fixtures/character-detail"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { CharacterSheetTabs } from "@/components/character/detail/tabs/character-sheet-tabs"
+import { characterNoteEditorHeightStorageKey } from "@/lib/utils/character-note-editor.util"
 
 const mutations = vi.hoisted(() => ({
   createBackstoryItem: { mutateAsync: vi.fn() },
@@ -45,6 +46,7 @@ vi.mock("@/lib/api/use-character-finances", () => ({
 
 describe("CharacterSheetTabs", () => {
   beforeEach(() => {
+    window.localStorage.clear()
     toastMocks.error.mockReset()
     toastMocks.success.mockReset()
     toastMocks.warning.mockReset()
@@ -299,6 +301,25 @@ describe("CharacterSheetTabs", () => {
 
     await user.click(screen.getByRole("tab", { name: "Заметки" }))
     await user.click(screen.getByRole("button", { name: "Добавить заметку" }))
+    expect(screen.getByRole("dialog", { name: "Новая заметка" })).toBeVisible()
+    expect(screen.getByLabelText("Заголовок")).toHaveClass("text-base")
+    expect(screen.getByLabelText("Текст")).toHaveClass(
+      "min-h-32",
+      "py-2",
+      "text-sm",
+      "leading-6",
+    )
+    expect(
+      screen.getByRole("button", { name: "Отмена" }).parentElement,
+    ).toHaveAttribute("data-slot", "dialog-footer")
+    expect(screen.getByRole("button", { name: "Отмена" })).toHaveClass(
+      "w-full",
+      "sm:flex-1",
+    )
+    expect(screen.getByRole("button", { name: "Добавить" })).toHaveClass(
+      "w-full",
+      "sm:flex-1",
+    )
     await user.click(screen.getByRole("button", { name: "Добавить" }))
 
     expect(toastMocks.error).toHaveBeenCalledWith("Укажите заголовок заметки", {
@@ -333,6 +354,7 @@ describe("CharacterSheetTabs", () => {
 
     await user.click(screen.getByRole("tab", { name: "Заметки" }))
     await user.click(screen.getByRole("button", { name: "Добавить заметку" }))
+    expect(screen.getByRole("dialog", { name: "Новая заметка" })).toBeVisible()
     await user.type(screen.getByLabelText("Заголовок"), "  Следующий шаг  ")
     await user.type(
       screen.getByLabelText("Текст"),
@@ -349,7 +371,7 @@ describe("CharacterSheetTabs", () => {
     ).not.toBeInTheDocument()
   })
 
-  it("keeps the add-note action visually distinct and keyboard focusable", async () => {
+  it("uses the compact sheet action for add-note and keeps it keyboard focusable", async () => {
     const user = userEvent.setup()
     const character = characterDetailFixture()
 
@@ -365,12 +387,13 @@ describe("CharacterSheetTabs", () => {
 
     await user.click(screen.getByRole("tab", { name: "Заметки" }))
     const addNote = screen.getByRole("button", { name: "Добавить заметку" })
-    expect(addNote).toHaveAttribute("data-variant", "default")
+    expect(addNote).toHaveAttribute("data-variant", "secondary")
     expect(addNote).toHaveClass(
-      "bg-[var(--ml-ink-on-paper)]",
-      "text-[var(--ml-surface-paper)]",
+      "border-[var(--ml-accent-brass-strong)]/70",
+      "bg-[color-mix(in_srgb,var(--ml-accent-brass-strong)_10%,transparent)]",
       "focus-visible:ring-3",
     )
+    expect(addNote).toHaveAttribute("data-size", "sm")
 
     addNote.focus()
     expect(addNote).toHaveFocus()
@@ -387,6 +410,11 @@ describe("CharacterSheetTabs", () => {
       title: "Старый заголовок",
       updated_at: "2026-01-01T00:00:00Z",
     }
+    const editorHeightStorageKey = characterNoteEditorHeightStorageKey(
+      character.id,
+      note.id,
+    )
+    window.localStorage.setItem(editorHeightStorageKey, "144")
 
     render(
       <CharacterSheetTabs
@@ -399,6 +427,22 @@ describe("CharacterSheetTabs", () => {
     )
 
     await user.click(screen.getByRole("tab", { name: "Заметки" }))
+    await user.click(
+      screen.getByRole("button", {
+        name: "Редактировать текст заметки Старый заголовок",
+      }),
+    )
+    const body = screen.getByRole("textbox", {
+      name: "Редактировать текст заметки Старый заголовок",
+    })
+    const resizableBody = body.closest('[data-slot="resizable-textarea"]')
+    expect(resizableBody).toHaveStyle({ height: "144px" })
+    expect(
+      resizableBody?.querySelector('[data-slot="scroll-area"]'),
+    ).toBeInTheDocument()
+    expect(body).toHaveClass("resize-none", "overflow-hidden")
+
+    await user.keyboard("{Escape}")
     await user.click(
       screen.getByRole("button", {
         name: "Редактировать заголовок заметки Старый заголовок",
@@ -417,9 +461,11 @@ describe("CharacterSheetTabs", () => {
       }),
     )
 
-    await user.click(
-      screen.getByRole("button", { name: "Удалить заметку Старый заголовок" }),
-    )
+    const deleteNote = screen.getByRole("button", {
+      name: "Удалить заметку Старый заголовок",
+    })
+    expect(deleteNote).toHaveAttribute("data-variant", "destructive")
+    await user.click(deleteNote)
     const dialog = screen.getByRole("alertdialog", {
       name: "Удалить заметку?",
     })
@@ -428,6 +474,7 @@ describe("CharacterSheetTabs", () => {
     await waitFor(() =>
       expect(mutations.deleteNote.mutateAsync).toHaveBeenCalledOnce(),
     )
+    expect(window.localStorage.getItem(editorHeightStorageKey)).toBeNull()
   })
 
   it("creates a fixed history section from its text area", async () => {
