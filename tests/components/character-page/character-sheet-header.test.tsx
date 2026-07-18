@@ -224,6 +224,11 @@ describe("CharacterSheetHeader", () => {
       name: "Редактировать характеристики",
     })
     expect(editButton).toHaveAttribute("title", "Изменить")
+    expect(editButton).toHaveClass(
+      "size-6",
+      "border-[var(--ml-accent-brass-strong)]/70",
+      "text-[var(--ml-accent-brass-strong)]",
+    )
     await user.click(editButton)
 
     const strengthInput = screen.getByRole("textbox", { name: "Сила" })
@@ -283,9 +288,24 @@ describe("CharacterSheetHeader", () => {
     })
     expect(strengthCard).toBeDisabled()
     expect(constitutionCard).not.toBeDisabled()
+    expect(strengthCard).toHaveTextContent("53")
+    expect(strengthCard).toHaveTextContent("26")
+    expect(strengthCard).toHaveTextContent("10")
+    expect(within(strengthCard).getByTestId("dice-roll-progress")).toBeVisible()
+    expect(
+      within(strengthCard).getByRole("status", {
+        name: "Выполняется бросок",
+      }),
+    ).toBeVisible()
+    expect(
+      within(constitutionCard).queryByTestId("dice-roll-progress"),
+    ).not.toBeInTheDocument()
     resolveRoll({ result: 42 })
 
     await waitFor(() => expect(strengthCard).not.toBeDisabled())
+    expect(
+      within(strengthCard).queryByTestId("dice-roll-progress"),
+    ).not.toBeInTheDocument()
     expect(toastMocks).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({
