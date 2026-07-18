@@ -28,6 +28,18 @@ vi.mock("@/lib/api/use-character-notes", () => ({
   useUpdateCharacterNote: () => ({ mutateAsync: vi.fn() }),
 }))
 
+vi.mock("@/lib/api/use-character-inventory", () => ({
+  useCreateCharacterInventoryItem: () => ({
+    isPending: false,
+    mutateAsync: vi.fn(),
+  }),
+  useDeleteCharacterInventoryItem: () => ({ mutateAsync: vi.fn() }),
+  useUpdateCharacterInventoryItem: () => ({
+    isPending: false,
+    mutateAsync: vi.fn(),
+  }),
+}))
+
 vi.mock("@/lib/api/use-character-backstory", () => ({
   useCreateCharacterBackstoryItem: () => ({ mutateAsync: vi.fn() }),
   useDeleteCharacterBackstory: () => ({ mutateAsync: vi.fn() }),

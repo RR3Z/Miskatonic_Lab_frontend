@@ -62,6 +62,7 @@ export function characterDetailFixture(
       updated_at: null,
     },
     id,
+    inventory: [],
     luck: {
       character_id: id,
       created_at: null,

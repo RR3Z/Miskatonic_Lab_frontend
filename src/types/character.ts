@@ -157,6 +157,17 @@ export type CharacterNote = CharacterRecordMeta & {
   body: string
 }
 
+export type CharacterInventoryItem = {
+  id: string
+  character_id: string
+  name: string
+  quantity: number | null
+  category: string | null
+  description: string | null
+  created_at: string
+  updated_at: string
+}
+
 export type CharacterDetail = {
   id: string
   user_id: string
@@ -179,6 +190,7 @@ export type CharacterDetail = {
   backstory: CharacterBackstory
   finances: CharacterFinances
   notes: CharacterNote[] | null
+  inventory: CharacterInventoryItem[] | null
 }
 
 export type PortraitKind = "male" | "female"

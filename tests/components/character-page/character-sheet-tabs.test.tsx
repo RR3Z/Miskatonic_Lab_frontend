@@ -31,6 +31,18 @@ vi.mock("@/lib/api/use-character-notes", () => ({
   useUpdateCharacterNote: () => mutations.updateNote,
 }))
 
+vi.mock("@/lib/api/use-character-inventory", () => ({
+  useCreateCharacterInventoryItem: () => ({
+    isPending: false,
+    mutateAsync: vi.fn(),
+  }),
+  useDeleteCharacterInventoryItem: () => ({ mutateAsync: vi.fn() }),
+  useUpdateCharacterInventoryItem: () => ({
+    isPending: false,
+    mutateAsync: vi.fn(),
+  }),
+}))
+
 vi.mock("@/lib/api/use-character-backstory", () => ({
   useCreateCharacterBackstoryItem: () => mutations.createBackstoryItem,
   useDeleteCharacterBackstory: () => mutations.deleteBackstory,
@@ -230,7 +242,7 @@ describe("CharacterSheetTabs", () => {
     )
   })
 
-  it("switches between inventory, notes, and the backend placeholder", async () => {
+  it("switches between inventory, notes, and the weapons placeholder", async () => {
     const user = userEvent.setup()
     const character = characterDetailFixture()
 
@@ -254,7 +266,7 @@ describe("CharacterSheetTabs", () => {
 
     await user.click(screen.getByRole("tab", { name: "Инвентарь" }))
     expect(screen.getByTestId("character-inventory-content")).toHaveTextContent(
-      "Сохранение инвентаря пока не поддерживается Backend-моделью персонажа.",
+      "Предметов пока нет.",
     )
 
     await user.click(screen.getByRole("tab", { name: "Заметки" }))

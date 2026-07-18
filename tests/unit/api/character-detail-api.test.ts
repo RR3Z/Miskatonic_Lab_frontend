@@ -14,6 +14,11 @@ import {
   updateCharacterFinances,
 } from "@/lib/api/character-finances"
 import {
+  createCharacterInventoryItem,
+  deleteCharacterInventoryItem,
+  updateCharacterInventoryItem,
+} from "@/lib/api/character-inventory"
+import {
   deleteCharacterNote,
   updateCharacterNote,
 } from "@/lib/api/character-notes"
@@ -50,6 +55,41 @@ describe("character detail write API", () => {
     )
     expect(deleteRequest).toHaveBeenCalledWith(
       "api/characters/character-1/notes/note-1/",
+    )
+  })
+
+  it("creates, updates, and deletes an inventory item", async () => {
+    const item = { id: "item-1", name: "Flashlight", quantity: 2 }
+    const postJson = vi.fn(async () => item)
+    const putJson = vi.fn(async () => item)
+    const post = vi.fn(() => ({ json: postJson }))
+    const put = vi.fn(() => ({ json: putJson }))
+    const deleteRequest = vi.fn(async () => undefined)
+    const api = { delete: deleteRequest, post, put } as unknown as KyInstance
+    const input = {
+      category: "Gear",
+      description: "Bright",
+      name: item.name,
+      quantity: 2,
+    }
+
+    await expect(
+      createCharacterInventoryItem(api, "character-1", input),
+    ).resolves.toBe(item)
+    await expect(
+      updateCharacterInventoryItem(api, "character-1", item.id, input),
+    ).resolves.toBe(item)
+    await deleteCharacterInventoryItem(api, "character-1", item.id)
+
+    expect(post).toHaveBeenCalledWith("api/characters/character-1/inventory/", {
+      json: input,
+    })
+    expect(put).toHaveBeenCalledWith(
+      "api/characters/character-1/inventory/item-1/",
+      { json: input },
+    )
+    expect(deleteRequest).toHaveBeenCalledWith(
+      "api/characters/character-1/inventory/item-1/",
     )
   })
 

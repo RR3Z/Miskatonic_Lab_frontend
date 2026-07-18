@@ -15,6 +15,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import type {
   CharacterBackstory,
   CharacterFinances,
+  CharacterInventoryItem,
   CharacterNote,
 } from "@/types/character"
 
@@ -22,11 +23,13 @@ export function CharacterSheetTabs({
   backstory,
   characterId,
   finances,
+  inventory = null,
   notes,
 }: {
   backstory: CharacterBackstory
   characterId: string
   finances: CharacterFinances
+  inventory?: CharacterInventoryItem[] | null
   notes: CharacterNote[] | null
 }) {
   return (
@@ -61,7 +64,7 @@ export function CharacterSheetTabs({
         </CharacterSheetTooltipProvider>
       </ScrollableTabsContent>
       <ScrollableTabsContent value="inventory">
-        <InventoryTab />
+        <InventoryTab characterId={characterId} inventory={inventory} />
       </ScrollableTabsContent>
       <ScrollableTabsContent value="notes">
         <NotesTab characterId={characterId} notes={notes} />

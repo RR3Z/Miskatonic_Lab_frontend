@@ -15,6 +15,7 @@ export function CharacterSectionsPanel({
         backstory={character.backstory}
         characterId={character.id}
         finances={character.finances}
+        inventory={character.inventory}
         notes={character.notes}
       />
     </div>
