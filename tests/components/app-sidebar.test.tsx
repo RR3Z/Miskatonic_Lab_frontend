@@ -104,8 +104,10 @@ describe("AppSidebar", () => {
       "data-active:bg-[var(--sidebar-active)]",
       "data-active:text-[var(--sidebar-active-foreground)]",
     )
-    expect(screen.getByRole("button", { name: /Справочник/i })).toBeDisabled()
-    expect(screen.getByText("WIP")).toBeVisible()
+    expect(screen.getByRole("link", { name: /Справочник/i })).toHaveAttribute(
+      "href",
+      "/guide",
+    )
     expect(
       screen.getByRole("button", { name: "Список персонажей" }),
     ).toBeVisible()
