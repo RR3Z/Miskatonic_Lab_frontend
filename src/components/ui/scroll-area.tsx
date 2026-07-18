@@ -7,8 +7,11 @@ import { cn } from "@/lib/utils/cn.util"
 function ScrollArea({
   children,
   className,
+  scrollbarKeepMounted = false,
   ...props
-}: ScrollAreaPrimitive.Root.Props) {
+}: ScrollAreaPrimitive.Root.Props & {
+  scrollbarKeepMounted?: boolean
+}) {
   return (
     <ScrollAreaPrimitive.Root
       className={cn("relative overflow-hidden", className)}
@@ -23,7 +26,7 @@ function ScrollArea({
           {children}
         </ScrollAreaPrimitive.Content>
       </ScrollAreaPrimitive.Viewport>
-      <ScrollBar />
+      <ScrollBar keepMounted={scrollbarKeepMounted} />
       <ScrollAreaPrimitive.Corner />
     </ScrollAreaPrimitive.Root>
   )
