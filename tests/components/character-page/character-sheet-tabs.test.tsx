@@ -1,9 +1,8 @@
 import { render, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
+import { characterDetailFixture } from "@tests/fixtures/character-detail"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-
 import { CharacterSheetTabs } from "@/components/character/detail/tabs/character-sheet-tabs"
-import { characterDetailFixture } from "../fixtures/character-detail"
 
 const mutations = vi.hoisted(() => ({
   createBackstoryItem: { mutateAsync: vi.fn() },

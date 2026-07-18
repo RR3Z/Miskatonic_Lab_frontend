@@ -1,9 +1,8 @@
+import { server } from "@tests/mocks/server"
 import { HttpResponse, http } from "msw"
 import { describe, expect, it, vi } from "vitest"
-
 import { createApiClient } from "@/lib/api/client"
 import { getApiErrorCode } from "@/lib/api/errors"
-import { server } from "../mocks/server"
 
 describe("getApiErrorCode", () => {
   it("reads a backend error code from parsed HTTP error data", async () => {

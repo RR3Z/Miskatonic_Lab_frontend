@@ -1,10 +1,13 @@
-import { fireEvent, render, screen } from "@testing-library/react"
+import { fireEvent, screen } from "@testing-library/react"
+import {
+  getSidebarTrigger,
+  renderWithSiteShell,
+} from "@tests/helpers/render-with-site-shell"
+import { setTestViewport } from "@tests/utils/viewport.util"
 import type * as React from "react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { LandingPage } from "@/components/landing/landing-page"
-import { SiteShell } from "@/components/layout/site-shell"
-import { TooltipProvider } from "@/components/ui/tooltip"
 
 const clerkState = vi.hoisted(() => ({
   signedIn: false,
@@ -33,34 +36,17 @@ vi.mock("next/navigation", () => ({
 }))
 
 function renderLandingPage() {
-  return render(
-    <TooltipProvider>
-      <SiteShell>
-        <LandingPage />
-      </SiteShell>
-    </TooltipProvider>,
-  )
+  return renderWithSiteShell(<LandingPage />)
 }
 
 function openSidebar() {
-  const trigger = document.querySelector<HTMLButtonElement>(
-    '[data-sidebar="trigger"]',
-  )
-
-  if (!trigger) {
-    throw new Error("Sidebar trigger was not rendered")
-  }
-
-  fireEvent.click(trigger)
+  fireEvent.click(getSidebarTrigger())
 }
 
 describe("LandingPage", () => {
   beforeEach(() => {
     clerkState.signedIn = false
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: 1280,
-    })
+    setTestViewport(1280)
   })
 
   it("renders signed-out case-file actions", () => {

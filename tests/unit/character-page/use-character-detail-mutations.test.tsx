@@ -1,11 +1,12 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { act, renderHook, waitFor } from "@testing-library/react"
-import type { ReactNode } from "react"
+import { characterDetailFixture } from "@tests/fixtures/character-detail"
+import {
+  createQueryClientWrapper,
+  createTestQueryClient,
+} from "@tests/helpers/react-query"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-
 import { characterQueryKeys } from "@/lib/api/character-query-keys"
 import type { CharacterDetail, CharacterHealth } from "@/types/character"
-import { characterDetailFixture } from "../fixtures/character-detail"
 
 const authState = vi.hoisted(() => ({
   getToken: vi.fn(async () => "test-token"),
@@ -49,20 +50,6 @@ import { useUpdateCharacterProfile } from "@/lib/api/use-character-profile"
 import { useUpdateCharacterResource } from "@/lib/api/use-character-resources"
 import { useUpdateCharacterCharacteristics } from "@/lib/api/use-character-statistics"
 
-function createQueryClient() {
-  return new QueryClient({
-    defaultOptions: { mutations: { retry: false }, queries: { retry: false } },
-  })
-}
-
-function wrapper(queryClient: QueryClient) {
-  return function QueryWrapper({ children }: { children: ReactNode }) {
-    return (
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    )
-  }
-}
-
 describe("character detail mutation cache", () => {
   beforeEach(() => {
     authState.userId = "user-a"
@@ -73,7 +60,7 @@ describe("character detail mutation cache", () => {
   })
 
   it("merges only the submitted patch into the active user's profile cache", async () => {
-    const queryClient = createQueryClient()
+    const queryClient = createTestQueryClient()
     const activeKey = characterQueryKeys.detail("user-a", "character-1")
     const foreignKey = characterQueryKeys.detail("user-b", "character-1")
     const original = characterDetailFixture()
@@ -87,7 +74,7 @@ describe("character detail mutation cache", () => {
     })
     const { result } = renderHook(
       () => useUpdateCharacterProfile("character-1"),
-      { wrapper: wrapper(queryClient) },
+      { wrapper: createQueryClientWrapper(queryClient) },
     )
 
     await act(() =>
@@ -109,7 +96,7 @@ describe("character detail mutation cache", () => {
   })
 
   it("serializes rapid profile patches for the same character", async () => {
-    const queryClient = createQueryClient()
+    const queryClient = createTestQueryClient()
     const queryKey = characterQueryKeys.detail("user-a", "character-1")
     const original = characterDetailFixture()
     queryClient.setQueryData(queryKey, original)
@@ -130,7 +117,7 @@ describe("character detail mutation cache", () => {
       )
     const { result } = renderHook(
       () => useUpdateCharacterProfile("character-1"),
-      { wrapper: wrapper(queryClient) },
+      { wrapper: createQueryClientWrapper(queryClient) },
     )
     let firstSave: Promise<unknown>
     let secondSave: Promise<unknown>
@@ -174,7 +161,7 @@ describe("character detail mutation cache", () => {
   })
 
   it("patches the matching resource and leaves cache unchanged on failure", async () => {
-    const queryClient = createQueryClient()
+    const queryClient = createTestQueryClient()
     const queryKey = characterQueryKeys.detail("user-a", "character-1")
     const original = characterDetailFixture()
     queryClient.setQueryData(queryKey, original)
@@ -189,7 +176,7 @@ describe("character detail mutation cache", () => {
     })
     const { result } = renderHook(
       () => useUpdateCharacterResource("character-1"),
-      { wrapper: wrapper(queryClient) },
+      { wrapper: createQueryClientWrapper(queryClient) },
     )
 
     await act(() =>
@@ -224,7 +211,7 @@ describe("character detail mutation cache", () => {
   })
 
   it("refreshes derived stats from the backend after characteristics change", async () => {
-    const queryClient = createQueryClient()
+    const queryClient = createTestQueryClient()
     const queryKey = characterQueryKeys.detail("user-a", "character-1")
     const original = characterDetailFixture()
     const characteristics = {
@@ -250,7 +237,7 @@ describe("character detail mutation cache", () => {
 
     const { result } = renderHook(
       () => useUpdateCharacterCharacteristics("character-1"),
-      { wrapper: wrapper(queryClient) },
+      { wrapper: createQueryClientWrapper(queryClient) },
     )
 
     await act(() =>

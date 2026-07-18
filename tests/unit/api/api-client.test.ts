@@ -1,8 +1,7 @@
+import { server } from "@tests/mocks/server"
 import { HttpResponse, http } from "msw"
 import { describe, expect, it, vi } from "vitest"
-
 import { createApiClient } from "@/lib/api/client"
-import { server } from "../mocks/server"
 
 describe("API client authentication", () => {
   it("adds the current Clerk token as a Bearer authorization header", async () => {

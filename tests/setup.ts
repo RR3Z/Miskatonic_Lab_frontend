@@ -1,7 +1,10 @@
 import "@testing-library/jest-dom/vitest"
 import { cleanup } from "@testing-library/react"
+import {
+  DEFAULT_TEST_VIEWPORT_WIDTH,
+  setTestViewport,
+} from "@tests/utils/viewport.util"
 import { afterAll, afterEach, beforeAll, vi } from "vitest"
-
 import { server } from "./mocks/server"
 
 function matchesMediaQuery(query: string) {
@@ -71,6 +74,7 @@ beforeAll(() => {
 afterEach(() => {
   cleanup()
   server.resetHandlers()
+  setTestViewport(DEFAULT_TEST_VIEWPORT_WIDTH)
 })
 
 afterAll(() => {

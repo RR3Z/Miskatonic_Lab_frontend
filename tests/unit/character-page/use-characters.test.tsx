@@ -1,6 +1,8 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { act, renderHook, waitFor } from "@testing-library/react"
-import type { ReactNode } from "react"
+import {
+  createQueryClientWrapper,
+  createTestQueryClient,
+} from "@tests/helpers/react-query"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import type { CreateCharacterFormDto } from "@/dto/character/create-character.dto"
@@ -176,22 +178,6 @@ function characterDetail(id: string): CharacterDetail {
   }
 }
 
-function createQueryClient() {
-  return new QueryClient({
-    defaultOptions: {
-      queries: { retry: false, staleTime: 30_000 },
-    },
-  })
-}
-
-function wrapper(queryClient: QueryClient) {
-  return function QueryWrapper({ children }: { children: ReactNode }) {
-    return (
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    )
-  }
-}
-
 describe("character query hooks", () => {
   beforeEach(() => {
     window.localStorage.clear()
@@ -209,9 +195,9 @@ describe("character query hooks", () => {
     apiMocks.fetchCharacters.mockImplementation(async () => [
       character(authState.userId ?? "anonymous"),
     ])
-    const queryClient = createQueryClient()
+    const queryClient = createTestQueryClient({ staleTime: 30_000 })
     const { result, rerender } = renderHook(() => useCharacters(), {
-      wrapper: wrapper(queryClient),
+      wrapper: createQueryClientWrapper(queryClient),
     })
 
     await waitFor(() => expect(result.current.data?.[0]?.id).toBe("user-a"))
@@ -231,9 +217,9 @@ describe("character query hooks", () => {
     apiMocks.fetchCharacter.mockImplementation(
       async (_api: unknown, id: string) => characterDetail(id),
     )
-    const queryClient = createQueryClient()
+    const queryClient = createTestQueryClient({ staleTime: 30_000 })
     const { result } = renderHook(() => useCharacter("character-1"), {
-      wrapper: wrapper(queryClient),
+      wrapper: createQueryClientWrapper(queryClient),
     })
 
     await waitFor(() => expect(result.current.data?.id).toBe("character-1"))
@@ -248,7 +234,7 @@ describe("character query hooks", () => {
     apiMocks.deleteCharacter.mockResolvedValue(undefined)
     const layoutKey = characterSheetLayoutStorageKey("character-1")
     window.localStorage.setItem(layoutKey, '{"character-core":42}')
-    const queryClient = createQueryClient()
+    const queryClient = createTestQueryClient({ staleTime: 30_000 })
     queryClient.setQueryData(characterQueryKeys.list("user-a"), [
       character("character-1"),
       character("character-2"),
@@ -258,7 +244,7 @@ describe("character query hooks", () => {
     ])
     const invalidateQueries = vi.spyOn(queryClient, "invalidateQueries")
     const { result } = renderHook(() => useDeleteCharacter(), {
-      wrapper: wrapper(queryClient),
+      wrapper: createQueryClientWrapper(queryClient),
     })
 
     await act(() => result.current.mutateAsync("character-1"))
@@ -279,7 +265,7 @@ describe("character query hooks", () => {
     apiMocks.deleteCharacter.mockRejectedValue(new Error("failed"))
     const layoutKey = characterSheetLayoutStorageKey("character-1")
     window.localStorage.setItem(layoutKey, '{"character-core":42}')
-    const queryClient = createQueryClient()
+    const queryClient = createTestQueryClient({ staleTime: 30_000 })
     const cachedCharacters = [
       character("character-1"),
       character("character-2"),
@@ -290,7 +276,7 @@ describe("character query hooks", () => {
     )
     const invalidateQueries = vi.spyOn(queryClient, "invalidateQueries")
     const { result } = renderHook(() => useDeleteCharacter(), {
-      wrapper: wrapper(queryClient),
+      wrapper: createQueryClientWrapper(queryClient),
     })
 
     await expect(
@@ -309,10 +295,10 @@ describe("character query hooks", () => {
       character: createdCharacter("character-1"),
       portraitStatus: "not_requested",
     })
-    const queryClient = createQueryClient()
+    const queryClient = createTestQueryClient({ staleTime: 30_000 })
     const invalidateQueries = vi.spyOn(queryClient, "invalidateQueries")
     const { result } = renderHook(() => useCreateCharacter(), {
-      wrapper: wrapper(queryClient),
+      wrapper: createQueryClientWrapper(queryClient),
     })
 
     await act(() => result.current.mutateAsync(createInput))
@@ -332,12 +318,12 @@ describe("character query hooks", () => {
       updated_at: "2026-01-01T00:00:00Z",
     }
     apiMocks.createCharacterNote.mockResolvedValue(note)
-    const queryClient = createQueryClient()
+    const queryClient = createTestQueryClient({ staleTime: 30_000 })
     const queryKey = characterQueryKeys.detail("user-a", "character-1")
     queryClient.setQueryData(queryKey, characterDetail("character-1"))
     const invalidateQueries = vi.spyOn(queryClient, "invalidateQueries")
     const { result } = renderHook(() => useCreateCharacterNote("character-1"), {
-      wrapper: wrapper(queryClient),
+      wrapper: createQueryClientWrapper(queryClient),
     })
 
     await act(() =>
@@ -360,16 +346,16 @@ describe("character query hooks", () => {
 
   it("blocks character mutations after the session disappears", async () => {
     authState.userId = null
-    const queryClient = createQueryClient()
+    const queryClient = createTestQueryClient({ staleTime: 30_000 })
     const deleteHook = renderHook(() => useDeleteCharacter(), {
-      wrapper: wrapper(queryClient),
+      wrapper: createQueryClientWrapper(queryClient),
     })
     const createHook = renderHook(() => useCreateCharacter(), {
-      wrapper: wrapper(queryClient),
+      wrapper: createQueryClientWrapper(queryClient),
     })
     const createNoteHook = renderHook(
       () => useCreateCharacterNote("character-1"),
-      { wrapper: wrapper(queryClient) },
+      { wrapper: createQueryClientWrapper(queryClient) },
     )
 
     await expect(

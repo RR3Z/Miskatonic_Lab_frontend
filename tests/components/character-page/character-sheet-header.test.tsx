@@ -6,10 +6,10 @@ import {
   within,
 } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
+import { characterDetailFixture } from "@tests/fixtures/character-detail"
+import { setTestViewport } from "@tests/utils/viewport.util"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-
 import { CharacterSheetHeader } from "@/components/character/detail/header/character-sheet-header"
-import { characterDetailFixture } from "../fixtures/character-detail"
 
 const mutations = vi.hoisted(() => ({
   deleteCharacteristics: { mutateAsync: vi.fn() },
@@ -48,11 +48,7 @@ vi.mock("@/lib/api/use-character-resources", () => ({
 
 describe("CharacterSheetHeader", () => {
   beforeEach(() => {
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: 1024,
-      writable: true,
-    })
+    setTestViewport(1024)
     diceMutation.mutateAsync.mockReset()
     diceMutation.mutateAsync.mockResolvedValue({ result: 42 })
     toastMocks.mockReset()
@@ -201,11 +197,7 @@ describe("CharacterSheetHeader", () => {
 
   it("shows desktop characteristic thresholds and saves all values from the editor dialog", async () => {
     const user = userEvent.setup()
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: 1280,
-      writable: true,
-    })
+    setTestViewport(1280)
     const base = characterDetailFixture()
     const character = characterDetailFixture({
       characteristics: {
@@ -256,11 +248,7 @@ describe("CharacterSheetHeader", () => {
 
   it("rolls only the clicked characteristic and sends its result to the dice toaster", async () => {
     const user = userEvent.setup()
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: 1280,
-      writable: true,
-    })
+    setTestViewport(1280)
     const base = characterDetailFixture()
     const character = characterDetailFixture({
       characteristics: {
@@ -313,11 +301,7 @@ describe("CharacterSheetHeader", () => {
 
   it("selects bonus and penalty d100 modes from the characteristic menu", async () => {
     const user = userEvent.setup()
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: 1280,
-      writable: true,
-    })
+    setTestViewport(1280)
     const base = characterDetailFixture()
     render(
       <CharacterSheetHeader
@@ -471,11 +455,7 @@ describe("CharacterSheetHeader", () => {
 
   it("does not request a roll for an unfilled characteristic", async () => {
     const user = userEvent.setup()
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: 1280,
-      writable: true,
-    })
+    setTestViewport(1280)
     render(<CharacterSheetHeader character={characterDetailFixture()} />)
 
     const emptyStrengthCard = screen.getByTestId("characteristic-card-СИЛ")
@@ -489,11 +469,7 @@ describe("CharacterSheetHeader", () => {
 
   it("unlocks the card and uses the normal error toast when a roll fails", async () => {
     const user = userEvent.setup()
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: 1280,
-      writable: true,
-    })
+    setTestViewport(1280)
     diceMutation.mutateAsync.mockRejectedValueOnce(new Error("network failed"))
     const base = characterDetailFixture()
     const character = characterDetailFixture({
@@ -523,11 +499,7 @@ describe("CharacterSheetHeader", () => {
 
   it("keeps only digits in characteristic editor fields", async () => {
     const user = userEvent.setup()
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: 1280,
-      writable: true,
-    })
+    setTestViewport(1280)
     render(<CharacterSheetHeader character={characterDetailFixture()} />)
 
     await user.click(
@@ -551,11 +523,7 @@ describe("CharacterSheetHeader", () => {
 
   it("discards editor changes after cancellation", async () => {
     const user = userEvent.setup()
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: 1280,
-      writable: true,
-    })
+    setTestViewport(1280)
     const base = characterDetailFixture()
     const character = characterDetailFixture({
       characteristics: { ...base.characteristics, strength: 50 },

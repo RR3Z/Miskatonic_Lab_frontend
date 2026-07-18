@@ -1,11 +1,14 @@
-import { render, screen, waitFor } from "@testing-library/react"
+import { screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
+import {
+  getSidebarTrigger,
+  renderWithSiteShell,
+} from "@tests/helpers/render-with-site-shell"
+import { setTestViewport } from "@tests/utils/viewport.util"
 import type * as React from "react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { getMobileUserDisplayName } from "@/components/auth/mobile-user-controls.utils"
-import { SiteShell } from "@/components/layout/site-shell"
-import { TooltipProvider } from "@/components/ui/tooltip"
 
 const clerkState = vi.hoisted(() => ({
   loaded: true,
@@ -47,25 +50,7 @@ vi.mock("@clerk/nextjs", () => ({
 }))
 
 function renderAppShell() {
-  return render(
-    <TooltipProvider>
-      <SiteShell>
-        <div data-testid="page-content" />
-      </SiteShell>
-    </TooltipProvider>,
-  )
-}
-
-function getSidebarTrigger(container: HTMLElement) {
-  const trigger = container.querySelector<HTMLButtonElement>(
-    '[data-sidebar="trigger"]',
-  )
-
-  if (!trigger) {
-    throw new Error("Sidebar trigger was not rendered")
-  }
-
-  return trigger
+  return renderWithSiteShell(<div data-testid="page-content" />)
 }
 
 describe("AppSidebar", () => {
@@ -75,10 +60,7 @@ describe("AppSidebar", () => {
     clerkState.pathname = "/"
     clerkState.signInProps.mockClear()
     clerkState.signedIn = false
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: 1280,
-    })
+    setTestViewport(1280)
   })
 
   it("renders a persistent desktop rail and expands over the content", async () => {
@@ -152,10 +134,7 @@ describe("AppSidebar", () => {
   })
 
   it("opens navigation as a Sheet on mobile and closes after navigation", async () => {
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: 375,
-    })
+    setTestViewport(375)
     const user = userEvent.setup()
     const { container } = renderAppShell()
 
@@ -180,10 +159,7 @@ describe("AppSidebar", () => {
   it.each([768, 1280])(
     "keeps the icon rail visible at %ipx and expands without a dialog",
     async (width) => {
-      Object.defineProperty(window, "innerWidth", {
-        configurable: true,
-        value: width,
-      })
+      setTestViewport(width)
       const user = userEvent.setup()
       const { container } = renderAppShell()
       const sidebar = container.querySelector(

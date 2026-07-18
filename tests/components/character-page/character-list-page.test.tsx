@@ -1,12 +1,11 @@
 import { screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
+import { createApiCharacter } from "@tests/fixtures/character"
+import { renderWithQuery } from "@tests/helpers/render-with-query"
+import { server } from "@tests/mocks/server"
 import { delay, HttpResponse, http } from "msw"
 import { describe, expect, it, vi } from "vitest"
-
 import { CharacterListPage } from "@/components/character/character-list-page"
-import { createApiCharacter } from "../fixtures/character"
-import { renderWithQuery } from "../helpers/render-with-query"
-import { server } from "../mocks/server"
 
 const mocks = vi.hoisted(() => ({
   getToken: vi.fn(async () => "test-token"),

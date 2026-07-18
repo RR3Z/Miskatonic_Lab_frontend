@@ -1,8 +1,8 @@
 import { render, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
+import { characterDetailFixture } from "@tests/fixtures/character-detail"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import type { CharacterDetail } from "@/types/character"
-import { characterDetailFixture } from "../fixtures/character-detail"
 
 const queryState = vi.hoisted(() => ({
   data: undefined as CharacterDetail | undefined,

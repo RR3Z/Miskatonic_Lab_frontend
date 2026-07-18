@@ -1,6 +1,8 @@
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { act, renderHook } from "@testing-library/react"
-import type { ReactNode } from "react"
+import {
+  createQueryClientWrapper,
+  createTestQueryClient,
+} from "@tests/helpers/react-query"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 const authState = vi.hoisted(() => ({
@@ -22,20 +24,6 @@ vi.mock("@/lib/api/character-dice-rolls", () => ({
 
 import { useMakeCharacterDiceRoll } from "@/lib/api/use-character-dice-rolls"
 
-function createQueryClient() {
-  return new QueryClient({
-    defaultOptions: { mutations: { retry: false }, queries: { retry: false } },
-  })
-}
-
-function wrapper(queryClient: QueryClient) {
-  return function QueryWrapper({ children }: { children: ReactNode }) {
-    return (
-      <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-    )
-  }
-}
-
 describe("useMakeCharacterDiceRoll", () => {
   beforeEach(() => {
     authState.userId = "user-a"
@@ -43,11 +31,11 @@ describe("useMakeCharacterDiceRoll", () => {
   })
 
   it("makes the requested roll for the selected character", async () => {
-    const queryClient = createQueryClient()
+    const queryClient = createTestQueryClient()
     apiMocks.makeCharacterDiceRoll.mockResolvedValue({ result: 42 })
     const { result } = renderHook(
       () => useMakeCharacterDiceRoll("character-1"),
-      { wrapper: wrapper(queryClient) },
+      { wrapper: createQueryClientWrapper(queryClient) },
     )
 
     await act(() => result.current.mutateAsync("+1d4"))
@@ -60,11 +48,11 @@ describe("useMakeCharacterDiceRoll", () => {
   })
 
   it("passes selected d100 mode to the API", async () => {
-    const queryClient = createQueryClient()
+    const queryClient = createTestQueryClient()
     apiMocks.makeCharacterDiceRoll.mockResolvedValue({ result: 42 })
     const { result } = renderHook(
       () => useMakeCharacterDiceRoll("character-1"),
-      { wrapper: wrapper(queryClient) },
+      { wrapper: createQueryClientWrapper(queryClient) },
     )
 
     await act(() =>

@@ -1,12 +1,11 @@
 import { screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
+import { renderWithQuery } from "@tests/helpers/render-with-query"
+import { server } from "@tests/mocks/server"
 import { HttpResponse, http } from "msw"
 import { useState } from "react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-
 import { CreateCharacterModal } from "@/components/character/create/create-character-modal"
-import { renderWithQuery } from "../helpers/render-with-query"
-import { server } from "../mocks/server"
 
 const mocks = vi.hoisted(() => ({
   getToken: vi.fn(async () => "test-token"),

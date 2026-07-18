@@ -1,5 +1,6 @@
 import { render, screen, waitFor } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
+import { setTestViewport } from "@tests/utils/viewport.util"
 import { describe, expect, it } from "vitest"
 
 import { GuideSidebar } from "@/components/guide/catalog/guide-sidebar"
@@ -29,11 +30,7 @@ describe("GuideSidebar", () => {
   })
 
   it("opens as a mobile sheet and closes after catalogue navigation", async () => {
-    Object.defineProperty(window, "innerWidth", {
-      configurable: true,
-      value: 390,
-    })
-    window.dispatchEvent(new Event("resize"))
+    setTestViewport(390)
 
     const user = userEvent.setup()
     renderGuideSidebar()
