@@ -21,19 +21,12 @@ export function useUpdateCharacterFinances(characterId: string) {
       context.updateDetail((character) => {
         if (!character) return character
 
-        const creditRating = input.credit_rating_skill_id
-          ? (character.skills ?? []).find(
-              (skill) => skill.id === input.credit_rating_skill_id,
-            )
-          : character.finances.credit_rating
-
         return {
           ...character,
           finances: {
             ...character.finances,
             assets: input.assets ?? character.finances.assets,
             cash: input.cash ?? character.finances.cash,
-            credit_rating: creditRating,
             spending_limit:
               input.spending_limit ?? character.finances.spending_limit,
           },
@@ -61,7 +54,6 @@ export function useDeleteCharacterFinances(characterId: string) {
                 assets: null,
                 cash: null,
                 created_at: null,
-                credit_rating: null,
                 id: null,
                 spending_limit: null,
                 updated_at: null,

@@ -150,7 +150,6 @@ export type CharacterFinances = CharacterRecordMeta & {
   spending_limit: string | null
   cash: string | null
   assets: string | null
-  credit_rating?: CharacterSkill | null
 }
 
 export type CharacterNote = CharacterRecordMeta & {

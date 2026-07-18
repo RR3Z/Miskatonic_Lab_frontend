@@ -7,7 +7,6 @@ export type CharacterFinancesWriteResponse = {
   cash: string | null
   character_id: string
   created_at: string
-  credit_rating_skill_id: string | null
   id: string
   spending_limit: string | null
   updated_at: string

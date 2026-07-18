@@ -14,6 +14,5 @@ export const characterFinanceAssetsSchema = z
 export type UpdateCharacterFinancesDto = {
   assets?: string
   cash?: string
-  credit_rating_skill_id?: string
   spending_limit?: string
 }

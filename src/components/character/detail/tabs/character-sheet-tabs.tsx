@@ -1,6 +1,8 @@
 "use client"
 
-import { HistoryFinancesTab } from "@/components/character/detail/tabs/history-finances-tab"
+import { CharacterSheetTooltipProvider } from "@/components/character/detail/character-sheet-tooltip"
+import { FinancesSection } from "@/components/character/detail/tabs/finances-section"
+import { HistorySection } from "@/components/character/detail/tabs/history-section"
 import { InventoryTab } from "@/components/character/detail/tabs/inventory-tab"
 import { NotesTab } from "@/components/character/detail/tabs/notes-tab"
 import { ScrollableTabsContent } from "@/components/character/detail/tabs/scrollable-tabs-content"
@@ -14,7 +16,6 @@ import type {
   CharacterBackstory,
   CharacterFinances,
   CharacterNote,
-  CharacterSkill,
 } from "@/types/character"
 
 export function CharacterSheetTabs({
@@ -22,18 +23,16 @@ export function CharacterSheetTabs({
   characterId,
   finances,
   notes,
-  skills,
 }: {
   backstory: CharacterBackstory
   characterId: string
   finances: CharacterFinances
   notes: CharacterNote[] | null
-  skills: CharacterSkill[] | null
 }) {
   return (
     <Tabs
       className="h-full min-h-0 flex-1 gap-0 overflow-hidden"
-      defaultValue="history-finances"
+      defaultValue="biography"
     >
       <TabsList
         aria-label="Разделы листа персонажа"
@@ -51,13 +50,15 @@ export function CharacterSheetTabs({
         ))}
       </TabsList>
 
-      <ScrollableTabsContent value="history-finances">
-        <HistoryFinancesTab
-          backstory={backstory}
-          characterId={characterId}
-          finances={finances}
-          skills={skills}
-        />
+      <ScrollableTabsContent value="biography">
+        <CharacterSheetTooltipProvider>
+          <HistorySection backstory={backstory} characterId={characterId} />
+        </CharacterSheetTooltipProvider>
+      </ScrollableTabsContent>
+      <ScrollableTabsContent value="finances">
+        <CharacterSheetTooltipProvider>
+          <FinancesSection characterId={characterId} finances={finances} />
+        </CharacterSheetTooltipProvider>
       </ScrollableTabsContent>
       <ScrollableTabsContent value="inventory">
         <InventoryTab />

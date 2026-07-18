@@ -2,19 +2,16 @@
 
 import { InlineTextEditor } from "@/components/character/detail/editors/inline-text-editor"
 import { FinanceCard } from "@/components/character/detail/tabs/finance-card"
-import { FinanceCreditRatingEditor } from "@/components/character/detail/tabs/finance-credit-rating-editor"
 import { CHARACTER_FINANCE_FIELDS } from "@/components/character/detail/tabs/finance-field-definitions"
 import { useUpdateCharacterFinances } from "@/lib/api/use-character-finances"
-import type { CharacterFinances, CharacterSkill } from "@/types/character"
+import type { CharacterFinances } from "@/types/character"
 
 export function FinanceFieldsGrid({
   characterId,
   finances,
-  skills,
 }: {
   characterId: string
   finances: CharacterFinances
-  skills: CharacterSkill[] | null
 }) {
   const updateFinances = useUpdateCharacterFinances(characterId)
 
@@ -26,25 +23,17 @@ export function FinanceFieldsGrid({
           key={field.key}
           label={field.label}
           value={
-            field.kind === "credit-rating" ? (
-              <FinanceCreditRatingEditor
-                characterId={characterId}
-                currentSkill={finances.credit_rating}
-                skills={skills}
-              />
-            ) : (
-              <InlineTextEditor
-                ariaLabel={`Редактировать поле ${field.label}`}
-                errorMessage="Не удалось сохранить имущество"
-                multiline={field.multiline}
-                onSave={(value) =>
-                  updateFinances.mutateAsync({ [field.key]: value })
-                }
-                placeholder={field.placeholder}
-                schema={field.schema}
-                value={finances[field.key]}
-              />
-            )
+            <InlineTextEditor
+              ariaLabel={`Редактировать поле ${field.label}`}
+              errorMessage="Не удалось сохранить финансы"
+              multiline={field.multiline}
+              onSave={(value) =>
+                updateFinances.mutateAsync({ [field.key]: value })
+              }
+              placeholder={field.placeholder}
+              schema={field.schema}
+              value={finances[field.key]}
+            />
           }
         />
       ))}
