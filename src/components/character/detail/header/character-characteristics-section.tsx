@@ -125,11 +125,12 @@ export function CharacterCharacteristicsSection({
               <div className="flex items-center gap-1">
                 <Button
                   aria-label="Редактировать характеристики"
+                  className="border-[var(--ml-accent-brass-strong)]/70 bg-[color-mix(in_srgb,var(--ml-accent-brass-strong)_10%,transparent)] text-[var(--ml-accent-brass-strong)] hover:border-[var(--ml-accent-brass-strong)] hover:bg-[color-mix(in_srgb,var(--ml-accent-brass-strong)_20%,transparent)] hover:text-[var(--ml-ink-primary)]"
                   onClick={() => setEditorOpen(true)}
                   size="icon-xs"
                   title="Изменить"
                   type="button"
-                  variant="ghost"
+                  variant="secondary"
                 >
                   <PencilLine aria-hidden="true" />
                 </Button>

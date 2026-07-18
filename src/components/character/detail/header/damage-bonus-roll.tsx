@@ -5,7 +5,6 @@ import {
   CharacterSheetStatButton,
   CharacterSheetStatCard,
 } from "@/components/character/detail/header/character-sheet-stat-card"
-import { Spinner } from "@/components/ui/spinner"
 
 export function DamageBonusRoll({
   onRoll,
@@ -23,7 +22,7 @@ export function DamageBonusRoll({
         Бонус урона
       </span>
       <span className="font-mono text-base font-semibold tabular-nums text-[var(--ml-ink-primary)]">
-        {rolling ? <Spinner className="size-3.5" /> : (value ?? "—")}
+        {value ?? "—"}
       </span>
     </>
   )
@@ -42,7 +41,7 @@ export function DamageBonusRoll({
   return (
     <CharacterSheetStatButton
       aria-label={`Бросить бонус урона ${formula}`}
-      className="flex flex-col items-center justify-center px-2 py-1"
+      className="relative flex flex-col items-center justify-center px-2 py-1"
       data-testid="damage-bonus-stat"
       disabled={rolling}
       onClick={() => onRoll(formula)}

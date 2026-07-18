@@ -12,7 +12,6 @@ import {
   ContextMenuLabel,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu"
-import { Spinner } from "@/components/ui/spinner"
 import type { D100Mode } from "@/lib/api/character-dice-rolls"
 import { getCharacteristicCheckThresholds } from "@/lib/dice/characteristic-check"
 import { cn } from "@/lib/utils/cn.util"
@@ -47,7 +46,7 @@ export function CharacteristicDiceCard({
           {label}
         </span>
         <span className="font-mono text-base font-semibold tabular-nums text-[var(--ml-ink-primary)]">
-          {rolling ? <Spinner className="size-3.5" /> : (value ?? "—")}
+          {value ?? "—"}
         </span>
       </div>
       <div className="grid min-w-8 grid-rows-2 border-l border-[var(--ml-border-subtle)] font-mono text-[0.65rem] tabular-nums text-[var(--ml-ink-muted)]">
@@ -78,7 +77,7 @@ export function CharacteristicDiceCard({
       <ContextMenuTrigger asChild>
         <CharacterSheetStatButton
           aria-label={`Бросить характеристику ${title}`}
-          className="grid grid-cols-[minmax(0,1fr)_auto] text-left"
+          className="relative grid grid-cols-[minmax(0,1fr)_auto] text-left"
           data-testid={`characteristic-card-${label}`}
           disabled={rolling}
           onClick={() => onRoll("normal")}
