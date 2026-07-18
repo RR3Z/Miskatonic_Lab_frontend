@@ -1,5 +1,6 @@
 "use client"
 
+import { DiceRollProgressOverlay } from "@/components/character/detail/dice-roll-progress-overlay"
 import {
   CharacterSheetStatButton,
   CharacterSheetStatCard,
@@ -85,6 +86,7 @@ export function CharacteristicDiceCard({
           type="button"
         >
           {content}
+          {rolling ? <DiceRollProgressOverlay /> : null}
         </CharacterSheetStatButton>
       </ContextMenuTrigger>
       <ContextMenuContent>
