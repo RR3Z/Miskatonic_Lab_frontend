@@ -12,7 +12,7 @@ export function GuideSearch() {
   return (
     <form
       aria-label={guideContent.ui.search.ariaLabel}
-      className="relative w-full max-w-xl"
+      className="relative mx-12 w-[calc(100%-6rem)] max-w-xl md:mx-0 md:w-full"
       onBlur={(event) => {
         if (!event.currentTarget.contains(event.relatedTarget)) {
           setIsFocused(false)

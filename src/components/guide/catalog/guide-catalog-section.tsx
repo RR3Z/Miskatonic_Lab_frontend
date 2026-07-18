@@ -5,7 +5,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
-  SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 import type { GuideSection } from "@/data/guide/types/guide-content.types"
@@ -30,19 +29,14 @@ export function GuideCatalogSection({
           <span>{section.title}</span>
         </Link>
       </SidebarMenuButton>
-      <SidebarMenuSub className="mt-0.5 w-auto">
+      <SidebarMenuSub className="mt-0.5 ml-3 mr-0 w-[calc(100%-0.75rem)]">
         {section.blocks.map((block) => (
           <SidebarMenuSubItem key={block.id}>
-            <SidebarMenuSubButton
-              asChild
-              className="h-auto min-h-7 w-full px-2 py-1 text-xs leading-4 transition-[background-color,color] duration-150 [&>span:last-child]:!overflow-visible [&>span:last-child]:!text-clip [&>span:last-child]:!whitespace-normal"
-            >
-              <GuideCatalogBlockLink
-                block={block}
-                onNavigate={onNavigate}
-                sectionSlug={section.slug}
-              />
-            </SidebarMenuSubButton>
+            <GuideCatalogBlockLink
+              block={block}
+              onNavigate={onNavigate}
+              sectionSlug={section.slug}
+            />
           </SidebarMenuSubItem>
         ))}
       </SidebarMenuSub>
