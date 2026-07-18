@@ -17,10 +17,6 @@ export type NavigationItem =
       href: string
       kind: "auth"
     })
-  | (NavigationItemBase & {
-      badge: string
-      kind: "disabled"
-    })
 
 export const navigationItems: readonly NavigationItem[] = [
   {
@@ -30,9 +26,9 @@ export const navigationItems: readonly NavigationItem[] = [
     label: "Главная",
   },
   {
-    badge: "WIP",
+    href: appRoutes.guide,
     icon: BookOpenText,
-    kind: "disabled",
+    kind: "link",
     label: "Справочник",
   },
   {
@@ -47,7 +43,7 @@ export function isNavigationItemActive(
   item: NavigationItem,
   pathname: string | null,
 ) {
-  if (item.kind === "disabled" || !pathname) {
+  if (!pathname) {
     return false
   }
 

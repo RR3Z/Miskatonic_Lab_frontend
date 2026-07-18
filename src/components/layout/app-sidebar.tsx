@@ -6,12 +6,14 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 import { BrandMark } from "@/components/brand/brand-mark"
+import { GuideSidebar } from "@/components/guide/catalog/guide-sidebar"
 import {
   isNavigationItemActive,
   navigationItems,
 } from "@/components/layout/sidebar-navigation"
 import { SidebarUserControls } from "@/components/layout/sidebar-user-controls"
 import { SidebarSiteFooter } from "@/components/layout/site-footer"
+import { isGuideRoute } from "@/components/layout/utils/is-guide-route.util"
 import {
   Sidebar,
   SidebarContent,
@@ -20,19 +22,21 @@ import {
   SidebarGroupContent,
   SidebarHeader,
   SidebarMenu,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar,
 } from "@/components/ui/sidebar"
+import { useCloseSidebar } from "@/hooks/layout/use-close-sidebar"
 import { landingContent } from "@/lib/content/landing.content"
 import { appRoutes } from "@/lib/routes/app-routes"
 
 export function AppSidebar() {
   const pathname = usePathname()
   const { isLoaded, isSignedIn } = useUser()
-  const { isMobile, setOpen, setOpenMobile } = useSidebar()
-  const closeSidebar = () => (isMobile ? setOpenMobile(false) : setOpen(false))
+  const closeSidebar = useCloseSidebar()
+
+  if (isGuideRoute(pathname)) {
+    return <GuideSidebar />
+  }
 
   return (
     <Sidebar collapsible="icon">
@@ -72,22 +76,6 @@ export function AppSidebar() {
               {navigationItems.map((item) => {
                 const Icon = item.icon
                 const isActive = isNavigationItemActive(item, pathname)
-
-                if (item.kind === "disabled") {
-                  return (
-                    <SidebarMenuItem key={item.label}>
-                      <SidebarMenuButton
-                        aria-disabled="true"
-                        disabled
-                        tooltip={item.label}
-                      >
-                        <Icon aria-hidden="true" />
-                        <span>{item.label}</span>
-                      </SidebarMenuButton>
-                      <SidebarMenuBadge>{item.badge}</SidebarMenuBadge>
-                    </SidebarMenuItem>
-                  )
-                }
 
                 if (item.kind === "auth" && !isSignedIn) {
                   return (

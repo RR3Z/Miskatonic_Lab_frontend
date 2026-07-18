@@ -1,5 +1,6 @@
 import { SocialLinks } from "@/components/social/social-links"
 import { landingContent } from "@/lib/content/landing.content"
+import { cn } from "@/lib/utils/cn.util"
 import githubIcon from "../../../assets/icons/github.svg"
 import telegramIcon from "../../../assets/icons/telegram.svg"
 
@@ -18,9 +19,20 @@ const socialLinks = [
   },
 ] as const
 
-export function SidebarSiteFooter() {
+type SidebarSiteFooterProps = {
+  fullWidth?: boolean
+}
+
+export function SidebarSiteFooter({
+  fullWidth = false,
+}: SidebarSiteFooterProps) {
   return (
-    <footer className="mt-1 border-t border-[var(--ml-border-aged)] pt-3 text-[var(--ml-ink-muted)] group-data-[collapsible=icon]:hidden">
+    <footer
+      className={cn(
+        "mt-1 border-t border-[var(--ml-border-aged)] pt-3 text-[var(--ml-ink-muted)] group-data-[collapsible=icon]:hidden",
+        fullWidth && "-mx-2",
+      )}
+    >
       <p className="text-center font-body text-[0.62rem] uppercase tracking-[0.08em]">
         {footer.copyright}
       </p>
