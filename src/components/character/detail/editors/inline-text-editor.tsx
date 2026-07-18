@@ -6,6 +6,7 @@ import { Controller } from "react-hook-form"
 import type { InlineTextEditorProps } from "@/components/character/detail/editors/inline-text-editor.types"
 import { useInlineTextEditor } from "@/components/character/detail/editors/use-inline-text-editor"
 import { Input } from "@/components/ui/input"
+import { ResizableTextarea } from "@/components/ui/resizable-textarea"
 import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils/cn.util"
 
@@ -25,6 +26,7 @@ export function InlineTextEditor({
   normalizeInput,
   onSave,
   placeholder,
+  resizeStorageKey,
   schema,
   showEditIcon = true,
   value,
@@ -114,7 +116,15 @@ export function InlineTextEditor({
             placeholder,
           }
 
-          return multiline ? (
+          return multiline && resizeStorageKey ? (
+            <ResizableTextarea
+              {...sharedProps}
+              align={inputAlign}
+              size={inputSize}
+              storageKey={resizeStorageKey}
+              variant={inputVariant}
+            />
+          ) : multiline ? (
             <Textarea
               {...sharedProps}
               align={inputAlign}

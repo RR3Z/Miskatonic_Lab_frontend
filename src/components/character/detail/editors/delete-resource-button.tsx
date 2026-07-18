@@ -13,6 +13,7 @@ export function DeleteResourceButton({
   errorMessage,
   onDelete,
   title,
+  variant = "ghost",
 }: {
   ariaLabel: string
   className?: string
@@ -20,6 +21,7 @@ export function DeleteResourceButton({
   errorMessage: string
   onDelete: () => Promise<unknown>
   title: string
+  variant?: "destructive" | "ghost"
 }) {
   const [open, setOpen] = useState(false)
 
@@ -31,7 +33,7 @@ export function DeleteResourceButton({
         onClick={() => setOpen(true)}
         size="icon-sm"
         type="button"
-        variant="ghost"
+        variant={variant}
       >
         <Trash2 aria-hidden="true" />
       </Button>

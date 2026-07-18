@@ -18,6 +18,7 @@ export type InlineTextEditorProps = {
   normalizeInput?: (value: string) => string
   onSave: (value: string) => Promise<unknown>
   placeholder: string
+  resizeStorageKey?: string
   schema: ZodType<string>
   showEditIcon?: boolean
   value: string | null
