@@ -1,5 +1,7 @@
 "use client"
 
+import { useRouter } from "next/navigation"
+
 import { RoomJoinForm } from "@/components/room/join/room-join-form"
 import {
   Dialog,
@@ -9,6 +11,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog"
 import roomContentRu from "@/data/room/room.ru.json"
+import { appRoutes } from "@/lib/routes/app-routes"
 import type { RoomSummary } from "@/types/room"
 
 import { formatRoomTemplate } from "../utils/format-room-template.util"
@@ -24,6 +27,8 @@ export function JoinRoomModal({
   open,
   room,
 }: JoinRoomModalProps) {
+  const router = useRouter()
+
   if (!room) return null
 
   return (
@@ -41,7 +46,13 @@ export function JoinRoomModal({
             })}
           </DialogDescription>
         </DialogHeader>
-        <RoomJoinForm onJoined={() => onOpenChange(false)} roomId={room.id} />
+        <RoomJoinForm
+          onJoined={() => {
+            onOpenChange(false)
+            router.replace(appRoutes.room(room.id))
+          }}
+          roomId={room.id}
+        />
       </DialogContent>
     </Dialog>
   )

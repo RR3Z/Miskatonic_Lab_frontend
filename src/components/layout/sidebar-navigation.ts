@@ -53,7 +53,7 @@ export const navigationItems: readonly NavigationItem[] = [
     href: appRoutes.rooms,
     icon: DoorOpen,
     kind: "auth",
-    label: "Комнаты",
+    label: "Комнаты — WIP",
   },
 ]
 

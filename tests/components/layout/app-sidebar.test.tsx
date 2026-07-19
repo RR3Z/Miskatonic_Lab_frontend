@@ -97,6 +97,10 @@ describe("AppSidebar", () => {
       forceRedirectUrl: "/characters",
       mode: "modal",
     })
+    expect(clerkState.signInProps).toHaveBeenCalledWith({
+      forceRedirectUrl: "/rooms",
+      mode: "modal",
+    })
     expect(screen.getByRole("button", { name: "Войти" })).toHaveClass(
       "cursor-pointer",
     )

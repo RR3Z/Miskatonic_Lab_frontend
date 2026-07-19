@@ -6,13 +6,16 @@ import { HttpResponse, http } from "msw"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { RoomDetailPage } from "@/components/room/detail/room-detail-page"
+import roomContentRu from "@/data/room/room.ru.json"
 import type { Room } from "@/types/room"
 
 const mocks = vi.hoisted(() => ({
   getToken: vi.fn(async () => "test-token"),
   replace: vi.fn(),
+  socketOptions: undefined as unknown,
   toastError: vi.fn(),
   toastSuccess: vi.fn(),
+  useRoomSocket: vi.fn(),
 }))
 
 vi.mock("@clerk/nextjs", () => ({
@@ -29,10 +32,14 @@ vi.mock("next/navigation", () => ({
 }))
 
 vi.mock("@/hooks/room/use-room-socket", () => ({
-  useRoomSocket: () => ({
-    send: vi.fn(() => false),
-    status: "unsupported",
-  }),
+  useRoomSocket: (options: unknown) => {
+    mocks.socketOptions = options
+    mocks.useRoomSocket()
+    return {
+      send: vi.fn(() => false),
+      status: "unsupported",
+    }
+  },
 }))
 
 vi.mock("sonner", () => ({
@@ -53,7 +60,7 @@ const room: Room = {
       character_id: "00000000-0000-0000-0000-000000000000",
       id: "member-owner",
       joined_at: "2026-07-19T10:00:00Z",
-      role: "keeper",
+      role: "player",
       room_id: "room-1",
       user_id: "owner-1",
     },
@@ -103,9 +110,25 @@ describe("RoomDetailPage", () => {
   beforeEach(() => {
     mocks.getToken.mockClear()
     mocks.replace.mockClear()
+    mocks.socketOptions = undefined
     mocks.toastError.mockClear()
     mocks.toastSuccess.mockClear()
+    mocks.useRoomSocket.mockClear()
     server.use(charactersHandler(), roomEventsHandler())
+  })
+
+  it("shows the owner invite link in room settings", async () => {
+    renderWithQuery(<RoomDetailPage room={room} />)
+
+    const inviteLink = await screen.findByLabelText(
+      roomContentRu.detail.inviteLinkLabel,
+    )
+    expect(inviteLink).toHaveValue(
+      `${window.location.origin}/rooms/room-1?invite=invite-token`,
+    )
+    expect(
+      screen.getByRole("button", { name: roomContentRu.detail.inviteCopy }),
+    ).toBeVisible()
   })
 
   it("lets a member select a character", async () => {
@@ -162,6 +185,85 @@ describe("RoomDetailPage", () => {
         "Настройки комнаты сохранены.",
       ),
     )
+  })
+
+  it("lets the keeper make themselves a GM or player", async () => {
+    const user = userEvent.setup()
+    server.use(
+      http.put(
+        "http://localhost:8000/api/rooms/room-1/members/owner-1/role",
+        async ({ request }) => {
+          await expect(request.json()).resolves.toEqual({ role: "gm" })
+          return HttpResponse.json({ ...room.members?.[0], role: "gm" })
+        },
+      ),
+    )
+    renderWithQuery(<RoomDetailPage room={room} />)
+
+    await user.click(
+      (await screen.findAllByLabelText("Изменить роль участника"))[0],
+    )
+    await user.click(screen.getByRole("option", { name: "GM" }))
+
+    await waitFor(() =>
+      expect(mocks.toastSuccess).toHaveBeenCalledWith(
+        "Роль участника изменена.",
+      ),
+    )
+  })
+
+  it("transfers ownership without changing the target role", async () => {
+    const user = userEvent.setup()
+    server.use(
+      http.put(
+        "http://localhost:8000/api/rooms/room-1/owner",
+        async ({ request }) => {
+          await expect(request.json()).resolves.toEqual({ user_id: "player-2" })
+          return HttpResponse.json({ ...room, owner_id: "player-2" })
+        },
+      ),
+    )
+    renderWithQuery(<RoomDetailPage room={room} />)
+
+    await user.click(
+      await screen.findByRole("button", { name: "Передать владение" }),
+    )
+
+    await waitFor(() =>
+      expect(mocks.toastSuccess).toHaveBeenCalledWith(
+        "Владение комнатой передано.",
+      ),
+    )
+  })
+
+  it("redirects a kicked user after the member.kicked event", async () => {
+    renderWithQuery(<RoomDetailPage room={room} />)
+
+    const options = mocks.socketOptions as {
+      onEvent: (event: {
+        actor_id: string
+        payload: unknown
+        room_id: string
+        type: string
+      }) => void
+    }
+    options.onEvent({
+      actor_id: "owner-1",
+      payload: { user_id: "owner-1" },
+      room_id: "room-1",
+      type: "member.kicked",
+    })
+
+    await waitFor(() => {
+      expect(mocks.toastError).toHaveBeenCalledWith("Вас исключили из комнаты.")
+      expect(mocks.replace).toHaveBeenCalledWith("/rooms")
+    })
+  })
+
+  it("uses one room websocket for the detail page and chat", () => {
+    renderWithQuery(<RoomDetailPage room={room} />)
+
+    expect(mocks.useRoomSocket).toHaveBeenCalledTimes(1)
   })
 
   it("leaves the room and returns to the catalog", async () => {

@@ -1,6 +1,6 @@
 "use client"
 
-import { Plus } from "lucide-react"
+import { Plus, RefreshCw } from "lucide-react"
 import { useState } from "react"
 import { RoomCatalogContent } from "@/components/room/catalog/room-catalog-content"
 import { CreateRoomModal } from "@/components/room/create/create-room-modal"
@@ -28,16 +28,32 @@ export function RoomCatalogPage() {
             {roomContentRu.catalog.description}
           </p>
         </div>
-        <Button
-          aria-label={roomContentRu.catalog.createAriaLabel}
-          className={roomOutlineButtonClassName}
-          onClick={() => setCreateOpen(true)}
-          size="icon"
-          type="button"
-          variant="outline"
-        >
-          <Plus aria-hidden="true" />
-        </Button>
+        <div className="flex shrink-0 items-center gap-2">
+          <Button
+            aria-label={roomContentRu.catalog.refreshAriaLabel}
+            className={roomOutlineButtonClassName}
+            disabled={isFetching}
+            onClick={() => void refetch()}
+            size="icon"
+            type="button"
+            variant="outline"
+          >
+            <RefreshCw
+              aria-hidden="true"
+              className={isFetching ? "animate-spin" : undefined}
+            />
+          </Button>
+          <Button
+            aria-label={roomContentRu.catalog.createAriaLabel}
+            className={roomOutlineButtonClassName}
+            onClick={() => setCreateOpen(true)}
+            size="icon"
+            type="button"
+            variant="outline"
+          >
+            <Plus aria-hidden="true" />
+          </Button>
+        </div>
       </div>
       <RoomCatalogContent
         hasLoadError={Boolean(error) && data === undefined}

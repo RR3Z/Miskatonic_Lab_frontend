@@ -1,6 +1,7 @@
 import type { KyInstance } from "ky"
 
 import type {
+  ChangeRoomMemberRoleInput,
   CreateRoomInput,
   JoinRoomInput,
   Room,
@@ -8,6 +9,7 @@ import type {
   RoomMember,
   RoomSummary,
   SelectRoomCharacterInput,
+  TransferRoomOwnershipInput,
   UpdateRoomInput,
 } from "@/types/room"
 
@@ -83,6 +85,28 @@ export async function kickRoomMember(
   userId: string,
 ): Promise<void> {
   await api.delete(`api/rooms/${roomId}/kick/${userId}`)
+}
+
+export function changeRoomMemberRole(
+  api: KyInstance,
+  input: ChangeRoomMemberRoleInput,
+): Promise<RoomMember> {
+  return api
+    .put(`api/rooms/${input.roomId}/members/${input.userId}/role`, {
+      json: { role: input.role },
+    })
+    .json<RoomMember>()
+}
+
+export function transferRoomOwnership(
+  api: KyInstance,
+  input: TransferRoomOwnershipInput,
+): Promise<Room> {
+  return api
+    .put(`api/rooms/${input.roomId}/owner`, {
+      json: { user_id: input.userId },
+    })
+    .json<Room>()
 }
 
 export function selectRoomCharacter(

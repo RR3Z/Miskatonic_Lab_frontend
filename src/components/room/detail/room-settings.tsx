@@ -1,6 +1,6 @@
 "use client"
 
-import { Settings2 } from "lucide-react"
+import { Copy, Settings2 } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
 import { roomPanelClassName } from "@/components/room/styles/room-panel.styles"
@@ -19,6 +19,8 @@ import { useUpdateRoom } from "@/hooks/room/use-update-room"
 import { showError, showErrorCode } from "@/lib/errors/presenter"
 import type { Room } from "@/types/room"
 
+import { roomInviteLink } from "./utils/room-invite-link.util"
+
 type RoomSettingsProps = {
   room: Room
 }
@@ -28,6 +30,23 @@ export function RoomSettings({ room }: RoomSettingsProps) {
   const [name, setName] = useState(room.name)
   const [maxPlayers, setMaxPlayers] = useState(String(room.max_players))
   const [password, setPassword] = useState("")
+  const inviteLink = room.invite_token
+    ? roomInviteLink(room.id, room.invite_token)
+    : null
+
+  async function copyInviteLink() {
+    if (!inviteLink || !navigator.clipboard) {
+      showErrorCode("client.network_unavailable")
+      return
+    }
+
+    try {
+      await navigator.clipboard.writeText(inviteLink)
+      toast.success(roomContentRu.detail.inviteCopySuccess)
+    } catch {
+      showErrorCode("client.network_unavailable")
+    }
+  }
 
   async function save(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -69,6 +88,30 @@ export function RoomSettings({ room }: RoomSettingsProps) {
       <CardContent>
         <form noValidate onSubmit={(event) => void save(event)}>
           <FieldGroup>
+            {inviteLink ? (
+              <Field>
+                <FieldLabel htmlFor="room-invite-link">
+                  {roomContentRu.detail.inviteLinkLabel}
+                </FieldLabel>
+                <div className="flex gap-2">
+                  <Input
+                    aria-label={roomContentRu.detail.inviteLinkLabel}
+                    id="room-invite-link"
+                    readOnly
+                    value={inviteLink}
+                  />
+                  <Button
+                    aria-label={roomContentRu.detail.inviteCopy}
+                    onClick={() => void copyInviteLink()}
+                    size="icon"
+                    type="button"
+                    variant="secondary"
+                  >
+                    <Copy aria-hidden="true" />
+                  </Button>
+                </div>
+              </Field>
+            ) : null}
             <Field>
               <FieldLabel htmlFor="room-settings-name">
                 {roomContentRu.detail.nameLabel}

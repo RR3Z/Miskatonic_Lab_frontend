@@ -9,5 +9,6 @@ export const appRoutes = {
   rooms: "/rooms",
   room: (roomId: string) => `/rooms/${roomId}`,
   charactersSignIn: "/?sign-in=characters",
+  roomsSignIn: "/?sign-in=rooms",
   newCharacter: "/characters?create=1",
 } as const

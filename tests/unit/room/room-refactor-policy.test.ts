@@ -4,6 +4,7 @@ import { describe, expect, it } from "vitest"
 
 import { formatRoomTemplate } from "@/components/room/utils/format-room-template.util"
 import roomContentRu from "@/data/room/room.ru.json"
+import { roomCatalogRefreshIntervalMs } from "@/hooks/room/constants/room-catalog-refresh.constants"
 import { parseRoomSocketEvent } from "@/hooks/room/utils/room-socket-payload.util"
 import { getPresentedError, UNKNOWN_ERROR_CODE } from "@/lib/errors/catalog"
 
@@ -60,7 +61,9 @@ describe("Rooms refactor policy", () => {
         "utils/has-room-character.util.ts",
         "utils/room-chat-payload.util.ts",
         "utils/room-socket-status.util.ts",
-        "create/utils/room-invite-link.util.ts",
+        "utils/room-event-user-id.util.ts",
+        "join/utils/is-room-join-required.util.ts",
+        "detail/utils/room-invite-link.util.ts",
       ]),
     )
 
@@ -128,5 +131,21 @@ describe("Rooms refactor policy", () => {
     ).toMatchObject({ room_id: "room-1", type: "chat.message" })
     expect(parseRoomSocketEvent('{"type":"chat.message"}')).toBeNull()
     expect(parseRoomSocketEvent({})).toBeNull()
+  })
+
+  it("refreshes only the room catalog every five minutes without realtime transport", () => {
+    const catalogHook = readFileSync(
+      resolve(process.cwd(), "src/hooks/room/use-rooms.ts"),
+      "utf8",
+    )
+
+    expect(roomCatalogRefreshIntervalMs).toBe(5 * 60 * 1_000)
+    expect(catalogHook).toContain(
+      "refetchInterval: roomCatalogRefreshIntervalMs",
+    )
+    expect(catalogHook).toContain("refetchOnWindowFocus: false")
+    expect(catalogHook).toContain("refetchOnReconnect: false")
+    expect(catalogHook).not.toContain("useRoomSocket")
+    expect(catalogHook).not.toContain("WebSocket")
   })
 })

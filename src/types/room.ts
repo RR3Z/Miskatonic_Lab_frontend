@@ -12,7 +12,7 @@ export type Room = {
   name: string
   owner_id: string
   max_players: number
-  invite_token: string
+  invite_token?: string
   created_at: string
   updated_at: string
   last_activity_at: string
@@ -35,9 +35,23 @@ export type RoomMember = {
   id: string
   room_id: string
   user_id: string
+  username?: string
   character_id: string
-  role: string
+  role: RoomRole
   joined_at: string
+}
+
+export type RoomRole = "gm" | "player"
+
+export type ChangeRoomMemberRoleInput = {
+  roomId: string
+  userId: string
+  role: RoomRole
+}
+
+export type TransferRoomOwnershipInput = {
+  roomId: string
+  userId: string
 }
 
 export type UpdateRoomInput = {

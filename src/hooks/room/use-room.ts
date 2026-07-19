@@ -14,5 +14,6 @@ export function useRoom(roomId: string) {
     queryKey: userId ? roomQueryKeys.detail(userId, roomId) : roomQueryKeys.all,
     queryFn: () => fetchRoom(api, roomId),
     enabled: isLoaded && Boolean(userId) && Boolean(roomId),
+    retry: false,
   })
 }

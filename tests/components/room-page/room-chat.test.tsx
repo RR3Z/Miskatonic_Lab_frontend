@@ -21,10 +21,6 @@ vi.mock("@clerk/nextjs", () => ({
   }),
 }))
 
-vi.mock("@/hooks/room/use-room-socket", () => ({
-  useRoomSocket: () => ({ send: mocks.send, status: "connected" }),
-}))
-
 describe("RoomChat", () => {
   beforeEach(() => {
     mocks.getToken.mockClear()
@@ -47,7 +43,9 @@ describe("RoomChat", () => {
 
   it("renders history and sends a chat command through the socket", async () => {
     const user = userEvent.setup()
-    renderWithQuery(<RoomChat roomId="room-1" />)
+    renderWithQuery(
+      <RoomChat roomId="room-1" send={mocks.send} status="connected" />,
+    )
 
     expect(await screen.findByText("Добро пожаловать")).toBeVisible()
     await user.type(screen.getByLabelText("Сообщение в чат"), "Привет всем")

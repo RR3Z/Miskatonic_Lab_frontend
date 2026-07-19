@@ -1,7 +1,7 @@
 "use client"
 
 import { Send } from "lucide-react"
-import { useCallback, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 import { roomPanelClassName } from "@/components/room/styles/room-panel.styles"
 import { chatTextFromPayload } from "@/components/room/utils/room-chat-payload.util"
 import { roomSocketStatusText } from "@/components/room/utils/room-socket-status.util"
@@ -16,41 +16,24 @@ import {
 import { Input } from "@/components/ui/input"
 import roomContentRu from "@/data/room/room.ru.json"
 import { useRoomEvents } from "@/hooks/room/use-room-events"
-import { useRoomSocket } from "@/hooks/room/use-room-socket"
+import type {
+  RoomSocketCommand,
+  RoomSocketStatus,
+} from "@/hooks/room/use-room-socket"
 import { showErrorCode } from "@/lib/errors/presenter"
-import type { RoomEvent, RoomSocketEvent } from "@/types/room"
 
 type RoomChatProps = {
   roomId: string
+  send: (command: RoomSocketCommand) => boolean
+  status: RoomSocketStatus
 }
 
-export function RoomChat({ roomId }: RoomChatProps) {
+export function RoomChat({ roomId, send, status }: RoomChatProps) {
   const { data: history, isLoading } = useRoomEvents(roomId)
-  const [liveEvents, setLiveEvents] = useState<RoomEvent[]>([])
   const [text, setText] = useState("")
-  const onEvent = useCallback((event: RoomSocketEvent) => {
-    if (event.type !== "chat.message") return
-    const chatText = chatTextFromPayload(event.payload)
-    if (!chatText) return
-    setLiveEvents((events) => [
-      ...events,
-      {
-        actor_id: event.actor_id,
-        created_at: new Date().toISOString(),
-        id: `live-${crypto.randomUUID()}`,
-        payload: { text: chatText },
-        room_id: event.room_id,
-        type: event.type,
-      },
-    ])
-  }, [])
-  const { send, status } = useRoomSocket({ enabled: true, onEvent, roomId })
   const messages = useMemo(
-    () =>
-      [...(history ?? []), ...liveEvents].filter(
-        (event) => event.type === "chat.message",
-      ),
-    [history, liveEvents],
+    () => (history ?? []).filter((event) => event.type === "chat.message"),
+    [history],
   )
 
   function submit(event: React.FormEvent<HTMLFormElement>) {

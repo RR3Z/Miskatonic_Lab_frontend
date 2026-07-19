@@ -10,13 +10,17 @@ import { RoomChat } from "@/components/room/chat/room-chat"
 import { RoomCharacterPicker } from "@/components/room/detail/room-character-picker"
 import { RoomMemberList } from "@/components/room/detail/room-member-list"
 import { RoomSettings } from "@/components/room/detail/room-settings"
+import { roomEventUserId } from "@/components/room/utils/room-event-user-id.util"
 import { Button } from "@/components/ui/button"
 import roomContentRu from "@/data/room/room.ru.json"
+import { useChangeRoomMemberRole } from "@/hooks/room/use-change-room-member-role"
 import { useKickRoomMember } from "@/hooks/room/use-kick-room-member"
 import { useLeaveRoom } from "@/hooks/room/use-leave-room"
+import { useRoomRealtime } from "@/hooks/room/use-room-realtime"
+import { useTransferRoomOwnership } from "@/hooks/room/use-transfer-room-ownership"
 import { showError } from "@/lib/errors/presenter"
 import { appRoutes } from "@/lib/routes/app-routes"
-import type { Room, RoomMember } from "@/types/room"
+import type { Room, RoomMember, RoomRole, RoomSocketEvent } from "@/types/room"
 
 type RoomDetailPageProps = {
   room: Room
@@ -27,8 +31,27 @@ export function RoomDetailPage({ room }: RoomDetailPageProps) {
   const router = useRouter()
   const leaveMutation = useLeaveRoom()
   const kickMutation = useKickRoomMember()
+  const changeRoleMutation = useChangeRoomMemberRole()
+  const transferOwnershipMutation = useTransferRoomOwnership()
   const members = room.members ?? []
   const isOwner = room.owner_id === userId
+  const currentMember = members.find((member) => member.user_id === userId)
+
+  function handleRoomEvent(event: RoomSocketEvent) {
+    if (
+      event.type === "member.kicked" &&
+      roomEventUserId(event.payload) === userId
+    ) {
+      toast.error(roomContentRu.detail.kickedFromRoom)
+      router.replace(appRoutes.rooms)
+      return false
+    }
+  }
+
+  const { send, status } = useRoomRealtime({
+    onEvent: handleRoomEvent,
+    roomId: room.id,
+  })
 
   async function leave() {
     try {
@@ -47,6 +70,31 @@ export function RoomDetailPage({ room }: RoomDetailPageProps) {
         userId: member.user_id,
       })
       toast.success(roomContentRu.detail.kickSuccess)
+    } catch (error) {
+      await showError(error)
+    }
+  }
+
+  async function changeRole(member: RoomMember, role: RoomRole) {
+    try {
+      await changeRoleMutation.mutateAsync({
+        role,
+        roomId: room.id,
+        userId: member.user_id,
+      })
+      toast.success(roomContentRu.detail.roleChangedSuccess)
+    } catch (error) {
+      await showError(error)
+    }
+  }
+
+  async function transferOwnership(member: RoomMember) {
+    try {
+      await transferOwnershipMutation.mutateAsync({
+        roomId: room.id,
+        userId: member.user_id,
+      })
+      toast.success(roomContentRu.detail.ownerTransferredSuccess)
     } catch (error) {
       await showError(error)
     }
@@ -84,19 +132,25 @@ export function RoomDetailPage({ room }: RoomDetailPageProps) {
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_22rem]">
         <div className="space-y-5">
           <RoomMemberList
-            canKick={isOwner}
+            canManageMembers={isOwner}
+            isChangingRole={changeRoleMutation.isPending}
             isKicking={kickMutation.isPending}
+            isTransferringOwnership={transferOwnershipMutation.isPending}
             members={members}
+            onChangeRole={changeRole}
             onKick={kick}
+            onTransferOwnership={transferOwnership}
             ownerId={room.owner_id}
             userId={userId}
           />
-          <RoomCharacterPicker
-            members={members}
-            roomId={room.id}
-            userId={userId}
-          />
-          <RoomChat roomId={room.id} />
+          {currentMember?.role === "player" ? (
+            <RoomCharacterPicker
+              members={members}
+              roomId={room.id}
+              userId={userId}
+            />
+          ) : null}
+          <RoomChat roomId={room.id} send={send} status={status} />
         </div>
         {isOwner ? <RoomSettings key={room.updated_at} room={room} /> : null}
       </div>

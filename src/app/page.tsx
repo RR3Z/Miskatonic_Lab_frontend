@@ -11,9 +11,10 @@ export default async function Home({ searchParams }: HomeProps) {
 
   return (
     <>
-      {signInIntent === "characters" ? (
+      {signInIntent === "characters" && (
         <SignInIntent returnTo={appRoutes.characters} />
-      ) : null}
+      )}
+      {signInIntent === "rooms" && <SignInIntent returnTo={appRoutes.rooms} />}
       <LandingPage />
     </>
   )

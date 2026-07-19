@@ -13,7 +13,7 @@ export type RoomSocketStatus =
   | "disconnected"
   | "unsupported"
 
-type RoomSocketCommand = {
+export type RoomSocketCommand = {
   type: string
   payload?: unknown
 }
