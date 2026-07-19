@@ -56,7 +56,8 @@ describe("RoomJoinForm", () => {
     await user.click(screen.getByRole("button", { name: "Войти в комнату" }))
 
     expect(mocks.toastError).toHaveBeenCalledWith(
-      "Введите пароль или откройте ссылку-приглашение.",
+      "client.validation_failed — Проверьте данные формы",
+      expect.objectContaining({ description: expect.anything() }),
     )
   })
 
@@ -127,7 +128,8 @@ describe("RoomJoinForm", () => {
 
     await waitFor(() =>
       expect(mocks.toastError).toHaveBeenCalledWith(
-        "room.full — Комната заполнена. Свободных мест больше нет. Действие: Попросите хранителя увеличить лимит или выберите другую комнату.",
+        "room.full — Комната заполнена",
+        expect.objectContaining({ description: expect.anything() }),
       ),
     )
     expect(mocks.joined).not.toHaveBeenCalled()

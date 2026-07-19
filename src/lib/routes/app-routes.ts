@@ -2,6 +2,8 @@ export const appRoutes = {
   home: "/",
   guide: "/guide",
   guideSection: (slug: string) => `/guide/${slug}`,
+  errors: "/errors",
+  error: (code: string) => `/errors/${encodeURIComponent(code)}`,
   characters: "/characters",
   character: (characterId: string) => `/characters/${characterId}`,
   rooms: "/rooms",

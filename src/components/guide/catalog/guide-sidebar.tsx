@@ -4,6 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 
 import { BrandMark } from "@/components/brand/brand-mark"
+import { ErrorCatalog } from "@/components/errors/error-catalog"
 import { GuideCatalog } from "@/components/guide/catalog/guide-catalog"
 import { SidebarSiteFooter } from "@/components/layout/site-footer"
 import {
@@ -54,6 +55,7 @@ export function GuideSidebar() {
 
       <SidebarContent>
         <GuideCatalog onNavigate={closeSidebar} />
+        <ErrorCatalog onNavigate={closeSidebar} />
       </SidebarContent>
 
       <SidebarFooter>

@@ -3,13 +3,9 @@ import { basename, join, relative, resolve } from "node:path"
 import { describe, expect, it } from "vitest"
 
 import { formatRoomTemplate } from "@/components/room/utils/format-room-template.util"
-import {
-  getRoomErrorCode,
-  presentRoomError,
-} from "@/components/room/utils/room-error-presenter.util"
-import roomErrorsRu from "@/data/errors/room-errors.ru.json"
 import roomContentRu from "@/data/room/room.ru.json"
 import { parseRoomSocketEvent } from "@/hooks/room/utils/room-socket-payload.util"
+import { getPresentedError, UNKNOWN_ERROR_CODE } from "@/lib/errors/catalog"
 
 const roomComponentsDirectory = resolve(process.cwd(), "src/components/room")
 
@@ -63,7 +59,6 @@ describe("Rooms refactor policy", () => {
         "utils/format-room-template.util.ts",
         "utils/has-room-character.util.ts",
         "utils/room-chat-payload.util.ts",
-        "utils/room-error-presenter.util.ts",
         "utils/room-socket-status.util.ts",
         "create/utils/room-invite-link.util.ts",
       ]),
@@ -91,23 +86,33 @@ describe("Rooms refactor policy", () => {
     expect(summary).not.toContain("·")
   })
 
-  it("presents every backend room error with code, explanation and action", () => {
-    for (const [code, entry] of Object.entries(roomErrorsRu)) {
-      const message = presentRoomError({ data: { code } })
-      expect(message).toContain(code)
-      expect(message).toContain(entry.title)
-      expect(message).toContain(entry.message)
-      expect(message).toContain(`Действие: ${entry.action}`)
+  it("presents every backend room error with code and catalog explanation", () => {
+    const roomCodes = [
+      "room.invalid_input",
+      "room.not_found",
+      "room.not_member",
+      "room.not_owner",
+      "room.full",
+      "room.already_member",
+      "room.cannot_kick_owner",
+      "room.character_not_owned",
+      "room.invalid_id",
+    ]
+
+    for (const code of roomCodes) {
+      const entry = getPresentedError(code)
+      expect(entry.code).toBe(code)
+      expect(entry.title).not.toBe("")
+      expect(entry.toastSummary).not.toBe("")
+      expect(entry.documentation.cases.length).toBeGreaterThan(0)
     }
   })
 
   it("uses safe network and unknown error fallbacks", () => {
-    expect(getRoomErrorCode(new Error("offline"))).toBe("network.error")
-    expect(getRoomErrorCode({ data: { code: "not-a-room-code" } })).toBe(
-      "unknown.error",
+    expect(getPresentedError("not-a-room-code").code).toBe(UNKNOWN_ERROR_CODE)
+    expect(getPresentedError("client.network_unavailable").code).toBe(
+      "client.network_unavailable",
     )
-    expect(presentRoomError(new Error("offline"))).toContain("network.error")
-    expect(presentRoomError({ data: {} })).toContain("unknown.error")
   })
 
   it("parses only valid websocket room events", () => {

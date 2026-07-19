@@ -2,7 +2,6 @@
 
 import { Send } from "lucide-react"
 import { useCallback, useMemo, useState } from "react"
-import { toast } from "sonner"
 import { roomPanelClassName } from "@/components/room/styles/room-panel.styles"
 import { chatTextFromPayload } from "@/components/room/utils/room-chat-payload.util"
 import { roomSocketStatusText } from "@/components/room/utils/room-socket-status.util"
@@ -18,6 +17,7 @@ import { Input } from "@/components/ui/input"
 import roomContentRu from "@/data/room/room.ru.json"
 import { useRoomEvents } from "@/hooks/room/use-room-events"
 import { useRoomSocket } from "@/hooks/room/use-room-socket"
+import { showErrorCode } from "@/lib/errors/presenter"
 import type { RoomEvent, RoomSocketEvent } from "@/types/room"
 
 type RoomChatProps = {
@@ -58,7 +58,7 @@ export function RoomChat({ roomId }: RoomChatProps) {
     const message = text.trim()
     if (!message) return
     if (!send({ payload: { text: message }, type: "chat.message" })) {
-      toast.error(roomContentRu.chat.notConnected)
+      showErrorCode("client.websocket_disconnected")
       return
     }
     setText("")

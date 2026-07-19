@@ -1,5 +1,11 @@
 import type { LucideIcon } from "lucide-react"
-import { BookOpenText, DoorOpen, House, UsersRound } from "lucide-react"
+import {
+  BookOpenText,
+  CircleHelp,
+  DoorOpen,
+  House,
+  UsersRound,
+} from "lucide-react"
 
 import { appRoutes } from "@/lib/routes/app-routes"
 
@@ -30,6 +36,12 @@ export const navigationItems: readonly NavigationItem[] = [
     icon: BookOpenText,
     kind: "link",
     label: "Справочник",
+  },
+  {
+    href: appRoutes.errors,
+    icon: CircleHelp,
+    kind: "link",
+    label: "Документация",
   },
   {
     href: appRoutes.characters,

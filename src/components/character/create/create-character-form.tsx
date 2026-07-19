@@ -18,8 +18,8 @@ import {
   createCharacterFormDefaultValues,
   createCharacterFormSchema,
 } from "@/dto/character/create-character.dto"
-import { getApiErrorCode } from "@/lib/api/errors"
 import { useCreateCharacter } from "@/lib/api/use-characters"
+import { showError, showErrorCode } from "@/lib/errors/presenter"
 
 type CreateCharacterFormProps = {
   onCancel: () => void
@@ -66,21 +66,17 @@ export function CreateCharacterForm({
 
       onCompleted()
     } catch (error) {
-      const code = await getApiErrorCode(error)
-      toast.error(
-        code === "character.limit_reached"
-          ? "Достигнут лимит персонажей"
-          : "Не удалось создать персонажа. Проверьте данные и попробуйте ещё раз.",
-        { id: "character-create-error" },
-      )
+      await showError(error, "character-create-error")
     }
   }
 
   function handleInvalid(errors: FieldErrors<CreateCharacterFormInput>) {
     const error = errors.name ?? errors.sex ?? errors.age ?? errors.portrait
-    toast.error(error?.message ?? "Проверьте данные формы", {
-      id: "character-create-validation-error",
-    })
+    void error
+    showErrorCode(
+      "client.validation_failed",
+      "character-create-validation-error",
+    )
   }
 
   return (

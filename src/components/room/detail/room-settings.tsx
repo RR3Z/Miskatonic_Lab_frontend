@@ -4,7 +4,6 @@ import { Settings2 } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
 import { roomPanelClassName } from "@/components/room/styles/room-panel.styles"
-import { presentRoomError } from "@/components/room/utils/room-error-presenter.util"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -17,6 +16,7 @@ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import roomContentRu from "@/data/room/room.ru.json"
 import { useUpdateRoom } from "@/hooks/room/use-update-room"
+import { showError, showErrorCode } from "@/lib/errors/presenter"
 import type { Room } from "@/types/room"
 
 type RoomSettingsProps = {
@@ -37,7 +37,7 @@ export function RoomSettings({ room }: RoomSettingsProps) {
       !Number.isInteger(parsedMaxPlayers) ||
       parsedMaxPlayers < 1
     ) {
-      toast.error(roomContentRu.detail.validationError)
+      showErrorCode("client.validation_failed")
       return
     }
 
@@ -51,7 +51,7 @@ export function RoomSettings({ room }: RoomSettingsProps) {
       setPassword("")
       toast.success(roomContentRu.detail.settingsSuccess)
     } catch (error) {
-      toast.error(presentRoomError(error))
+      await showError(error)
     }
   }
 

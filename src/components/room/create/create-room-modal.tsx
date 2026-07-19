@@ -24,8 +24,8 @@ import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
 import roomContentRu from "@/data/room/room.ru.json"
 import { useCreateRoom } from "@/hooks/room/use-create-room"
+import { showError, showErrorCode } from "@/lib/errors/presenter"
 import type { Room } from "@/types/room"
-import { presentRoomError } from "../utils/room-error-presenter.util"
 import { roomInviteLink } from "./utils/room-invite-link.util"
 
 type CreateRoomModalProps = {
@@ -57,9 +57,7 @@ export function CreateRoomModal({ open, onOpenChange }: CreateRoomModalProps) {
       !Number.isInteger(parsedMaxPlayers) ||
       parsedMaxPlayers < 1
     ) {
-      toast.error(roomContentRu.create.validationError, {
-        id: "room-create-validation-error",
-      })
+      showErrorCode("client.validation_failed", "room-create-validation-error")
       return
     }
 
@@ -72,7 +70,7 @@ export function CreateRoomModal({ open, onOpenChange }: CreateRoomModalProps) {
       setCreatedRoom(room)
       setPassword("")
     } catch (error) {
-      toast.error(presentRoomError(error), { id: "room-create-error" })
+      await showError(error, "room-create-error")
     }
   }
 
@@ -82,7 +80,7 @@ export function CreateRoomModal({ open, onOpenChange }: CreateRoomModalProps) {
       typeof navigator === "undefined" ||
       !navigator.clipboard
     ) {
-      toast.error(roomContentRu.create.copyError)
+      showErrorCode("client.network_unavailable")
       return
     }
 
@@ -90,7 +88,7 @@ export function CreateRoomModal({ open, onOpenChange }: CreateRoomModalProps) {
       await navigator.clipboard.writeText(roomInviteLink(createdRoom))
       toast.success(roomContentRu.create.copySuccess)
     } catch {
-      toast.error(roomContentRu.create.copyError)
+      showErrorCode("client.network_unavailable")
     }
   }
 

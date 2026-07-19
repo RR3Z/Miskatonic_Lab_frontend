@@ -10,11 +10,11 @@ import { RoomChat } from "@/components/room/chat/room-chat"
 import { RoomCharacterPicker } from "@/components/room/detail/room-character-picker"
 import { RoomMemberList } from "@/components/room/detail/room-member-list"
 import { RoomSettings } from "@/components/room/detail/room-settings"
-import { presentRoomError } from "@/components/room/utils/room-error-presenter.util"
 import { Button } from "@/components/ui/button"
 import roomContentRu from "@/data/room/room.ru.json"
 import { useKickRoomMember } from "@/hooks/room/use-kick-room-member"
 import { useLeaveRoom } from "@/hooks/room/use-leave-room"
+import { showError } from "@/lib/errors/presenter"
 import { appRoutes } from "@/lib/routes/app-routes"
 import type { Room, RoomMember } from "@/types/room"
 
@@ -36,7 +36,7 @@ export function RoomDetailPage({ room }: RoomDetailPageProps) {
       toast.success(roomContentRu.detail.leaveSuccess)
       router.replace(appRoutes.rooms)
     } catch (error) {
-      toast.error(presentRoomError(error))
+      await showError(error)
     }
   }
 
@@ -48,7 +48,7 @@ export function RoomDetailPage({ room }: RoomDetailPageProps) {
       })
       toast.success(roomContentRu.detail.kickSuccess)
     } catch (error) {
-      toast.error(presentRoomError(error))
+      await showError(error)
     }
   }
 

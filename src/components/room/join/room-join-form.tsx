@@ -15,7 +15,7 @@ import { Spinner } from "@/components/ui/spinner"
 import roomContentRu from "@/data/room/room.ru.json"
 import { useJoinRoom } from "@/hooks/room/use-join-room"
 
-import { presentRoomError } from "../utils/room-error-presenter.util"
+import { showError, showErrorCode } from "@/lib/errors/presenter"
 
 type RoomJoinFormProps = {
   inviteToken?: string
@@ -34,7 +34,7 @@ export function RoomJoinForm({
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!inviteToken?.trim() && !password.trim()) {
-      toast.error(roomContentRu.join.missingCredential)
+      showErrorCode("client.validation_failed")
       return
     }
 
@@ -43,7 +43,7 @@ export function RoomJoinForm({
       toast.success(roomContentRu.join.success)
       onJoined()
     } catch (error) {
-      toast.error(presentRoomError(error))
+      await showError(error)
     }
   }
 

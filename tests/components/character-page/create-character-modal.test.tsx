@@ -155,9 +155,13 @@ describe("CreateCharacterModal", () => {
 
     expect(name).toHaveAttribute("aria-invalid", "true")
     expect(name).toHaveFocus()
-    expect(mocks.toastError).toHaveBeenCalledWith("Укажите имя персонажа", {
-      id: "character-create-validation-error",
-    })
+    expect(mocks.toastError).toHaveBeenCalledWith(
+      "client.validation_failed — Проверьте данные формы",
+      expect.objectContaining({
+        description: expect.anything(),
+        id: "character-create-validation-error",
+      }),
+    )
     expect(screen.queryByText("Укажите имя персонажа")).not.toBeInTheDocument()
 
     await user.type(name, "А")
@@ -236,8 +240,11 @@ describe("CreateCharacterModal", () => {
 
     await waitFor(() =>
       expect(mocks.toastError).toHaveBeenCalledWith(
-        "Достигнут лимит персонажей",
-        { id: "character-create-error" },
+        "character.limit_reached — Достигнут лимит персонажей",
+        expect.objectContaining({
+          description: expect.anything(),
+          id: "character-create-error",
+        }),
       ),
     )
     expect(screen.getByRole("dialog")).toBeVisible()

@@ -3,7 +3,6 @@
 import { toast } from "sonner"
 import { roomPanelClassName } from "@/components/room/styles/room-panel.styles"
 import { hasRoomCharacter } from "@/components/room/utils/has-room-character.util"
-import { presentRoomError } from "@/components/room/utils/room-error-presenter.util"
 import {
   Card,
   CardContent,
@@ -22,6 +21,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import roomContentRu from "@/data/room/room.ru.json"
 import { useSelectRoomCharacter } from "@/hooks/room/use-select-room-character"
 import { useCharacters } from "@/lib/api/use-characters"
+import { showError } from "@/lib/errors/presenter"
 import type { RoomMember } from "@/types/room"
 
 type RoomCharacterPickerProps = {
@@ -48,7 +48,7 @@ export function RoomCharacterPicker({
       await mutation.mutateAsync({ characterId, roomId })
       toast.success(roomContentRu.detail.characterSuccess)
     } catch (error) {
-      toast.error(presentRoomError(error))
+      await showError(error)
     }
   }
 
