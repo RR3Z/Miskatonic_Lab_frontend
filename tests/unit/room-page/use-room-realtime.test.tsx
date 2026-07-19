@@ -9,6 +9,7 @@ import type { RoomSocketEvent } from "@/types/room"
 
 const mocks = vi.hoisted(() => ({
   socketOptions: undefined as unknown,
+  socketStatus: "disconnected" as "connected" | "disconnected",
 }))
 
 vi.mock("@/hooks/room/use-room-session", () => ({
@@ -20,7 +21,7 @@ vi.mock("@/hooks/room/use-room-socket", () => ({
     mocks.socketOptions = options
     return {
       send: vi.fn(),
-      status: "disconnected",
+      status: mocks.socketStatus,
     }
   },
 }))
@@ -36,6 +37,7 @@ function testWrapper(queryClient: QueryClient) {
 describe("useRoomRealtime", () => {
   beforeEach(() => {
     mocks.socketOptions = undefined
+    mocks.socketStatus = "disconnected"
   })
 
   it("refetches current room snapshot before event history", async () => {
@@ -59,6 +61,31 @@ describe("useRoomRealtime", () => {
         type: "owner.transferred",
       })
     })
+
+    await waitFor(() => expect(refetchQueries).toHaveBeenCalledTimes(2))
+    expect(refetchQueries).toHaveBeenNthCalledWith(1, {
+      queryKey: roomQueryKeys.detail("owner-1", "room-1"),
+      type: "active",
+    })
+    expect(refetchQueries).toHaveBeenNthCalledWith(2, {
+      queryKey: roomQueryKeys.events("owner-1", "room-1"),
+      type: "active",
+    })
+  })
+
+  it("refetches snapshot and history after websocket reconnect", async () => {
+    const queryClient = new QueryClient()
+    const refetchQueries = vi
+      .spyOn(queryClient, "refetchQueries")
+      .mockResolvedValue(undefined)
+
+    const { rerender } = renderHook(
+      () => useRoomRealtime({ roomId: "room-1" }),
+      { wrapper: testWrapper(queryClient) },
+    )
+
+    mocks.socketStatus = "connected"
+    rerender()
 
     await waitFor(() => expect(refetchQueries).toHaveBeenCalledTimes(2))
     expect(refetchQueries).toHaveBeenNthCalledWith(1, {
