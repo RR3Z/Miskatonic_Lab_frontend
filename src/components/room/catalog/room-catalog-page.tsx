@@ -5,6 +5,7 @@ import { useState } from "react"
 import { RoomCatalogContent } from "@/components/room/catalog/room-catalog-content"
 import { CreateRoomModal } from "@/components/room/create/create-room-modal"
 import { JoinRoomModal } from "@/components/room/join/join-room-modal"
+import { roomOutlineButtonClassName } from "@/components/room/styles/room-button.styles"
 import { Button } from "@/components/ui/button"
 import roomContentRu from "@/data/room/room.ru.json"
 import { useRooms } from "@/hooks/room/use-rooms"
@@ -29,6 +30,7 @@ export function RoomCatalogPage() {
         </div>
         <Button
           aria-label={roomContentRu.catalog.createAriaLabel}
+          className={roomOutlineButtonClassName}
           onClick={() => setCreateOpen(true)}
           size="icon"
           type="button"

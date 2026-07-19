@@ -1,5 +1,6 @@
 import { DoorOpen } from "lucide-react"
 import Link from "next/link"
+import { roomOutlineButtonClassName } from "@/components/room/styles/room-button.styles"
 import { formatRoomCreatedAt } from "@/components/room/utils/format-room-created-at.util"
 import { Button } from "@/components/ui/button"
 import {
@@ -33,7 +34,13 @@ export function RoomCatalogCard({ onJoin, room }: RoomCatalogCardProps) {
           {room.member_count} / {room.max_players}
         </span>
         {room.is_member ? (
-          <Button asChild size="sm" type="button" variant="outline">
+          <Button
+            asChild
+            className={roomOutlineButtonClassName}
+            size="sm"
+            type="button"
+            variant="outline"
+          >
             <Link href={appRoutes.room(room.id)}>
               {roomContentRu.catalog.open}
             </Link>

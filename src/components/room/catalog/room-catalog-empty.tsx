@@ -1,5 +1,6 @@
 import { Plus } from "lucide-react"
 
+import { roomOutlineButtonClassName } from "@/components/room/styles/room-button.styles"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -20,7 +21,12 @@ export function RoomCatalogEmpty({ onCreate }: { onCreate: () => void }) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Button onClick={onCreate} type="button" variant="outline">
+        <Button
+          className={roomOutlineButtonClassName}
+          onClick={onCreate}
+          type="button"
+          variant="outline"
+        >
           <Plus aria-hidden="true" data-icon="inline-start" />
           {roomContentRu.catalog.create}
         </Button>
