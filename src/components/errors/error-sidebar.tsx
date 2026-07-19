@@ -4,7 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 
 import { BrandMark } from "@/components/brand/brand-mark"
-import { GuideCatalog } from "@/components/guide/catalog/guide-catalog"
+import { ErrorCatalog } from "@/components/errors/error-catalog"
 import { SidebarSiteFooter } from "@/components/layout/site-footer"
 import {
   Sidebar,
@@ -18,7 +18,7 @@ import {
 import { useCloseSidebar } from "@/hooks/layout/use-close-sidebar"
 import { appRoutes } from "@/lib/routes/app-routes"
 
-export function GuideSidebar() {
+export function ErrorSidebar() {
   const closeSidebar = useCloseSidebar({ mobileOnly: true })
 
   return (
@@ -53,7 +53,7 @@ export function GuideSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        <GuideCatalog onNavigate={closeSidebar} />
+        <ErrorCatalog onNavigate={closeSidebar} />
       </SidebarContent>
 
       <SidebarFooter>

@@ -4,6 +4,7 @@ import { usePathname } from "next/navigation"
 
 import { GuideLayoutToolbar } from "@/components/guide/search/guide-layout-toolbar"
 import { AppSidebar } from "@/components/layout/app-sidebar"
+import { isErrorDocumentationRoute } from "@/components/layout/utils/is-error-documentation-route.util"
 import { isGuideRoute } from "@/components/layout/utils/is-guide-route.util"
 import {
   SidebarInset,
@@ -17,7 +18,7 @@ type SiteShellProps = {
 
 export function SiteShell({ children }: SiteShellProps) {
   const pathname = usePathname()
-  const isGuide = isGuideRoute(pathname)
+  const isGuide = isGuideRoute(pathname) || isErrorDocumentationRoute(pathname)
 
   return (
     <SidebarProvider

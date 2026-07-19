@@ -6,6 +6,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 import { BrandMark } from "@/components/brand/brand-mark"
+import { ErrorSidebar } from "@/components/errors/error-sidebar"
 import { GuideSidebar } from "@/components/guide/catalog/guide-sidebar"
 import {
   isNavigationItemActive,
@@ -13,6 +14,7 @@ import {
 } from "@/components/layout/sidebar-navigation"
 import { SidebarUserControls } from "@/components/layout/sidebar-user-controls"
 import { SidebarSiteFooter } from "@/components/layout/site-footer"
+import { isErrorDocumentationRoute } from "@/components/layout/utils/is-error-documentation-route.util"
 import { isGuideRoute } from "@/components/layout/utils/is-guide-route.util"
 import {
   Sidebar,
@@ -36,6 +38,10 @@ export function AppSidebar() {
 
   if (isGuideRoute(pathname)) {
     return <GuideSidebar />
+  }
+
+  if (isErrorDocumentationRoute(pathname)) {
+    return <ErrorSidebar />
   }
 
   return (
