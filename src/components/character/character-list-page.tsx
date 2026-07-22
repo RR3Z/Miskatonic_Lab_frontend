@@ -1,12 +1,13 @@
 "use client"
 
 import { Plus } from "lucide-react"
-
 import { CreateCharacterModal } from "@/components/character/create/create-character-modal"
-import { useCreateCharacterIntent } from "@/components/character/create/use-create-character-intent"
 import { CharacterListContent } from "@/components/character/list/character-list-content"
 import { Button } from "@/components/ui/button"
-import { useCharacters, useDeleteCharacter } from "@/lib/api/use-characters"
+import localizedContent from "@/data/locales/ru/character/list.ru.json"
+import { useCharacters } from "@/hooks/character/use-characters"
+import { useCreateCharacterIntent } from "@/hooks/character/use-create-character-intent"
+import { useDeleteCharacter } from "@/hooks/character/use-delete-character"
 
 export const MAX_CHARACTERS_PER_USER = 30
 
@@ -25,16 +26,22 @@ export function CharacterListPage() {
     <div className="mx-auto w-full max-w-[1720px] px-4 py-6 sm:px-8 sm:py-8 lg:py-10">
       <div className="mb-5 flex items-start justify-between gap-4 sm:mb-6 sm:items-center">
         <h1 className="font-heading text-2xl font-semibold tracking-wide text-[var(--ml-ink-primary)] sm:text-3xl lg:text-4xl">
-          Список персонажей ({hasLoadError ? "—" : characters.length}/
-          {MAX_CHARACTERS_PER_USER})
+          {
+            localizedContent.copy.componentsCharacterCharacterListPage
+              .spisokPersonazhei
+          }
+          {hasLoadError ? "—" : characters.length}/{MAX_CHARACTERS_PER_USER})
         </h1>
         <Button
           aria-label={
             atLimit
-              ? "Создание персонажа недоступно: достигнут лимит"
+              ? localizedContent.copy.componentsCharacterCharacterListPage
+                  .sozdaniePersonazhaNedostupnoDostignutLimit
               : hasLoadError
-                ? "Создание персонажа недоступно: список не загружен"
-                : "Создать персонажа"
+                ? localizedContent.copy.componentsCharacterCharacterListPage
+                    .sozdaniePersonazhaNedostupnoSpisokNeZagruzhen
+                : localizedContent.copy.componentsCharacterCharacterListPage
+                    .sozdatPersonazha
           }
           className={
             atLimit

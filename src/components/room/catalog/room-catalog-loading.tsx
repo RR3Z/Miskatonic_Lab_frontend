@@ -1,5 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton"
-import roomContentRu from "@/data/room/room.ru.json"
+import roomContentRu from "@/data/locales/ru/room/catalog.ru.json"
 
 export function RoomCatalogLoading() {
   return (

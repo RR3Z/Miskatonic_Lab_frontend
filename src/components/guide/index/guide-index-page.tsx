@@ -1,6 +1,6 @@
 import { GuideIndexHeader } from "@/components/guide/index/guide-index-header"
 import { GuideSectionCard } from "@/components/guide/index/guide-section-card"
-import { guideContent } from "@/data/guide/guide-content.data"
+import { guideContent } from "@/lib/guide/guide-content"
 
 export function GuideIndexPage() {
   return (

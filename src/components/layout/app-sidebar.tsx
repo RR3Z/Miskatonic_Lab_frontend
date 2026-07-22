@@ -8,27 +8,24 @@ import { usePathname } from "next/navigation"
 import { BrandMark } from "@/components/brand/brand-mark"
 import { ErrorSidebar } from "@/components/errors/error-sidebar"
 import { GuideSidebar } from "@/components/guide/catalog/guide-sidebar"
-import {
-  isNavigationItemActive,
-  navigationItems,
-} from "@/components/layout/sidebar-navigation"
+import { navigationItems } from "@/components/layout/constants/sidebar-navigation.constants"
 import { SidebarUserControls } from "@/components/layout/sidebar-user-controls"
 import { SidebarSiteFooter } from "@/components/layout/site-footer"
 import { isErrorDocumentationRoute } from "@/components/layout/utils/is-error-documentation-route.util"
 import { isGuideRoute } from "@/components/layout/utils/is-guide-route.util"
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar"
+import { isNavigationItemActive } from "@/components/layout/utils/is-navigation-item-active.util"
+import { Sidebar } from "@/components/ui/sidebar/sidebar"
+import { SidebarContent } from "@/components/ui/sidebar/sidebar-content"
+import { SidebarFooter } from "@/components/ui/sidebar/sidebar-footer"
+import { SidebarGroup } from "@/components/ui/sidebar/sidebar-group"
+import { SidebarGroupContent } from "@/components/ui/sidebar/sidebar-group-content"
+import { SidebarHeader } from "@/components/ui/sidebar/sidebar-header"
+import { SidebarMenu } from "@/components/ui/sidebar/sidebar-menu"
+import { SidebarMenuButton } from "@/components/ui/sidebar/sidebar-menu-button"
+import { SidebarMenuItem } from "@/components/ui/sidebar/sidebar-menu-item"
+import layoutContent from "@/data/locales/ru/layout/layout.ru.json"
+import { landingContent } from "@/data/locales/utils/landing-content.util"
 import { useCloseSidebar } from "@/hooks/layout/use-close-sidebar"
-import { landingContent } from "@/lib/content/landing.content"
 import { appRoutes } from "@/lib/routes/app-routes"
 
 export function AppSidebar() {
@@ -53,10 +50,16 @@ export function AppSidebar() {
               asChild
               className="h-12 justify-center"
               size="lg"
-              tooltip="Miskatonic Lab"
+              tooltip={
+                layoutContent.copy.componentsLayoutSidebarNavigation
+                  .brandTooltip
+              }
             >
               <Link
-                aria-label="Miskatonic Lab home"
+                aria-label={
+                  layoutContent.copy.componentsLayoutSidebarNavigation
+                    .homeAriaLabel
+                }
                 href={appRoutes.home}
                 onClick={closeSidebar}
               >

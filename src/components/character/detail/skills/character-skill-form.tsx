@@ -1,12 +1,12 @@
 "use client"
 
 import { useEffect, useId, useMemo, useState } from "react"
-
-import { getEditableSkillValues } from "@/components/character/detail/skills/skill-values"
+import { getEditableSkillValues } from "@/components/character/detail/skills/utils/skill-values.util"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
-import { DialogFooter } from "@/components/ui/dialog"
+import { DialogFooter } from "@/components/ui/dialog/dialog-footer"
 import { Input } from "@/components/ui/input"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
 import type { CharacterSkillInput } from "@/lib/api/character-skills"
 
 export function CharacterSkillForm({
@@ -59,12 +59,18 @@ export function CharacterSkillForm({
       parsedBaseValue < 0 ||
       parsedValue < 0
     ) {
-      setError("Введите название и целые неотрицательные значения.")
+      setError(
+        localizedContent.copy.characterDetailSkillsCharacterSkillForm
+          .vvediteNazvanieITselyeNeotritsatelnyeZnacheniya,
+      )
       return
     }
 
     if (parsedBaseValue > 100 || parsedBaseValue + parsedValue > 100) {
-      setError("Итоговое значение навыка не может превышать 100%.")
+      setError(
+        localizedContent.copy.characterDetailSkillsCharacterSkillForm
+          .itogovoeZnachenieNavykaNeMozhetPrevyshat,
+      )
       return
     }
 
@@ -79,7 +85,10 @@ export function CharacterSkillForm({
         checked,
       })
     } catch {
-      setError("Не удалось сохранить навык.")
+      setError(
+        localizedContent.copy.characterDetailSkillsCharacterSkillForm
+          .neUdalosSohranitNavyk,
+      )
     }
   }
 
@@ -98,11 +107,17 @@ export function CharacterSkillForm({
     >
       {canEditDefinition ? (
         <Input
-          aria-label="Название навыка"
+          aria-label={
+            localizedContent.copy.characterDetailSkillsCharacterSkillForm
+              .nazvanieNavyka
+          }
           disabled={isPending}
           maxLength={100}
           onChange={(event) => setName(event.target.value)}
-          placeholder="Название навыка"
+          placeholder={
+            localizedContent.copy.characterDetailSkillsCharacterSkillForm
+              .nazvanieNavyka
+          }
           value={name}
         />
       ) : null}
@@ -111,9 +126,12 @@ export function CharacterSkillForm({
           className="grid gap-1 font-body text-xs text-[var(--ml-ink-muted)]"
           htmlFor={baseValueId}
         >
-          База
+          {localizedContent.copy.characterDetailSkillsCharacterSkillForm.baza}
           <Input
-            aria-label="Базовое значение навыка"
+            aria-label={
+              localizedContent.copy.characterDetailSkillsCharacterSkillForm
+                .bazovoeZnachenieNavyka
+            }
             disabled={isPending || !canEditDefinition}
             id={baseValueId}
             min={0}
@@ -127,9 +145,15 @@ export function CharacterSkillForm({
           className="grid gap-1 font-body text-xs text-[var(--ml-ink-muted)]"
           htmlFor={valueId}
         >
-          Прокачка
+          {
+            localizedContent.copy.characterDetailSkillsCharacterSkillForm
+              .prokachka
+          }
           <Input
-            aria-label="Прокачка навыка"
+            aria-label={
+              localizedContent.copy.characterDetailSkillsCharacterSkillForm
+                .prokachkaNavyka
+            }
             disabled={isPending}
             id={valueId}
             min={0}
@@ -147,13 +171,19 @@ export function CharacterSkillForm({
           htmlFor={checkedId}
         >
           <Checkbox
-            aria-label="Отмечен для развития"
+            aria-label={
+              localizedContent.copy.characterDetailSkillsCharacterSkillForm
+                .otmechenDlyaRazvitiya
+            }
             checked={checked}
             disabled={isPending || isAtMaximum}
             id={checkedId}
             onCheckedChange={(nextChecked) => setChecked(nextChecked === true)}
           />
-          Развитие
+          {
+            localizedContent.copy.characterDetailSkillsCharacterSkillForm
+              .razvitie
+          }
         </label>
       </div>
       {error ? <p className="text-xs text-destructive">{error}</p> : null}
@@ -165,7 +195,7 @@ export function CharacterSkillForm({
           type="button"
           variant="destructive"
         >
-          Отмена
+          {localizedContent.copy.characterDetailSkillsCharacterSkillForm.otmena}
         </Button>
         <Button
           className="w-full sm:flex-1"
@@ -173,7 +203,10 @@ export function CharacterSkillForm({
           type="submit"
           variant="success"
         >
-          {isPending ? "Сохранение…" : submitLabel}
+          {isPending
+            ? localizedContent.copy.characterDetailSkillsCharacterSkillForm
+                .sohranenie
+            : submitLabel}
         </Button>
       </DialogFooter>
     </form>

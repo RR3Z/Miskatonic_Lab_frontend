@@ -1,4 +1,5 @@
 import { Skeleton } from "@/components/ui/skeleton"
+import localizedContent from "@/data/locales/ru/character/list.ru.json"
 
 const skeletonCards = [
   "skeleton-card-1",
@@ -13,7 +14,10 @@ export function CharacterListLoading() {
   return (
     <>
       <output className="sr-only" aria-live="polite">
-        Загрузка персонажей…
+        {
+          localizedContent.copy.componentsCharacterListCharacterListLoading
+            .zagruzkaPersonazhei
+        }
       </output>
       {skeletonCards.map((key) => (
         <Skeleton

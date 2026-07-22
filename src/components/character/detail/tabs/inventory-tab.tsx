@@ -2,13 +2,13 @@
 
 import { Plus } from "lucide-react"
 import { useMemo, useState } from "react"
-
 import { InventoryItemCard } from "@/components/character/detail/inventory/inventory-item-card"
 import { InventoryItemDialog } from "@/components/character/detail/inventory/inventory-item-dialog"
 import { EmptySection } from "@/components/character/detail/tabs/empty-section"
 import { SectionTitle } from "@/components/character/detail/tabs/section-title"
 import { Button } from "@/components/ui/button"
-import type { CharacterInventoryItem } from "@/types/character"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import type { CharacterInventoryItem } from "@/types/character.types"
 
 export function InventoryTab({
   characterId,
@@ -36,7 +36,9 @@ export function InventoryTab({
   return (
     <section data-testid="character-inventory-content">
       <div className="flex items-center justify-between gap-4">
-        <SectionTitle>Инвентарь</SectionTitle>
+        <SectionTitle>
+          {localizedContent.copy.characterDetailTabsInventoryTab.inventar}
+        </SectionTitle>
         <Button
           className="shrink-0 border-[var(--ml-accent-brass-strong)]/70 bg-[color-mix(in_srgb,var(--ml-accent-brass-strong)_10%,transparent)] text-[var(--ml-accent-aged-gold)] hover:border-[var(--ml-accent-aged-gold)] hover:bg-[color-mix(in_srgb,var(--ml-accent-brass-strong)_20%,transparent)] hover:text-[var(--ml-ink-primary)]"
           disabled={isCreating || editingItem !== null}
@@ -46,7 +48,7 @@ export function InventoryTab({
           variant="secondary"
         >
           <Plus aria-hidden="true" data-icon="inline-start" />
-          Добавить предмет
+          {localizedContent.copy.characterDetailTabsInventoryTab.dobavitPredmet}
         </Button>
       </div>
 
@@ -82,7 +84,12 @@ export function InventoryTab({
         </div>
       ) : (
         <div className="mt-3">
-          <EmptySection>Предметов пока нет.</EmptySection>
+          <EmptySection>
+            {
+              localizedContent.copy.characterDetailTabsInventoryTab
+                .predmetovPokaNet
+            }
+          </EmptySection>
         </div>
       )}
     </section>

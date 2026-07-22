@@ -1,4 +1,4 @@
-import roomContentRu from "@/data/room/room.ru.json"
+import roomContentRu from "@/data/locales/ru/room/chat.ru.json"
 import type { RoomSocketStatus } from "@/hooks/room/use-room-socket"
 
 export function roomSocketStatusText(status: RoomSocketStatus) {

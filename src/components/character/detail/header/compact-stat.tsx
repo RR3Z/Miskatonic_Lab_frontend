@@ -1,9 +1,9 @@
 "use client"
 
 import type { ZodType } from "zod"
-
 import { InlineTextEditor } from "@/components/character/detail/editors/inline-text-editor"
-import { CharacterSheetStatCard } from "@/components/character/detail/header/character-sheet-stat-card"
+import { CharacterSheetStatCard } from "@/components/character/detail/header/character-sheet-stat/character-sheet-stat-card"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
 
 export function CompactStat({
   ariaLabel,
@@ -32,13 +32,16 @@ export function CompactStat({
         ariaLabel={ariaLabel}
         className="w-full p-0"
         displayClassName="text-center font-mono text-base font-semibold tabular-nums text-[var(--ml-ink-primary)]"
-        errorMessage="Не удалось сохранить показатель"
+        errorMessage={
+          localizedContent.copy.characterDetailHeaderCompactStat
+            .neUdalosSohranitPokazatel
+        }
         inputAlign="center"
         inputClassName="font-mono text-sm"
         inputSize="sm"
         multiline={false}
         onSave={onSave}
-        placeholder="—"
+        placeholder={localizedContent.copy.characterDetailCommon.emptyValue}
         schema={schema}
         value={value === null ? null : String(value)}
       />

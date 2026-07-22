@@ -4,8 +4,8 @@ import { GuideExampleCallout } from "@/components/guide/article/guide-example-ca
 import { GuideFormulaCard } from "@/components/guide/article/guide-formula-card"
 import { GuideSearchHighlight } from "@/components/guide/article/guide-search-highlight"
 import { GuideFlowDiagram } from "@/components/guide/flow-diagram/guide-flow-diagram"
-import type { GuideBlock } from "@/data/guide/types/guide-content.types"
 import { cn } from "@/lib/utils/cn.util"
+import type { GuideBlock } from "@/types/guide-content.types"
 
 type GuideArticleBlockProps = {
   block: GuideBlock

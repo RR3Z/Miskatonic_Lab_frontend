@@ -6,8 +6,8 @@ import {
   DICE_RESULT_TOAST_DURATION_MS,
   DICE_RESULT_TOASTER_ARIA_LABEL,
   DICE_RESULT_TOASTER_ID,
-} from "@/components/ui/sonner/constants"
-import { diceResultToastOptions } from "@/components/ui/sonner/toast-options"
+} from "@/components/ui/sonner/constants/sonner.constants"
+import { diceResultToastOptions } from "@/components/ui/sonner/utils/toast-options.util"
 
 export function DiceResultToaster() {
   return (

@@ -1,29 +1,33 @@
 "use client"
 
-import { Minus, Plus, X } from "lucide-react"
+import { X } from "lucide-react"
 import Image from "next/image"
-import type * as React from "react"
 import { useEffect, useId, useState } from "react"
 import { toast } from "sonner"
-
-import { characterStatVisuals } from "@/components/character/character-stat-visuals"
-import { CHARACTER_RESOURCE_TONE_CLASSES } from "@/components/character/detail/header/character-resource-tone-classes"
-import type { ResourceStatDefinition } from "@/components/character/detail/header/character-stat-types"
+import { characterStatVisuals } from "@/components/character/constants/character-stat-visuals.constants"
 import { ResourceCalculatorActions } from "@/components/character/detail/header/resource-calculator-actions"
-import { Button } from "@/components/ui/button"
+import { ResourceDialogBackground } from "@/components/character/detail/header/resource-stat/resource-dialog-background"
+import { ResourceValueInput } from "@/components/character/detail/header/resource-stat/resource-value-input"
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import { Field, FieldError, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+  adjustDraftValue,
+  getResourceValidationMessage,
+  parseResourceValue,
+} from "@/components/character/detail/header/resource-stat/utils/resource-stat.util"
+import { CHARACTER_RESOURCE_TONE_CLASSES } from "@/components/character/detail/header/styles/character-resource-tone.styles"
+import type { ResourceStatDefinition } from "@/components/character/detail/header/types/character-stat.types"
+import { Button } from "@/components/ui/button"
+import { Dialog } from "@/components/ui/dialog/dialog"
+import { DialogClose } from "@/components/ui/dialog/dialog-close"
+import { DialogContent } from "@/components/ui/dialog/dialog-content"
+import { DialogFooter } from "@/components/ui/dialog/dialog-footer"
+import { DialogHeader } from "@/components/ui/dialog/dialog-header"
+import { DialogTitle } from "@/components/ui/dialog/dialog-title"
+import { FieldError } from "@/components/ui/field/field-error"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { formatLocalizedTemplate } from "@/data/locales/utils/format-localized-template.util"
 import type { CharacterDiceRoll } from "@/lib/api/character-dice-rolls"
 import { cn } from "@/lib/utils/cn.util"
-import type { CharacterDetail } from "@/types/character"
+import type { CharacterDetail } from "@/types/character.types"
 
 export function ResourceStat({
   character,
@@ -53,7 +57,10 @@ export function ResourceStat({
   const maxId = useId()
   const parsedCurrent = parseResourceValue(draftCurrent)
   const parsedMax = parseResourceValue(draftMax)
-  const validationMessage = getValidationMessage(parsedCurrent, parsedMax)
+  const validationMessage = getResourceValidationMessage(
+    parsedCurrent,
+    parsedMax,
+  )
 
   useEffect(() => {
     if (!open) return
@@ -81,7 +88,13 @@ export function ResourceStat({
       for (const reminder of reminders) toast(reminder)
       setOpen(false)
     } catch {
-      toast.error(`Не удалось сохранить ресурс «${label}»`)
+      toast.error(
+        formatLocalizedTemplate(
+          localizedContent.copy.characterDetailHeaderResourceStat
+            .neUdalosSohranitResursValue0,
+          { value0: label },
+        ),
+      )
     } finally {
       setIsSaving(false)
     }
@@ -89,9 +102,13 @@ export function ResourceStat({
 
   return (
     <>
-      <button
+      <Button
         aria-haspopup="dialog"
-        aria-label={`Изменить ресурс ${label}`}
+        aria-label={formatLocalizedTemplate(
+          localizedContent.copy.characterDetailHeaderResourceStat
+            .izmenitResursValue0,
+          { value0: label },
+        )}
         className={cn(
           "relative flex min-h-13 min-w-0 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-md border bg-[var(--ml-surface-panel-raised)]/75 px-2 py-1 text-center transition-colors hover:bg-[var(--ml-surface-panel-raised)] focus-visible:outline-1 focus-visible:outline-offset-1 focus-visible:outline-[var(--ml-focus-ring)]",
           CHARACTER_RESOURCE_TONE_CLASSES[tone],
@@ -99,7 +116,9 @@ export function ResourceStat({
         data-resource={resource}
         data-testid="character-resource"
         onClick={() => setOpen(true)}
+        size="content"
         type="button"
+        variant="unstyled"
       >
         {visual.image ? (
           <Image
@@ -130,7 +149,7 @@ export function ResourceStat({
         <span className="relative z-10 font-mono text-base font-semibold tabular-nums">
           {current}/{max}
         </span>
-      </button>
+      </Button>
 
       <Dialog
         onOpenChange={(nextOpen) => !isSaving && setOpen(nextOpen)}
@@ -144,7 +163,10 @@ export function ResourceStat({
           {!isSaving ? (
             <DialogClose asChild>
               <Button
-                aria-label="Закрыть калькулятор ресурса"
+                aria-label={
+                  localizedContent.copy.characterDetailHeaderResourceStat
+                    .zakrytKalkulyatorResursa
+                }
                 className="absolute top-2 right-2 z-20"
                 size="icon-sm"
                 type="button"
@@ -156,7 +178,11 @@ export function ResourceStat({
           ) : null}
           <DialogHeader className="relative z-10 items-center border-b border-[var(--ml-border-subtle)] pb-3 text-center">
             <DialogTitle className="font-heading text-xl font-semibold tracking-wide">
-              Изменить ресурс: {label}
+              {formatLocalizedTemplate(
+                localizedContent.copy.characterDetailHeaderResourceStat
+                  .izmenitResursTitleValue0,
+                { value0: label },
+              )}
             </DialogTitle>
           </DialogHeader>
 
@@ -173,7 +199,10 @@ export function ResourceStat({
                 parsedMax === null ||
                 parsedCurrent >= parsedMax
               }
-              label="Текущее"
+              label={
+                localizedContent.copy.characterDetailHeaderResourceStat
+                  .tekuschee
+              }
               onChange={setDraftCurrent}
               onDecrement={() =>
                 adjustDraftValue(setDraftCurrent, parsedCurrent, -1)
@@ -195,7 +224,9 @@ export function ResourceStat({
               incrementDisabled={
                 isSaving || parsedMax === null || parsedMax === 100
               }
-              label="Максимум"
+              label={
+                localizedContent.copy.characterDetailHeaderResourceStat.maksimum
+              }
               onChange={setDraftMax}
               onDecrement={() => adjustDraftValue(setDraftMax, parsedMax, -1)}
               onIncrement={() => adjustDraftValue(setDraftMax, parsedMax, 1)}
@@ -221,7 +252,12 @@ export function ResourceStat({
           />
           {reminders.length ? (
             <div className="relative z-10 rounded-sm border border-[var(--ml-accent-warning)]/65 bg-[var(--ml-surface-panel-raised)]/90 px-2 py-2 text-sm text-[var(--ml-ink-primary)]">
-              <p className="font-semibold">Напоминания после сохранения</p>
+              <p className="font-semibold">
+                {
+                  localizedContent.copy.characterDetailHeaderResourceStat
+                    .napominaniyaPosleSohraneniya
+                }
+              </p>
               <ul className="mt-1 list-disc space-y-1 pl-4 text-[var(--ml-ink-muted)]">
                 {reminders.map((reminder) => (
                   <li key={reminder}>{reminder}</li>
@@ -238,7 +274,7 @@ export function ResourceStat({
               type="button"
               variant="destructive"
             >
-              Отмена
+              {localizedContent.copy.characterDetailHeaderResourceStat.otmena}
             </Button>
             <Button
               className="w-full sm:flex-1"
@@ -247,147 +283,15 @@ export function ResourceStat({
               type="button"
               variant="success"
             >
-              {isSaving ? "Сохранение…" : "Сохранить"}
+              {isSaving
+                ? localizedContent.copy.characterDetailHeaderResourceStat
+                    .sohranenie
+                : localizedContent.copy.characterDetailHeaderResourceStat
+                    .sohranit}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
     </>
   )
-}
-
-function ResourceValueInput({
-  decrementDisabled,
-  disabled,
-  id,
-  incrementDisabled,
-  label,
-  onChange,
-  onDecrement,
-  onIncrement,
-  value,
-}: {
-  decrementDisabled: boolean
-  disabled: boolean
-  id: string
-  incrementDisabled: boolean
-  label: string
-  onChange: (value: string) => void
-  onDecrement: () => void
-  onIncrement: () => void
-  value: string
-}) {
-  const valueName =
-    label === "Текущее"
-      ? "текущее значение ресурса"
-      : "максимальное значение ресурса"
-
-  return (
-    <Field>
-      <FieldLabel
-        className="w-full justify-center text-center font-heading text-base font-semibold"
-        htmlFor={id}
-      >
-        {label}
-      </FieldLabel>
-      <div className="flex items-center gap-1">
-        <ResourceAdjustButton
-          aria-label={`Уменьшить ${valueName}`}
-          disabled={decrementDisabled}
-          onClick={onDecrement}
-        >
-          <Minus aria-hidden="true" />
-        </ResourceAdjustButton>
-        <Input
-          aria-label={valueName[0]?.toUpperCase() + valueName.slice(1)}
-          align="center"
-          disabled={disabled}
-          id={id}
-          inputMode="numeric"
-          maxLength={3}
-          onChange={(event) => onChange(event.target.value.replace(/\D/g, ""))}
-          pattern="[0-9]*"
-          variant="accent"
-          value={value}
-        />
-        <ResourceAdjustButton
-          aria-label={`Увеличить ${valueName}`}
-          disabled={incrementDisabled}
-          onClick={onIncrement}
-        >
-          <Plus aria-hidden="true" />
-        </ResourceAdjustButton>
-      </div>
-    </Field>
-  )
-}
-
-function ResourceAdjustButton({
-  children,
-  ...props
-}: React.ComponentProps<typeof Button>) {
-  return (
-    <Button {...props} size="icon-xs" type="button" variant="secondary">
-      {children}
-    </Button>
-  )
-}
-
-function ResourceDialogBackground({
-  visual,
-}: {
-  visual: (typeof characterStatVisuals)[keyof typeof characterStatVisuals]
-}) {
-  const Icon = visual.icon
-
-  return (
-    <div
-      aria-hidden="true"
-      className="pointer-events-none absolute inset-0 z-0 grid place-items-center opacity-[0.12]"
-      data-testid="resource-dialog-icon"
-    >
-      {visual.image ? (
-        <Image
-          alt=""
-          className="size-48"
-          height={192}
-          src={visual.image}
-          style={
-            visual.imageFilter ? { filter: visual.imageFilter } : undefined
-          }
-          width={192}
-        />
-      ) : Icon ? (
-        <Icon className={cn("size-48", visual.iconClassName)} />
-      ) : null}
-    </div>
-  )
-}
-
-function adjustDraftValue(
-  setValue: (value: string) => void,
-  value: number | null,
-  delta: -1 | 1,
-) {
-  if (value === null) return
-  setValue(String(value + delta))
-}
-
-function parseResourceValue(value: string): number | null {
-  if (!/^\d+$/.test(value)) return null
-  const parsed = Number(value)
-  return Number.isSafeInteger(parsed) && parsed <= 100 ? parsed : null
-}
-
-function getValidationMessage(
-  current: number | null,
-  max: number | null,
-): string | null {
-  if (current === null || max === null) {
-    return "Введите целое неотрицательное значение от 0 до 100"
-  }
-  if (current > max) {
-    return "Текущее значение не может быть больше максимального"
-  }
-  return null
 }

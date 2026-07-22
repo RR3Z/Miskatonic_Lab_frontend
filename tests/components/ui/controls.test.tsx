@@ -3,13 +3,11 @@ import userEvent from "@testing-library/user-event"
 import { describe, expect, it } from "vitest"
 
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Select } from "@/components/ui/select/select"
+import { SelectContent } from "@/components/ui/select/select-content"
+import { SelectItem } from "@/components/ui/select/select-item"
+import { SelectTrigger } from "@/components/ui/select/select-trigger"
+import { SelectValue } from "@/components/ui/select/select-value"
 import { Textarea } from "@/components/ui/textarea"
 
 describe("shared form controls", () => {

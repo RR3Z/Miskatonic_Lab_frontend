@@ -2,7 +2,7 @@ import { Search } from "lucide-react"
 import type { RefObject } from "react"
 
 import { Input } from "@/components/ui/input"
-import { guideContent } from "@/data/guide/guide-content.data"
+import { guideContent } from "@/lib/guide/guide-content"
 
 type GuideSearchInputProps = {
   inputRef: RefObject<HTMLInputElement | null>

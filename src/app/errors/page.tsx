@@ -1,7 +1,8 @@
 import { CircleHelp } from "lucide-react"
 import Link from "next/link"
-
 import { GuideSymbol } from "@/components/guide/symbol/guide-symbol"
+import localizedContent from "@/data/locales/ru/errors/pages.ru.json"
+import { formatLocalizedTemplate } from "@/data/locales/utils/format-localized-template.util"
 import { getAllErrorCodes, getPresentedError } from "@/lib/errors/catalog"
 import { appRoutes } from "@/lib/routes/app-routes"
 
@@ -19,25 +20,30 @@ export default function ErrorDocumentationIndexPage() {
           <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,var(--ml-surface-panel)_0%,rgba(30,26,23,0.92)_35%,rgba(30,26,23,0.4)_68%,rgba(30,26,23,0.22)_100%)]" />
           <div className="relative z-10 max-w-3xl">
             <p className="text-xs font-semibold tracking-[0.2em] text-(--ml-accent-brass-strong) uppercase">
-              Справочник приложения
+              {localizedContent.copy.appErrorsPage.spravochnikPrilozheniya}
             </p>
             <h1 className="mt-3 font-(family-name:--font-display) text-4xl leading-none font-semibold text-(--ml-surface-paper) sm:text-6xl">
-              Документация ошибок
+              {localizedContent.copy.appErrorsPage.dokumentatsiyaOshibok}
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-relaxed text-(--ml-ink-muted) sm:text-lg">
-              Найдите код ошибки, узнайте возможные причины и безопасный способ
-              исправления.
+              {
+                localizedContent.copy.appErrorsPage
+                  .naiditeKodOshibkiUznaiteVozmozhnyePrichiny
+              }
             </p>
             <div className="mt-6 flex items-center gap-2 text-sm text-(--ml-accent-brass-strong)">
               <CircleHelp aria-hidden="true" size={18} />
-              {getAllErrorCodes().length} кодов в каталоге
+              {formatLocalizedTemplate(
+                localizedContent.copy.appErrorsPage.value0KodovVKataloge,
+                { value0: getAllErrorCodes().length },
+              )}
             </div>
           </div>
         </header>
 
         <section
           className="mt-6 grid gap-4 md:grid-cols-2"
-          aria-label="Коды ошибок"
+          aria-label={localizedContent.copy.appErrorsPage.kodyOshibok}
         >
           {getAllErrorCodes().map((code) => {
             const error = getPresentedError(code)

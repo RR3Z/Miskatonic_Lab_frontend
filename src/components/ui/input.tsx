@@ -3,7 +3,7 @@ import type * as React from "react"
 import {
   type ControlVariantProps,
   controlVariants,
-} from "@/components/ui/control-variants"
+} from "@/components/ui/styles/control-variants.styles"
 import { cn } from "@/lib/utils/cn.util"
 
 function Input({

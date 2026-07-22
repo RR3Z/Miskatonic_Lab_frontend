@@ -1,0 +1,18 @@
+{
+  "chat": {
+    "title": "Чат комнаты",
+    "description": "Сообщения получают все подключённые игроки.",
+    "messagesAriaLabel": "Сообщения комнаты",
+    "empty": "Сообщений пока нет.",
+    "messageLabel": "Сообщение в чат",
+    "messagePlaceholder": "Сообщение для комнаты",
+    "sendAriaLabel": "Отправить сообщение",
+    "notConnected": "Чат ещё не подключён. Попробуйте через мгновение.",
+    "status": {
+      "connected": "на связи",
+      "connecting": "подключение…",
+      "unsupported": "чат недоступен",
+      "disconnected": "переподключение…"
+    }
+  }
+}

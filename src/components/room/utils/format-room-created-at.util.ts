@@ -1,4 +1,4 @@
-import roomContentRu from "@/data/room/room.ru.json"
+import roomContentRu from "@/data/locales/ru/room/catalog.ru.json"
 
 export function formatRoomCreatedAt(value: string) {
   const date = new Date(value)

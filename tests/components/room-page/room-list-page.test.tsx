@@ -8,7 +8,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { RoomCatalogPage } from "@/components/room/catalog/room-catalog-page"
 import { CreateRoomModal } from "@/components/room/create/create-room-modal"
-import roomContentRu from "@/data/room/room.ru.json"
+import roomContentRu from "@/data/locales/ru/room/catalog.ru.json"
+import createContentRu from "@/data/locales/ru/room/create.ru.json"
+import joinContentRu from "@/data/locales/ru/room/join.ru.json"
 
 const mocks = vi.hoisted(() => ({
   getToken: vi.fn(async () => "test-token"),
@@ -98,10 +100,10 @@ describe("Room catalog", () => {
     )
 
     expect(
-      screen.getByRole("heading", { name: roomContentRu.join.title }),
+      screen.getByRole("heading", { name: joinContentRu.join.title }),
     ).toBeVisible()
     expect(
-      screen.getByLabelText(roomContentRu.join.passwordLabel),
+      screen.getByLabelText(joinContentRu.join.passwordLabel),
     ).toBeVisible()
   })
 
@@ -187,22 +189,22 @@ describe("Room catalog", () => {
     renderWithQuery(<ModalHarness />)
 
     await user.type(
-      screen.getByLabelText(roomContentRu.create.nameLabel),
+      screen.getByLabelText(createContentRu.create.nameLabel),
       "Masks",
     )
     await user.type(
-      screen.getByLabelText(roomContentRu.create.passwordLabel),
+      screen.getByLabelText(createContentRu.create.passwordLabel),
       "keeper-password",
     )
     await user.clear(
-      screen.getByLabelText(roomContentRu.create.maxPlayersLabel),
+      screen.getByLabelText(createContentRu.create.maxPlayersLabel),
     )
     await user.type(
-      screen.getByLabelText(roomContentRu.create.maxPlayersLabel),
+      screen.getByLabelText(createContentRu.create.maxPlayersLabel),
       "3",
     )
     await user.click(
-      screen.getByRole("button", { name: roomContentRu.create.submit }),
+      screen.getByRole("button", { name: createContentRu.create.submit }),
     )
 
     await waitFor(() =>

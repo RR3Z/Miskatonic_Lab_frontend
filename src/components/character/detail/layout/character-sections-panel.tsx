@@ -1,5 +1,5 @@
 import { CharacterSheetTabs } from "@/components/character/detail/tabs/character-sheet-tabs"
-import type { CharacterDetail } from "@/types/character"
+import type { CharacterDetail } from "@/types/character.types"
 
 export function CharacterSectionsPanel({
   character,

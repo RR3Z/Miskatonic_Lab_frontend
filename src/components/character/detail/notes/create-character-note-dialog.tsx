@@ -5,22 +5,21 @@ import { useId } from "react"
 import type { FieldErrors } from "react-hook-form"
 import { Controller } from "react-hook-form"
 import { toast } from "sonner"
-
-import { useCreateCharacterNoteForm } from "@/components/character/detail/notes/use-create-character-note-form"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import { Field, FieldLabel } from "@/components/ui/field"
+import { Dialog } from "@/components/ui/dialog/dialog"
+import { DialogClose } from "@/components/ui/dialog/dialog-close"
+import { DialogContent } from "@/components/ui/dialog/dialog-content"
+import { DialogFooter } from "@/components/ui/dialog/dialog-footer"
+import { DialogHeader } from "@/components/ui/dialog/dialog-header"
+import { DialogTitle } from "@/components/ui/dialog/dialog-title"
+import { Field } from "@/components/ui/field/field"
+import { FieldLabel } from "@/components/ui/field/field-label"
 import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
 import { Textarea } from "@/components/ui/textarea"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
 import { MAX_CHARACTER_NOTE_TITLE_LENGTH } from "@/dto/character/create-character-note.dto"
+import { useCreateCharacterNoteForm } from "@/hooks/character/use-create-character-note-form"
 
 export function CreateCharacterNoteDialog({
   characterId,
@@ -50,9 +49,14 @@ export function CreateCharacterNoteDialog({
 
   function handleInvalid(errors: FieldErrors<{ body: string; title: string }>) {
     const error = errors.title ?? errors.body
-    toast.error(error?.message ?? "Проверьте данные заметки", {
-      id: "character-note-validation-error",
-    })
+    toast.error(
+      error?.message ??
+        localizedContent.copy.characterDetailNotesCreateCharacterNoteDialog
+          .proverteDannyeZametki,
+      {
+        id: "character-note-validation-error",
+      },
+    )
   }
 
   return (
@@ -69,12 +73,19 @@ export function CreateCharacterNoteDialog({
       >
         <DialogHeader className="items-center border-b border-[var(--ml-border-subtle)] pb-3 text-center">
           <DialogTitle className="font-heading text-xl font-semibold tracking-wide">
-            Новая заметка
+            {
+              localizedContent.copy
+                .characterDetailNotesCreateCharacterNoteDialog.novayaZametka
+            }
           </DialogTitle>
         </DialogHeader>
         <DialogClose asChild>
           <Button
-            aria-label="Закрыть окно: Новая заметка"
+            aria-label={
+              localizedContent.copy
+                .characterDetailNotesCreateCharacterNoteDialog
+                .zakrytOknoNovayaZametka
+            }
             className="absolute top-2 right-2"
             disabled={isPending}
             onClick={closeDialog}
@@ -97,7 +108,12 @@ export function CreateCharacterNoteDialog({
               name="title"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={titleId}>Заголовок</FieldLabel>
+                  <FieldLabel htmlFor={titleId}>
+                    {
+                      localizedContent.copy
+                        .characterDetailNotesCreateCharacterNoteDialog.zagolovok
+                    }
+                  </FieldLabel>
                   <Input
                     {...field}
                     aria-invalid={fieldState.invalid}
@@ -105,7 +121,11 @@ export function CreateCharacterNoteDialog({
                     disabled={isPending}
                     id={titleId}
                     maxLength={MAX_CHARACTER_NOTE_TITLE_LENGTH}
-                    placeholder="Новая заметка"
+                    placeholder={
+                      localizedContent.copy
+                        .characterDetailNotesCreateCharacterNoteDialog
+                        .novayaZametka
+                    }
                     required
                   />
                 </Field>
@@ -116,14 +136,23 @@ export function CreateCharacterNoteDialog({
               name="body"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={bodyId}>Текст</FieldLabel>
+                  <FieldLabel htmlFor={bodyId}>
+                    {
+                      localizedContent.copy
+                        .characterDetailNotesCreateCharacterNoteDialog.tekst
+                    }
+                  </FieldLabel>
                   <Textarea
                     {...field}
                     aria-invalid={fieldState.invalid}
                     className="min-h-32 py-2 text-sm leading-6"
                     disabled={isPending}
                     id={bodyId}
-                    placeholder="Что важно запомнить?"
+                    placeholder={
+                      localizedContent.copy
+                        .characterDetailNotesCreateCharacterNoteDialog
+                        .chtoVazhnoZapomnit
+                    }
                     required
                     size="lg"
                   />
@@ -140,7 +169,10 @@ export function CreateCharacterNoteDialog({
               type="button"
               variant="secondary"
             >
-              Отмена
+              {
+                localizedContent.copy
+                  .characterDetailNotesCreateCharacterNoteDialog.otmena
+              }
             </Button>
             <Button
               className="w-full sm:flex-1"
@@ -151,10 +183,14 @@ export function CreateCharacterNoteDialog({
               {isPending ? (
                 <>
                   <Spinner aria-hidden="true" data-icon="inline-start" />
-                  Сохранение…
+                  {
+                    localizedContent.copy
+                      .characterDetailNotesCreateCharacterNoteDialog.sohranenie
+                  }
                 </>
               ) : (
-                "Добавить"
+                localizedContent.copy
+                  .characterDetailNotesCreateCharacterNoteDialog.dobavit
               )}
             </Button>
           </DialogFooter>

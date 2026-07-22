@@ -3,22 +3,19 @@
 import { useRouter } from "next/navigation"
 import { useEffect, useRef } from "react"
 import { toast } from "sonner"
-
+import { showError } from "@/components/errors/utils/error-toast.util"
 import { RoomDetailPage } from "@/components/room/detail/room-detail-page"
 import { RoomJoinForm } from "@/components/room/join/room-join-form"
 import { isRoomJoinRequiredError } from "@/components/room/join/utils/is-room-join-required.util"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import roomContentRu from "@/data/room/room.ru.json"
+import { Card } from "@/components/ui/card/card"
+import { CardContent } from "@/components/ui/card/card-content"
+import { CardDescription } from "@/components/ui/card/card-description"
+import { CardHeader } from "@/components/ui/card/card-header"
+import { CardTitle } from "@/components/ui/card/card-title"
+import roomContentRu from "@/data/locales/ru/room/join.ru.json"
 import { useJoinRoom } from "@/hooks/room/use-join-room"
 import { useRoom } from "@/hooks/room/use-room"
-import { showError } from "@/lib/errors/presenter"
 import { appRoutes } from "@/lib/routes/app-routes"
 
 import { RoomAccessLayout } from "./room-access-layout"

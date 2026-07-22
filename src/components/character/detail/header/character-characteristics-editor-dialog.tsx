@@ -2,36 +2,29 @@
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { X } from "lucide-react"
-import { useEffect, useId, useMemo } from "react"
-import { Controller, useForm } from "react-hook-form"
+import { useEffect, useMemo } from "react"
+import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { z } from "zod"
-
-import { getCharacterCharacteristics } from "@/components/character/detail/header/character-characteristic-definitions"
+import { CharacteristicInput } from "@/components/character/detail/header/characteristics-editor/characteristic-input"
+import type { CharacteristicFormInput } from "@/components/character/detail/header/characteristics-editor/types/characteristics-editor.types"
+import { getCharacteristicFormValues } from "@/components/character/detail/header/characteristics-editor/utils/characteristic-form-values.util"
+import { getCharacterCharacteristics } from "@/components/character/detail/header/utils/character-characteristics.util"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import { Field, FieldError, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+import { Dialog } from "@/components/ui/dialog/dialog"
+import { DialogClose } from "@/components/ui/dialog/dialog-close"
+import { DialogContent } from "@/components/ui/dialog/dialog-content"
+import { DialogDescription } from "@/components/ui/dialog/dialog-description"
+import { DialogFooter } from "@/components/ui/dialog/dialog-footer"
+import { DialogHeader } from "@/components/ui/dialog/dialog-header"
+import { DialogTitle } from "@/components/ui/dialog/dialog-title"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
 import {
   characterNullableIntegerTextSchema,
-  MAX_CHARACTERISTIC_VALUE,
   type UpdateCharacterCharacteristicsDto,
 } from "@/dto/character/character-sheet-values.dto"
-import { useUpdateCharacterCharacteristics } from "@/lib/api/use-character-statistics"
-import type { CharacterDetail } from "@/types/character"
-
-type CharacteristicFormInput = Record<
-  keyof UpdateCharacterCharacteristicsDto,
-  string
->
+import { useUpdateCharacterCharacteristics } from "@/hooks/character/use-update-character-characteristics"
+import type { CharacterDetail } from "@/types/character.types"
 
 const characteristicsFormSchema = z.object({
   appearance: characterNullableIntegerTextSchema,
@@ -54,7 +47,10 @@ export function CharacterCharacteristicsEditorDialog({
   open: boolean
 }) {
   const mutation = useUpdateCharacterCharacteristics(character.id)
-  const defaultValues = useMemo(() => getFormValues(character), [character])
+  const defaultValues = useMemo(
+    () => getCharacteristicFormValues(character),
+    [character],
+  )
   const form = useForm<CharacteristicFormInput>({
     defaultValues,
     mode: "onSubmit",
@@ -80,7 +76,11 @@ export function CharacterCharacteristicsEditorDialog({
       await mutation.mutateAsync(input)
       onOpenChange(false)
     } catch {
-      toast.error("Не удалось сохранить характеристики")
+      toast.error(
+        localizedContent.copy
+          .characterDetailHeaderCharacterCharacteristicsEditorDialog
+          .neUdalosSohranitHarakteristiki,
+      )
     }
   }
 
@@ -101,15 +101,27 @@ export function CharacterCharacteristicsEditorDialog({
       >
         <DialogHeader className="pr-9">
           <DialogTitle className="text-2xl">
-            Изменить характеристики
+            {
+              localizedContent.copy
+                .characterDetailHeaderCharacterCharacteristicsEditorDialog
+                .izmenitHarakteristiki
+            }
           </DialogTitle>
           <DialogDescription>
-            Пустое поле сохранится как неуказанное значение.
+            {
+              localizedContent.copy
+                .characterDetailHeaderCharacterCharacteristicsEditorDialog
+                .pustoePoleSohranitsyaKakNeukazannoeZnachenie
+            }
           </DialogDescription>
         </DialogHeader>
         <DialogClose asChild>
           <Button
-            aria-label="Закрыть окно изменения характеристик"
+            aria-label={
+              localizedContent.copy
+                .characterDetailHeaderCharacterCharacteristicsEditorDialog
+                .zakrytOknoIzmeneniyaHarakteristik
+            }
             className="absolute top-2 right-2"
             disabled={isPending}
             onClick={closeModal}
@@ -141,7 +153,11 @@ export function CharacterCharacteristicsEditorDialog({
               type="button"
               variant="destructive"
             >
-              Отмена
+              {
+                localizedContent.copy
+                  .characterDetailHeaderCharacterCharacteristicsEditorDialog
+                  .otmena
+              }
             </Button>
             <Button
               className="w-full sm:flex-1"
@@ -149,65 +165,17 @@ export function CharacterCharacteristicsEditorDialog({
               type="submit"
               variant="success"
             >
-              {isPending ? "Сохранение…" : "Сохранить"}
+              {isPending
+                ? localizedContent.copy
+                    .characterDetailHeaderCharacterCharacteristicsEditorDialog
+                    .sohranenie
+                : localizedContent.copy
+                    .characterDetailHeaderCharacterCharacteristicsEditorDialog
+                    .sohranit}
             </Button>
           </DialogFooter>
         </form>
       </DialogContent>
     </Dialog>
   )
-}
-
-function CharacteristicInput({
-  control,
-  disabled,
-  label,
-  name,
-}: {
-  control: ReturnType<typeof useForm<CharacteristicFormInput>>["control"]
-  disabled: boolean
-  label: string
-  name: keyof UpdateCharacterCharacteristicsDto
-}) {
-  const id = useId()
-
-  return (
-    <Controller
-      control={control}
-      name={name}
-      render={({ field, fieldState }) => (
-        <Field data-invalid={fieldState.invalid}>
-          <FieldLabel htmlFor={id}>{label}</FieldLabel>
-          <Input
-            {...field}
-            aria-invalid={fieldState.invalid}
-            disabled={disabled}
-            id={id}
-            inputMode="numeric"
-            maxLength={3}
-            onChange={(event) => {
-              const digits = event.target.value.replace(/\D/g, "")
-              field.onChange(
-                digits === ""
-                  ? ""
-                  : String(Math.min(Number(digits), MAX_CHARACTERISTIC_VALUE)),
-              )
-            }}
-            pattern="[0-9]*"
-            placeholder="—"
-          />
-          <FieldError errors={[fieldState.error]} />
-        </Field>
-      )}
-    />
-  )
-}
-
-function getFormValues(character: CharacterDetail): CharacteristicFormInput {
-  return Object.fromEntries(
-    getCharacterCharacteristics(character).map((field) => [
-      field.key,
-      field.value === null ? "" : String(field.value),
-    ]),
-  ) as CharacteristicFormInput
 }

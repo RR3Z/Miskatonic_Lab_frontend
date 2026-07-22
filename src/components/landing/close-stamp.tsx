@@ -1,4 +1,5 @@
 import type { SVGProps } from "react"
+import localizedContent from "@/data/locales/ru/landing/content.ru.json"
 
 export function CloseStamp(props: SVGProps<SVGSVGElement>) {
   return (
@@ -8,7 +9,7 @@ export function CloseStamp(props: SVGProps<SVGSVGElement>) {
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <title>Закрыто</title>
+      <title>{localizedContent.copy.componentsLandingCloseStamp.zakryto}</title>
       <rect
         x="0"
         y="0"
@@ -28,7 +29,7 @@ export function CloseStamp(props: SVGProps<SVGSVGElement>) {
         fontWeight="900"
         letterSpacing="4"
       >
-        ЗАКРЫТО
+        {localizedContent.copy.componentsLandingCloseStamp.zakryto2}
       </text>
     </svg>
   )

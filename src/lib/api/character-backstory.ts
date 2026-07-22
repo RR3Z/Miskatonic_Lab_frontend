@@ -7,7 +7,7 @@ import type {
 import type {
   CharacterBackstory,
   CharacterBackstoryItem,
-} from "@/types/character"
+} from "@/types/character.types"
 
 export async function upsertCharacterBackstory(
   api: KyInstance,

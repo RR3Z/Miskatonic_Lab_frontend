@@ -5,7 +5,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { useRoomRealtime } from "@/hooks/room/use-room-realtime"
 import { roomQueryKeys } from "@/lib/api/room-query-keys"
-import type { RoomSocketEvent } from "@/types/room"
+import type { RoomSocketEvent } from "@/types/room.types"
 
 const mocks = vi.hoisted(() => ({
   api: {} as object,

@@ -9,7 +9,7 @@ import { useRoomSocket } from "@/hooks/room/use-room-socket"
 import { getApiErrorCode } from "@/lib/api/errors"
 import { roomQueryKeys } from "@/lib/api/room-query-keys"
 import { fetchAllRoomEvents, fetchRoom } from "@/lib/api/rooms"
-import type { RoomEvent, RoomSocketEvent } from "@/types/room"
+import type { RoomEvent, RoomSocketEvent } from "@/types/room.types"
 
 type UseRoomRealtimeOptions = {
   onEvent?: (event: RoomSocketEvent) => boolean | undefined

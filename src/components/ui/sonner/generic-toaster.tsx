@@ -5,8 +5,8 @@ import { Toaster as Sonner } from "sonner"
 import {
   GENERIC_TOAST_DURATION_MS,
   GENERIC_TOASTER_ARIA_LABEL,
-} from "@/components/ui/sonner/constants"
-import { genericToastOptions } from "@/components/ui/sonner/toast-options"
+} from "@/components/ui/sonner/constants/sonner.constants"
+import { genericToastOptions } from "@/components/ui/sonner/utils/toast-options.util"
 
 export function GenericToaster() {
   return (

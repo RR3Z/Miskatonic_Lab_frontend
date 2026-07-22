@@ -1,4 +1,7 @@
-import catalog from "@/data/errors/error-catalog.ru.json"
+import catalog from "@/data/locales/ru/errors/error-catalog.ru.json"
+import { errorCatalogSchema } from "@/lib/errors/schemas/error-catalog.schema"
+
+errorCatalogSchema.parse(catalog)
 
 type DocumentationCase = {
   situation: string
@@ -13,6 +16,7 @@ type Documentation = {
 }
 
 type Template = {
+  action: string
   toastSummary: string
   documentation: Documentation
 }
@@ -25,6 +29,9 @@ type CatalogEntry = {
 
 export type PresentedError = CatalogEntry & {
   code: string
+  catalogCode: string
+  isKnown: boolean
+  action: string
   toastSummary: string
   documentation: Documentation
 }
@@ -32,15 +39,24 @@ export type PresentedError = CatalogEntry & {
 const errors = catalog.errors as Record<string, CatalogEntry>
 const templates = catalog.templates as Record<string, Template>
 
+export function getErrorCatalogLabels() {
+  return catalog.labels
+}
+
 export const UNKNOWN_ERROR_CODE = "client.unknown_error"
 
 export function getPresentedError(code: string): PresentedError {
-  const entry = errors[code] ?? errors[UNKNOWN_ERROR_CODE]
+  const isKnown = hasErrorCode(code)
+  const catalogCode = isKnown ? code : UNKNOWN_ERROR_CODE
+  const entry = errors[catalogCode]
   const template = templates[entry.template]
 
   return {
     ...entry,
-    code: errors[code] ? code : UNKNOWN_ERROR_CODE,
+    action: template.action,
+    catalogCode,
+    code,
+    isKnown,
     toastSummary: template.toastSummary,
     documentation: template.documentation,
   }

@@ -10,7 +10,8 @@ import { SiteShell } from "@/components/layout/site-shell"
 import { MotionProvider } from "@/components/motion/motion-provider"
 import { DiceResultToaster } from "@/components/ui/sonner/dice-result-toaster"
 import { GenericToaster } from "@/components/ui/sonner/generic-toaster"
-import { TooltipProvider } from "@/components/ui/tooltip"
+import { TooltipProvider } from "@/components/ui/tooltip/tooltip-provider"
+import localizedContent from "@/data/locales/ru/layout/layout.ru.json"
 import { AuthQueryCacheBoundary } from "@/lib/api/auth-query-cache-boundary"
 import { QueryProvider } from "@/lib/api/provider"
 import "./globals.css"
@@ -41,7 +42,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Miskatonic Lab",
   description:
-    "Архив сыщиков, комнат, бросков и хроники событий для мистических расследований.",
+    localizedContent.copy.appLayout.arhivSyschikovKomnatBroskovIHroniki,
   applicationName: "Miskatonic Lab",
   icons: {
     icon: [

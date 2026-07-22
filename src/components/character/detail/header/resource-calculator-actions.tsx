@@ -1,25 +1,25 @@
 "use client"
 
-import type * as React from "react"
 import type { CSSProperties } from "react"
 import { useState } from "react"
 import { toast } from "sonner"
-import { CharacterInfoTooltip } from "@/components/character/detail/character-info-tooltip"
-import { CharacterSheetTooltipProvider } from "@/components/character/detail/character-sheet-tooltip"
+import { CharacterSheetTooltipProvider } from "@/components/character/detail/character-sheet-tooltip/character-sheet-tooltip-provider"
+import { DiceRollResultToast } from "@/components/character/detail/header/dice-result-toast/dice-roll-result-toast"
+import { FormulaDiceRollResultToast } from "@/components/character/detail/header/dice-result-toast/formula-dice-roll-result-toast"
 import {
-  DiceRollResultToast,
-  FormulaDiceRollResultToast,
   getDiceRollToastClassName,
   getDiceRollToastCloseButtonClassName,
   getDiceRollToastStyle,
-} from "@/components/character/detail/header/dice-roll-result-toast"
-import { Button } from "@/components/ui/button"
-import { Field, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
+} from "@/components/character/detail/header/dice-result-toast/utils/dice-roll-toast-style.util"
+import { CalculatorActionGroup } from "@/components/character/detail/header/resource-calculator/calculator-action-group"
+import { FormulaAction } from "@/components/character/detail/header/resource-calculator/formula-action"
+import { RuleButton } from "@/components/character/detail/header/resource-calculator/rule-button"
 import {
   DICE_RESULT_TOAST_DURATION_MS,
   DICE_RESULT_TOASTER_ID,
-} from "@/components/ui/sonner/constants"
+} from "@/components/ui/sonner/constants/sonner.constants"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { formatLocalizedTemplate } from "@/data/locales/utils/format-localized-template.util"
 import type { CharacterResourceKey } from "@/dto/character/character-sheet-values.dto"
 import type { CharacterDiceRoll } from "@/lib/api/character-dice-rolls"
 import { classifyCharacteristicCheck } from "@/lib/dice/characteristic-check"
@@ -94,7 +94,10 @@ export function ResourceCalculatorActions({
       )
       apply(roll.result)
     } catch {
-      toast.error("Не удалось выполнить бросок")
+      toast.error(
+        localizedContent.copy.characterDetailHeaderResourceCalculatorActions
+          .neUdalosVypolnitBrosok,
+      )
     }
   }
 
@@ -129,7 +132,10 @@ export function ResourceCalculatorActions({
       )
       onOutcome(success)
     } catch {
-      toast.error("Не удалось выполнить бросок")
+      toast.error(
+        localizedContent.copy.characterDetailHeaderResourceCalculatorActions
+          .neUdalosVypolnitBrosok,
+      )
     }
   }
 
@@ -141,75 +147,136 @@ export function ResourceCalculatorActions({
       >
         {resource === "hp" ? (
           <div className="grid gap-3">
-            <CalculatorActionGroup title="Урон">
+            <CalculatorActionGroup
+              title={
+                localizedContent.copy
+                  .characterDetailHeaderResourceCalculatorActions.uron
+              }
+            >
               <FormulaAction
                 disabled={!canChangeCurrent || isRolling}
                 formula={formula}
-                label="Формула броска"
+                label={
+                  localizedContent.copy
+                    .characterDetailHeaderResourceCalculatorActions
+                    .formulaBroska
+                }
                 onFormulaChange={setFormula}
                 onRoll={() =>
-                  rollFormula("Урон", (damage) => {
-                    changeCurrent(-damage)
-                    if (max !== null && damage > max) {
-                      onReminder(
-                        "Урон превышает максимум здоровья: отметьте «Мёртв».",
-                      )
-                    } else if (max !== null && damage >= max / 2) {
-                      onReminder(
-                        "Урон не меньше половины максимального здоровья: отметьте «Серьёзная рана».",
-                      )
-                    }
-                    if (current !== null && current - damage <= 0) {
-                      onReminder(
-                        "Здоровье опустилось до 0: отметьте «Без сознания».",
-                      )
-                      if (majorWound || (max !== null && damage >= max / 2)) {
+                  rollFormula(
+                    localizedContent.copy
+                      .characterDetailHeaderResourceCalculatorActions.uron,
+                    (damage) => {
+                      changeCurrent(-damage)
+                      if (max !== null && damage > max) {
                         onReminder(
-                          "0 здоровья при серьёзной ране: отметьте «При смерти».",
+                          localizedContent.copy
+                            .characterDetailHeaderResourceCalculatorActions
+                            .uronPrevyshaetMaksimumZdorovyaOtmetteMertv,
+                        )
+                      } else if (max !== null && damage >= max / 2) {
+                        onReminder(
+                          localizedContent.copy
+                            .characterDetailHeaderResourceCalculatorActions
+                            .uronNeMenshePolovinyMaksimalnogoZdorovya,
                         )
                       }
-                    }
-                  })
+                      if (current !== null && current - damage <= 0) {
+                        onReminder(
+                          localizedContent.copy
+                            .characterDetailHeaderResourceCalculatorActions
+                            .zdoroveOpustilosDo0OtmetteBez,
+                        )
+                        if (majorWound || (max !== null && damage >= max / 2)) {
+                          onReminder(
+                            localizedContent.copy
+                              .characterDetailHeaderResourceCalculatorActions
+                              .copy0ZdorovyaPriSereznoiRaneOtmette,
+                          )
+                        }
+                      }
+                    },
+                  )
                 }
               />
             </CalculatorActionGroup>
-            <CalculatorActionGroup title="Последствия серьёзной раны">
+            <CalculatorActionGroup
+              title={
+                localizedContent.copy
+                  .characterDetailHeaderResourceCalculatorActions
+                  .posledstviyaSereznoiRany
+              }
+            >
               <RuleButton
                 disabled={constitution === null || isRolling}
                 onClick={() =>
-                  rollCheck(constitution, "ВЫН", (success) => {
-                    if (!success) {
-                      onReminder(
-                        "Провал ВЫН после серьёзной раны: отметьте «Без сознания».",
-                      )
-                    }
-                  })
+                  rollCheck(
+                    constitution,
+                    localizedContent.copy
+                      .characterDetailHeaderResourceCalculatorActions.vyn,
+                    (success) => {
+                      if (!success) {
+                        onReminder(
+                          localizedContent.copy
+                            .characterDetailHeaderResourceCalculatorActions
+                            .provalVynPosleSereznoiRanyOtmette,
+                        )
+                      }
+                    },
+                  )
                 }
               >
-                Проверка ВЫН
+                {
+                  localizedContent.copy
+                    .characterDetailHeaderResourceCalculatorActions.proverkaVyn
+                }
               </RuleButton>
             </CalculatorActionGroup>
-            <CalculatorActionGroup title="Восстановление здоровья">
+            <CalculatorActionGroup
+              title={
+                localizedContent.copy
+                  .characterDetailHeaderResourceCalculatorActions
+                  .vosstanovlenieZdorovya
+              }
+            >
               <div className="grid grid-cols-2 gap-2">
                 <RuleButton
                   disabled={!canChangeCurrent || isRolling}
                   onClick={() => changeCurrent(1)}
                 >
-                  Первая помощь +1
+                  {
+                    localizedContent.copy
+                      .characterDetailHeaderResourceCalculatorActions
+                      .pervayaPomosch1
+                  }
                 </RuleButton>
                 <RuleButton
                   disabled={!canChangeCurrent || isRolling}
                   onClick={() =>
-                    rollExpression("1d3", "Медицина", changeCurrent)
+                    rollExpression(
+                      "1d3",
+                      localizedContent.copy
+                        .characterDetailHeaderResourceCalculatorActions
+                        .meditsina,
+                      changeCurrent,
+                    )
                   }
                 >
-                  Медицина +1d3
+                  {
+                    localizedContent.copy
+                      .characterDetailHeaderResourceCalculatorActions
+                      .meditsina1d3
+                  }
                 </RuleButton>
                 <RuleButton
                   disabled={!canChangeCurrent || isRolling}
                   onClick={() => changeCurrent(1)}
                 >
-                  Восстановление +1
+                  {
+                    localizedContent.copy
+                      .characterDetailHeaderResourceCalculatorActions
+                      .vosstanovlenie1
+                  }
                 </RuleButton>
               </div>
             </CalculatorActionGroup>
@@ -218,57 +285,107 @@ export function ResourceCalculatorActions({
 
         {resource === "sanity" ? (
           <div className="grid gap-3">
-            <CalculatorActionGroup title="Потеря рассудка">
+            <CalculatorActionGroup
+              title={
+                localizedContent.copy
+                  .characterDetailHeaderResourceCalculatorActions
+                  .poteryaRassudka
+              }
+            >
               <FormulaAction
                 disabled={!canChangeCurrent || isRolling}
                 formula={formula}
-                label="Формула броска"
+                label={
+                  localizedContent.copy
+                    .characterDetailHeaderResourceCalculatorActions
+                    .formulaBroska
+                }
                 onFormulaChange={setFormula}
                 onRoll={() =>
-                  rollFormula("Потеря рассудка", (loss) => {
-                    changeCurrent(-loss)
-                    if (loss >= 5) {
-                      onReminder(
-                        "Потеря 5+ пунктов рассудка от одного источника: проведите проверку ИНТ.",
-                      )
-                    }
-                    if (current !== null) {
-                      onReminder(
-                        `Проверьте потерю рассудка за игровой день: порог бессрочного безумия — ${Math.ceil(current / 5)}.`,
-                      )
-                    }
-                  })
+                  rollFormula(
+                    localizedContent.copy
+                      .characterDetailHeaderResourceCalculatorActions
+                      .poteryaRassudka,
+                    (loss) => {
+                      changeCurrent(-loss)
+                      if (loss >= 5) {
+                        onReminder(
+                          localizedContent.copy
+                            .characterDetailHeaderResourceCalculatorActions
+                            .poterya5PunktovRassudkaOtOdnogo,
+                        )
+                      }
+                      if (current !== null) {
+                        onReminder(
+                          formatLocalizedTemplate(
+                            localizedContent.copy
+                              .characterDetailHeaderResourceCalculatorActions
+                              .provertePoteryuRassudkaZaIgrovoiDen,
+                            { value0: Math.ceil(current / 5) },
+                          ),
+                        )
+                      }
+                    },
+                  )
                 }
               />
             </CalculatorActionGroup>
-            <CalculatorActionGroup title="Проверка безумия">
+            <CalculatorActionGroup
+              title={
+                localizedContent.copy
+                  .characterDetailHeaderResourceCalculatorActions
+                  .proverkaBezumiya
+              }
+            >
               <RuleButton
                 disabled={intelligence === null || isRolling}
                 onClick={() =>
-                  rollCheck(intelligence, "ИНТ", (success) => {
-                    if (success) {
-                      onReminder(
-                        "Успешная ИНТ после сильной потери рассудка: отметьте «Временное безумие».",
-                      )
-                    }
-                  })
+                  rollCheck(
+                    intelligence,
+                    localizedContent.copy
+                      .characterDetailHeaderResourceCalculatorActions.int,
+                    (success) => {
+                      if (success) {
+                        onReminder(
+                          localizedContent.copy
+                            .characterDetailHeaderResourceCalculatorActions
+                            .uspeshnayaIntPosleSilnoiPoteriRassudka,
+                        )
+                      }
+                    },
+                  )
                 }
               >
-                Проверка ИНТ
+                {
+                  localizedContent.copy
+                    .characterDetailHeaderResourceCalculatorActions.proverkaInt
+                }
               </RuleButton>
             </CalculatorActionGroup>
-            <CalculatorActionGroup title="Восстановление рассудка">
+            <CalculatorActionGroup
+              title={
+                localizedContent.copy
+                  .characterDetailHeaderResourceCalculatorActions
+                  .vosstanovlenieRassudka
+              }
+            >
               <RuleButton
                 disabled={!canChangeCurrent || isRolling}
                 onClick={() =>
                   rollExpression(
                     "1d3",
-                    "Восстановление рассудка",
+                    localizedContent.copy
+                      .characterDetailHeaderResourceCalculatorActions
+                      .vosstanovlenieRassudka,
                     changeCurrent,
                   )
                 }
               >
-                Восстановить рассудок +1d3
+                {
+                  localizedContent.copy
+                    .characterDetailHeaderResourceCalculatorActions
+                    .vosstanovitRassudok1d3
+                }
               </RuleButton>
             </CalculatorActionGroup>
           </div>
@@ -276,8 +393,16 @@ export function ResourceCalculatorActions({
 
         {resource === "mp" ? (
           <CalculatorActionGroup
-            description="Очки магии восстанавливаются после отдыха: обычно 1 очко за час, а при Мощи выше 100 — 2 очка. Используйте кнопку, когда в игре прошёл час восстановления."
-            title="Восстановление магии"
+            description={
+              localizedContent.copy
+                .characterDetailHeaderResourceCalculatorActions
+                .ochkiMagiiVosstanavlivayutsyaPosleOtdyhaObychno
+            }
+            title={
+              localizedContent.copy
+                .characterDetailHeaderResourceCalculatorActions
+                .vosstanovlenieMagii
+            }
           >
             <RuleButton
               disabled={!canChangeCurrent || isRolling}
@@ -285,106 +410,50 @@ export function ResourceCalculatorActions({
                 changeCurrent(power !== null && power > 100 ? 2 : 1)
               }
             >
-              Восстановить за час +{power !== null && power > 100 ? 2 : 1}
+              {
+                localizedContent.copy
+                  .characterDetailHeaderResourceCalculatorActions
+                  .vosstanovitZaChas
+              }
+              {power !== null && power > 100 ? 2 : 1}
             </RuleButton>
           </CalculatorActionGroup>
         ) : null}
 
         {resource === "luck" ? (
           <CalculatorActionGroup
-            description="По правилам CoC 7e удачу можно восстанавливать в фазе развития после неудачной проверки Удачи. Бросок возвращает 1d10 очков удачи в черновик."
-            title="Восстановление удачи"
+            description={
+              localizedContent.copy
+                .characterDetailHeaderResourceCalculatorActions
+                .poPravilamCoc7eUdachuMozhno
+            }
+            title={
+              localizedContent.copy
+                .characterDetailHeaderResourceCalculatorActions
+                .vosstanovlenieUdachi
+            }
           >
             <RuleButton
               disabled={!canChangeCurrent || isRolling}
               onClick={() =>
-                rollExpression("1d10", "Восстановление удачи", changeCurrent)
+                rollExpression(
+                  "1d10",
+                  localizedContent.copy
+                    .characterDetailHeaderResourceCalculatorActions
+                    .vosstanovlenieUdachi,
+                  changeCurrent,
+                )
               }
             >
-              Восстановить удачу +1d10
+              {
+                localizedContent.copy
+                  .characterDetailHeaderResourceCalculatorActions
+                  .vosstanovitUdachu1d10
+              }
             </RuleButton>
           </CalculatorActionGroup>
         ) : null}
       </section>
     </CharacterSheetTooltipProvider>
-  )
-}
-
-function CalculatorActionGroup({
-  children,
-  description,
-  title,
-}: {
-  children: React.ReactNode
-  description?: string
-  title: string
-}) {
-  return (
-    <div className="rounded-sm border border-[var(--ml-border-aged)]/85 bg-[linear-gradient(135deg,rgba(63,51,34,0.55),rgba(25,22,18,0.82))] p-2.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.035)]">
-      <div className="mb-2 flex items-center justify-between gap-2">
-        <p className="font-heading text-sm font-semibold uppercase tracking-[0.09em] text-[var(--ml-accent-aged-gold)]">
-          {title}
-        </p>
-        {description ? (
-          <CharacterInfoTooltip
-            ariaLabel={`Справка: ${title}`}
-            contentClassName="max-w-72"
-            iconClassName="size-3.5"
-            side="top"
-            triggerClassName="size-5 cursor-pointer text-[var(--ml-ink-muted)] hover:text-[var(--ml-accent-aged-gold)]"
-          >
-            {description}
-          </CharacterInfoTooltip>
-        ) : null}
-      </div>
-      {children}
-    </div>
-  )
-}
-
-function FormulaAction({
-  disabled,
-  formula,
-  label,
-  onFormulaChange,
-  onRoll,
-}: {
-  disabled: boolean
-  formula: string
-  label: string
-  onFormulaChange: (value: string) => void
-  onRoll: () => void
-}) {
-  return (
-    <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-2">
-      <Field>
-        <FieldLabel
-          className="text-xs uppercase tracking-[0.08em] text-[var(--ml-ink-muted)]"
-          htmlFor={`${label}-formula`}
-        >
-          {label}
-        </FieldLabel>
-        <Input
-          id={`${label}-formula`}
-          onChange={(event) => onFormulaChange(event.target.value)}
-          value={formula}
-          variant="accent"
-        />
-      </Field>
-      <RuleButton disabled={disabled || !formula.trim()} onClick={onRoll}>
-        Бросить
-      </RuleButton>
-    </div>
-  )
-}
-
-function RuleButton({
-  children,
-  ...props
-}: React.ComponentProps<typeof Button>) {
-  return (
-    <Button {...props} size="lg" type="button" variant="accent">
-      {children}
-    </Button>
   )
 }

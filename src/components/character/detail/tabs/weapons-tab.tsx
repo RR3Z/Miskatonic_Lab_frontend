@@ -1,6 +1,6 @@
 import { Swords } from "lucide-react"
-
 import { EmptySection } from "@/components/character/detail/tabs/empty-section"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
 
 export function WeaponsTab() {
   return (
@@ -10,7 +10,12 @@ export function WeaponsTab() {
           aria-hidden="true"
           className="size-8 text-[var(--ml-accent-brass-strong)] opacity-70"
         />
-        <p>Оружие и атаки пока не поддерживаются Backend-моделью персонажа.</p>
+        <p>
+          {
+            localizedContent.copy.characterDetailTabsWeaponsTab
+              .oruzhieIAtakiPokaNePodderzhivayutsya
+          }
+        </p>
       </div>
     </EmptySection>
   )

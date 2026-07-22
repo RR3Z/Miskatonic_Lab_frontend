@@ -1,5 +1,6 @@
 import Image from "next/image"
 
+import { landingContent } from "@/data/locales/utils/landing-content.util"
 import { cn } from "@/lib/utils/cn.util"
 import logo from "../../../assets/logo-transparent-1468w.webp"
 
@@ -11,7 +12,7 @@ type BrandMarkProps = {
 export function BrandMark({ className, priority = false }: BrandMarkProps) {
   return (
     <Image
-      alt="Miskatonic Lab"
+      alt={landingContent.brand.alt}
       className={cn("h-auto w-full object-contain", className)}
       height={450}
       priority={priority}

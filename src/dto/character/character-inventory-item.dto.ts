@@ -1,4 +1,6 @@
 import { z } from "zod"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { formatLocalizedTemplate } from "@/data/locales/utils/format-localized-template.util"
 
 export const MAX_CHARACTER_INVENTORY_ITEM_NAME_LENGTH = 120
 export const MAX_CHARACTER_INVENTORY_ITEM_CATEGORY_LENGTH = 80
@@ -11,10 +13,18 @@ const optionalTextSchema = z
 export const characterInventoryItemNameSchema = z
   .string()
   .trim()
-  .min(1, "Укажите название предмета")
+  .min(
+    1,
+    localizedContent.copy.dtoCharacterCharacterInventoryItemDto
+      .ukazhiteNazvaniePredmeta,
+  )
   .max(
     MAX_CHARACTER_INVENTORY_ITEM_NAME_LENGTH,
-    `Название не должно превышать ${MAX_CHARACTER_INVENTORY_ITEM_NAME_LENGTH} символов`,
+    formatLocalizedTemplate(
+      localizedContent.copy.dtoCharacterCharacterInventoryItemDto
+        .nazvanieNeDolzhnoPrevyshatValue0Simvolov,
+      { value0: MAX_CHARACTER_INVENTORY_ITEM_NAME_LENGTH },
+    ),
   )
 
 export const characterInventoryItemQuantitySchema = z
@@ -24,8 +34,15 @@ export const characterInventoryItemQuantitySchema = z
   .pipe(
     z
       .number()
-      .int("Количество должно быть целым числом")
-      .min(1, "Количество должно быть не меньше 1")
+      .int(
+        localizedContent.copy.dtoCharacterCharacterInventoryItemDto
+          .kolichestvoDolzhnoBytTselymChislom,
+      )
+      .min(
+        1,
+        localizedContent.copy.dtoCharacterCharacterInventoryItemDto
+          .kolichestvoDolzhnoBytNeMenshe1,
+      )
       .optional(),
   )
 
@@ -33,7 +50,11 @@ export const characterInventoryItemCategorySchema = optionalTextSchema.refine(
   (value) =>
     value === undefined ||
     value.length <= MAX_CHARACTER_INVENTORY_ITEM_CATEGORY_LENGTH,
-  `Категория не должна превышать ${MAX_CHARACTER_INVENTORY_ITEM_CATEGORY_LENGTH} символов`,
+  formatLocalizedTemplate(
+    localizedContent.copy.dtoCharacterCharacterInventoryItemDto
+      .kategoriyaNeDolzhnaPrevyshatValue0Simvolov,
+    { value0: MAX_CHARACTER_INVENTORY_ITEM_CATEGORY_LENGTH },
+  ),
 )
 
 export const characterInventoryItemDescriptionSchema = optionalTextSchema

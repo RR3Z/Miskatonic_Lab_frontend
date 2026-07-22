@@ -6,15 +6,13 @@ import { CharacterSheetHeader } from "@/components/character/detail/header/chara
 import { CharacterSheetWorkspace } from "@/components/character/detail/layout/character-sheet-workspace"
 import { roomPanelClassName } from "@/components/room/styles/room-panel.styles"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card } from "@/components/ui/card/card"
+import { CardContent } from "@/components/ui/card/card-content"
+import { CardDescription } from "@/components/ui/card/card-description"
+import { CardHeader } from "@/components/ui/card/card-header"
+import { CardTitle } from "@/components/ui/card/card-title"
 import { Skeleton } from "@/components/ui/skeleton"
-import roomContentRu from "@/data/room/room.ru.json"
+import roomContentRu from "@/data/locales/ru/room/detail.ru.json"
 import { useRoomSelectedCharacters } from "@/hooks/room/use-room-selected-characters"
 
 type RoomCharacterSheetProps = {

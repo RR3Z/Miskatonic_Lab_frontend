@@ -5,21 +5,24 @@ import { useEffect } from "react"
 import type { FieldErrors } from "react-hook-form"
 import { FormProvider, useForm } from "react-hook-form"
 import { toast } from "sonner"
-
 import { CharacterIdentityFields } from "@/components/character/create/character-identity-fields"
 import { CharacterPortraitField } from "@/components/character/create/character-portrait-field"
+import {
+  showError,
+  showErrorCode,
+} from "@/components/errors/utils/error-toast.util"
 import { Button } from "@/components/ui/button"
-import { DialogFooter } from "@/components/ui/dialog"
-import { FieldGroup } from "@/components/ui/field"
+import { DialogFooter } from "@/components/ui/dialog/dialog-footer"
+import { FieldGroup } from "@/components/ui/field/field-group"
 import { Spinner } from "@/components/ui/spinner"
+import localizedContent from "@/data/locales/ru/character/create.ru.json"
 import {
   type CreateCharacterFormDto,
   type CreateCharacterFormInput,
   createCharacterFormDefaultValues,
   createCharacterFormSchema,
 } from "@/dto/character/create-character.dto"
-import { useCreateCharacter } from "@/lib/api/use-characters"
-import { showError, showErrorCode } from "@/lib/errors/presenter"
+import { useCreateCharacter } from "@/hooks/character/use-create-character"
 
 type CreateCharacterFormProps = {
   onCancel: () => void
@@ -61,7 +64,10 @@ export function CreateCharacterForm({
       const result = await mutation.mutateAsync(data)
 
       if (result.portraitStatus === "failed") {
-        toast.warning("Персонаж создан, но портрет загрузить не удалось")
+        toast.warning(
+          localizedContent.copy.componentsCharacterCreateCreateCharacterForm
+            .personazhSozdanNoPortretZagruzitNe,
+        )
       }
 
       onCompleted()
@@ -98,7 +104,10 @@ export function CreateCharacterForm({
             type="button"
             variant="destructive"
           >
-            Отмена
+            {
+              localizedContent.copy.componentsCharacterCreateCreateCharacterForm
+                .otmena
+            }
           </Button>
           <Button
             className="w-full sm:flex-1"
@@ -109,10 +118,14 @@ export function CreateCharacterForm({
             {isPending ? (
               <>
                 <Spinner aria-hidden="true" data-icon="inline-start" />
-                Создание…
+                {
+                  localizedContent.copy
+                    .componentsCharacterCreateCreateCharacterForm.sozdanie
+                }
               </>
             ) : (
-              "Создать персонажа"
+              localizedContent.copy.componentsCharacterCreateCreateCharacterForm
+                .sozdatPersonazha
             )}
           </Button>
         </DialogFooter>

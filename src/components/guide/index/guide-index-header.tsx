@@ -1,7 +1,7 @@
 import { FileSearch } from "lucide-react"
 
 import { GuideSymbol } from "@/components/guide/symbol/guide-symbol"
-import { guideContent } from "@/data/guide/guide-content.data"
+import { guideContent } from "@/lib/guide/guide-content"
 
 export function GuideIndexHeader() {
   const { index } = guideContent.ui

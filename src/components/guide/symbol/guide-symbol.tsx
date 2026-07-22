@@ -1,8 +1,8 @@
 import Image from "next/image"
 
 import { guideSymbols } from "@/components/guide/symbol/constants/guide-symbols.constants"
-import type { GuideSymbolName } from "@/data/guide/types/guide-content.types"
 import { cn } from "@/lib/utils/cn.util"
+import type { GuideSymbolName } from "@/types/guide-content.types"
 
 type GuideSymbolProps = {
   alt?: string

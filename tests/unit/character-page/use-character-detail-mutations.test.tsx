@@ -6,7 +6,7 @@ import {
 } from "@tests/helpers/react-query"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 import { characterQueryKeys } from "@/lib/api/character-query-keys"
-import type { CharacterDetail, CharacterHealth } from "@/types/character"
+import type { CharacterDetail, CharacterHealth } from "@/types/character.types"
 
 const authState = vi.hoisted(() => ({
   getToken: vi.fn(async () => "test-token"),
@@ -46,9 +46,9 @@ vi.mock("@/lib/api/character-resources", async (importOriginal) => {
   }
 })
 
-import { useUpdateCharacterProfile } from "@/lib/api/use-character-profile"
-import { useUpdateCharacterResource } from "@/lib/api/use-character-resources"
-import { useUpdateCharacterCharacteristics } from "@/lib/api/use-character-statistics"
+import { useUpdateCharacterCharacteristics } from "@/hooks/character/use-update-character-characteristics"
+import { useUpdateCharacterProfile } from "@/hooks/character/use-update-character-profile"
+import { useUpdateCharacterResource } from "@/hooks/character/use-update-character-resource"
 
 describe("character detail mutation cache", () => {
   beforeEach(() => {

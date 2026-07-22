@@ -1,4 +1,5 @@
 import { z } from "zod"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
 
 export const characterBackstorySectionSchema = z.enum([
   "traits",
@@ -15,7 +16,10 @@ export const characterBackstorySectionSchema = z.enum([
 export const characterBackstoryTextSchema = z
   .string()
   .trim()
-  .min(1, "Добавьте текст раздела")
+  .min(
+    1,
+    localizedContent.copy.dtoCharacterCharacterBackstoryDto.dobavteTekstRazdela,
+  )
 
 export const characterBackstoryItemSchema = z.object({
   section: characterBackstorySectionSchema,

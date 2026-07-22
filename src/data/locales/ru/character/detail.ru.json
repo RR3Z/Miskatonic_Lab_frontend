@@ -1,0 +1,497 @@
+{
+  "copy": {
+    "characterDetailCommon": {
+      "emptyValue": "—",
+      "quantityOne": "1",
+      "d100": "D100"
+    },
+    "componentsCharacterDetailCharacterDetailError": {
+      "personazhNeNaiden": "Персонаж не найден",
+      "neUdalosZagruzitListPersonazha": "Не удалось загрузить лист персонажа",
+      "vozmozhnoPersonazhBylUdalenIliNedostupen": "Возможно, персонаж был удалён или недоступен текущему пользователю.",
+      "provertePodklyuchenieIPoprobuitePoluchitDannye": "Проверьте подключение и попробуйте получить данные ещё раз.",
+      "kSpiskuPersonazhei": "К списку персонажей",
+      "zagruzka": "Загрузка…",
+      "povtorit": "Повторить"
+    },
+    "componentsCharacterDetailCharacterDetailLoading": {
+      "zagruzkaListaPersonazha": "Загрузка листа персонажа…"
+    },
+    "componentsCharacterDetailCharacterStateRules": {
+      "odnaAtakaNanositUronRavnyiIli": "Одна атака наносит урон, равный или превышающий половину максимального здоровья.",
+      "personazhPadaetIProhoditProverkuVyn": "Персонаж падает и проходит проверку ВЫН. При провале он теряет сознание; при 0 здоровья оказывается при смерти.",
+      "opasnoePovrezhdenieSposobnoePrivestiKSmerti": "Опасное повреждение, способное привести к смерти.",
+      "sereznayaRana": "Серьёзная рана",
+      "knigaHranitelyaGlava6BoiStr": "Книга хранителя, глава 6 «Бой», стр. 118.",
+      "zdorovePadaetDo0LiboProvalena": "Здоровье падает до 0 либо провалена проверка ВЫН после получения серьёзной раны.",
+      "personazhNeMozhetDeistvovatNamerennayaPopytka": "Персонаж не может действовать. Намеренная попытка убить лежащего без сознания персонажа считается успешной.",
+      "personazhNeVosprinimaetProishodyascheeINe": "Персонаж не воспринимает происходящее и не может действовать.",
+      "bezSoznaniya": "Без сознания",
+      "zdorovePadaetDo0PokaU": "Здоровье падает до 0, пока у персонажа отмечена серьёзная рана.",
+      "personazhTeryaetSoznanieISoSleduyuschego": "Персонаж теряет сознание и со следующего раунда проверяет ВЫН в конце каждого раунда. Первый провал означает смерть; Первая помощь временно стабилизирует состояние.",
+      "kriticheskoeSostoyanieTrebuyuscheeNemedlennoiPomoschi": "Критическое состояние, требующее немедленной помощи.",
+      "priSmerti": "При смерти",
+      "knigaHranitelyaGlava6BoiStr2": "Книга хранителя, глава 6 «Бой», стр. 118–119.",
+      "razovyiUronPrevyshaetMaksimalnoeZdoroveLibo": "Разовый урон превышает максимальное здоровье либо провалена проверка ВЫН в состоянии «При смерти».",
+      "personazhPogibIBolsheNeMozhet": "Персонаж погиб и больше не может действовать.",
+      "zhiznPersonazhaZavershilas": "Жизнь персонажа завершилась.",
+      "mertv": "Мёртв",
+      "personazhTeryaet5IliBolshePunktov": "Персонаж теряет 5 или больше пунктов рассудка по одной причине и успешно проходит проверку ИНТ.",
+      "sostoyanieNachinaetsyaNemedlennoIDlitsya1d10": "Состояние начинается немедленно и длится 1d10 часов.",
+      "kratkovremennyiPsihicheskiiSryvPosleSilnoiTravmy": "Кратковременный психический срыв после сильной травмы.",
+      "vremennoeBezumie": "Временное безумие",
+      "knigaHranitelyaGlava8RassudokStr": "Книга хранителя, глава 8 «Рассудок», стр. 153–154.",
+      "zaOdinIgrovoiDenPersonazhTeryaet": "За один игровой день персонаж теряет не менее 1/5 текущих пунктов рассудка.",
+      "sostoyanieProdolzhaetsyaPokaPersonazhaNeVylechat": "Состояние продолжается, пока персонажа не вылечат или он не выздоровеет самостоятельно.",
+      "prodolzhitelnoeRasstroistvoRassudka": "Продолжительное расстройство рассудка.",
+      "bessrochnoeBezumie": "Бессрочное безумие",
+      "knigaHranitelyaGlava8RassudokStr2": "Книга хранителя, глава 8 «Рассудок», стр. 154."
+    },
+    "componentsCharacterDetailDiceRollProgressOverlay": {
+      "vypolnyaetsyaBrosok": "Выполняется бросок"
+    },
+    "characterDetailEditorsDeleteConfirmationDialog": {
+      "otmena": "Отмена",
+      "udalenie": "Удаление",
+      "udalit": "Удалить"
+    },
+    "characterDetailHeaderCharacterAgeInfo": {
+      "informatsiyaOVozrastnyhModifikatorah": "Информация о возрастных модификаторах",
+      "vozrastModifikatory": "Возраст: модификаторы",
+      "sistemaNePrimenyaetVozrastnyeModifikatoryAvtomaticheski": "Система не применяет возрастные модификаторы автоматически. Игрок\n          изменяет характеристики, ОБР, Удачу и СКО вручную.",
+      "knigaHranitelyaStr32": "Книга хранителя, стр. 32"
+    },
+    "characterDetailHeaderCharacterAgeRules": {
+      "vychtiteSummarno5IzSilI": "Вычтите суммарно 5 из СИЛ и/или ТЕЛ. Вычтите 5 из ОБР. Определяя Удачу, сделайте два броска и выберите лучший результат.",
+      "vypolniteProverkuUluchsheniyaObr": "Выполните проверку улучшения ОБР.",
+      "vychtiteSummarno5IzSilVyn": "Вычтите суммарно 5 из СИЛ, ВЫН и/или ЛВК, а НАР уменьшите на 5. Выполните 2 проверки улучшения ОБР.",
+      "vychtiteSummarno10IzSilVyn": "Вычтите суммарно 10 из СИЛ, ВЫН и/или ЛВК, а НАР уменьшите на 10. Выполните 3 проверки улучшения ОБР.",
+      "vychtiteSummarno20IzSilVyn": "Вычтите суммарно 20 из СИЛ, ВЫН и/или ЛВК, а НАР уменьшите на 15. Выполните 4 проверки улучшения ОБР.",
+      "vychtiteSummarno40IzSilVyn": "Вычтите суммарно 40 из СИЛ, ВЫН и/или ЛВК, а НАР уменьшите на 20. Выполните 4 проверки улучшения ОБР.",
+      "vychtiteSummarno80IzSilVyn": "Вычтите суммарно 80 из СИЛ, ВЫН и/или ЛВК, а НАР уменьшите на 25. Выполните 4 проверки улучшения ОБР.",
+      "proverkaUluchsheniyaObrBroste1d100Esli": "Проверка улучшения ОБР: бросьте 1d100. Если выпало больше текущего значения ОБР, прибавьте к нему 1d10 процентов (ОБР не может быть выше 99)."
+    },
+    "characterDetailHeaderCharacterCharacteristicDefinitions": {
+      "sil": "СИЛ",
+      "sila": "Сила",
+      "vyn": "ВЫН",
+      "vynoslivost": "Выносливость",
+      "tel": "ТЕЛ",
+      "teloslozhenie": "Телосложение",
+      "lvk": "ЛВК",
+      "lovkost": "Ловкость",
+      "nar": "НАР",
+      "naruzhnost": "Наружность",
+      "int": "ИНТ",
+      "intellekt": "Интеллект",
+      "mosch": "МОЩ",
+      "mosch2": "Мощь",
+      "obr": "ОБР",
+      "obrazovanie": "Образование"
+    },
+    "characterDetailHeaderCharacterCharacteristicsEditorDialog": {
+      "neUdalosSohranitHarakteristiki": "Не удалось сохранить характеристики",
+      "izmenitHarakteristiki": "Изменить характеристики",
+      "pustoePoleSohranitsyaKakNeukazannoeZnachenie": "Пустое поле сохранится как неуказанное значение.",
+      "zakrytOknoIzmeneniyaHarakteristik": "Закрыть окно изменения характеристик",
+      "otmena": "Отмена",
+      "sohranenie": "Сохранение…",
+      "sohranit": "Сохранить"
+    },
+    "characterDetailHeaderCharacterCharacteristicsSection": {
+      "neUdalosBrositD100": "Не удалось бросить d100",
+      "harakteristiki": "Характеристики",
+      "redaktirovatHarakteristikuValue0": "Редактировать характеристику {value0}",
+      "redaktirovatHarakteristiki": "Редактировать характеристики",
+      "izmenit": "Изменить"
+    },
+    "characterDetailHeaderCharacterDerivedStatDefinitions": {
+      "skorost": "Скорость",
+      "komplektsiya": "Комплекция",
+      "bonusUrona": "Бонус урона",
+      "uklonenie": "Уклонение"
+    },
+    "characterDetailHeaderCharacterDerivedStatsSection": {
+      "bonusUrona": "Бонус урона",
+      "neUdalosBrositBonusUrona": "Не удалось бросить бонус урона",
+      "neUdalosBrositD100": "Не удалось бросить d100",
+      "proizvodnye": "Производные"
+    },
+    "characterDetailHeaderCharacterIdentitySection": {
+      "zhenskii": "Женский",
+      "muzhskoi": "Мужской",
+      "value0PortretValue1": "{value0} портрет {value1}",
+      "redaktirovatPoleValue0": "Редактировать поле {value0}",
+      "informatsiyaOBonusahProfessii": "Информация о бонусах профессии",
+      "professiyaDopolnitelnyeVozmozhnosti": "Профессия: дополнительные возможности",
+      "ochkiProfessionalnyhNavykovPoFormuleProfessii": "Очки профессиональных навыков по формуле профессии.",
+      "spisokNavykovDlyaRaspredeleniyaEtihOchkov": "Список навыков для распределения этих очков.",
+      "diapazonSredstvIKreditnogoReitinga": "Диапазон Средств и кредитного рейтинга.",
+      "poleznyeSvyaziIKrugObscheniya": "Полезные связи и круг общения.",
+      "znacheniyaZavisyatOtVybrannoiProfessiiPrilozhenie": "Значения зависят от выбранной профессии. Приложение не\n                      применяет бонусы автоматически: навыки и финансы\n                      заполняются вручную.",
+      "kratkoeRukovodstvoPoSozdaniyuPersonazhaS": "Краткое руководство по созданию персонажа, с. 2–3"
+    },
+    "characterDetailHeaderCharacterNameEditor": {
+      "redaktirovatImyaPersonazha": "Редактировать имя персонажа",
+      "neUdalosSohranitImyaPersonazha": "Не удалось сохранить имя персонажа",
+      "imyaPersonazha": "Имя персонажа"
+    },
+    "characterDetailHeaderCharacterPortraitEditor": {
+      "nekorrektnyiPortret": "Некорректный портрет",
+      "neUdalosObnovitPortret": "Не удалось обновить портрет",
+      "izmenitPortretPersonazha": "Изменить портрет персонажа"
+    },
+    "characterDetailHeaderCharacterResourceDefinitions": {
+      "zdorove": "Здоровье",
+      "rassudok": "Рассудок",
+      "magiya": "Магия",
+      "udacha": "Удача"
+    },
+    "characterDetailHeaderCharacterResourcesSection": {
+      "resursy": "Ресурсы"
+    },
+    "characterDetailHeaderCharacterSexEditor": {
+      "neUdalosSohranitPol": "Не удалось сохранить пол",
+      "pol": "Пол: ",
+      "redaktirovatPolPersonazha": "Редактировать пол персонажа",
+      "muzhchina": "Мужчина",
+      "zhenschina": "Женщина"
+    },
+    "characterDetailHeaderCharacterStateGroupDefinitions": {
+      "zdorove": "Здоровье",
+      "rassudok": "Рассудок"
+    },
+    "characterDetailHeaderCharacterState": {
+      "informatsiyaOSostoyaniiValue0": "Информация о состоянии: {value0}",
+      "kakPoluchit": "Как получить: ",
+      "posledstvie": "Последствие: "
+    },
+    "characterDetailHeaderCharacterStatesGrid": {
+      "neUdalosSohranitSostoyaniePersonazha": "Не удалось сохранить состояние персонажа"
+    },
+    "characterDetailHeaderCharacterStatesSection": {
+      "sostoyaniya": "Состояния"
+    },
+    "characterDetailHeaderCharacteristicDiceCard": {
+      "brositHarakteristikuValue0": "Бросить характеристику {value0}",
+      "broski": "Броски",
+      "obychnyiBrosok": "Обычный бросок",
+      "brosokSPreimuschestvom": "Бросок с преимуществом",
+      "brosokSPomehoi": "Бросок с помехой"
+    },
+    "characterDetailHeaderCompactStat": {
+      "neUdalosSohranitPokazatel": "Не удалось сохранить показатель"
+    },
+    "characterDetailHeaderDamageBonusRoll": {
+      "bonusUrona": "Бонус урона",
+      "brositBonusUronaValue0": "Бросить бонус урона {value0}"
+    },
+    "characterDetailHeaderIdentityFieldDefinitions": {
+      "professiya": "Профессия",
+      "vozrast": "Возраст",
+      "mestoZhitelstva": "Место жительства",
+      "mestoRozhdeniya": "Место рождения"
+    },
+    "characterDetailHeaderIdentityLine": {
+      "neUdalosSohranitLichnyeDannye": "Не удалось сохранить личные данные"
+    },
+    "characterDetailHeaderResourceCalculatorActions": {
+      "neUdalosVypolnitBrosok": "Не удалось выполнить бросок",
+      "uron": "Урон",
+      "formulaBroska": "Формула броска",
+      "uronPrevyshaetMaksimumZdorovyaOtmetteMertv": "Урон превышает максимум здоровья: отметьте «Мёртв».",
+      "uronNeMenshePolovinyMaksimalnogoZdorovya": "Урон не меньше половины максимального здоровья: отметьте «Серьёзная рана».",
+      "zdoroveOpustilosDo0OtmetteBez": "Здоровье опустилось до 0: отметьте «Без сознания».",
+      "copy0ZdorovyaPriSereznoiRaneOtmette": "0 здоровья при серьёзной ране: отметьте «При смерти».",
+      "posledstviyaSereznoiRany": "Последствия серьёзной раны",
+      "vyn": "ВЫН",
+      "provalVynPosleSereznoiRanyOtmette": "Провал ВЫН после серьёзной раны: отметьте «Без сознания».",
+      "proverkaVyn": "Проверка ВЫН",
+      "vosstanovlenieZdorovya": "Восстановление здоровья",
+      "pervayaPomosch1": "Первая помощь +1",
+      "meditsina": "Медицина",
+      "meditsina1d3": "Медицина +1d3",
+      "vosstanovlenie1": "Восстановление +1",
+      "poteryaRassudka": "Потеря рассудка",
+      "poterya5PunktovRassudkaOtOdnogo": "Потеря 5+ пунктов рассудка от одного источника: проведите проверку ИНТ.",
+      "provertePoteryuRassudkaZaIgrovoiDen": "Проверьте потерю рассудка за игровой день: порог бессрочного безумия — {value0}.",
+      "proverkaBezumiya": "Проверка безумия",
+      "int": "ИНТ",
+      "uspeshnayaIntPosleSilnoiPoteriRassudka": "Успешная ИНТ после сильной потери рассудка: отметьте «Временное безумие».",
+      "proverkaInt": "Проверка ИНТ",
+      "vosstanovlenieRassudka": "Восстановление рассудка",
+      "vosstanovitRassudok1d3": "Восстановить рассудок +1d3",
+      "ochkiMagiiVosstanavlivayutsyaPosleOtdyhaObychno": "Очки магии восстанавливаются после отдыха: обычно 1 очко за час, а при Мощи выше 100 — 2 очка. Используйте кнопку, когда в игре прошёл час восстановления.",
+      "vosstanovlenieMagii": "Восстановление магии",
+      "vosstanovitZaChas": "Восстановить за час +",
+      "poPravilamCoc7eUdachuMozhno": "По правилам CoC 7e удачу можно восстанавливать в фазе развития после неудачной проверки Удачи. Бросок возвращает 1d10 очков удачи в черновик.",
+      "vosstanovlenieUdachi": "Восстановление удачи",
+      "vosstanovitUdachu1d10": "Восстановить удачу +1d10"
+    },
+    "characterDetailHeaderResourceStat": {
+      "neUdalosSohranitResursValue0": "Не удалось сохранить ресурс «{value0}»",
+      "izmenitResursValue0": "Изменить ресурс {value0}",
+      "zakrytKalkulyatorResursa": "Закрыть калькулятор ресурса",
+      "izmenitResurs": "Изменить ресурс:",
+      "izmenitResursTitleValue0": "Изменить ресурс: {value0}",
+      "tekuschee": "Текущее",
+      "maksimum": "Максимум",
+      "napominaniyaPosleSohraneniya": "Напоминания после сохранения",
+      "otmena": "Отмена",
+      "sohranenie": "Сохранение…",
+      "sohranit": "Сохранить"
+    },
+    "detailHeaderDiceResultToastD100RollDetailsComparison": {
+      "preimuschestvo": "Преимущество",
+      "pomeha": "Помеха",
+      "vzyatMenshiiRezultat": "взят меньший результат",
+      "vzyatBolshiiRezultat": "взят больший результат",
+      "modeRuleValue0Value1": "{value0} — {value1}",
+      "obschayaEdinitsaValue0": "Общая единица: {value0}",
+      "vzyat": "Взят",
+      "neVzyat": "Не взят",
+      "desyatokValue0": "Десяток {value0}"
+    },
+    "detailHeaderResourceCalculatorCalculatorActionGroup": {
+      "spravkaValue0": "Справка: {value0}"
+    },
+    "detailHeaderResourceCalculatorFormulaAction": {
+      "brosit": "Бросить"
+    },
+    "detailHeaderResourceStatResourceValueInput": {
+      "tekuschee": "Текущее",
+      "tekuscheeZnachenieResursa": "текущее значение ресурса",
+      "maksimalnoeZnachenieResursa": "максимальное значение ресурса",
+      "umenshitValue0": "Уменьшить {value0}",
+      "uvelichitValue0": "Увеличить {value0}"
+    },
+    "headerResourceStatUtilsResourceStatUtil": {
+      "vvediteTseloeNeotritsatelnoeZnachenieOt0": "Введите целое неотрицательное значение от 0 до 100",
+      "tekuscheeZnachenieNeMozhetBytBolshe": "Текущее значение не может быть больше максимального"
+    },
+    "characterDetailInventoryInventoryItemCard": {
+      "redaktirovatPredmetValue0": "Редактировать предмет {value0}",
+      "udalitPredmetValue0": "Удалить предмет {value0}",
+      "predmetValue0BudetUdalenBezVozmozhnosti": "Предмет «{value0}» будет удалён без возможности восстановления.",
+      "neUdalosUdalitPredmet": "Не удалось удалить предмет",
+      "udalitPredmet": "Удалить предмет?"
+    },
+    "characterDetailInventoryInventoryItemDialog": {
+      "redaktirovatPredmet": "Редактировать предмет",
+      "novyiPredmet": "Новый предмет",
+      "proverteDannyePredmeta": "Проверьте данные предмета",
+      "predmetSohranen": "Предмет сохранён",
+      "predmetDobavlen": "Предмет добавлен",
+      "neUdalosSohranitPredmetPoprobuiteEsche": "Не удалось сохранить предмет. Попробуйте ещё раз.",
+      "neUdalosDobavitPredmetPoprobuiteEsche": "Не удалось добавить предмет. Попробуйте ещё раз.",
+      "zakrytOknoValue0": "Закрыть окно: {value0}",
+      "nazvanie": "Название",
+      "karmannyiFonar": "Карманный фонарь",
+      "kolichestvo": "Количество",
+      "kategoriya": "Категория",
+      "snaryazhenie": "Снаряжение",
+      "opisanie": "Описание",
+      "chtoVazhnoZnatObEtomPredmete": "Что важно знать об этом предмете?",
+      "otmena": "Отмена",
+      "sohranenie": "Сохранение…",
+      "sohranit": "Сохранить",
+      "dobavit": "Добавить"
+    },
+    "characterDetailLayoutCharacterSheetWorkspace": {
+      "izmenitShirinuPaneleiLista": "Изменить ширину панелей листа"
+    },
+    "characterDetailNotesCharacterNoteCard": {
+      "redaktirovatZagolovokZametkiValue0": "Редактировать заголовок заметки {value0}",
+      "neUdalosSohranitZagolovok": "Не удалось сохранить заголовок",
+      "zagolovokZametki": "Заголовок заметки",
+      "udalitZametkuValue0": "Удалить заметку {value0}",
+      "zametkaValue0BudetUdalenaBezVozmozhnosti": "Заметка «{value0}» будет удалена без возможности восстановления.",
+      "neUdalosUdalitZametku": "Не удалось удалить заметку",
+      "udalitZametku": "Удалить заметку?",
+      "redaktirovatTekstZametkiValue0": "Редактировать текст заметки {value0}",
+      "neUdalosSohranitTekstZametki": "Не удалось сохранить текст заметки",
+      "tekstZametki": "Текст заметки"
+    },
+    "characterDetailNotesCreateCharacterNoteDialog": {
+      "proverteDannyeZametki": "Проверьте данные заметки",
+      "novayaZametka": "Новая заметка",
+      "zakrytOknoNovayaZametka": "Закрыть окно: Новая заметка",
+      "zagolovok": "Заголовок",
+      "tekst": "Текст",
+      "chtoVazhnoZapomnit": "Что важно запомнить?",
+      "otmena": "Отмена",
+      "sohranenie": "Сохранение…",
+      "dobavit": "Добавить"
+    },
+    "characterDetailSkillsCharacterSkillEditorDialog": {
+      "zakrytOknoValue0": "Закрыть окно: {value0}",
+      "sohranit": "Сохранить"
+    },
+    "characterDetailSkillsCharacterSkillForm": {
+      "vvediteNazvanieITselyeNeotritsatelnyeZnacheniya": "Введите название и целые неотрицательные значения.",
+      "itogovoeZnachenieNavykaNeMozhetPrevyshat": "Итоговое значение навыка не может превышать 100%.",
+      "neUdalosSohranitNavyk": "Не удалось сохранить навык.",
+      "nazvanieNavyka": "Название навыка",
+      "baza": "База",
+      "bazovoeZnachenieNavyka": "Базовое значение навыка",
+      "prokachka": "Прокачка",
+      "prokachkaNavyka": "Прокачка навыка",
+      "otmechenDlyaRazvitiya": "Отмечен для развития",
+      "razvitie": "Развитие",
+      "otmena": "Отмена",
+      "sohranenie": "Сохранение…"
+    },
+    "characterDetailSkillsCharacterSkillRow": {
+      "neUdalosProveritNavykValue0": "Не удалось проверить навык «{value0}»",
+      "redaktirovatNavykValue0": "Редактировать навык {value0}",
+      "udalitNavykValue0": "Удалить навык {value0}",
+      "navykValue0BudetUdalenUPersonazha": "Навык «{value0}» будет удалён у персонажа.",
+      "neUdalosUdalitNavykVozmozhnoOn": "Не удалось удалить навык. Возможно, он используется в имуществе.",
+      "udalitNavyk": "Удалить навык?",
+      "redaktirovatValue0": "Редактировать: {value0}"
+    },
+    "characterDetailSkillsCharacterSkills": {
+      "snachalaZapolniteHarakteristikuLovkostBezNee": "Сначала заполните характеристику «Ловкость»: без неё невозможно рассчитать значение навыка.",
+      "snachalaZapolniteHarakteristikuObrazovanieBezNee": "Сначала заполните характеристику «Образование»: без неё невозможно рассчитать значение навыка.",
+      "navyki": "Навыки",
+      "poiskNavykov": "Поиск навыков",
+      "poiskNavykov2": "Поиск навыков…",
+      "ochistitPoiskNavykov": "Очистить поиск навыков",
+      "dobavitSobstvennyiNavyk": "Добавить собственный навык",
+      "navykiPersonazhaPokaNeDobavleny": "Навыки персонажа пока не добавлены.",
+      "navykiNeNaideny": "Навыки не найдены.",
+      "navykiNaBukvuValue0": "Навыки на букву {value0}",
+      "dobavitNavyk": "Добавить навык"
+    },
+    "characterDetailSkillsSkillDevelopmentMark": {
+      "otmechenDlyaRazvitiya": "Отмечен для развития",
+      "neOtmechenDlyaRazvitiya": "Не отмечен для развития"
+    },
+    "characterDetailSkillsSkillDiceCard": {
+      "navykValue0NedostupenValue1": "Навык {value0} недоступен. {value1}",
+      "neUdalosRasschitatZnachenieNavyka": "Не удалось рассчитать значение навыка.",
+      "brositNavykValue0": "Бросить навык {value0}",
+      "broski": "Броски",
+      "obychnyiBrosok": "Обычный бросок",
+      "brosokSPreimuschestvom": "Бросок с преимуществом",
+      "brosokSPomehoi": "Бросок с помехой"
+    },
+    "characterDetailTabsBackstorySectionCard": {
+      "udalitRazdelValue0": "Удалить раздел {value0}",
+      "tekstRazdelaValue0BudetUdalen": "Текст раздела «{value0}» будет удалён.",
+      "neUdalosUdalitRazdelIstorii": "Не удалось удалить раздел истории",
+      "udalitRazdelIstorii": "Удалить раздел истории?",
+      "redaktirovatRazdelValue0": "Редактировать раздел {value0}",
+      "neUdalosSohranitRazdelIstorii": "Не удалось сохранить раздел истории",
+      "nazhmiteChtobyDobavitTekst": "Нажмите, чтобы добавить текст"
+    },
+    "characterDetailTabsBackstorySections": {
+      "opisanie": "Описание",
+      "cherty": "Черты",
+      "idealyIPrintsipy": "Идеалы и принципы",
+      "travmyIShramy": "Травмы и шрамы",
+      "znachimyeLyudi": "Значимые люди",
+      "fobiiIManii": "Фобии и мании",
+      "vazhnyeMesta": "Важные места",
+      "magicheskieKnigiZaklinaniyaArtefakty": "Магические книги, заклинания, артефакты",
+      "tsennoeImuschestvo": "Ценное имущество",
+      "vstrechiSoSverhestestvennym": "Встречи со сверхъестественным"
+    },
+    "characterDetailTabsCharacterSheetTabs": {
+      "razdelyListaPersonazha": "Разделы листа персонажа"
+    },
+    "characterDetailTabsFinanceFieldDefinitions": {
+      "karmannyeDengi": "Карманные деньги",
+      "dobavitLimitRashodov": "Добавить лимит расходов",
+      "nalichnye": "Наличные",
+      "dobavitNalichnye": "Добавить наличные",
+      "aktivy": "Активы",
+      "dobavitAktivy": "Добавить активы"
+    },
+    "characterDetailTabsFinanceFieldsGrid": {
+      "redaktirovatPoleValue0": "Редактировать поле {value0}",
+      "neUdalosSohranitFinansy": "Не удалось сохранить финансы"
+    },
+    "characterDetailTabsFinancesSection": {
+      "finansy": "Финансы",
+      "udalitFinansy": "Удалить финансы",
+      "karmannyeDengiNalichnyeIAktivyBudut": "Карманные деньги, наличные и активы будут удалены.",
+      "neUdalosUdalitFinansy": "Не удалось удалить финансы",
+      "udalitFinansy2": "Удалить финансы?"
+    },
+    "characterDetailTabsHistorySection": {
+      "biografiya": "Биография",
+      "udalitBiografiyu": "Удалить биографию",
+      "opisanieIVseZapolnennyeRazdelyBiografii": "Описание и все заполненные разделы биографии будут удалены.",
+      "neUdalosUdalitBiografiyu": "Не удалось удалить биографию",
+      "udalitBiografiyu2": "Удалить биографию?"
+    },
+    "characterDetailTabsInventoryTab": {
+      "inventar": "Инвентарь",
+      "dobavitPredmet": "Добавить предмет",
+      "predmetovPokaNet": "Предметов пока нет."
+    },
+    "characterDetailTabsNotesTab": {
+      "zametki": "Заметки",
+      "dobavitZametku": "Добавить заметку",
+      "zametokPokaNet": "Заметок пока нет."
+    },
+    "characterDetailTabsTabDefinitions": {
+      "biografiya": "Биография",
+      "finansy": "Финансы",
+      "inventar": "Инвентарь",
+      "zametki": "Заметки",
+      "oruzhieIAtaki": "Оружие и атаки"
+    },
+    "characterDetailTabsWeaponsTab": {
+      "oruzhieIAtakiPokaNePodderzhivayutsya": "Оружие и атаки пока не поддерживаются Backend-моделью персонажа."
+    },
+    "dtoCharacterCharacterBackstoryDto": {
+      "dobavteTekstRazdela": "Добавьте текст раздела"
+    },
+    "dtoCharacterCharacterFinancesDto": {
+      "dobavteZnachenie": "Добавьте значение",
+      "znachenieNeDolzhnoPrevyshat120Simvolov": "Значение не должно превышать 120 символов",
+      "dobavteOpisanieAktivov": "Добавьте описание активов"
+    },
+    "dtoCharacterCharacterInventoryItemDto": {
+      "ukazhiteNazvaniePredmeta": "Укажите название предмета",
+      "nazvanieNeDolzhnoPrevyshatValue0Simvolov": "Название не должно превышать {value0} символов",
+      "kolichestvoDolzhnoBytTselymChislom": "Количество должно быть целым числом",
+      "kolichestvoDolzhnoBytNeMenshe1": "Количество должно быть не меньше 1",
+      "kategoriyaNeDolzhnaPrevyshatValue0Simvolov": "Категория не должна превышать {value0} символов"
+    },
+    "dtoCharacterCharacterProfileDto": {
+      "ukazhiteImyaPersonazha": "Укажите имя персонажа",
+      "imyaSlishkomDlinnoe": "Имя слишком длинное",
+      "znachenieSlishkomDlinnoe": "Значение слишком длинное",
+      "vozrastDolzhenBytTselymNeotritsatelnymChislom": "Возраст должен быть целым неотрицательным числом",
+      "vozrastSlishkomBolshoi": "Возраст слишком большой"
+    },
+    "dtoCharacterCharacterSheetValuesDto": {
+      "vvediteTseloeNeotritsatelnoeChislo": "Введите целое неотрицательное число",
+      "vvediteZnachenieOt0DoValue0": "Введите значение от 0 до {value0}",
+      "vvediteZnachenie": "Введите значение"
+    },
+    "dtoCharacterCreateCharacterNoteDto": {
+      "ukazhiteZagolovokZametki": "Укажите заголовок заметки",
+      "zagolovokNeDolzhenPrevyshatValue0Simvolov": "Заголовок не должен превышать {value0} символов",
+      "dobavteTekstZametki": "Добавьте текст заметки"
+    },
+    "hooksCharacterUseCreateCharacterNoteForm": {
+      "zametkaDobavlena": "Заметка добавлена",
+      "neUdalosDobavitZametkuPoprobuiteEsche": "Не удалось добавить заметку. Попробуйте ещё раз."
+    },
+    "hooksCharacterUseInlineTextEditor": {
+      "proverteVvedennoeZnachenie": "Проверьте введённое значение"
+    },
+    "libDiceCharacteristicCheck": {
+      "kriticheskiiUspeh": "критический успех",
+      "chrezvychainyiUspeh": "чрезвычайный успех",
+      "proval": "провал",
+      "krah": "крах",
+      "trudnyiUspeh": "трудный успех",
+      "obychnyiUspeh": "обычный успех"
+    }
+  }
+}

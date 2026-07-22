@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
 
 import { SidebarSiteFooter } from "@/components/layout/site-footer"
-import { landingContent } from "@/lib/content/landing.content"
+import { landingContent } from "@/data/locales/utils/landing-content.util"
 
 describe("SidebarSiteFooter", () => {
   it("keeps legal and social content inside the sidebar", () => {

@@ -1,4 +1,6 @@
 import { z } from "zod"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { formatLocalizedTemplate } from "@/data/locales/utils/format-localized-template.util"
 
 export const MAX_CHARACTERISTIC_VALUE = 100
 
@@ -7,17 +9,22 @@ export const characterNullableIntegerTextSchema = z
   .trim()
   .refine(
     (value) => value === "" || /^\d+$/.test(value),
-    "Введите целое неотрицательное число",
+    localizedContent.copy.dtoCharacterCharacterSheetValuesDto
+      .vvediteTseloeNeotritsatelnoeChislo,
   )
   .refine(
     (value) => value === "" || Number(value) <= MAX_CHARACTERISTIC_VALUE,
-    `Введите значение от 0 до ${MAX_CHARACTERISTIC_VALUE}`,
+    formatLocalizedTemplate(
+      localizedContent.copy.dtoCharacterCharacterSheetValuesDto
+        .vvediteZnachenieOt0DoValue0,
+      { value0: MAX_CHARACTERISTIC_VALUE },
+    ),
   )
 
 export const characterIntegerTextSchema =
   characterNullableIntegerTextSchema.refine(
     (value) => value !== "",
-    "Введите значение",
+    localizedContent.copy.dtoCharacterCharacterSheetValuesDto.vvediteZnachenie,
   )
 
 export type UpdateCharacterCharacteristicsDto = {

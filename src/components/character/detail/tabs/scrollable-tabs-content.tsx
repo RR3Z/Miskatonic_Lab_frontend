@@ -1,5 +1,5 @@
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { TabsContent } from "@/components/ui/tabs"
+import { ScrollArea } from "@/components/ui/scroll-area/scroll-area"
+import { TabsContent } from "@/components/ui/tabs/tabs-content"
 
 export function ScrollableTabsContent({
   children,

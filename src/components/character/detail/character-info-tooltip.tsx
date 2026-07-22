@@ -1,7 +1,8 @@
 import { Info } from "lucide-react"
 import type * as React from "react"
 
-import { CharacterSheetTooltip } from "@/components/character/detail/character-sheet-tooltip"
+import { CharacterSheetTooltip } from "@/components/character/detail/character-sheet-tooltip/character-sheet-tooltip"
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils/cn.util"
 
 const DEFAULT_TRIGGER_CLASS_NAME =
@@ -38,14 +39,16 @@ export function CharacterInfoTooltip({
       side={side}
       sideOffset={sideOffset}
       trigger={
-        <button
+        <Button
           aria-label={ariaLabel}
           className={cn(DEFAULT_TRIGGER_CLASS_NAME, triggerClassName)}
           data-testid={testId}
+          size="content"
           type="button"
+          variant="unstyled"
         >
           <Info aria-hidden="true" className={iconClassName} />
-        </button>
+        </Button>
       }
     >
       {children}

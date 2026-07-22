@@ -1,0 +1,22 @@
+{
+  "copy": {
+    "appLayout": {
+      "arhivSyschikovKomnatBroskovIHroniki": "Архив сыщиков, комнат, бросков и хроники событий для мистических расследований."
+    },
+    "componentsLayoutSidebarNavigation": {
+      "brandTooltip": "Miskatonic Lab",
+      "homeAriaLabel": "На главную Miskatonic Lab",
+      "glavnaya": "Главная",
+      "spravochnik": "Справочник",
+      "dokumentatsiya": "Документация",
+      "spisokPersonazhei": "Список персонажей",
+      "komnatyWip": "Комнаты — WIP"
+    },
+    "componentsLayoutSidebarUserControls": {
+      "vyiti": "Выйти"
+    },
+    "componentsLayoutSiteShell": {
+      "pereklyuchitBokovuyuPanel": "Переключить боковую панель"
+    }
+  }
+}

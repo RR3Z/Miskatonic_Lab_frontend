@@ -1,0 +1,19 @@
+{
+  "catalog": {
+    "title": "Комнаты",
+    "description": "Найдите стол или создайте свой.",
+    "createAriaLabel": "Создать комнату",
+    "refreshAriaLabel": "Обновить список комнат",
+    "loadingAriaLabel": "Загрузка комнат",
+    "catalogAriaLabel": "Каталог комнат",
+    "loadErrorTitle": "Не удалось загрузить комнаты",
+    "loadErrorDescription": "Проверьте подключение и попробуйте ещё раз.",
+    "retry": "Повторить",
+    "emptyTitle": "Комнат пока нет",
+    "emptyDescription": "Создайте первую комнату и пригласите игроков.",
+    "create": "Создать комнату",
+    "open": "Открыть",
+    "join": "Войти",
+    "unknownCreationDate": "Дата создания неизвестна"
+  }
+}

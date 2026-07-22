@@ -6,7 +6,7 @@ import { CharacterIdentitySection } from "@/components/character/detail/header/c
 import { CharacterResourcesSection } from "@/components/character/detail/header/character-resources-section"
 import { CharacterStatesSection } from "@/components/character/detail/header/character-states-section"
 import { Separator } from "@/components/ui/separator"
-import type { CharacterDetail } from "@/types/character"
+import type { CharacterDetail } from "@/types/character.types"
 
 export function CharacterSheetHeader({
   character,

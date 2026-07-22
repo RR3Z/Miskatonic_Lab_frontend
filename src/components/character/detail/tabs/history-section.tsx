@@ -2,10 +2,11 @@
 
 import { DeleteResourceButton } from "@/components/character/detail/editors/delete-resource-button"
 import { BackstorySectionCard } from "@/components/character/detail/tabs/backstory-section-card"
-import { BACKSTORY_SECTIONS } from "@/components/character/detail/tabs/backstory-sections"
+import { BACKSTORY_SECTIONS } from "@/components/character/detail/tabs/constants/backstory-sections.constants"
 import { SectionTitle } from "@/components/character/detail/tabs/section-title"
-import { useDeleteCharacterBackstory } from "@/lib/api/use-character-backstory"
-import type { CharacterBackstory } from "@/types/character"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { useDeleteCharacterBackstory } from "@/hooks/character/use-delete-character-backstory"
+import type { CharacterBackstory } from "@/types/character.types"
 
 export function HistorySection({
   backstory,
@@ -19,14 +20,28 @@ export function HistorySection({
   return (
     <section className="space-y-3" data-testid="character-history-content">
       <div className="flex items-center justify-between gap-3">
-        <SectionTitle>Биография</SectionTitle>
+        <SectionTitle>
+          {localizedContent.copy.characterDetailTabsHistorySection.biografiya}
+        </SectionTitle>
         {backstory.id ? (
           <DeleteResourceButton
-            ariaLabel="Удалить биографию"
-            description="Описание и все заполненные разделы биографии будут удалены."
-            errorMessage="Не удалось удалить биографию"
+            ariaLabel={
+              localizedContent.copy.characterDetailTabsHistorySection
+                .udalitBiografiyu
+            }
+            description={
+              localizedContent.copy.characterDetailTabsHistorySection
+                .opisanieIVseZapolnennyeRazdelyBiografii
+            }
+            errorMessage={
+              localizedContent.copy.characterDetailTabsHistorySection
+                .neUdalosUdalitBiografiyu
+            }
             onDelete={() => deleteBackstory.mutateAsync()}
-            title="Удалить биографию?"
+            title={
+              localizedContent.copy.characterDetailTabsHistorySection
+                .udalitBiografiyu2
+            }
           />
         ) : null}
       </div>

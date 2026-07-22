@@ -1,17 +1,15 @@
 "use client"
 
 import { DiceRollProgressOverlay } from "@/components/character/detail/dice-roll-progress-overlay"
-import {
-  CharacterSheetStatButton,
-  CharacterSheetStatCard,
-} from "@/components/character/detail/header/character-sheet-stat-card"
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuLabel,
-  ContextMenuTrigger,
-} from "@/components/ui/context-menu"
+import { CharacterSheetStatButton } from "@/components/character/detail/header/character-sheet-stat/character-sheet-stat-button"
+import { CharacterSheetStatCard } from "@/components/character/detail/header/character-sheet-stat/character-sheet-stat-card"
+import { ContextMenu } from "@/components/ui/context-menu/context-menu"
+import { ContextMenuContent } from "@/components/ui/context-menu/context-menu-content"
+import { ContextMenuItem } from "@/components/ui/context-menu/context-menu-item"
+import { ContextMenuLabel } from "@/components/ui/context-menu/context-menu-label"
+import { ContextMenuTrigger } from "@/components/ui/context-menu/context-menu-trigger"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { formatLocalizedTemplate } from "@/data/locales/utils/format-localized-template.util"
 import type { D100Mode } from "@/lib/api/character-dice-rolls"
 import { getCharacteristicCheckThresholds } from "@/lib/dice/characteristic-check"
 import { cn } from "@/lib/utils/cn.util"
@@ -76,7 +74,11 @@ export function CharacteristicDiceCard({
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <CharacterSheetStatButton
-          aria-label={`Бросить характеристику ${title}`}
+          aria-label={formatLocalizedTemplate(
+            localizedContent.copy.characterDetailHeaderCharacteristicDiceCard
+              .brositHarakteristikuValue0,
+            { value0: title },
+          )}
           className="relative grid grid-cols-[minmax(0,1fr)_auto] text-left"
           data-testid={`characteristic-card-${label}`}
           disabled={rolling}
@@ -89,23 +91,37 @@ export function CharacteristicDiceCard({
         </CharacterSheetStatButton>
       </ContextMenuTrigger>
       <ContextMenuContent>
-        <ContextMenuLabel>Броски</ContextMenuLabel>
+        <ContextMenuLabel>
+          {
+            localizedContent.copy.characterDetailHeaderCharacteristicDiceCard
+              .broski
+          }
+        </ContextMenuLabel>
         <ContextMenuItem disabled={rolling} onSelect={() => onRoll("normal")}>
-          Обычный бросок
+          {
+            localizedContent.copy.characterDetailHeaderCharacteristicDiceCard
+              .obychnyiBrosok
+          }
         </ContextMenuItem>
         <ContextMenuItem
           className="text-[var(--ml-accent-success)] focus:bg-[color-mix(in_srgb,var(--ml-accent-success)_18%,transparent)] focus:text-[var(--ml-ink-primary)]"
           disabled={rolling}
           onSelect={() => onRoll("bonus")}
         >
-          Бросок с преимуществом
+          {
+            localizedContent.copy.characterDetailHeaderCharacteristicDiceCard
+              .brosokSPreimuschestvom
+          }
         </ContextMenuItem>
         <ContextMenuItem
           className="text-[var(--ml-accent-danger)] focus:bg-[color-mix(in_srgb,var(--ml-accent-danger)_18%,transparent)] focus:text-[var(--ml-ink-primary)]"
           disabled={rolling}
           onSelect={() => onRoll("penalty")}
         >
-          Бросок с помехой
+          {
+            localizedContent.copy.characterDetailHeaderCharacteristicDiceCard
+              .brosokSPomehoi
+          }
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>

@@ -10,7 +10,7 @@ import type {
   CharacterLuck,
   CharacterMagic,
   CharacterSanity,
-} from "@/types/character"
+} from "@/types/character.types"
 
 export type UpdatedCharacterResource =
   | { resource: "hp"; value: CharacterHealth }

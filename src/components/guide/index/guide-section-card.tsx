@@ -2,9 +2,9 @@ import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 
 import { GuideSymbol } from "@/components/guide/symbol/guide-symbol"
-import { guideContent } from "@/data/guide/guide-content.data"
-import type { GuideSection } from "@/data/guide/types/guide-content.types"
+import { guideContent } from "@/lib/guide/guide-content"
 import { appRoutes } from "@/lib/routes/app-routes"
+import type { GuideSection } from "@/types/guide-content.types"
 
 type GuideSectionCardProps = {
   section: GuideSection
@@ -30,7 +30,7 @@ export function GuideSectionCard({ section }: GuideSectionCardProps) {
           {section.description}
         </p>
         <span className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-(--ml-accent-brass-strong)">
-          {guideContent.ui.index.openLabel}{" "}
+          {guideContent.ui.index.openLabel}
           <ArrowRight aria-hidden="true" size={16} />
         </span>
       </div>

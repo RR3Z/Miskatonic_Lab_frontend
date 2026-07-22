@@ -6,15 +6,14 @@ import Link from "next/link"
 import { BrandMark } from "@/components/brand/brand-mark"
 import { ErrorCatalog } from "@/components/errors/error-catalog"
 import { SidebarSiteFooter } from "@/components/layout/site-footer"
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar"
+import { Sidebar } from "@/components/ui/sidebar/sidebar"
+import { SidebarContent } from "@/components/ui/sidebar/sidebar-content"
+import { SidebarFooter } from "@/components/ui/sidebar/sidebar-footer"
+import { SidebarHeader } from "@/components/ui/sidebar/sidebar-header"
+import { SidebarMenu } from "@/components/ui/sidebar/sidebar-menu"
+import { SidebarMenuButton } from "@/components/ui/sidebar/sidebar-menu-button"
+import { SidebarMenuItem } from "@/components/ui/sidebar/sidebar-menu-item"
+import layoutContent from "@/data/locales/ru/layout/layout.ru.json"
 import { useCloseSidebar } from "@/hooks/layout/use-close-sidebar"
 import { appRoutes } from "@/lib/routes/app-routes"
 
@@ -30,10 +29,16 @@ export function ErrorSidebar() {
               asChild
               className="h-12 justify-center"
               size="lg"
-              tooltip="Miskatonic Lab"
+              tooltip={
+                layoutContent.copy.componentsLayoutSidebarNavigation
+                  .brandTooltip
+              }
             >
               <Link
-                aria-label="Miskatonic Lab home"
+                aria-label={
+                  layoutContent.copy.componentsLayoutSidebarNavigation
+                    .homeAriaLabel
+                }
                 href={appRoutes.home}
                 onClick={closeSidebar}
               >

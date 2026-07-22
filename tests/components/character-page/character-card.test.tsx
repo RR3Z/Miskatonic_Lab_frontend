@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
 
 import { CharacterCard } from "@/components/character/character-card"
-import type { CharacterListItem } from "@/types/character"
+import type { CharacterListItem } from "@/types/character.types"
 
 const character: CharacterListItem = {
   id: "character-1",

@@ -6,7 +6,10 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
-
+import {
+  showError,
+  showErrorCode,
+} from "@/components/errors/utils/error-toast.util"
 import { RoomChat } from "@/components/room/chat/room-chat"
 import { RoomCharacterPicker } from "@/components/room/detail/room-character-picker"
 import { RoomCharacterSheet } from "@/components/room/detail/room-character-sheet"
@@ -15,15 +18,19 @@ import { RoomSettings } from "@/components/room/detail/room-settings"
 import { roomCommandErrorCode } from "@/components/room/utils/room-command-error-code.util"
 import { roomEventUserId } from "@/components/room/utils/room-event-user-id.util"
 import { Button } from "@/components/ui/button"
-import roomContentRu from "@/data/room/room.ru.json"
+import roomContentRu from "@/data/locales/ru/room/detail.ru.json"
 import { useChangeRoomMemberRole } from "@/hooks/room/use-change-room-member-role"
 import { useKickRoomMember } from "@/hooks/room/use-kick-room-member"
 import { useLeaveRoom } from "@/hooks/room/use-leave-room"
 import { useRoomRealtime } from "@/hooks/room/use-room-realtime"
 import { useTransferRoomOwnership } from "@/hooks/room/use-transfer-room-ownership"
-import { showError, showErrorCode } from "@/lib/errors/presenter"
 import { appRoutes } from "@/lib/routes/app-routes"
-import type { Room, RoomMember, RoomRole, RoomSocketEvent } from "@/types/room"
+import type {
+  Room,
+  RoomMember,
+  RoomRole,
+  RoomSocketEvent,
+} from "@/types/room.types"
 
 type RoomDetailPageProps = {
   room: Room

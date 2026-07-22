@@ -1,7 +1,7 @@
 "use client"
 
 import { CharacterInfoTooltip } from "@/components/character/detail/character-info-tooltip"
-import { CharacterSheetTooltipProvider } from "@/components/character/detail/character-sheet-tooltip"
+import { CharacterSheetTooltipProvider } from "@/components/character/detail/character-sheet-tooltip/character-sheet-tooltip-provider"
 import { CharacterAgeInfo } from "@/components/character/detail/header/character-age-info"
 import { CharacterNameEditor } from "@/components/character/detail/header/character-name-editor"
 import { CharacterPortraitEditor } from "@/components/character/detail/header/character-portrait-editor"
@@ -9,12 +9,14 @@ import { CharacterSexEditor } from "@/components/character/detail/header/charact
 import {
   CHARACTER_IDENTITY_TEXT_FIELDS,
   type CharacterIdentityTextKey,
-} from "@/components/character/detail/header/identity-field-definitions"
-import { identityFieldValue } from "@/components/character/detail/header/identity-field-value"
+} from "@/components/character/detail/header/constants/identity-fields.constants"
 import { IdentityLine } from "@/components/character/detail/header/identity-line"
-import { useUpdateCharacterProfile } from "@/lib/api/use-character-profile"
+import { identityFieldValue } from "@/components/character/detail/header/utils/identity-field-value.util"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { formatLocalizedTemplate } from "@/data/locales/utils/format-localized-template.util"
+import { useUpdateCharacterProfile } from "@/hooks/character/use-update-character-profile"
 import { getPortraitKind, getPortraitUrl } from "@/lib/utils/portrait.util"
-import type { CharacterDetail } from "@/types/character"
+import type { CharacterDetail } from "@/types/character.types"
 
 type CharacterIdentitySectionProps = {
   character: CharacterDetail
@@ -49,7 +51,19 @@ export function CharacterIdentitySection({
     <CharacterSheetTooltipProvider>
       <section className="flex h-full min-w-0 self-stretch items-center gap-3 md:col-span-2 xl:col-span-1">
         <CharacterPortraitEditor
-          alt={`${portraitKind === "female" ? "Женский" : "Мужской"} портрет ${character.name}`}
+          alt={formatLocalizedTemplate(
+            localizedContent.copy.characterDetailHeaderCharacterIdentitySection
+              .value0PortretValue1,
+            {
+              value0:
+                portraitKind === "female"
+                  ? localizedContent.copy
+                      .characterDetailHeaderCharacterIdentitySection.zhenskii
+                  : localizedContent.copy
+                      .characterDetailHeaderCharacterIdentitySection.muzhskoi,
+              value1: character.name,
+            },
+          )}
           characterId={character.id}
           portraitUrl={portraitSrc}
         />
@@ -60,12 +74,21 @@ export function CharacterIdentitySection({
           />
           <div className="mt-1.5 grid grid-cols-2 gap-x-4 gap-y-0.5 pl-2">
             <IdentityLine
-              ariaLabel={`Редактировать поле ${CHARACTER_IDENTITY_TEXT_FIELDS[0].label}`}
+              ariaLabel={formatLocalizedTemplate(
+                localizedContent.copy
+                  .characterDetailHeaderCharacterIdentitySection
+                  .redaktirovatPoleValue0,
+                { value0: CHARACTER_IDENTITY_TEXT_FIELDS[0].label },
+              )}
               className="col-span-2"
               label={CHARACTER_IDENTITY_TEXT_FIELDS[0].label}
               labelAccessory={
                 <CharacterInfoTooltip
-                  ariaLabel="Информация о бонусах профессии"
+                  ariaLabel={
+                    localizedContent.copy
+                      .characterDetailHeaderCharacterIdentitySection
+                      .informatsiyaOBonusahProfessii
+                  }
                   contentClassName="w-[min(24rem,calc(100vw-2rem))] max-w-none"
                   iconClassName="size-3"
                   testId="character-occupation-info"
@@ -73,23 +96,55 @@ export function CharacterIdentitySection({
                 >
                   <div className="flex flex-col items-start gap-2 text-sm leading-relaxed">
                     <p className="font-heading text-base font-semibold">
-                      Профессия: дополнительные возможности
+                      {
+                        localizedContent.copy
+                          .characterDetailHeaderCharacterIdentitySection
+                          .professiyaDopolnitelnyeVozmozhnosti
+                      }
                     </p>
                     <ul className="list-disc space-y-1 pl-4">
                       <li>
-                        Очки профессиональных навыков по формуле профессии.
+                        {
+                          localizedContent.copy
+                            .characterDetailHeaderCharacterIdentitySection
+                            .ochkiProfessionalnyhNavykovPoFormuleProfessii
+                        }
                       </li>
-                      <li>Список навыков для распределения этих очков.</li>
-                      <li>Диапазон Средств и кредитного рейтинга.</li>
-                      <li>Полезные связи и круг общения.</li>
+                      <li>
+                        {
+                          localizedContent.copy
+                            .characterDetailHeaderCharacterIdentitySection
+                            .spisokNavykovDlyaRaspredeleniyaEtihOchkov
+                        }
+                      </li>
+                      <li>
+                        {
+                          localizedContent.copy
+                            .characterDetailHeaderCharacterIdentitySection
+                            .diapazonSredstvIKreditnogoReitinga
+                        }
+                      </li>
+                      <li>
+                        {
+                          localizedContent.copy
+                            .characterDetailHeaderCharacterIdentitySection
+                            .poleznyeSvyaziIKrugObscheniya
+                        }
+                      </li>
                     </ul>
                     <p className="border-t border-[#5d5231]/70 pt-2 text-[#e8d9b4]">
-                      Значения зависят от выбранной профессии. Приложение не
-                      применяет бонусы автоматически: навыки и финансы
-                      заполняются вручную.
+                      {
+                        localizedContent.copy
+                          .characterDetailHeaderCharacterIdentitySection
+                          .znacheniyaZavisyatOtVybrannoiProfessiiPrilozhenie
+                      }
                     </p>
                     <p className="text-xs opacity-70">
-                      Краткое руководство по созданию персонажа, с. 2–3
+                      {
+                        localizedContent.copy
+                          .characterDetailHeaderCharacterIdentitySection
+                          .kratkoeRukovodstvoPoSozdaniyuPersonazhaS
+                      }
                     </p>
                   </div>
                 </CharacterInfoTooltip>
@@ -105,7 +160,12 @@ export function CharacterIdentitySection({
               )}
             />
             <IdentityLine
-              ariaLabel={`Редактировать поле ${CHARACTER_IDENTITY_TEXT_FIELDS[1].label}`}
+              ariaLabel={formatLocalizedTemplate(
+                localizedContent.copy
+                  .characterDetailHeaderCharacterIdentitySection
+                  .redaktirovatPoleValue0,
+                { value0: CHARACTER_IDENTITY_TEXT_FIELDS[1].label },
+              )}
               label={CHARACTER_IDENTITY_TEXT_FIELDS[1].label}
               labelAccessory={<CharacterAgeInfo />}
               inputMode="numeric"
@@ -128,7 +188,12 @@ export function CharacterIdentitySection({
               />
             </div>
             <IdentityLine
-              ariaLabel={`Редактировать поле ${CHARACTER_IDENTITY_TEXT_FIELDS[2].label}`}
+              ariaLabel={formatLocalizedTemplate(
+                localizedContent.copy
+                  .characterDetailHeaderCharacterIdentitySection
+                  .redaktirovatPoleValue0,
+                { value0: CHARACTER_IDENTITY_TEXT_FIELDS[2].label },
+              )}
               className="col-span-2"
               label={CHARACTER_IDENTITY_TEXT_FIELDS[2].label}
               onSave={(value) =>
@@ -141,7 +206,12 @@ export function CharacterIdentitySection({
               )}
             />
             <IdentityLine
-              ariaLabel={`Редактировать поле ${CHARACTER_IDENTITY_TEXT_FIELDS[3].label}`}
+              ariaLabel={formatLocalizedTemplate(
+                localizedContent.copy
+                  .characterDetailHeaderCharacterIdentitySection
+                  .redaktirovatPoleValue0,
+                { value0: CHARACTER_IDENTITY_TEXT_FIELDS[3].label },
+              )}
               className="col-span-2"
               label={CHARACTER_IDENTITY_TEXT_FIELDS[3].label}
               onSave={(value) =>

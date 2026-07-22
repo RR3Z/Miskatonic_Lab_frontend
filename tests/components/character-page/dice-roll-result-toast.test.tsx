@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 
-import { DiceRollResultToast } from "@/components/character/detail/header/dice-roll-result-toast"
+import { DiceRollResultToast } from "@/components/character/detail/header/dice-result-toast/dice-roll-result-toast"
 
 describe("DiceRollResultToast", () => {
   it("separates the characteristic, d100 result, outcome, and thresholds", () => {

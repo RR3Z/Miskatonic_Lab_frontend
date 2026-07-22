@@ -7,7 +7,7 @@ import {
   normalizeCharacterListItem,
   uploadCharacterPortrait,
 } from "@/lib/api/characters"
-import type { CharacterApiListItem } from "@/types/character"
+import type { CharacterApiListItem } from "@/types/character.types"
 
 describe("character API normalization", () => {
   it("fetches the full character aggregate by id", async () => {

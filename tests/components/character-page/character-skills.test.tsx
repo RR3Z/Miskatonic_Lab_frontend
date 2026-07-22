@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { CharacterSkills } from "@/components/character/detail/skills/character-skills"
-import type { CharacterSkill } from "@/types/character"
+import type { CharacterSkill } from "@/types/character.types"
 
 const deleteSkillMutation = vi.hoisted(() => ({ mutateAsync: vi.fn() }))
 const createSkillMutation = vi.hoisted(() => ({
@@ -20,13 +20,19 @@ const rollMutation = vi.hoisted(() => ({
   mutateAsync: vi.fn(),
 }))
 
-vi.mock("@/lib/api/use-character-skills", () => ({
+vi.mock("@/hooks/character/use-create-character-skill", () => ({
   useCreateCharacterSkill: () => createSkillMutation,
+}))
+
+vi.mock("@/hooks/character/use-delete-character-skill", () => ({
   useDeleteCharacterSkill: () => deleteSkillMutation,
+}))
+
+vi.mock("@/hooks/character/use-update-character-skill", () => ({
   useUpdateCharacterSkill: () => updateSkillMutation,
 }))
 
-vi.mock("@/lib/api/use-character-dice-rolls", () => ({
+vi.mock("@/hooks/character/use-character-dice-rolls", () => ({
   useMakeCharacterDiceRoll: () => rollMutation,
 }))
 

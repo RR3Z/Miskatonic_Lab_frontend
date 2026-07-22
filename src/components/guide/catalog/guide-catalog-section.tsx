@@ -1,14 +1,12 @@
 import Link from "next/link"
 
 import { GuideCatalogBlockLink } from "@/components/guide/catalog/guide-catalog-block-link"
-import {
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
-} from "@/components/ui/sidebar"
-import type { GuideSection } from "@/data/guide/types/guide-content.types"
+import { SidebarMenuButton } from "@/components/ui/sidebar/sidebar-menu-button"
+import { SidebarMenuItem } from "@/components/ui/sidebar/sidebar-menu-item"
+import { SidebarMenuSub } from "@/components/ui/sidebar/sidebar-menu-sub"
+import { SidebarMenuSubItem } from "@/components/ui/sidebar/sidebar-menu-sub-item"
 import { appRoutes } from "@/lib/routes/app-routes"
+import type { GuideSection } from "@/types/guide-content.types"
 
 type GuideCatalogSectionProps = {
   onNavigate: () => void

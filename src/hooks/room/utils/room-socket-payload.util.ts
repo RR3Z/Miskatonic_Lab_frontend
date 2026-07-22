@@ -1,4 +1,4 @@
-import type { RoomSocketEvent } from "@/types/room"
+import type { RoomSocketEvent } from "@/types/room.types"
 
 export function parseRoomSocketEvent(value: unknown): RoomSocketEvent | null {
   if (typeof value !== "string") return null

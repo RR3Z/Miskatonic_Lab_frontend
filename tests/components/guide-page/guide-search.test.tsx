@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event"
 import { describe, expect, it } from "vitest"
 
 import { GuideSearch } from "@/components/guide/search/guide-search"
-import { getGuideSearchResults } from "@/components/guide/utils/guide-search.util"
+import { getGuideSearchResults } from "@/lib/guide/utils/guide-search.util"
 
 describe("GuideSearch", () => {
   it("shows results in a styled scroll area and links to the matched block", async () => {

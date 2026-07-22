@@ -2,26 +2,24 @@
 
 import { Send } from "lucide-react"
 import { useMemo, useState } from "react"
+import { showErrorCode } from "@/components/errors/utils/error-toast.util"
 import { roomPanelClassName } from "@/components/room/styles/room-panel.styles"
 import { chatTextFromPayload } from "@/components/room/utils/room-chat-payload.util"
 import { roomSocketStatusText } from "@/components/room/utils/room-socket-status.util"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card } from "@/components/ui/card/card"
+import { CardContent } from "@/components/ui/card/card-content"
+import { CardDescription } from "@/components/ui/card/card-description"
+import { CardHeader } from "@/components/ui/card/card-header"
+import { CardTitle } from "@/components/ui/card/card-title"
 import { Input } from "@/components/ui/input"
-import roomContentRu from "@/data/room/room.ru.json"
+import roomContentRu from "@/data/locales/ru/room/chat.ru.json"
 import { useRoomEvents } from "@/hooks/room/use-room-events"
 import type {
   RoomSocketCommand,
   RoomSocketStatus,
 } from "@/hooks/room/use-room-socket"
-import { showErrorCode } from "@/lib/errors/presenter"
-import type { RoomMember } from "@/types/room"
+import type { RoomMember } from "@/types/room.types"
 
 type RoomChatProps = {
   members: RoomMember[]

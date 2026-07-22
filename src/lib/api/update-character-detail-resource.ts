@@ -1,5 +1,5 @@
 import type { UpdatedCharacterResource } from "@/lib/api/character-resources"
-import type { CharacterDetail } from "@/types/character"
+import type { CharacterDetail } from "@/types/character.types"
 
 export function updateCharacterDetailResource(
   character: CharacterDetail,

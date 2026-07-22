@@ -3,7 +3,7 @@ import { basename, join, relative, resolve } from "node:path"
 import { describe, expect, it } from "vitest"
 
 import { formatRoomTemplate } from "@/components/room/utils/format-room-template.util"
-import roomContentRu from "@/data/room/room.ru.json"
+import roomContentRu from "@/data/locales/ru/room/join.ru.json"
 import { roomCatalogRefreshIntervalMs } from "@/hooks/room/constants/room-catalog-refresh.constants"
 import { parseRoomSocketEvent } from "@/hooks/room/utils/room-socket-payload.util"
 import { getPresentedError, UNKNOWN_ERROR_CODE } from "@/lib/errors/catalog"
@@ -20,17 +20,19 @@ function filesIn(directory: string): string[] {
 
 describe("Rooms refactor policy", () => {
   it("uses direct UTF-8 JSON imports in every room scenario", () => {
-    const scenarioFiles = [
-      "catalog/room-catalog-page.tsx",
-      "create/create-room-modal.tsx",
-      "join/room-join-form.tsx",
-      "detail/room-detail-page.tsx",
-      "chat/room-chat.tsx",
-    ]
+    const scenarioFiles = {
+      "catalog/room-catalog-page.tsx": "catalog",
+      "create/create-room-modal.tsx": "create",
+      "join/room-join-form.tsx": "join",
+      "detail/room-detail-page.tsx": "detail",
+      "chat/room-chat.tsx": "chat",
+    } as const
 
-    for (const file of scenarioFiles) {
+    for (const [file, locale] of Object.entries(scenarioFiles)) {
       const source = readFileSync(join(roomComponentsDirectory, file), "utf8")
-      expect(source).toContain('from "@/data/room/room.ru.json"')
+      expect(source).toContain(
+        `from "@/data/locales/ru/room/${locale}.ru.json"`,
+      )
     }
   })
 
@@ -112,7 +114,10 @@ describe("Rooms refactor policy", () => {
   })
 
   it("uses safe network and unknown error fallbacks", () => {
-    expect(getPresentedError("not-a-room-code").code).toBe(UNKNOWN_ERROR_CODE)
+    expect(getPresentedError("not-a-room-code").code).toBe("not-a-room-code")
+    expect(getPresentedError("not-a-room-code").catalogCode).toBe(
+      UNKNOWN_ERROR_CODE,
+    )
     expect(getPresentedError("client.network_unavailable").code).toBe(
       "client.network_unavailable",
     )

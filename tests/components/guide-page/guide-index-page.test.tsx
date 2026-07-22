@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react"
 import { describe, expect, it, vi } from "vitest"
 
 import { GuideIndexPage } from "@/components/guide/index/guide-index-page"
-import { guideContent } from "@/data/guide/guide-content.data"
+import { guideContent } from "@/lib/guide/guide-content"
 
 vi.mock("@/components/guide/symbol/guide-symbol", () => ({
   GuideSymbol: () => <div aria-hidden="true" data-testid="guide-symbol" />,

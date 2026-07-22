@@ -1,13 +1,14 @@
 import Image from "next/image"
 import Link from "next/link"
-
 import { CharacterCardActions } from "@/components/character/character-card-actions"
 import { CharacterStat } from "@/components/character/character-stat"
-import { characterStatVisuals } from "@/components/character/character-stat-visuals"
-import { Card } from "@/components/ui/card"
+import { characterStatVisuals } from "@/components/character/constants/character-stat-visuals.constants"
+import { Card } from "@/components/ui/card/card"
+import localizedContent from "@/data/locales/ru/character/list.ru.json"
+import { formatLocalizedTemplate } from "@/data/locales/utils/format-localized-template.util"
 import { appRoutes } from "@/lib/routes/app-routes"
 import { getPortraitKind, getPortraitUrl } from "@/lib/utils/portrait.util"
-import type { CharacterListItem } from "@/types/character"
+import type { CharacterListItem } from "@/types/character.types"
 import cardTentacle from "../../../assets/character-card-tentacle.svg"
 
 type CharacterCardProps = {
@@ -23,12 +24,17 @@ export function CharacterCard({ character, onDelete }: CharacterCardProps) {
   const portraitKind = getPortraitKind(character.sex)
   const sexLabel = character.sex
     ? portraitKind === "female"
-      ? "Женщина"
-      : "Мужчина"
+      ? localizedContent.copy.componentsCharacterCharacterCard.zhenschina
+      : localizedContent.copy.componentsCharacterCharacterCard.muzhchina
     : null
   const subtitle = [
     sexLabel,
-    character.age !== null ? `${character.age} лет` : null,
+    character.age !== null
+      ? formatLocalizedTemplate(
+          localizedContent.copy.componentsCharacterCharacterCard.value0Let,
+          { value0: character.age },
+        )
+      : null,
     character.residence,
   ]
     .filter(Boolean)
@@ -49,7 +55,18 @@ export function CharacterCard({ character, onDelete }: CharacterCardProps) {
         />
         <div className="relative my-auto size-[92px] shrink-0 overflow-hidden rounded-sm border border-[var(--ml-border-subtle)] bg-[var(--ml-surface-panel-raised)]">
           <Image
-            alt={`${portraitKind === "female" ? "Женский" : "Мужской"} портрет`}
+            alt={formatLocalizedTemplate(
+              localizedContent.copy.componentsCharacterCharacterCard
+                .value0Portret,
+              {
+                value0:
+                  portraitKind === "female"
+                    ? localizedContent.copy.componentsCharacterCharacterCard
+                        .zhenskii
+                    : localizedContent.copy.componentsCharacterCharacterCard
+                        .muzhskoi,
+              },
+            )}
             className="object-cover"
             fill
             sizes="92px"
@@ -70,7 +87,9 @@ export function CharacterCard({ character, onDelete }: CharacterCardProps) {
             <CharacterCardActions character={character} onDelete={onDelete} />
           </div>
           <p className="mt-0.5 truncate font-body text-base text-[var(--ml-ink-muted)]">
-            {subtitle || "Данные сыщика не заполнены"}
+            {subtitle ||
+              localizedContent.copy.componentsCharacterCharacterCard
+                .dannyeSyschikaNeZapolneny}
           </p>
           <div
             data-testid="character-stats"
@@ -78,25 +97,33 @@ export function CharacterCard({ character, onDelete }: CharacterCardProps) {
           >
             <CharacterStat
               current={character.hp.current}
-              label="Здоровье"
+              label={
+                localizedContent.copy.componentsCharacterCharacterCard.zdorove
+              }
               max={character.hp.max}
               {...characterStatVisuals.health}
             />
             <CharacterStat
               current={character.sanity.current}
-              label="Рассудок"
+              label={
+                localizedContent.copy.componentsCharacterCharacterCard.rassudok
+              }
               max={character.sanity.max}
               {...characterStatVisuals.sanity}
             />
             <CharacterStat
               current={character.mp.current}
-              label="Магия"
+              label={
+                localizedContent.copy.componentsCharacterCharacterCard.magiya
+              }
               max={character.mp.max}
               {...characterStatVisuals.magic}
             />
             <CharacterStat
               current={character.luck.current}
-              label="Удача"
+              label={
+                localizedContent.copy.componentsCharacterCharacterCard.udacha
+              }
               max={character.luck.starting}
               {...characterStatVisuals.luck}
             />

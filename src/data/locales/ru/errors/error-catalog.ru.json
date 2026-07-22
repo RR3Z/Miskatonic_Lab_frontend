@@ -1,0 +1,521 @@
+{
+  "version": 1,
+  "labels": {
+    "details": "Подробнее"
+  },
+  "templates": {
+    "validation": {
+      "action": "Исправьте отмеченные поля и повторите действие.",
+      "toastSummary": "Проверьте введённые данные и повторите действие.",
+      "documentation": {
+        "summary": "Система не смогла обработать данные, потому что они не соответствуют правилам заполнения.",
+        "cases": [
+          {
+            "situation": "Поле не заполнено или содержит недопустимое значение.",
+            "why": "Для этого действия нужны корректные данные.",
+            "steps": [
+              "Проверьте отмеченное поле.",
+              "Исправьте значение и повторите действие."
+            ]
+          },
+          {
+            "situation": "Данные устарели после изменения страницы.",
+            "why": "Форма может содержать неактуальное состояние.",
+            "steps": [
+              "Обновите страницу.",
+              "Введите данные заново и сохраните их."
+            ]
+          }
+        ],
+        "supportHint": "Если данные выглядят корректными, сохраните код ошибки и обратитесь в поддержку."
+      }
+    },
+    "parse": {
+      "action": "Обновите страницу и повторите действие.",
+      "toastSummary": "Сервер не смог прочитать отправленные данные.",
+      "documentation": {
+        "summary": "Запрос имеет неверный формат.",
+        "cases": [
+          {
+            "situation": "Запрос был отправлен не полностью или в неверном формате.",
+            "why": "Сервер не смог прочитать структуру данных.",
+            "steps": ["Обновите страницу.", "Повторите действие."]
+          }
+        ],
+        "supportHint": "Если ошибка повторяется, сообщите в поддержку код ошибки."
+      }
+    },
+    "permission": {
+      "action": "Проверьте учётную запись и запросите доступ у владельца.",
+      "toastSummary": "Для этого действия недостаточно прав или доступ больше не действует.",
+      "documentation": {
+        "summary": "Текущее действие недоступно для вашей учётной записи или состояния комнаты.",
+        "cases": [
+          {
+            "situation": "Вы не являетесь владельцем ресурса или участником комнаты.",
+            "why": "Правила доступа защищают данные других игроков.",
+            "steps": [
+              "Проверьте, что вошли в нужную учётную запись.",
+              "Попросите владельца комнаты выдать доступ."
+            ]
+          }
+        ],
+        "supportHint": "Не передавайте пароль или токены поддержки."
+      }
+    },
+    "notFound": {
+      "action": "Вернитесь к списку и откройте ресурс заново.",
+      "toastSummary": "Нужный объект не найден или больше недоступен.",
+      "documentation": {
+        "summary": "Ресурс мог быть удалён, изменён или скрыт правилами доступа.",
+        "cases": [
+          {
+            "situation": "Ссылка устарела или ресурс удалён.",
+            "why": "Система не может найти доступный объект.",
+            "steps": [
+              "Вернитесь к списку ресурсов.",
+              "Откройте объект снова или запросите новую ссылку."
+            ]
+          }
+        ],
+        "supportHint": "Если ресурс должен существовать, сообщите его код ошибки владельцу комнаты."
+      }
+    },
+    "conflict": {
+      "action": "Обновите страницу, проверьте текущее состояние и повторите действие.",
+      "toastSummary": "Действие конфликтует с текущим состоянием данных.",
+      "documentation": {
+        "summary": "Данные уже изменились или достигли установленного ограничения.",
+        "cases": [
+          {
+            "situation": "Другой участник изменил ресурс либо лимит уже исчерпан.",
+            "why": "Система не может безопасно применить повторное действие.",
+            "steps": [
+              "Обновите страницу.",
+              "Проверьте текущее состояние и выберите другое действие."
+            ]
+          }
+        ],
+        "supportHint": "Не повторяйте действие автоматически много раз."
+      }
+    },
+    "network": {
+      "action": "Проверьте соединение с интернетом и повторите действие.",
+      "toastSummary": "Не удалось связаться с сервером.",
+      "documentation": {
+        "summary": "Приложение не получило ответ от сервера.",
+        "cases": [
+          {
+            "situation": "Нет сети, сервер недоступен или соединение прервано.",
+            "why": "Запрос не дошёл до API либо ответ не вернулся.",
+            "steps": [
+              "Проверьте подключение к интернету.",
+              "Подождите немного и повторите действие."
+            ]
+          }
+        ],
+        "supportHint": "Проверьте, сохранилось ли изменение, прежде чем отправлять его повторно."
+      }
+    },
+    "internal": {
+      "action": "Повторите действие позже; если ошибка сохранится, обратитесь в поддержку.",
+      "toastSummary": "Сервис временно не смог выполнить действие.",
+      "documentation": {
+        "summary": "Во время обработки произошла непредвиденная ошибка.",
+        "cases": [
+          {
+            "situation": "Сервис или зависимая система временно недоступны.",
+            "why": "Ошибка не связана с введёнными данными пользователя.",
+            "steps": [
+              "Повторите действие позже.",
+              "При повторении сохраните код ошибки и обратитесь в поддержку."
+            ]
+          }
+        ],
+        "supportHint": "Не прикладывайте пароли, токены или другие секретные данные к обращению."
+      }
+    }
+  },
+  "errors": {
+    "common.invalid_request": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректный запрос"
+    },
+    "common.unauthorized": {
+      "kind": "api",
+      "template": "permission",
+      "title": "Требуется авторизация"
+    },
+    "common.forbidden": {
+      "kind": "api",
+      "template": "permission",
+      "title": "Доступ запрещён"
+    },
+    "common.not_found": {
+      "kind": "api",
+      "template": "notFound",
+      "title": "Ресурс не найден"
+    },
+    "common.conflict": {
+      "kind": "api",
+      "template": "conflict",
+      "title": "Конфликт данных"
+    },
+    "common.unique_violation": {
+      "kind": "api",
+      "template": "conflict",
+      "title": "Такое значение уже существует"
+    },
+    "common.foreign_key_violation": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Связанный объект не найден"
+    },
+    "common.check_violation": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Нарушено правило данных"
+    },
+    "common.not_null_violation": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Не заполнено обязательное значение"
+    },
+    "common.value_too_long": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Слишком длинное значение"
+    },
+    "common.constraint_violation": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Нарушено ограничение данных"
+    },
+    "common.internal_error": {
+      "kind": "api",
+      "template": "internal",
+      "title": "Внутренняя ошибка сервиса"
+    },
+    "user.missing_id": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Не указан пользователь"
+    },
+    "user.not_found": {
+      "kind": "api",
+      "template": "notFound",
+      "title": "Пользователь не найден"
+    },
+    "user.invalid_request_body": {
+      "kind": "api",
+      "template": "parse",
+      "title": "Некорректное тело запроса"
+    },
+    "user.invalid_webhook_signature": {
+      "kind": "api",
+      "template": "permission",
+      "title": "Недействительная подпись webhook"
+    },
+    "user.invalid_webhook_payload": {
+      "kind": "api",
+      "template": "parse",
+      "title": "Некорректные данные webhook"
+    },
+    "user.unexpected_webhook_event": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Неподдерживаемое событие webhook"
+    },
+    "room.not_found": {
+      "kind": "api",
+      "template": "notFound",
+      "title": "Комната не найдена"
+    },
+    "room.invalid_id": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректная ссылка на комнату"
+    },
+    "room.invalid_input": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректные данные комнаты"
+    },
+    "room.not_member": {
+      "kind": "api",
+      "template": "permission",
+      "title": "Вы не участник комнаты"
+    },
+    "room.not_owner": {
+      "kind": "api",
+      "template": "permission",
+      "title": "Недостаточно прав"
+    },
+    "room.full": {
+      "kind": "api",
+      "template": "conflict",
+      "title": "Комната заполнена"
+    },
+    "room.already_member": {
+      "kind": "api",
+      "template": "conflict",
+      "title": "Вы уже участник комнаты"
+    },
+    "room.cannot_kick_owner": {
+      "kind": "api",
+      "template": "permission",
+      "title": "Нельзя исключить хранителя"
+    },
+    "room.character_not_owned": {
+      "kind": "api",
+      "template": "permission",
+      "title": "Персонаж вам не принадлежит"
+    },
+    "dice.invalid_character_id": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректный персонаж"
+    },
+    "dice.invalid_expression": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректное выражение броска"
+    },
+    "dice.invalid_input": {
+      "kind": "api",
+      "template": "parse",
+      "title": "Некорректные данные броска"
+    },
+    "dice.character_not_found": {
+      "kind": "api",
+      "template": "notFound",
+      "title": "Персонаж не найден"
+    },
+    "dice.room_not_available": {
+      "kind": "api",
+      "template": "permission",
+      "title": "Комната недоступна для броска"
+    },
+    "character.not_found": {
+      "kind": "api",
+      "template": "notFound",
+      "title": "Персонаж не найден"
+    },
+    "character.invalid_id": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректный идентификатор"
+    },
+    "character.invalid_input": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректные данные персонажа"
+    },
+    "character.name_required": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Укажите имя персонажа"
+    },
+    "character.name_too_long": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Имя слишком длинное"
+    },
+    "character.age_negative": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректный возраст"
+    },
+    "character.sex_invalid": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректный пол"
+    },
+    "character.limit_reached": {
+      "kind": "api",
+      "template": "conflict",
+      "title": "Достигнут лимит персонажей"
+    },
+    "character.portrait_required": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Нужен портрет"
+    },
+    "character.portrait_unsupported": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Неподдерживаемый портрет"
+    },
+    "character.portrait_invalid": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректный портрет"
+    },
+    "character.portrait_too_large": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Портрет слишком большой"
+    },
+    "character.portrait_managed_by_server": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Портрет управляется сервером"
+    },
+    "character.portrait_storage_unavailable": {
+      "kind": "api",
+      "template": "internal",
+      "title": "Хранилище портретов недоступно"
+    },
+    "character.characteristics_negative": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректные характеристики"
+    },
+    "character.derived_stats_negative": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректные производные характеристики"
+    },
+    "character.invalid_damage_bonus": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректный бонус урона"
+    },
+    "character.state_negative": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректное состояние персонажа"
+    },
+    "character.state_current_exceeds_max": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Текущее значение превышает максимум"
+    },
+    "character.invalid_backstory_section": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректный раздел истории"
+    },
+    "character.section_too_long": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Раздел истории слишком длинный"
+    },
+    "character.backstory_title_required": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Укажите заголовок истории"
+    },
+    "character.backstory_title_too_long": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Заголовок истории слишком длинный"
+    },
+    "character.backstory_text_required": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Заполните текст истории"
+    },
+    "character.invalid_skill": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректный навык"
+    },
+    "character.skill_name_required": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Укажите имя навыка"
+    },
+    "character.skill_name_too_long": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Имя навыка слишком длинное"
+    },
+    "character.skill_value_negative": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректное значение навыка"
+    },
+    "character.skill_protected": {
+      "kind": "api",
+      "template": "conflict",
+      "title": "Защищённый навык нельзя изменить"
+    },
+    "character.skill_in_use": {
+      "kind": "api",
+      "template": "conflict",
+      "title": "Навык используется"
+    },
+    "character.invalid_finances": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректные финансы"
+    },
+    "character.finances_money_too_long": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Сумма слишком длинная"
+    },
+    "character.invalid_derived_stats": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректные производные характеристики"
+    },
+    "character.note_title_required": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Укажите заголовок заметки"
+    },
+    "character.note_title_too_long": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Заголовок заметки слишком длинный"
+    },
+    "character.note_body_required": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Заполните текст заметки"
+    },
+    "character.inventory_item_name_required": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Укажите название предмета"
+    },
+    "character.inventory_item_name_too_long": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Название предмета слишком длинное"
+    },
+    "character.inventory_item_quantity_invalid": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Некорректное количество предметов"
+    },
+    "character.inventory_item_category_too_long": {
+      "kind": "api",
+      "template": "validation",
+      "title": "Категория предмета слишком длинная"
+    },
+    "client.network_unavailable": {
+      "kind": "client",
+      "template": "network",
+      "title": "Ошибка соединения"
+    },
+    "client.validation_failed": {
+      "kind": "client",
+      "template": "validation",
+      "title": "Проверьте данные формы"
+    },
+    "client.unknown_error": {
+      "kind": "client",
+      "template": "internal",
+      "title": "Неизвестная ошибка"
+    },
+    "client.websocket_disconnected": {
+      "kind": "client",
+      "template": "network",
+      "title": "Соединение с комнатой потеряно"
+    }
+  }
+}

@@ -2,8 +2,8 @@
 
 import type { ComponentProps, ReactNode } from "react"
 import type { ZodType } from "zod"
-
 import { InlineTextEditor } from "@/components/character/detail/editors/inline-text-editor"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
 
 export function IdentityLine({
   ariaLabel,
@@ -44,7 +44,10 @@ export function IdentityLine({
         ariaLabel={ariaLabel}
         className="h-6 min-w-0 flex-1 items-center gap-0 px-1.5 py-0"
         displayClassName="truncate whitespace-nowrap leading-5 text-[var(--ml-ink-primary)]"
-        errorMessage="Не удалось сохранить личные данные"
+        errorMessage={
+          localizedContent.copy.characterDetailHeaderIdentityLine
+            .neUdalosSohranitLichnyeDannye
+        }
         inputClassName="text-sm leading-5"
         inputMode={inputMode}
         inputPattern={inputPattern}
@@ -53,7 +56,7 @@ export function IdentityLine({
         multiline={false}
         normalizeInput={normalizeInput}
         onSave={onSave}
-        placeholder="—"
+        placeholder={localizedContent.copy.characterDetailCommon.emptyValue}
         schema={schema}
         showEditIcon={false}
         value={value === null ? null : String(value)}

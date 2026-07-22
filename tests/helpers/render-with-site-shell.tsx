@@ -2,7 +2,7 @@ import { render } from "@testing-library/react"
 import type { ReactNode } from "react"
 
 import { SiteShell } from "@/components/layout/site-shell"
-import { TooltipProvider } from "@/components/ui/tooltip"
+import { TooltipProvider } from "@/components/ui/tooltip/tooltip-provider"
 
 export function renderWithSiteShell(ui: ReactNode) {
   return render(

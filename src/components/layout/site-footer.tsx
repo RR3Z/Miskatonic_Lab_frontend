@@ -1,5 +1,5 @@
 import { SocialLinks } from "@/components/social/social-links"
-import { landingContent } from "@/lib/content/landing.content"
+import { landingContent } from "@/data/locales/utils/landing-content.util"
 import { cn } from "@/lib/utils/cn.util"
 import githubIcon from "../../../assets/icons/github.svg"
 import telegramIcon from "../../../assets/icons/telegram.svg"

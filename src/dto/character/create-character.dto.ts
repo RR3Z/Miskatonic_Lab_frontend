@@ -1,4 +1,6 @@
 import { z } from "zod"
+import localizedContent from "@/data/locales/ru/character/create.ru.json"
+import { formatLocalizedTemplate } from "@/data/locales/utils/format-localized-template.util"
 
 export const MAX_CHARACTER_NAME_LENGTH = 255
 export const MAX_PORTRAIT_BYTES = 5 * 1024 * 1024
@@ -12,7 +14,8 @@ const optionalAgeSchema = z
   .string()
   .refine(
     (value) => value === "" || /^\d+$/.test(value),
-    "Возраст должен быть целым числом от 0",
+    localizedContent.copy.dtoCharacterCreateCharacterDto
+      .vozrastDolzhenBytTselymChislomOt,
   )
   .transform((value) => (value === "" ? null : Number(value)))
 
@@ -21,19 +24,37 @@ const optionalSexSchema = z
   .transform((value) => value || null)
 
 export const characterPortraitSchema = z
-  .file("Выберите файл портрета")
-  .max(MAX_PORTRAIT_BYTES, "Размер портрета не должен превышать 5 МБ")
-  .mime([...PORTRAIT_MIME_TYPES], "Поддерживаются только JPEG, PNG и WebP")
+  .file(
+    localizedContent.copy.dtoCharacterCreateCharacterDto.vyberiteFailPortreta,
+  )
+  .max(
+    MAX_PORTRAIT_BYTES,
+    localizedContent.copy.dtoCharacterCreateCharacterDto
+      .razmerPortretaNeDolzhenPrevyshat5,
+  )
+  .mime(
+    [...PORTRAIT_MIME_TYPES],
+    localizedContent.copy.dtoCharacterCreateCharacterDto
+      .podderzhivayutsyaTolkoJpegPngIWebp,
+  )
   .nullable()
 
 export const createCharacterFormSchema = z.object({
   name: z
     .string()
     .trim()
-    .min(1, "Укажите имя персонажа")
+    .min(
+      1,
+      localizedContent.copy.dtoCharacterCreateCharacterDto
+        .ukazhiteImyaPersonazha,
+    )
     .max(
       MAX_CHARACTER_NAME_LENGTH,
-      `Имя не должно превышать ${MAX_CHARACTER_NAME_LENGTH} символов`,
+      formatLocalizedTemplate(
+        localizedContent.copy.dtoCharacterCreateCharacterDto
+          .imyaNeDolzhnoPrevyshatValue0Simvolov,
+        { value0: MAX_CHARACTER_NAME_LENGTH },
+      ),
     ),
   sex: optionalSexSchema,
   age: optionalAgeSchema,

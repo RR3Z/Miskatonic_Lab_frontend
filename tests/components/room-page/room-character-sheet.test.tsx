@@ -5,7 +5,7 @@ import { HttpResponse, http } from "msw"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { RoomCharacterSheet } from "@/components/room/detail/room-character-sheet"
-import roomContentRu from "@/data/room/room.ru.json"
+import roomContentRu from "@/data/locales/ru/room/detail.ru.json"
 
 const mocks = vi.hoisted(() => ({
   getToken: vi.fn(async () => "test-token"),

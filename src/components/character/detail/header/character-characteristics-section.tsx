@@ -3,36 +3,37 @@
 import { PencilLine } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
-
-import { buildCharacteristicsInput } from "@/components/character/detail/header/build-characteristics-input"
-import {
-  type CharacteristicDefinition,
-  getCharacterCharacteristics,
-} from "@/components/character/detail/header/character-characteristic-definitions"
 import { CharacterCharacteristicsEditorDialog } from "@/components/character/detail/header/character-characteristics-editor-dialog"
 import { CharacterSheetSectionTitle } from "@/components/character/detail/header/character-sheet-section-title"
 import { CharacteristicDiceCard } from "@/components/character/detail/header/characteristic-dice-card"
 import { CompactStat } from "@/components/character/detail/header/compact-stat"
+import { DiceRollResultToast } from "@/components/character/detail/header/dice-result-toast/dice-roll-result-toast"
 import {
-  DiceRollResultToast,
   getDiceRollToastClassName,
   getDiceRollToastCloseButtonClassName,
   getDiceRollToastStyle,
-} from "@/components/character/detail/header/dice-roll-result-toast"
-import { useDesktopCharacterSheet } from "@/components/character/detail/layout/use-desktop-character-sheet"
+} from "@/components/character/detail/header/dice-result-toast/utils/dice-roll-toast-style.util"
+import { buildCharacteristicsInput } from "@/components/character/detail/header/utils/build-characteristics-input.util"
+import {
+  type CharacteristicDefinition,
+  getCharacterCharacteristics,
+} from "@/components/character/detail/header/utils/character-characteristics.util"
 import { Button } from "@/components/ui/button"
 import {
   DICE_RESULT_TOAST_DURATION_MS,
   DICE_RESULT_TOASTER_ID,
-} from "@/components/ui/sonner/constants"
+} from "@/components/ui/sonner/constants/sonner.constants"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { formatLocalizedTemplate } from "@/data/locales/utils/format-localized-template.util"
+import { useMakeCharacterDiceRoll } from "@/hooks/character/use-character-dice-rolls"
+import { useDesktopCharacterSheet } from "@/hooks/character/use-desktop-character-sheet"
+import { useUpdateCharacterCharacteristics } from "@/hooks/character/use-update-character-characteristics"
 import {
   type D100Mode,
   parseD100RollDetails,
 } from "@/lib/api/character-dice-rolls"
-import { useMakeCharacterDiceRoll } from "@/lib/api/use-character-dice-rolls"
-import { useUpdateCharacterCharacteristics } from "@/lib/api/use-character-statistics"
 import { classifyCharacteristicCheck } from "@/lib/dice/characteristic-check"
-import type { CharacterDetail } from "@/types/character"
+import type { CharacterDetail } from "@/types/character.types"
 
 export function CharacterCharacteristicsSection({
   character,
@@ -81,7 +82,11 @@ export function CharacterCharacteristicsSection({
         },
       )
     } catch {
-      toast.error("Не удалось бросить d100")
+      toast.error(
+        localizedContent.copy
+          .characterDetailHeaderCharacterCharacteristicsSection
+          .neUdalosBrositD100,
+      )
     } finally {
       setRollingKeys((keys) => {
         const nextKeys = new Set(keys)
@@ -96,12 +101,21 @@ export function CharacterCharacteristicsSection({
       {!isDesktop ? (
         <div>
           <CharacterSheetSectionTitle>
-            Характеристики
+            {
+              localizedContent.copy
+                .characterDetailHeaderCharacterCharacteristicsSection
+                .harakteristiki
+            }
           </CharacterSheetSectionTitle>
           <div className="grid min-h-0 flex-1 auto-rows-fr grid-cols-4 gap-1.5">
             {characteristics.map((stat) => (
               <CompactStat
-                ariaLabel={`Редактировать характеристику ${stat.title}`}
+                ariaLabel={formatLocalizedTemplate(
+                  localizedContent.copy
+                    .characterDetailHeaderCharacterCharacteristicsSection
+                    .redaktirovatHarakteristikuValue0,
+                  { value0: stat.title ?? stat.label },
+                )}
                 key={stat.key}
                 label={stat.label}
                 onSave={(value) =>
@@ -124,11 +138,19 @@ export function CharacterCharacteristicsSection({
             action={
               <div className="flex items-center gap-1">
                 <Button
-                  aria-label="Редактировать характеристики"
+                  aria-label={
+                    localizedContent.copy
+                      .characterDetailHeaderCharacterCharacteristicsSection
+                      .redaktirovatHarakteristiki
+                  }
                   className="border-[var(--ml-accent-brass-strong)]/70 bg-[color-mix(in_srgb,var(--ml-accent-brass-strong)_10%,transparent)] text-[var(--ml-accent-brass-strong)] hover:border-[var(--ml-accent-brass-strong)] hover:bg-[color-mix(in_srgb,var(--ml-accent-brass-strong)_20%,transparent)] hover:text-[var(--ml-ink-primary)]"
                   onClick={() => setEditorOpen(true)}
                   size="icon-xs"
-                  title="Изменить"
+                  title={
+                    localizedContent.copy
+                      .characterDetailHeaderCharacterCharacteristicsSection
+                      .izmenit
+                  }
                   type="button"
                   variant="secondary"
                 >
@@ -137,7 +159,11 @@ export function CharacterCharacteristicsSection({
               </div>
             }
           >
-            Характеристики
+            {
+              localizedContent.copy
+                .characterDetailHeaderCharacterCharacteristicsSection
+                .harakteristiki
+            }
           </CharacterSheetSectionTitle>
           <div className="grid min-h-0 flex-1 auto-rows-fr grid-cols-4 gap-1.5">
             {characteristics.map((stat) => (

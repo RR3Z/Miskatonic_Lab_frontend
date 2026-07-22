@@ -1,0 +1,23 @@
+{
+  "copy": {
+    "componentsUiDialog": {
+      "zakryt": "Закрыть"
+    },
+    "componentsUiSheet": {
+      "zakryt": "Закрыть"
+    },
+    "componentsUiSidebar": {
+      "navigatsiya": "Навигация",
+      "bokovayaPanelNavigatsii": "Боковая панель навигации.",
+      "pereklyuchitBokovuyuPanel": "Переключить боковую панель"
+    },
+    "componentsUiSpinner": {
+      "zagruzka": "Загрузка"
+    },
+    "uiSonnerConstantsSonnerConstants": {
+      "uvedomleniya": "Уведомления",
+      "rezultatyBroskov": "Результаты бросков",
+      "zakrytUvedomlenie": "Закрыть уведомление"
+    }
+  }
+}

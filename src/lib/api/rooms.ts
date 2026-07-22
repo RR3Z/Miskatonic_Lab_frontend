@@ -12,7 +12,7 @@ import type {
   SelectRoomCharacterInput,
   TransferRoomOwnershipInput,
   UpdateRoomInput,
-} from "@/types/room"
+} from "@/types/room.types"
 
 export function fetchRooms(api: KyInstance): Promise<RoomSummary[]> {
   return api.get("api/rooms/").json<RoomSummary[]>()

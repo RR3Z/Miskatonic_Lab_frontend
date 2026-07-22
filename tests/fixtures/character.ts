@@ -1,4 +1,4 @@
-import type { CharacterApiListItem } from "@/types/character"
+import type { CharacterApiListItem } from "@/types/character.types"
 
 export function createApiCharacter(id = "character-1"): CharacterApiListItem {
   return {

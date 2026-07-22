@@ -2,14 +2,12 @@
 
 import { useState } from "react"
 import { toast } from "sonner"
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Select } from "@/components/ui/select/select"
+import { SelectContent } from "@/components/ui/select/select-content"
+import { SelectItem } from "@/components/ui/select/select-item"
+import { SelectTrigger } from "@/components/ui/select/select-trigger"
+import { SelectValue } from "@/components/ui/select/select-value"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
 
 const EMPTY_SEX_VALUE = "not-specified"
 
@@ -29,7 +27,10 @@ export function CharacterSexEditor({
         nextValue === EMPTY_SEX_VALUE ? null : (nextValue as "female" | "male"),
       )
     } catch {
-      toast.error("Не удалось сохранить пол")
+      toast.error(
+        localizedContent.copy.characterDetailHeaderCharacterSexEditor
+          .neUdalosSohranitPol,
+      )
     } finally {
       setIsPending(false)
     }
@@ -37,7 +38,9 @@ export function CharacterSexEditor({
 
   return (
     <div className="flex min-w-0 items-center gap-1 font-body text-sm leading-5">
-      <span className="shrink-0 text-[var(--ml-ink-muted)]">Пол:</span>{" "}
+      <span className="shrink-0 text-[var(--ml-ink-muted)]">
+        {localizedContent.copy.characterDetailHeaderCharacterSexEditor.pol}
+      </span>
       <div className="min-w-0 flex-1">
         <Select
           disabled={isPending}
@@ -47,7 +50,10 @@ export function CharacterSexEditor({
           }
         >
           <SelectTrigger
-            aria-label="Редактировать пол персонажа"
+            aria-label={
+              localizedContent.copy.characterDetailHeaderCharacterSexEditor
+                .redaktirovatPolPersonazha
+            }
             className="w-full"
             size="xs"
             variant="inline"
@@ -56,8 +62,18 @@ export function CharacterSexEditor({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value={EMPTY_SEX_VALUE}>—</SelectItem>
-            <SelectItem value="male">Мужчина</SelectItem>
-            <SelectItem value="female">Женщина</SelectItem>
+            <SelectItem value="male">
+              {
+                localizedContent.copy.characterDetailHeaderCharacterSexEditor
+                  .muzhchina
+              }
+            </SelectItem>
+            <SelectItem value="female">
+              {
+                localizedContent.copy.characterDetailHeaderCharacterSexEditor
+                  .zhenschina
+              }
+            </SelectItem>
           </SelectContent>
         </Select>
       </div>

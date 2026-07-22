@@ -2,16 +2,15 @@
 
 import { useId } from "react"
 import { Controller, useFormContext } from "react-hook-form"
-
-import { Field, FieldLabel } from "@/components/ui/field"
+import { Field } from "@/components/ui/field/field"
+import { FieldLabel } from "@/components/ui/field/field-label"
 import { Input } from "@/components/ui/input"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { Select } from "@/components/ui/select/select"
+import { SelectContent } from "@/components/ui/select/select-content"
+import { SelectItem } from "@/components/ui/select/select-item"
+import { SelectTrigger } from "@/components/ui/select/select-trigger"
+import { SelectValue } from "@/components/ui/select/select-value"
+import localizedContent from "@/data/locales/ru/character/create.ru.json"
 import {
   type CreateCharacterFormDto,
   type CreateCharacterFormInput,
@@ -41,14 +40,23 @@ export function CharacterIdentityFields({
         name="name"
         render={({ field, fieldState }) => (
           <Field data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor={nameId}>Имя</FieldLabel>
+            <FieldLabel htmlFor={nameId}>
+              {
+                localizedContent.copy
+                  .componentsCharacterCreateCharacterIdentityFields.imya
+              }
+            </FieldLabel>
             <Input
               {...field}
               aria-invalid={fieldState.invalid}
               disabled={disabled}
               id={nameId}
               maxLength={MAX_CHARACTER_NAME_LENGTH}
-              placeholder="Например, Харви Уолтерс"
+              placeholder={
+                localizedContent.copy
+                  .componentsCharacterCreateCharacterIdentityFields
+                  .naprimerHarviUolters
+              }
               required
             />
           </Field>
@@ -61,7 +69,12 @@ export function CharacterIdentityFields({
           name="sex"
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={sexId}>Пол</FieldLabel>
+              <FieldLabel htmlFor={sexId}>
+                {
+                  localizedContent.copy
+                    .componentsCharacterCreateCharacterIdentityFields.pol
+                }
+              </FieldLabel>
               <Select
                 disabled={disabled}
                 name={field.name}
@@ -78,9 +91,27 @@ export function CharacterIdentityFields({
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="unspecified">Не указан</SelectItem>
-                  <SelectItem value="male">Мужчина</SelectItem>
-                  <SelectItem value="female">Женщина</SelectItem>
+                  <SelectItem value="unspecified">
+                    {
+                      localizedContent.copy
+                        .componentsCharacterCreateCharacterIdentityFields
+                        .neUkazan
+                    }
+                  </SelectItem>
+                  <SelectItem value="male">
+                    {
+                      localizedContent.copy
+                        .componentsCharacterCreateCharacterIdentityFields
+                        .muzhchina
+                    }
+                  </SelectItem>
+                  <SelectItem value="female">
+                    {
+                      localizedContent.copy
+                        .componentsCharacterCreateCharacterIdentityFields
+                        .zhenschina
+                    }
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </Field>
@@ -91,14 +122,22 @@ export function CharacterIdentityFields({
           name="age"
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor={ageId}>Возраст</FieldLabel>
+              <FieldLabel htmlFor={ageId}>
+                {
+                  localizedContent.copy
+                    .componentsCharacterCreateCharacterIdentityFields.vozrast
+                }
+              </FieldLabel>
               <Input
                 {...field}
                 aria-invalid={fieldState.invalid}
                 disabled={disabled}
                 id={ageId}
                 min={0}
-                placeholder="Например, 42"
+                placeholder={
+                  localizedContent.copy
+                    .componentsCharacterCreateCharacterIdentityFields.naprimer42
+                }
                 type="number"
               />
             </Field>

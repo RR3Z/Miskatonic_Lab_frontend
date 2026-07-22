@@ -3,18 +3,19 @@
 import { Plus, Search, X } from "lucide-react"
 import { AnimatePresence, motion, useReducedMotion } from "motion/react"
 import { useMemo, useState } from "react"
-
 import { CharacterSkillEditorDialog } from "@/components/character/detail/skills/character-skill-editor-dialog"
 import { CharacterSkillRow } from "@/components/character/detail/skills/character-skill-row"
-import { groupCharacterSkills } from "@/components/character/detail/skills/group-character-skills"
+import { groupCharacterSkills } from "@/components/character/detail/skills/utils/group-character-skills.util"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { useCreateCharacterSkill } from "@/lib/api/use-character-skills"
+import { ScrollArea } from "@/components/ui/scroll-area/scroll-area"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { formatLocalizedTemplate } from "@/data/locales/utils/format-localized-template.util"
+import { useCreateCharacterSkill } from "@/hooks/character/use-create-character-skill"
 import type {
   CharacterCharacteristics,
   CharacterSkill,
-} from "@/types/character"
+} from "@/types/character.types"
 
 export function CharacterSkills({
   characterId,
@@ -49,13 +50,15 @@ export function CharacterSkills({
 
   function getUnavailableReason(skill: CharacterSkill) {
     if (skill.base_rule === "dodge" && characteristics.dexterity === null) {
-      return "Сначала заполните характеристику «Ловкость»: без неё невозможно рассчитать значение навыка."
+      return localizedContent.copy.characterDetailSkillsCharacterSkills
+        .snachalaZapolniteHarakteristikuLovkostBezNee
     }
     if (
       skill.base_rule === "native_language" &&
       characteristics.education === null
     ) {
-      return "Сначала заполните характеристику «Образование»: без неё невозможно рассчитать значение навыка."
+      return localizedContent.copy.characterDetailSkillsCharacterSkills
+        .snachalaZapolniteHarakteristikuObrazovanieBezNee
     }
     return null
   }
@@ -67,7 +70,7 @@ export function CharacterSkills({
     >
       <div className="mb-4 grid shrink-0 grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 border-b border-[var(--ml-border-subtle)] pb-2">
         <h2 className="font-heading text-xl font-semibold tracking-wide text-[var(--ml-ink-primary)]">
-          Навыки
+          {localizedContent.copy.characterDetailSkillsCharacterSkills.navyki}
         </h2>
         <div className="relative min-w-0 w-full max-w-sm justify-self-end">
           <Search
@@ -75,10 +78,16 @@ export function CharacterSkills({
             className="pointer-events-none absolute top-1/2 left-2.5 z-10 size-3.5 -translate-y-1/2 text-[var(--ml-ink-muted)]"
           />
           <Input
-            aria-label="Поиск навыков"
+            aria-label={
+              localizedContent.copy.characterDetailSkillsCharacterSkills
+                .poiskNavykov
+            }
             className="h-8 pr-9 pl-8 [&::-webkit-search-cancel-button]:appearance-none"
             onChange={(event) => setSearchQuery(event.target.value)}
-            placeholder="Поиск навыков…"
+            placeholder={
+              localizedContent.copy.characterDetailSkillsCharacterSkills
+                .poiskNavykov2
+            }
             type="search"
             value={searchQuery}
           />
@@ -94,7 +103,10 @@ export function CharacterSkills({
                 transition={motionTransition}
               >
                 <Button
-                  aria-label="Очистить поиск навыков"
+                  aria-label={
+                    localizedContent.copy.characterDetailSkillsCharacterSkills
+                      .ochistitPoiskNavykov
+                  }
                   className="size-6"
                   onClick={() => setSearchQuery("")}
                   size="icon-xs"
@@ -108,11 +120,17 @@ export function CharacterSkills({
           </AnimatePresence>
         </div>
         <Button
-          aria-label="Добавить собственный навык"
+          aria-label={
+            localizedContent.copy.characterDetailSkillsCharacterSkills
+              .dobavitSobstvennyiNavyk
+          }
           className="size-7 shrink-0"
           onClick={() => setIsCreating(true)}
           size="icon-sm"
-          title="Добавить собственный навык"
+          title={
+            localizedContent.copy.characterDetailSkillsCharacterSkills
+              .dobavitSobstvennyiNavyk
+          }
           type="button"
           variant="secondary"
         >
@@ -126,11 +144,17 @@ export function CharacterSkills({
       >
         {!hasSkills ? (
           <p className="rounded-sm border border-dashed border-[var(--ml-border-subtle)] px-4 py-8 text-center font-body text-sm text-[var(--ml-ink-muted)]">
-            Навыки персонажа пока не добавлены.
+            {
+              localizedContent.copy.characterDetailSkillsCharacterSkills
+                .navykiPersonazhaPokaNeDobavleny
+            }
           </p>
         ) : groups.length === 0 ? (
           <p className="rounded-sm border border-dashed border-[var(--ml-border-subtle)] px-4 py-8 text-center font-body text-sm text-[var(--ml-ink-muted)]">
-            Навыки не найдены.
+            {
+              localizedContent.copy.characterDetailSkillsCharacterSkills
+                .navykiNeNaideny
+            }
           </p>
         ) : (
           <div
@@ -141,7 +165,11 @@ export function CharacterSkills({
               {groups.map((group) => (
                 <motion.section
                   animate={{ opacity: 1, y: 0 }}
-                  aria-label={`Навыки на букву ${group.initial}`}
+                  aria-label={formatLocalizedTemplate(
+                    localizedContent.copy.characterDetailSkillsCharacterSkills
+                      .navykiNaBukvuValue0,
+                    { value0: group.initial },
+                  )}
                   className="min-w-0"
                   data-testid="character-skill-group"
                   exit={{ opacity: 0, y: -4 }}
@@ -185,7 +213,10 @@ export function CharacterSkills({
         onOpenChange={setIsCreating}
         onSubmit={createMutation.mutateAsync}
         open={isCreating}
-        title="Добавить навык"
+        title={
+          localizedContent.copy.characterDetailSkillsCharacterSkills
+            .dobavitNavyk
+        }
       />
     </section>
   )

@@ -22,7 +22,7 @@ vi.mock("@/lib/api/character-dice-rolls", () => ({
   makeCharacterDiceRoll: apiMocks.makeCharacterDiceRoll,
 }))
 
-import { useMakeCharacterDiceRoll } from "@/lib/api/use-character-dice-rolls"
+import { useMakeCharacterDiceRoll } from "@/hooks/character/use-character-dice-rolls"
 
 describe("useMakeCharacterDiceRoll", () => {
   beforeEach(() => {

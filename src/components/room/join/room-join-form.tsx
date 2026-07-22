@@ -2,20 +2,19 @@
 
 import { useState } from "react"
 import { toast } from "sonner"
-
-import { Button } from "@/components/ui/button"
 import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
+  showError,
+  showErrorCode,
+} from "@/components/errors/utils/error-toast.util"
+import { Button } from "@/components/ui/button"
+import { Field } from "@/components/ui/field/field"
+import { FieldDescription } from "@/components/ui/field/field-description"
+import { FieldGroup } from "@/components/ui/field/field-group"
+import { FieldLabel } from "@/components/ui/field/field-label"
 import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
-import roomContentRu from "@/data/room/room.ru.json"
+import roomContentRu from "@/data/locales/ru/room/join.ru.json"
 import { useJoinRoom } from "@/hooks/room/use-join-room"
-
-import { showError, showErrorCode } from "@/lib/errors/presenter"
 
 type RoomJoinFormProps = {
   inviteToken?: string

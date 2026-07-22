@@ -1,3 +1,4 @@
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
 export type CharacteristicCheckOutcome =
   | "critical_success"
   | "extreme_success"
@@ -18,12 +19,15 @@ export type CharacteristicCheckResult = {
 }
 
 const outcomeLabels: Record<CharacteristicCheckOutcome, string> = {
-  critical_success: "критический успех",
-  extreme_success: "чрезвычайный успех",
-  failure: "провал",
-  fumble: "крах",
-  hard_success: "трудный успех",
-  regular_success: "обычный успех",
+  critical_success:
+    localizedContent.copy.libDiceCharacteristicCheck.kriticheskiiUspeh,
+  extreme_success:
+    localizedContent.copy.libDiceCharacteristicCheck.chrezvychainyiUspeh,
+  failure: localizedContent.copy.libDiceCharacteristicCheck.proval,
+  fumble: localizedContent.copy.libDiceCharacteristicCheck.krah,
+  hard_success: localizedContent.copy.libDiceCharacteristicCheck.trudnyiUspeh,
+  regular_success:
+    localizedContent.copy.libDiceCharacteristicCheck.obychnyiUspeh,
 }
 
 export function getCharacteristicCheckOutcomeLabel(

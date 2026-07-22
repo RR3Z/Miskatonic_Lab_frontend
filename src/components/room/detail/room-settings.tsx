@@ -3,21 +3,24 @@
 import { Copy, Settings2 } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
+import {
+  showError,
+  showErrorCode,
+} from "@/components/errors/utils/error-toast.util"
 import { roomPanelClassName } from "@/components/room/styles/room-panel.styles"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
+import { Card } from "@/components/ui/card/card"
+import { CardContent } from "@/components/ui/card/card-content"
+import { CardDescription } from "@/components/ui/card/card-description"
+import { CardHeader } from "@/components/ui/card/card-header"
+import { CardTitle } from "@/components/ui/card/card-title"
+import { Field } from "@/components/ui/field/field"
+import { FieldGroup } from "@/components/ui/field/field-group"
+import { FieldLabel } from "@/components/ui/field/field-label"
 import { Input } from "@/components/ui/input"
-import roomContentRu from "@/data/room/room.ru.json"
+import roomContentRu from "@/data/locales/ru/room/detail.ru.json"
 import { useUpdateRoom } from "@/hooks/room/use-update-room"
-import { showError, showErrorCode } from "@/lib/errors/presenter"
-import type { Room } from "@/types/room"
+import type { Room } from "@/types/room.types"
 
 import { roomInviteLink } from "./utils/room-invite-link.util"
 

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react"
 
-import { getGuideSearchResults } from "@/components/guide/utils/guide-search.util"
+import { getGuideSearchResults } from "@/lib/guide/utils/guide-search.util"
 
 export function useGuideSearch() {
   const [isFocused, setIsFocused] = useState(false)

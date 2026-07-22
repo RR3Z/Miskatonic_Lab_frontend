@@ -1,6 +1,7 @@
 import { CharacterSheetSectionTitle } from "@/components/character/detail/header/character-sheet-section-title"
 import { CharacterStatesGrid } from "@/components/character/detail/header/character-states-grid"
-import type { CharacterDetail } from "@/types/character"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import type { CharacterDetail } from "@/types/character.types"
 
 export function CharacterStatesSection({
   character,
@@ -9,7 +10,12 @@ export function CharacterStatesSection({
 }) {
   return (
     <section className="flex h-full min-w-0 self-stretch flex-col py-1">
-      <CharacterSheetSectionTitle>Состояния</CharacterSheetSectionTitle>
+      <CharacterSheetSectionTitle>
+        {
+          localizedContent.copy.characterDetailHeaderCharacterStatesSection
+            .sostoyaniya
+        }
+      </CharacterSheetSectionTitle>
       <CharacterStatesGrid
         characterId={character.id}
         initialValues={{

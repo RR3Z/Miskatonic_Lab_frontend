@@ -4,7 +4,7 @@ import { motion } from "motion/react"
 import Link from "next/link"
 import { guideSearchStyles } from "@/components/guide/search/styles/guide-search.styles"
 import { getGuideSearchResultHref } from "@/components/guide/utils/guide-route.util"
-import type { GuideSearchResult } from "@/data/guide/types/guide-content.types"
+import type { GuideSearchResult } from "@/types/guide-content.types"
 
 type GuideSearchResultItemProps = {
   index: number

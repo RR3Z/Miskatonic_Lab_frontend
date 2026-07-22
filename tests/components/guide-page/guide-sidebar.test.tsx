@@ -4,8 +4,9 @@ import { setTestViewport } from "@tests/utils/viewport.util"
 import { describe, expect, it } from "vitest"
 
 import { GuideSidebar } from "@/components/guide/catalog/guide-sidebar"
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { TooltipProvider } from "@/components/ui/tooltip"
+import { SidebarProvider } from "@/components/ui/sidebar/sidebar-provider"
+import { SidebarTrigger } from "@/components/ui/sidebar/sidebar-trigger"
+import { TooltipProvider } from "@/components/ui/tooltip/tooltip-provider"
 
 function renderGuideSidebar() {
   return render(
@@ -24,7 +25,7 @@ describe("GuideSidebar", () => {
 
     expect(screen.getByText("Каталог")).toBeVisible()
     expect(
-      screen.getByRole("link", { name: "Miskatonic Lab home" }),
+      screen.getByRole("link", { name: "На главную Miskatonic Lab" }),
     ).toHaveAttribute("href", "/")
     expect(container.querySelector("footer")).toHaveClass("-mx-2")
   })

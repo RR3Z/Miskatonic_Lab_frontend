@@ -1,10 +1,12 @@
 "use client"
 
 import { InlineTextEditor } from "@/components/character/detail/editors/inline-text-editor"
+import { CHARACTER_FINANCE_FIELDS } from "@/components/character/detail/tabs/constants/finance-fields.constants"
 import { FinanceCard } from "@/components/character/detail/tabs/finance-card"
-import { CHARACTER_FINANCE_FIELDS } from "@/components/character/detail/tabs/finance-field-definitions"
-import { useUpdateCharacterFinances } from "@/lib/api/use-character-finances"
-import type { CharacterFinances } from "@/types/character"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { formatLocalizedTemplate } from "@/data/locales/utils/format-localized-template.util"
+import { useUpdateCharacterFinances } from "@/hooks/character/use-update-character-finances"
+import type { CharacterFinances } from "@/types/character.types"
 
 export function FinanceFieldsGrid({
   characterId,
@@ -24,8 +26,15 @@ export function FinanceFieldsGrid({
           label={field.label}
           value={
             <InlineTextEditor
-              ariaLabel={`Редактировать поле ${field.label}`}
-              errorMessage="Не удалось сохранить финансы"
+              ariaLabel={formatLocalizedTemplate(
+                localizedContent.copy.characterDetailTabsFinanceFieldsGrid
+                  .redaktirovatPoleValue0,
+                { value0: field.label },
+              )}
+              errorMessage={
+                localizedContent.copy.characterDetailTabsFinanceFieldsGrid
+                  .neUdalosSohranitFinansy
+              }
               multiline={field.multiline}
               onSave={(value) =>
                 updateFinances.mutateAsync({ [field.key]: value })

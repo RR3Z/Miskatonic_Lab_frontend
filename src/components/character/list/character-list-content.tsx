@@ -1,16 +1,14 @@
 "use client"
 
 import { AnimatePresence, useReducedMotion } from "motion/react"
-
 import { CharacterCard } from "@/components/character/character-card"
 import { CreateCharacterCard } from "@/components/character/create/create-character-card"
 import { CharacterListError } from "@/components/character/list/character-list-error"
 import { CharacterListLoading } from "@/components/character/list/character-list-loading"
-import {
-  CharacterListMotionItem,
-  CreateCharacterMotionItem,
-} from "@/components/character/list/character-list-motion-items"
-import type { CharacterListItem } from "@/types/character"
+import { CharacterListMotionItem } from "@/components/character/list/character-list-motion-item"
+import { CreateCharacterMotionItem } from "@/components/character/list/create-character-motion-item"
+import localizedContent from "@/data/locales/ru/character/list.ru.json"
+import type { CharacterListItem } from "@/types/character.types"
 
 type CharacterListContentProps = {
   atLimit: boolean
@@ -38,7 +36,10 @@ export function CharacterListContent({
   return (
     <section
       aria-busy={isLoading || isFetching}
-      aria-label="Список персонажей"
+      aria-label={
+        localizedContent.copy.componentsCharacterListCharacterListContent
+          .spisokPersonazhei
+      }
       className="relative grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4"
     >
       {isLoading ? (

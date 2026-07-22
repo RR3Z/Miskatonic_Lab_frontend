@@ -1,20 +1,18 @@
 "use client"
 
 import { DiceRollProgressOverlay } from "@/components/character/detail/dice-roll-progress-overlay"
-import { CharacterSheetStatButton } from "@/components/character/detail/header/character-sheet-stat-card"
-import {
-  ContextMenu,
-  ContextMenuContent,
-  ContextMenuItem,
-  ContextMenuLabel,
-  ContextMenuTrigger,
-} from "@/components/ui/context-menu"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import { CharacterSheetStatButton } from "@/components/character/detail/header/character-sheet-stat/character-sheet-stat-button"
+import { ContextMenu } from "@/components/ui/context-menu/context-menu"
+import { ContextMenuContent } from "@/components/ui/context-menu/context-menu-content"
+import { ContextMenuItem } from "@/components/ui/context-menu/context-menu-item"
+import { ContextMenuLabel } from "@/components/ui/context-menu/context-menu-label"
+import { ContextMenuTrigger } from "@/components/ui/context-menu/context-menu-trigger"
+import { Tooltip } from "@/components/ui/tooltip/tooltip"
+import { TooltipContent } from "@/components/ui/tooltip/tooltip-content"
+import { TooltipProvider } from "@/components/ui/tooltip/tooltip-provider"
+import { TooltipTrigger } from "@/components/ui/tooltip/tooltip-trigger"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { formatLocalizedTemplate } from "@/data/locales/utils/format-localized-template.util"
 import type { D100Mode } from "@/lib/api/character-dice-rolls"
 import { getCharacteristicCheckThresholds } from "@/lib/dice/characteristic-check"
 
@@ -67,7 +65,17 @@ export function SkillDiceCard({
           <TooltipTrigger asChild>
             <CharacterSheetStatButton
               aria-disabled="true"
-              aria-label={`Навык ${label} недоступен. ${disabledReason ?? "Не удалось рассчитать значение навыка."}`}
+              aria-label={formatLocalizedTemplate(
+                localizedContent.copy.characterDetailSkillsSkillDiceCard
+                  .navykValue0NedostupenValue1,
+                {
+                  value0: label,
+                  value1:
+                    disabledReason ??
+                    localizedContent.copy.characterDetailSkillsSkillDiceCard
+                      .neUdalosRasschitatZnachenieNavyka,
+                },
+              )}
               className="grid h-full w-full cursor-not-allowed grid-cols-[minmax(0,1fr)_auto] opacity-65 hover:border-[var(--ml-border-subtle)] hover:bg-[var(--ml-bg-page)]/25"
               type="button"
             >
@@ -79,7 +87,9 @@ export function SkillDiceCard({
             side="bottom"
             sideOffset={6}
           >
-            {disabledReason ?? "Не удалось рассчитать значение навыка."}
+            {disabledReason ??
+              localizedContent.copy.characterDetailSkillsSkillDiceCard
+                .neUdalosRasschitatZnachenieNavyka}
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -90,7 +100,11 @@ export function SkillDiceCard({
     <ContextMenu>
       <ContextMenuTrigger asChild>
         <CharacterSheetStatButton
-          aria-label={`Бросить навык ${label}`}
+          aria-label={formatLocalizedTemplate(
+            localizedContent.copy.characterDetailSkillsSkillDiceCard
+              .brositNavykValue0,
+            { value0: label },
+          )}
           className="relative grid h-full w-full grid-cols-[minmax(0,1fr)_auto] text-left"
           disabled={rolling}
           onClick={() => onRoll("normal")}
@@ -101,23 +115,34 @@ export function SkillDiceCard({
         </CharacterSheetStatButton>
       </ContextMenuTrigger>
       <ContextMenuContent>
-        <ContextMenuLabel>Броски</ContextMenuLabel>
+        <ContextMenuLabel>
+          {localizedContent.copy.characterDetailSkillsSkillDiceCard.broski}
+        </ContextMenuLabel>
         <ContextMenuItem disabled={rolling} onSelect={() => onRoll("normal")}>
-          Обычный бросок
+          {
+            localizedContent.copy.characterDetailSkillsSkillDiceCard
+              .obychnyiBrosok
+          }
         </ContextMenuItem>
         <ContextMenuItem
           className="text-[var(--ml-accent-success)] focus:bg-[color-mix(in_srgb,var(--ml-accent-success)_18%,transparent)] focus:text-[var(--ml-ink-primary)]"
           disabled={rolling}
           onSelect={() => onRoll("bonus")}
         >
-          Бросок с преимуществом
+          {
+            localizedContent.copy.characterDetailSkillsSkillDiceCard
+              .brosokSPreimuschestvom
+          }
         </ContextMenuItem>
         <ContextMenuItem
           className="text-[var(--ml-accent-danger)] focus:bg-[color-mix(in_srgb,var(--ml-accent-danger)_18%,transparent)] focus:text-[var(--ml-ink-primary)]"
           disabled={rolling}
           onSelect={() => onRoll("penalty")}
         >
-          Бросок с помехой
+          {
+            localizedContent.copy.characterDetailSkillsSkillDiceCard
+              .brosokSPomehoi
+          }
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>

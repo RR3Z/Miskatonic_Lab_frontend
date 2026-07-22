@@ -1,6 +1,6 @@
-import { resolveErrorCode } from "@/lib/errors/resolve-error-code"
+import { resolveError } from "@/lib/errors/utils/resolve-error-code.util"
 
 export async function getApiErrorCode(error: unknown): Promise<string | null> {
-  const code = await resolveErrorCode(error)
-  return code.startsWith("client.") ? null : code
+  const resolved = await resolveError(error)
+  return resolved.source === "backend" ? resolved.rawCode : null
 }

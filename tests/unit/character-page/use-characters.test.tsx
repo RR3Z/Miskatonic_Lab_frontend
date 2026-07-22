@@ -12,7 +12,7 @@ import type {
   CharacterDetail,
   CharacterListItem,
   CreatedCharacter,
-} from "@/types/character"
+} from "@/types/character.types"
 
 const authState = vi.hoisted(() => ({
   getToken: vi.fn(async () => "test-token"),
@@ -37,14 +37,12 @@ vi.mock("@/lib/api/character-notes", () => ({
   createCharacterNote: apiMocks.createCharacterNote,
 }))
 
+import { useCharacter } from "@/hooks/character/use-character"
+import { useCharacters } from "@/hooks/character/use-characters"
+import { useCreateCharacter } from "@/hooks/character/use-create-character"
+import { useCreateCharacterNote } from "@/hooks/character/use-create-character-note"
+import { useDeleteCharacter } from "@/hooks/character/use-delete-character"
 import { CharacterSessionRequiredError } from "@/lib/api/character-session-required-error"
-import { useCreateCharacterNote } from "@/lib/api/use-character-notes"
-import {
-  useCharacter,
-  useCharacters,
-  useCreateCharacter,
-  useDeleteCharacter,
-} from "@/lib/api/use-characters"
 
 const createInput: CreateCharacterFormDto = {
   age: null,
@@ -140,6 +138,7 @@ function characterDetail(id: string): CharacterDetail {
       updated_at: null,
     },
     id,
+    inventory: null,
     luck: {
       character_id: id,
       created_at: null,

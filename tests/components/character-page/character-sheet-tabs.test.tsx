@@ -25,34 +25,61 @@ const toastMocks = vi.hoisted(() => ({
 
 vi.mock("sonner", () => ({ toast: toastMocks }))
 
-vi.mock("@/lib/api/use-character-notes", () => ({
+vi.mock("@/hooks/character/use-create-character-note", () => ({
   useCreateCharacterNote: () => mutations.createNote,
+}))
+
+vi.mock("@/hooks/character/use-delete-character-note", () => ({
   useDeleteCharacterNote: () => mutations.deleteNote,
+}))
+
+vi.mock("@/hooks/character/use-update-character-note", () => ({
   useUpdateCharacterNote: () => mutations.updateNote,
 }))
 
-vi.mock("@/lib/api/use-character-inventory", () => ({
+vi.mock("@/hooks/character/use-create-character-inventory-item", () => ({
   useCreateCharacterInventoryItem: () => ({
     isPending: false,
     mutateAsync: vi.fn(),
   }),
+}))
+
+vi.mock("@/hooks/character/use-delete-character-inventory-item", () => ({
   useDeleteCharacterInventoryItem: () => ({ mutateAsync: vi.fn() }),
+}))
+
+vi.mock("@/hooks/character/use-update-character-inventory-item", () => ({
   useUpdateCharacterInventoryItem: () => ({
     isPending: false,
     mutateAsync: vi.fn(),
   }),
 }))
 
-vi.mock("@/lib/api/use-character-backstory", () => ({
+vi.mock("@/hooks/character/use-create-character-backstory-item", () => ({
   useCreateCharacterBackstoryItem: () => mutations.createBackstoryItem,
+}))
+
+vi.mock("@/hooks/character/use-delete-character-backstory", () => ({
   useDeleteCharacterBackstory: () => mutations.deleteBackstory,
+}))
+
+vi.mock("@/hooks/character/use-delete-character-backstory-item", () => ({
   useDeleteCharacterBackstoryItem: () => mutations.deleteBackstoryItem,
+}))
+
+vi.mock("@/hooks/character/use-update-character-backstory-item", () => ({
   useUpdateCharacterBackstoryItem: () => mutations.updateBackstoryItem,
+}))
+
+vi.mock("@/hooks/character/use-upsert-character-backstory", () => ({
   useUpsertCharacterBackstory: () => mutations.upsertBackstory,
 }))
 
-vi.mock("@/lib/api/use-character-finances", () => ({
+vi.mock("@/hooks/character/use-delete-character-finances", () => ({
   useDeleteCharacterFinances: () => mutations.deleteFinances,
+}))
+
+vi.mock("@/hooks/character/use-update-character-finances", () => ({
   useUpdateCharacterFinances: () => mutations.updateFinances,
 }))
 

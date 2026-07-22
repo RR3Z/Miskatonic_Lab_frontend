@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
 
 import { GuideFlowDiagram } from "@/components/guide/flow-diagram/guide-flow-diagram"
-import { guideContent } from "@/data/guide/guide-content.data"
+import { guideContent } from "@/lib/guide/guide-content"
 
 const diagram = guideContent.sections[0]?.blocks[0]?.diagram
 

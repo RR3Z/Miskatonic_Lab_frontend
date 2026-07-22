@@ -1,7 +1,7 @@
 import { ArrowDown, ArrowRight } from "lucide-react"
 
 import { GuideFlowStepCard } from "@/components/guide/flow-diagram/guide-flow-step-card"
-import type { GuideFlowDiagram as GuideFlowDiagramData } from "@/data/guide/types/guide-content.types"
+import type { GuideFlowDiagram as GuideFlowDiagramData } from "@/types/guide-content.types"
 
 type GuideFlowDiagramProps = {
   diagram: GuideFlowDiagramData

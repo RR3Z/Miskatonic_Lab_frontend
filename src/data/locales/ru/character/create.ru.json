@@ -1,0 +1,49 @@
+{
+  "copy": {
+    "componentsCharacterCreateCharacterIdentityFields": {
+      "imya": "Имя",
+      "naprimerHarviUolters": "Например, Харви Уолтерс",
+      "pol": "Пол",
+      "neUkazan": "Не указан",
+      "muzhchina": "Мужчина",
+      "zhenschina": "Женщина",
+      "vozrast": "Возраст",
+      "naprimer42": "Например, 42"
+    },
+    "componentsCharacterCreateCharacterPortraitField": {
+      "neUdalosVybratPortret": "Не удалось выбрать портрет",
+      "portret": "Портрет",
+      "predprosmotrPortreta": "Предпросмотр портрета",
+      "vybratPortret": "Выбрать портрет",
+      "failGotovKZagruzke": "Файл готов к загрузке",
+      "nazhmiteChtobyOtkrytFaily": "Нажмите, чтобы открыть файлы",
+      "udalitVybrannyiPortret": "Удалить выбранный портрет",
+      "vybratIzobrazhenie": "Выбрать изображение",
+      "copy1Fail": "1 файл",
+      "jpegPngIliWebp": "JPEG, PNG или WebP",
+      "do5Mb": "до 5 МБ"
+    },
+    "componentsCharacterCreateCreateCharacterCard": {
+      "sozdatNovogoSyschika": "Создать нового сыщика"
+    },
+    "componentsCharacterCreateCreateCharacterForm": {
+      "personazhSozdanNoPortretZagruzitNe": "Персонаж создан, но портрет загрузить не удалось",
+      "otmena": "Отмена",
+      "sozdanie": "Создание…",
+      "sozdatPersonazha": "Создать персонажа"
+    },
+    "componentsCharacterCreateCreateCharacterModal": {
+      "novyiPersonazh": "Новый персонаж",
+      "formaSozdaniyaNovogoPersonazha": "Форма создания нового персонажа",
+      "zakrytOknoSozdaniyaPersonazha": "Закрыть окно создания персонажа"
+    },
+    "dtoCharacterCreateCharacterDto": {
+      "vozrastDolzhenBytTselymChislomOt": "Возраст должен быть целым числом от 0",
+      "vyberiteFailPortreta": "Выберите файл портрета",
+      "razmerPortretaNeDolzhenPrevyshat5": "Размер портрета не должен превышать 5 МБ",
+      "podderzhivayutsyaTolkoJpegPngIWebp": "Поддерживаются только JPEG, PNG и WebP",
+      "ukazhiteImyaPersonazha": "Укажите имя персонажа",
+      "imyaNeDolzhnoPrevyshatValue0Simvolov": "Имя не должно превышать {value0} символов"
+    }
+  }
+}

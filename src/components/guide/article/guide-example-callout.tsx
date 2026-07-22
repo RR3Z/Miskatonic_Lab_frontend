@@ -1,5 +1,5 @@
-import { guideContent } from "@/data/guide/guide-content.data"
-import type { GuideExample } from "@/data/guide/types/guide-content.types"
+import { guideContent } from "@/lib/guide/guide-content"
+import type { GuideExample } from "@/types/guide-content.types"
 
 type GuideExampleCalloutProps = {
   example: GuideExample

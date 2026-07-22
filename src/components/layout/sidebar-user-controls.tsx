@@ -8,18 +8,16 @@ import {
   useUser,
 } from "@clerk/nextjs"
 import { LogIn, LogOut } from "lucide-react"
-
 import {
   getMobileUserDisplayName,
   openProfileAfterNavigation,
-} from "@/components/auth/mobile-user-controls.utils"
-import {
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSkeleton,
-  useSidebar,
-} from "@/components/ui/sidebar"
+} from "@/components/auth/utils/mobile-user-controls.util"
+import { SidebarMenu } from "@/components/ui/sidebar/sidebar-menu"
+import { SidebarMenuButton } from "@/components/ui/sidebar/sidebar-menu-button"
+import { SidebarMenuItem } from "@/components/ui/sidebar/sidebar-menu-item"
+import { SidebarMenuSkeleton } from "@/components/ui/sidebar/sidebar-menu-skeleton"
+import localizedContent from "@/data/locales/ru/layout/layout.ru.json"
+import { useSidebar } from "@/hooks/ui/use-sidebar"
 import { appRoutes } from "@/lib/routes/app-routes"
 
 type SidebarUserControlsProps = {
@@ -86,10 +84,16 @@ export function SidebarUserControls({ signInLabel }: SidebarUserControlsProps) {
         </SidebarMenuButton>
         <SignOutButton redirectUrl={appRoutes.home}>
           <SidebarMenuButton
-            aria-label="Выйти"
+            aria-label={
+              localizedContent.copy.componentsLayoutSidebarUserControls.vyiti
+            }
             className="size-9 w-9! shrink-0 cursor-pointer justify-center gap-0 p-0! text-[var(--ml-clerk-danger)] hover:bg-[var(--ml-clerk-danger-bg)] hover:text-[var(--ml-clerk-danger)] group-data-[collapsible=icon]:hidden"
             onClick={closeSidebar}
-            tooltip={{ children: "Выйти", hidden: false }}
+            tooltip={{
+              children:
+                localizedContent.copy.componentsLayoutSidebarUserControls.vyiti,
+              hidden: false,
+            }}
           >
             <LogOut aria-hidden="true" />
           </SidebarMenuButton>

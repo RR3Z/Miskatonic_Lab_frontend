@@ -2,8 +2,8 @@
 
 import { GuideSearchInput } from "@/components/guide/search/guide-search-input"
 import { GuideSearchResults } from "@/components/guide/search/guide-search-results"
-import { guideContent } from "@/data/guide/guide-content.data"
 import { useGuideSearch } from "@/hooks/guide/use-guide-search"
+import { guideContent } from "@/lib/guide/guide-content"
 
 export function GuideSearch() {
   const { inputRef, isResultsOpen, query, results, setIsFocused, setQuery } =

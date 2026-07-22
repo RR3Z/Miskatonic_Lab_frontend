@@ -2,13 +2,14 @@
 
 import { useState } from "react"
 import { toast } from "sonner"
-import { CharacterSheetTooltipProvider } from "@/components/character/detail/character-sheet-tooltip"
-import { characterStateRules } from "@/components/character/detail/character-state-rules"
+import { CharacterSheetTooltipProvider } from "@/components/character/detail/character-sheet-tooltip/character-sheet-tooltip-provider"
+import { characterStateRules } from "@/components/character/detail/constants/character-state-rules.constants"
 import { CharacterState } from "@/components/character/detail/header/character-state"
-import { CHARACTER_STATE_GROUPS } from "@/components/character/detail/header/character-state-group-definitions"
-import type { CharacterStateValues } from "@/components/character/detail/header/character-state-types"
-import { createCharacterResourceUpdate } from "@/components/character/detail/header/create-character-resource-update"
-import { useUpdateCharacterResource } from "@/lib/api/use-character-resources"
+import { CHARACTER_STATE_GROUPS } from "@/components/character/detail/header/constants/character-state-groups.constants"
+import type { CharacterStateValues } from "@/components/character/detail/header/types/character-state.types"
+import { createCharacterResourceUpdate } from "@/components/character/detail/header/utils/create-character-resource-update.util"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { useUpdateCharacterResource } from "@/hooks/character/use-update-character-resource"
 import { cn } from "@/lib/utils/cn.util"
 
 export function CharacterStatesGrid({
@@ -41,7 +42,10 @@ export function CharacterStatesGrid({
       )
     } catch {
       setStates((current) => ({ ...current, [state]: previousValue }))
-      toast.error("Не удалось сохранить состояние персонажа")
+      toast.error(
+        localizedContent.copy.characterDetailHeaderCharacterStatesGrid
+          .neUdalosSohranitSostoyaniePersonazha,
+      )
     } finally {
       setPendingState(null)
     }

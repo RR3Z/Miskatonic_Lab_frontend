@@ -1,4 +1,6 @@
 import { Check } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
 
 import { cn } from "@/lib/utils/cn.util"
 
@@ -12,13 +14,21 @@ export function SkillDevelopmentMark({
   onToggle: () => void
 }) {
   return (
-    <button
-      aria-label={checked ? "Отмечен для развития" : "Не отмечен для развития"}
+    <Button
+      aria-label={
+        checked
+          ? localizedContent.copy.characterDetailSkillsSkillDevelopmentMark
+              .otmechenDlyaRazvitiya
+          : localizedContent.copy.characterDetailSkillsSkillDevelopmentMark
+              .neOtmechenDlyaRazvitiya
+      }
       aria-pressed={checked}
       className="group grid w-7 shrink-0 self-stretch cursor-pointer place-items-center rounded-sm hover:bg-[var(--ml-surface-panel-raised)]/45 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60"
       disabled={disabled}
       onClick={onToggle}
+      size="content"
       type="button"
+      variant="unstyled"
     >
       <span
         className={cn(
@@ -31,6 +41,6 @@ export function SkillDevelopmentMark({
       >
         <Check aria-hidden="true" className="size-3.5" strokeWidth={2.5} />
       </span>
-    </button>
+    </Button>
   )
 }

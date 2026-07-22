@@ -2,16 +2,16 @@
 
 import { DeleteResourceButton } from "@/components/character/detail/editors/delete-resource-button"
 import { InlineTextEditor } from "@/components/character/detail/editors/inline-text-editor"
-import type { BackstorySection } from "@/components/character/detail/tabs/backstory-sections"
-import { SHEET_CARD_CLASS_NAME } from "@/components/character/detail/tabs/sheet-card-classes"
+import type { BackstorySection } from "@/components/character/detail/tabs/constants/backstory-sections.constants"
+import { SHEET_CARD_CLASS_NAME } from "@/components/character/detail/tabs/styles/sheet-card.styles"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { formatLocalizedTemplate } from "@/data/locales/utils/format-localized-template.util"
 import { characterBackstoryTextSchema } from "@/dto/character/character-backstory.dto"
-import {
-  useCreateCharacterBackstoryItem,
-  useDeleteCharacterBackstoryItem,
-  useUpdateCharacterBackstoryItem,
-  useUpsertCharacterBackstory,
-} from "@/lib/api/use-character-backstory"
-import type { CharacterBackstory } from "@/types/character"
+import { useCreateCharacterBackstoryItem } from "@/hooks/character/use-create-character-backstory-item"
+import { useDeleteCharacterBackstoryItem } from "@/hooks/character/use-delete-character-backstory-item"
+import { useUpdateCharacterBackstoryItem } from "@/hooks/character/use-update-character-backstory-item"
+import { useUpsertCharacterBackstory } from "@/hooks/character/use-upsert-character-backstory"
+import type { CharacterBackstory } from "@/types/character.types"
 
 export function BackstorySectionCard({
   backstory,
@@ -62,20 +62,44 @@ export function BackstorySectionCard({
         </h3>
         {item ? (
           <DeleteResourceButton
-            ariaLabel={`Удалить раздел ${section.label}`}
-            description={`Текст раздела «${section.label}» будет удалён.`}
-            errorMessage="Не удалось удалить раздел истории"
+            ariaLabel={formatLocalizedTemplate(
+              localizedContent.copy.characterDetailTabsBackstorySectionCard
+                .udalitRazdelValue0,
+              { value0: section.label },
+            )}
+            description={formatLocalizedTemplate(
+              localizedContent.copy.characterDetailTabsBackstorySectionCard
+                .tekstRazdelaValue0BudetUdalen,
+              { value0: section.label },
+            )}
+            errorMessage={
+              localizedContent.copy.characterDetailTabsBackstorySectionCard
+                .neUdalosUdalitRazdelIstorii
+            }
             onDelete={() => deleteItem.mutateAsync()}
-            title="Удалить раздел истории?"
+            title={
+              localizedContent.copy.characterDetailTabsBackstorySectionCard
+                .udalitRazdelIstorii
+            }
           />
         ) : null}
       </div>
       <InlineTextEditor
-        ariaLabel={`Редактировать раздел ${section.label}`}
+        ariaLabel={formatLocalizedTemplate(
+          localizedContent.copy.characterDetailTabsBackstorySectionCard
+            .redaktirovatRazdelValue0,
+          { value0: section.label },
+        )}
         className="mt-1"
-        errorMessage="Не удалось сохранить раздел истории"
+        errorMessage={
+          localizedContent.copy.characterDetailTabsBackstorySectionCard
+            .neUdalosSohranitRazdelIstorii
+        }
         onSave={saveValue}
-        placeholder="Нажмите, чтобы добавить текст"
+        placeholder={
+          localizedContent.copy.characterDetailTabsBackstorySectionCard
+            .nazhmiteChtobyDobavitTekst
+        }
         schema={characterBackstoryTextSchema}
         value={value ?? null}
       />

@@ -1,7 +1,7 @@
 import { UserPlus } from "lucide-react"
-
 import { Button } from "@/components/ui/button"
-import { Card } from "@/components/ui/card"
+import { Card } from "@/components/ui/card/card"
+import localizedContent from "@/data/locales/ru/character/create.ru.json"
 import cardTentacle from "../../../../assets/character-card-tentacle.svg"
 
 const cardClassName =
@@ -23,14 +23,22 @@ export function CreateCharacterCard({ onCreate }: CreateCharacterCardProps) {
         style={{ backgroundImage: `url(${cardTentacleUrl})` }}
       />
       <Button
-        aria-label="Создать нового сыщика"
+        aria-label={
+          localizedContent.copy.componentsCharacterCreateCreateCharacterCard
+            .sozdatNovogoSyschika
+        }
         className="relative h-full w-full gap-2 rounded-md font-heading text-lg text-[var(--ml-ink-primary)]"
         onClick={onCreate}
         type="button"
         variant="ghost"
       >
         <UserPlus className="size-6 shrink-0" />
-        <span>Создать нового сыщика</span>
+        <span>
+          {
+            localizedContent.copy.componentsCharacterCreateCreateCharacterCard
+              .sozdatNovogoSyschika
+          }
+        </span>
       </Button>
     </Card>
   )

@@ -1,16 +1,14 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-
 import { GuideLayoutToolbar } from "@/components/guide/search/guide-layout-toolbar"
 import { AppSidebar } from "@/components/layout/app-sidebar"
 import { isErrorDocumentationRoute } from "@/components/layout/utils/is-error-documentation-route.util"
 import { isGuideRoute } from "@/components/layout/utils/is-guide-route.util"
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar"
+import { SidebarInset } from "@/components/ui/sidebar/sidebar-inset"
+import { SidebarProvider } from "@/components/ui/sidebar/sidebar-provider"
+import { SidebarTrigger } from "@/components/ui/sidebar/sidebar-trigger"
+import localizedContent from "@/data/locales/ru/layout/layout.ru.json"
 
 type SiteShellProps = {
   children: React.ReactNode
@@ -32,7 +30,10 @@ export function SiteShell({ children }: SiteShellProps) {
           <GuideLayoutToolbar />
         ) : (
           <SidebarTrigger
-            aria-label="Переключить боковую панель"
+            aria-label={
+              localizedContent.copy.componentsLayoutSiteShell
+                .pereklyuchitBokovuyuPanel
+            }
             className="fixed top-2 left-0 z-40 rounded-l-none border border-l-0 border-sidebar-border bg-sidebar shadow-none transition-[left] duration-200 hover:bg-sidebar-accent md:left-[var(--sidebar-width-icon)] md:group-data-[state=expanded]/sidebar-wrapper:left-[var(--sidebar-width)]"
             size="icon-lg"
           />

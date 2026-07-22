@@ -1,0 +1,21 @@
+{
+  "copy": {
+    "appErrorsPage": {
+      "spravochnikPrilozheniya": "Справочник приложения",
+      "dokumentatsiyaOshibok": "Документация ошибок",
+      "naiditeKodOshibkiUznaiteVozmozhnyePrichiny": "Найдите код ошибки, узнайте возможные причины и безопасный способ\n              исправления.",
+      "kodovVKataloge": "кодов в каталоге",
+      "value0KodovVKataloge": "{value0} кодов в каталоге",
+      "kodyOshibok": "Коды ошибок"
+    },
+    "appErrorsCodePage": {
+      "dokumentatsiyaOshibok": "Документация ошибок",
+      "pochemuEtoMogloProizoiti": "Почему это могло произойти",
+      "pochemu": "Почему:"
+    },
+    "componentsErrorsErrorCatalog": {
+      "dokumentatsiya": "Документация",
+      "vseOshibki": "Все ошибки"
+    }
+  }
+}

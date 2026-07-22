@@ -27,22 +27,31 @@ const toastMocks = vi.hoisted(() => Object.assign(vi.fn(), { error: vi.fn() }))
 
 vi.mock("sonner", () => ({ toast: toastMocks }))
 
-vi.mock("@/lib/api/use-character-profile", () => ({
+vi.mock("@/hooks/character/use-update-character-portrait", () => ({
   useUpdateCharacterPortrait: () => mutations.portrait,
+}))
+
+vi.mock("@/hooks/character/use-update-character-profile", () => ({
   useUpdateCharacterProfile: () => mutations.profile,
 }))
 
-vi.mock("@/lib/api/use-character-dice-rolls", () => ({
+vi.mock("@/hooks/character/use-character-dice-rolls", () => ({
   useMakeCharacterDiceRoll: () => diceMutation,
 }))
 
-vi.mock("@/lib/api/use-character-statistics", () => ({
+vi.mock("@/hooks/character/use-delete-character-characteristics", () => ({
   useDeleteCharacterCharacteristics: () => mutations.deleteCharacteristics,
+}))
+
+vi.mock("@/hooks/character/use-update-character-characteristics", () => ({
   useUpdateCharacterCharacteristics: () => mutations.updateCharacteristics,
 }))
 
-vi.mock("@/lib/api/use-character-resources", () => ({
+vi.mock("@/hooks/character/use-delete-character-resource", () => ({
   useDeleteCharacterResource: () => mutations.deleteResource,
+}))
+
+vi.mock("@/hooks/character/use-update-character-resource", () => ({
   useUpdateCharacterResource: () => mutations.resource,
 }))
 

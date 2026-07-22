@@ -4,19 +4,19 @@ import { ImagePlus, X } from "lucide-react"
 import { useEffect, useId, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { toast } from "sonner"
-
-import {
-  Attachment,
-  AttachmentAction,
-  AttachmentActions,
-  AttachmentContent,
-  AttachmentDescription,
-  AttachmentMedia,
-  AttachmentTitle,
-  AttachmentTrigger,
-} from "@/components/ui/attachment"
-import { Field, FieldDescription, FieldLabel } from "@/components/ui/field"
+import { Attachment } from "@/components/ui/attachment/attachment"
+import { AttachmentAction } from "@/components/ui/attachment/attachment-action"
+import { AttachmentActions } from "@/components/ui/attachment/attachment-actions"
+import { AttachmentContent } from "@/components/ui/attachment/attachment-content"
+import { AttachmentDescription } from "@/components/ui/attachment/attachment-description"
+import { AttachmentMedia } from "@/components/ui/attachment/attachment-media"
+import { AttachmentTitle } from "@/components/ui/attachment/attachment-title"
+import { AttachmentTrigger } from "@/components/ui/attachment/attachment-trigger"
+import { Field } from "@/components/ui/field/field"
+import { FieldDescription } from "@/components/ui/field/field-description"
+import { FieldLabel } from "@/components/ui/field/field-label"
 import { Input } from "@/components/ui/input"
+import localizedContent from "@/data/locales/ru/character/create.ru.json"
 import {
   type CreateCharacterFormDto,
   type CreateCharacterFormInput,
@@ -65,7 +65,9 @@ export function CharacterPortraitField({
     if (!result.success) {
       form.clearErrors("portrait")
       toast.error(
-        result.error.issues[0]?.message ?? "Не удалось выбрать портрет",
+        result.error.issues[0]?.message ??
+          localizedContent.copy.componentsCharacterCreateCharacterPortraitField
+            .neUdalosVybratPortret,
         { id: "character-portrait-validation-error" },
       )
       return
@@ -79,7 +81,12 @@ export function CharacterPortraitField({
 
   return (
     <Field>
-      <FieldLabel htmlFor={portraitId}>Портрет</FieldLabel>
+      <FieldLabel htmlFor={portraitId}>
+        {
+          localizedContent.copy.componentsCharacterCreateCharacterPortraitField
+            .portret
+        }
+      </FieldLabel>
       <Attachment
         className="w-full flex-nowrap rounded-lg border-[var(--ml-border-subtle)] bg-[var(--ml-surface-panel-raised)]"
         size="sm"
@@ -91,7 +98,11 @@ export function CharacterPortraitField({
         >
           {/* biome-ignore lint/performance/noImgElement: blob URLs need a native preview */}
           <img
-            alt="Предпросмотр портрета"
+            alt={
+              localizedContent.copy
+                .componentsCharacterCreateCharacterPortraitField
+                .predprosmotrPortreta
+            }
             src={previewURL ?? fallbackPortrait}
           />
         </AttachmentMedia>
@@ -103,18 +114,28 @@ export function CharacterPortraitField({
                 className="size-4 shrink-0 text-[var(--ml-accent-aged-gold)]"
               />
             ) : null}
-            {portrait?.name ?? "Выбрать портрет"}
+            {portrait?.name ??
+              localizedContent.copy
+                .componentsCharacterCreateCharacterPortraitField.vybratPortret}
           </AttachmentTitle>
           <AttachmentDescription>
             {portrait
-              ? "Файл готов к загрузке"
-              : "Нажмите, чтобы открыть файлы"}
+              ? localizedContent.copy
+                  .componentsCharacterCreateCharacterPortraitField
+                  .failGotovKZagruzke
+              : localizedContent.copy
+                  .componentsCharacterCreateCharacterPortraitField
+                  .nazhmiteChtobyOtkrytFaily}
           </AttachmentDescription>
         </AttachmentContent>
         {portrait ? (
           <AttachmentActions>
             <AttachmentAction
-              aria-label="Удалить выбранный портрет"
+              aria-label={
+                localizedContent.copy
+                  .componentsCharacterCreateCharacterPortraitField
+                  .udalitVybrannyiPortret
+              }
               disabled={disabled}
               onClick={() => handlePortrait(null)}
               type="button"
@@ -130,7 +151,13 @@ export function CharacterPortraitField({
             className={disabled ? "pointer-events-none" : "cursor-pointer"}
             htmlFor={portraitId}
           >
-            <span className="sr-only">Выбрать изображение</span>
+            <span className="sr-only">
+              {
+                localizedContent.copy
+                  .componentsCharacterCreateCharacterPortraitField
+                  .vybratIzobrazhenie
+              }
+            </span>
           </label>
         </AttachmentTrigger>
       </Attachment>
@@ -143,11 +170,26 @@ export function CharacterPortraitField({
         type="file"
       />
       <FieldDescription className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs">
-        <span>1 файл</span>
+        <span>
+          {
+            localizedContent.copy
+              .componentsCharacterCreateCharacterPortraitField.copy1Fail
+          }
+        </span>
         <span aria-hidden="true">•</span>
-        <span>JPEG, PNG или WebP</span>
+        <span>
+          {
+            localizedContent.copy
+              .componentsCharacterCreateCharacterPortraitField.jpegPngIliWebp
+          }
+        </span>
         <span aria-hidden="true">•</span>
-        <span>до 5 МБ</span>
+        <span>
+          {
+            localizedContent.copy
+              .componentsCharacterCreateCharacterPortraitField.do5Mb
+          }
+        </span>
       </FieldDescription>
     </Field>
   )

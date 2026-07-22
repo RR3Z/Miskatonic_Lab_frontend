@@ -3,16 +3,14 @@
 import { useRouter } from "next/navigation"
 
 import { RoomJoinForm } from "@/components/room/join/room-join-form"
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import roomContentRu from "@/data/room/room.ru.json"
+import { Dialog } from "@/components/ui/dialog/dialog"
+import { DialogContent } from "@/components/ui/dialog/dialog-content"
+import { DialogDescription } from "@/components/ui/dialog/dialog-description"
+import { DialogHeader } from "@/components/ui/dialog/dialog-header"
+import { DialogTitle } from "@/components/ui/dialog/dialog-title"
+import roomContentRu from "@/data/locales/ru/room/join.ru.json"
 import { appRoutes } from "@/lib/routes/app-routes"
-import type { RoomSummary } from "@/types/room"
+import type { RoomSummary } from "@/types/room.types"
 
 import { formatRoomTemplate } from "../utils/format-room-template.util"
 

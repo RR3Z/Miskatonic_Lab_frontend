@@ -1,13 +1,11 @@
 import { CircleAlert } from "lucide-react"
-
-import {
-  Alert,
-  AlertAction,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert"
+import { Alert } from "@/components/ui/alert/alert"
+import { AlertAction } from "@/components/ui/alert/alert-action"
+import { AlertDescription } from "@/components/ui/alert/alert-description"
+import { AlertTitle } from "@/components/ui/alert/alert-title"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
+import localizedContent from "@/data/locales/ru/character/list.ru.json"
 
 type CharacterListErrorProps = {
   isFetching: boolean
@@ -25,10 +23,16 @@ export function CharacterListError({
     >
       <CircleAlert aria-hidden="true" />
       <AlertTitle className="text-destructive">
-        Не удалось загрузить персонажей
+        {
+          localizedContent.copy.componentsCharacterListCharacterListError
+            .neUdalosZagruzitPersonazhei
+        }
       </AlertTitle>
       <AlertDescription>
-        Проверьте подключение и попробуйте получить список ещё раз.
+        {
+          localizedContent.copy.componentsCharacterListCharacterListError
+            .provertePodklyuchenieIPoprobuitePoluchitSpisok
+        }
       </AlertDescription>
       <AlertAction>
         <Button
@@ -41,7 +45,11 @@ export function CharacterListError({
           {isFetching ? (
             <Spinner aria-hidden="true" data-icon="inline-start" />
           ) : null}
-          {isFetching ? "Загрузка…" : "Повторить"}
+          {isFetching
+            ? localizedContent.copy.componentsCharacterListCharacterListError
+                .zagruzka
+            : localizedContent.copy.componentsCharacterListCharacterListError
+                .povtorit}
         </Button>
       </AlertAction>
     </Alert>

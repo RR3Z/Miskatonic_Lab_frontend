@@ -4,10 +4,10 @@ import { Camera } from "lucide-react"
 import Image from "next/image"
 import { useId } from "react"
 import { toast } from "sonner"
-
 import { Input } from "@/components/ui/input"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
 import { characterPortraitSchema } from "@/dto/character/create-character.dto"
-import { useUpdateCharacterPortrait } from "@/lib/api/use-character-profile"
+import { useUpdateCharacterPortrait } from "@/hooks/character/use-update-character-portrait"
 
 export function CharacterPortraitEditor({
   alt,
@@ -25,7 +25,11 @@ export function CharacterPortraitEditor({
     if (!file) return
     const parsed = characterPortraitSchema.safeParse(file)
     if (!parsed.success) {
-      toast.error(parsed.error.issues[0]?.message ?? "Некорректный портрет")
+      toast.error(
+        parsed.error.issues[0]?.message ??
+          localizedContent.copy.characterDetailHeaderCharacterPortraitEditor
+            .nekorrektnyiPortret,
+      )
       return
     }
     if (!parsed.data) return
@@ -33,7 +37,10 @@ export function CharacterPortraitEditor({
     try {
       await mutation.mutateAsync(parsed.data)
     } catch {
-      toast.error("Не удалось обновить портрет")
+      toast.error(
+        localizedContent.copy.characterDetailHeaderCharacterPortraitEditor
+          .neUdalosObnovitPortret,
+      )
     }
   }
 
@@ -49,7 +56,10 @@ export function CharacterPortraitEditor({
         unoptimized={!portraitUrl.startsWith("/")}
       />
       <label
-        aria-label="Изменить портрет персонажа"
+        aria-label={
+          localizedContent.copy.characterDetailHeaderCharacterPortraitEditor
+            .izmenitPortretPersonazha
+        }
         className="absolute inset-0 grid cursor-pointer place-items-center bg-black/55 opacity-0 transition-opacity group-hover/portrait:opacity-100 focus-within:opacity-100"
         htmlFor={inputId}
       >

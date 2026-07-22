@@ -1,0 +1,48 @@
+{
+  "copy": {
+    "componentsCharacterCharacterCardActions": {
+      "deistviyaPersonazhaValue0": "Действия персонажа {value0}",
+      "udalit": "Удалить"
+    },
+    "componentsCharacterCharacterCard": {
+      "zhenschina": "Женщина",
+      "muzhchina": "Мужчина",
+      "zhenskii": "Женский",
+      "muzhskoi": "Мужской",
+      "value0Let": "{value0} лет",
+      "value0Portret": "{value0} портрет",
+      "dannyeSyschikaNeZapolneny": "Данные сыщика не заполнены",
+      "zdorove": "Здоровье",
+      "rassudok": "Рассудок",
+      "magiya": "Магия",
+      "udacha": "Удача"
+    },
+    "componentsCharacterCharacterListPage": {
+      "spisokPersonazhei": "Список персонажей (",
+      "sozdaniePersonazhaNedostupnoDostignutLimit": "Создание персонажа недоступно: достигнут лимит",
+      "sozdaniePersonazhaNedostupnoSpisokNeZagruzhen": "Создание персонажа недоступно: список не загружен",
+      "sozdatPersonazha": "Создать персонажа"
+    },
+    "componentsCharacterDeleteCharacterDeleteDialog": {
+      "neUdalosUdalitPersonazhaPoprobuiteEsche": "Не удалось удалить персонажа. Попробуйте ещё раз.",
+      "udalitPersonazha": "Удалить персонажа?",
+      "personazh": "Персонаж «",
+      "budetUdalenBezVozmozhnostiVosstanovleniya": "» будет удалён без возможности\n            восстановления.",
+      "otmena": "Отмена",
+      "udaleniePersonazha": "Удаление персонажа",
+      "udalit": "Удалить"
+    },
+    "componentsCharacterListCharacterListContent": {
+      "spisokPersonazhei": "Список персонажей"
+    },
+    "componentsCharacterListCharacterListError": {
+      "neUdalosZagruzitPersonazhei": "Не удалось загрузить персонажей",
+      "provertePodklyuchenieIPoprobuitePoluchitSpisok": "Проверьте подключение и попробуйте получить список ещё раз.",
+      "zagruzka": "Загрузка…",
+      "povtorit": "Повторить"
+    },
+    "componentsCharacterListCharacterListLoading": {
+      "zagruzkaPersonazhei": "Загрузка персонажей…"
+    }
+  }
+}

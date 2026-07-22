@@ -6,7 +6,7 @@ import { useRoomInvalidation } from "@/hooks/room/use-room-invalidation"
 import { useRoomSession } from "@/hooks/room/use-room-session"
 import { RoomSessionRequiredError } from "@/hooks/room/utils/room-session-required-error.util"
 import { createRoom } from "@/lib/api/rooms"
-import type { CreateRoomInput } from "@/types/room"
+import type { CreateRoomInput } from "@/types/room.types"
 
 export function useCreateRoom() {
   const { userId } = useRoomSession()

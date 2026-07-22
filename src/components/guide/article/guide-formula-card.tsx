@@ -1,4 +1,4 @@
-import type { GuideFormula } from "@/data/guide/types/guide-content.types"
+import type { GuideFormula } from "@/types/guide-content.types"
 
 type GuideFormulaCardProps = {
   formula: GuideFormula

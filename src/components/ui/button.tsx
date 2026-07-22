@@ -24,6 +24,7 @@ const buttonVariants = cva(
         success:
           "border-[color-mix(in_srgb,var(--ml-accent-success)_80%,black)] bg-[var(--ml-accent-success)] text-[#f4f1ea] hover:bg-[color-mix(in_srgb,var(--ml-accent-success)_86%,white)] focus-visible:border-[var(--ml-accent-success)] focus-visible:ring-[color-mix(in_srgb,var(--ml-accent-success)_35%,transparent)]",
         link: "text-primary underline-offset-4 hover:underline",
+        unstyled: "",
       },
       size: {
         default:
@@ -37,6 +38,7 @@ const buttonVariants = cva(
         "icon-sm":
           "size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg",
         "icon-lg": "size-9",
+        content: "",
       },
     },
     defaultVariants: {

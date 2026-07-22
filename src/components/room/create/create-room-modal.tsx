@@ -3,28 +3,26 @@
 import { X } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
-
+import {
+  showError,
+  showErrorCode,
+} from "@/components/errors/utils/error-toast.util"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import {
-  Field,
-  FieldDescription,
-  FieldGroup,
-  FieldLabel,
-} from "@/components/ui/field"
+import { Dialog } from "@/components/ui/dialog/dialog"
+import { DialogClose } from "@/components/ui/dialog/dialog-close"
+import { DialogContent } from "@/components/ui/dialog/dialog-content"
+import { DialogDescription } from "@/components/ui/dialog/dialog-description"
+import { DialogFooter } from "@/components/ui/dialog/dialog-footer"
+import { DialogHeader } from "@/components/ui/dialog/dialog-header"
+import { DialogTitle } from "@/components/ui/dialog/dialog-title"
+import { Field } from "@/components/ui/field/field"
+import { FieldDescription } from "@/components/ui/field/field-description"
+import { FieldGroup } from "@/components/ui/field/field-group"
+import { FieldLabel } from "@/components/ui/field/field-label"
 import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
-import roomContentRu from "@/data/room/room.ru.json"
+import roomContentRu from "@/data/locales/ru/room/create.ru.json"
 import { useCreateRoom } from "@/hooks/room/use-create-room"
-import { showError, showErrorCode } from "@/lib/errors/presenter"
 import { appRoutes } from "@/lib/routes/app-routes"
 
 type CreateRoomModalProps = {

@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event"
 import { describe, expect, it } from "vitest"
 
 import { CharacterInfoTooltip } from "@/components/character/detail/character-info-tooltip"
-import { CharacterSheetTooltipProvider } from "@/components/character/detail/character-sheet-tooltip"
+import { CharacterSheetTooltipProvider } from "@/components/character/detail/character-sheet-tooltip/character-sheet-tooltip-provider"
 
 describe("CharacterInfoTooltip", () => {
   it("opens shared tooltip from accessible info button", async () => {

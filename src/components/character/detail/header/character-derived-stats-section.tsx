@@ -2,30 +2,30 @@
 
 import type { CSSProperties } from "react"
 import { toast } from "sonner"
-
-import { getCharacterDerivedStats } from "@/components/character/detail/header/character-derived-stat-definitions"
 import { CharacterSheetSectionTitle } from "@/components/character/detail/header/character-sheet-section-title"
-import { CharacterSheetStatCard } from "@/components/character/detail/header/character-sheet-stat-card"
 import { CharacteristicDiceCard } from "@/components/character/detail/header/characteristic-dice-card"
 import { DamageBonusRoll } from "@/components/character/detail/header/damage-bonus-roll"
+import { DerivedStatCard } from "@/components/character/detail/header/derived-stat-card"
+import { DiceRollResultToast } from "@/components/character/detail/header/dice-result-toast/dice-roll-result-toast"
+import { FormulaDiceRollResultToast } from "@/components/character/detail/header/dice-result-toast/formula-dice-roll-result-toast"
 import {
-  DiceRollResultToast,
-  FormulaDiceRollResultToast,
   getDiceRollToastClassName,
   getDiceRollToastCloseButtonClassName,
   getDiceRollToastStyle,
-} from "@/components/character/detail/header/dice-roll-result-toast"
+} from "@/components/character/detail/header/dice-result-toast/utils/dice-roll-toast-style.util"
+import { getCharacterDerivedStats } from "@/components/character/detail/header/utils/character-derived-stats.util"
 import {
   DICE_RESULT_TOAST_DURATION_MS,
   DICE_RESULT_TOASTER_ID,
-} from "@/components/ui/sonner/constants"
+} from "@/components/ui/sonner/constants/sonner.constants"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { useMakeCharacterDiceRoll } from "@/hooks/character/use-character-dice-rolls"
 import {
   type D100Mode,
   parseD100RollDetails,
 } from "@/lib/api/character-dice-rolls"
-import { useMakeCharacterDiceRoll } from "@/lib/api/use-character-dice-rolls"
 import { classifyCharacteristicCheck } from "@/lib/dice/characteristic-check"
-import type { CharacterDetail } from "@/types/character"
+import type { CharacterDetail } from "@/types/character.types"
 
 export function CharacterDerivedStatsSection({
   character,
@@ -45,7 +45,10 @@ export function CharacterDerivedStatsSection({
         <FormulaDiceRollResultToast
           formula={roll.expression || formula}
           result={roll.result}
-          title="Бонус урона"
+          title={
+            localizedContent.copy
+              .characterDetailHeaderCharacterDerivedStatsSection.bonusUrona
+          }
         />,
         {
           classNames: {
@@ -61,7 +64,10 @@ export function CharacterDerivedStatsSection({
         },
       )
     } catch {
-      toast.error("Не удалось бросить бонус урона")
+      toast.error(
+        localizedContent.copy.characterDetailHeaderCharacterDerivedStatsSection
+          .neUdalosBrositBonusUrona,
+      )
     }
   }
 
@@ -95,13 +101,21 @@ export function CharacterDerivedStatsSection({
         },
       )
     } catch {
-      toast.error("Не удалось бросить d100")
+      toast.error(
+        localizedContent.copy.characterDetailHeaderCharacterDerivedStatsSection
+          .neUdalosBrositD100,
+      )
     }
   }
 
   return (
     <section className="flex h-full min-w-0 self-stretch flex-col py-1">
-      <CharacterSheetSectionTitle>Производные</CharacterSheetSectionTitle>
+      <CharacterSheetSectionTitle>
+        {
+          localizedContent.copy
+            .characterDetailHeaderCharacterDerivedStatsSection.proizvodnye
+        }
+      </CharacterSheetSectionTitle>
       <div className="grid min-h-0 flex-1 auto-rows-fr grid-cols-2 gap-1.5">
         <DerivedStatCard label={speed.label} value={speed.value} />
         <DerivedStatCard label={physique.label} value={physique.value} />
@@ -121,27 +135,5 @@ export function CharacterDerivedStatsSection({
         />
       </div>
     </section>
-  )
-}
-
-function DerivedStatCard({
-  label,
-  value,
-}: {
-  label: string
-  value: number | string | null
-}) {
-  return (
-    <CharacterSheetStatCard
-      className="flex flex-col items-center justify-center px-2 py-1"
-      data-testid={`derived-stat-${label}`}
-    >
-      <span className="block w-full min-w-0 truncate font-body text-[0.65rem] uppercase tracking-[0.12em] text-[var(--ml-ink-muted)]">
-        {label}
-      </span>
-      <span className="font-mono text-base font-semibold tabular-nums text-[var(--ml-ink-primary)]">
-        {value ?? "—"}
-      </span>
-    </CharacterSheetStatCard>
   )
 }

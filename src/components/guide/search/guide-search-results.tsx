@@ -3,8 +3,8 @@ import { AnimatePresence, motion } from "motion/react"
 import { GuideSearchEmptyState } from "@/components/guide/search/guide-search-empty-state"
 import { GuideSearchResultItem } from "@/components/guide/search/guide-search-result-item"
 import { guideSearchStyles } from "@/components/guide/search/styles/guide-search.styles"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import type { GuideSearchResult } from "@/data/guide/types/guide-content.types"
+import { ScrollArea } from "@/components/ui/scroll-area/scroll-area"
+import type { GuideSearchResult } from "@/types/guide-content.types"
 
 type GuideSearchResultsProps = {
   isOpen: boolean

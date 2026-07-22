@@ -5,13 +5,12 @@ import type {
   LayoutChangedMeta,
 } from "react-resizable-panels"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-
+import { useCharacterSheetLayout } from "@/hooks/character/use-character-sheet-layout"
 import {
   SECTIONS_PANEL_ID,
   SKILLS_PANEL_ID,
-} from "@/components/character/detail/layout/character-sheet-layout-definitions"
-import { parseCharacterSheetLayout } from "@/components/character/detail/layout/parse-character-sheet-layout"
-import { useCharacterSheetLayout } from "@/components/character/detail/layout/use-character-sheet-layout"
+} from "@/lib/character/constants/character-sheet-layout.constants"
+import { parseCharacterSheetLayout } from "@/lib/character/utils/parse-character-sheet-layout.util"
 import { characterSheetLayoutStorageKey } from "@/lib/utils/character-sheet-layout.util"
 
 const storedLayout: Layout = {

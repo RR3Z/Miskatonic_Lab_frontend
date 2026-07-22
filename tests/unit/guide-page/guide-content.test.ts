@@ -3,11 +3,11 @@ import {
   getGuideBlockHref,
   getGuideSearchResultHref,
 } from "@/components/guide/utils/guide-route.util"
+import { guideContent } from "@/lib/guide/guide-content"
 import {
   getGuideSearchResults,
   getGuideSection,
-} from "@/components/guide/utils/guide-search.util"
-import { guideContent } from "@/data/guide/guide-content.data"
+} from "@/lib/guide/utils/guide-search.util"
 
 describe("guide content", () => {
   it("keeps the eight player-facing guide sections", () => {

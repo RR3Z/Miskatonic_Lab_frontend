@@ -1,7 +1,7 @@
 import type { KyInstance } from "ky"
 
 import type { CharacterInventoryItemDto } from "@/dto/character/character-inventory-item.dto"
-import type { CharacterInventoryItem } from "@/types/character"
+import type { CharacterInventoryItem } from "@/types/character.types"
 
 export async function createCharacterInventoryItem(
   api: KyInstance,

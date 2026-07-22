@@ -1,7 +1,7 @@
 import type { KyInstance } from "ky"
 
 import type { CreateCharacterNoteDto } from "@/dto/character/create-character-note.dto"
-import type { CharacterNote } from "@/types/character"
+import type { CharacterNote } from "@/types/character.types"
 
 export async function createCharacterNote(
   api: KyInstance,

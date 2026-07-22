@@ -1,20 +1,19 @@
 "use client"
 
 import { CharacterSectionsPanel } from "@/components/character/detail/layout/character-sections-panel"
+import { CharacterSkillsPanel } from "@/components/character/detail/layout/character-skills-panel"
+import { ResizableHandle } from "@/components/ui/resizable/resizable-handle"
+import { ResizablePanel } from "@/components/ui/resizable/resizable-panel"
+import { ResizablePanelGroup } from "@/components/ui/resizable/resizable-panel-group"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { useCharacterSheetLayout } from "@/hooks/character/use-character-sheet-layout"
+import { useDesktopCharacterSheet } from "@/hooks/character/use-desktop-character-sheet"
 import {
   DEFAULT_CHARACTER_SHEET_LAYOUT,
   SECTIONS_PANEL_ID,
   SKILLS_PANEL_ID,
-} from "@/components/character/detail/layout/character-sheet-layout-definitions"
-import { CharacterSkillsPanel } from "@/components/character/detail/layout/character-skills-panel"
-import { useCharacterSheetLayout } from "@/components/character/detail/layout/use-character-sheet-layout"
-import { useDesktopCharacterSheet } from "@/components/character/detail/layout/use-desktop-character-sheet"
-import {
-  ResizableHandle,
-  ResizablePanel,
-  ResizablePanelGroup,
-} from "@/components/ui/resizable"
-import type { CharacterDetail } from "@/types/character"
+} from "@/lib/character/constants/character-sheet-layout.constants"
+import type { CharacterDetail } from "@/types/character.types"
 
 export function CharacterSheetWorkspace({
   character,
@@ -60,7 +59,10 @@ export function CharacterSheetWorkspace({
       </ResizablePanel>
 
       <ResizableHandle
-        aria-label="Изменить ширину панелей листа"
+        aria-label={
+          localizedContent.copy.characterDetailLayoutCharacterSheetWorkspace
+            .izmenitShirinuPaneleiLista
+        }
         className="w-0.5 cursor-col-resize bg-[var(--ml-border-aged)] transition-colors hover:bg-[var(--ml-accent-brass-strong)] focus-visible:bg-[var(--ml-accent-brass-strong)]"
         withHandle
       />

@@ -1,4 +1,4 @@
-import type { GuideFlowStep } from "@/data/guide/types/guide-content.types"
+import type { GuideFlowStep } from "@/types/guide-content.types"
 
 type GuideFlowStepCardProps = GuideFlowStep
 

@@ -1,7 +1,7 @@
 import Link from "next/link"
 
 import { getGuideBlockHref } from "@/components/guide/utils/guide-route.util"
-import type { GuideBlock } from "@/data/guide/types/guide-content.types"
+import type { GuideBlock } from "@/types/guide-content.types"
 
 type GuideCatalogBlockLinkProps = {
   block: GuideBlock

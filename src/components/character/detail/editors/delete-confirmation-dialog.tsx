@@ -2,18 +2,16 @@
 
 import { useState } from "react"
 import { toast } from "sonner"
-
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+import { AlertDialog } from "@/components/ui/alert-dialog/alert-dialog"
+import { AlertDialogCancel } from "@/components/ui/alert-dialog/alert-dialog-cancel"
+import { AlertDialogContent } from "@/components/ui/alert-dialog/alert-dialog-content"
+import { AlertDialogDescription } from "@/components/ui/alert-dialog/alert-dialog-description"
+import { AlertDialogFooter } from "@/components/ui/alert-dialog/alert-dialog-footer"
+import { AlertDialogHeader } from "@/components/ui/alert-dialog/alert-dialog-header"
+import { AlertDialogTitle } from "@/components/ui/alert-dialog/alert-dialog-title"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
 
 export function DeleteConfirmationDialog({
   description,
@@ -64,7 +62,10 @@ export function DeleteConfirmationDialog({
             disabled={isDeleting}
             variant="secondary"
           >
-            Отмена
+            {
+              localizedContent.copy
+                .characterDetailEditorsDeleteConfirmationDialog.otmena
+            }
           </AlertDialogCancel>
           <Button
             className="w-full sm:flex-1"
@@ -73,7 +74,17 @@ export function DeleteConfirmationDialog({
             type="button"
             variant="destructive"
           >
-            {isDeleting ? <Spinner aria-label="Удаление" /> : "Удалить"}
+            {isDeleting ? (
+              <Spinner
+                aria-label={
+                  localizedContent.copy
+                    .characterDetailEditorsDeleteConfirmationDialog.udalenie
+                }
+              />
+            ) : (
+              localizedContent.copy
+                .characterDetailEditorsDeleteConfirmationDialog.udalit
+            )}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

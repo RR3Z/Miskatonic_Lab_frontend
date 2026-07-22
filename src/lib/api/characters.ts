@@ -12,7 +12,7 @@ import type {
   CharacterLuckValue,
   CharacterStatValue,
   CreatedCharacter,
-} from "@/types/character"
+} from "@/types/character.types"
 
 export type CreateCharacterResult = {
   character: CreatedCharacter

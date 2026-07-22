@@ -8,7 +8,7 @@ import { setTestViewport } from "@tests/utils/viewport.util"
 import type * as React from "react"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
-import { getMobileUserDisplayName } from "@/components/auth/mobile-user-controls.utils"
+import { getMobileUserDisplayName } from "@/components/auth/utils/mobile-user-controls.util"
 
 const clerkState = vi.hoisted(() => ({
   loaded: true,
@@ -106,11 +106,11 @@ describe("AppSidebar", () => {
     )
     expect(
       screen
-        .getByRole("link", { name: "Miskatonic Lab home" })
+        .getByRole("link", { name: "На главную Miskatonic Lab" })
         .querySelector('[data-slot="sidebar-favicon"]'),
     ).toBeInTheDocument()
     expect(
-      screen.getByRole("link", { name: "Miskatonic Lab home" }),
+      screen.getByRole("link", { name: "На главную Miskatonic Lab" }),
     ).toHaveClass("justify-center")
     expect(
       container.querySelector('[data-slot="site-shell-content"]'),

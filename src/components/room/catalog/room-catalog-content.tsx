@@ -2,8 +2,8 @@ import { RoomCatalogCard } from "@/components/room/catalog/room-catalog-card"
 import { RoomCatalogEmpty } from "@/components/room/catalog/room-catalog-empty"
 import { RoomCatalogError } from "@/components/room/catalog/room-catalog-error"
 import { RoomCatalogLoading } from "@/components/room/catalog/room-catalog-loading"
-import roomContentRu from "@/data/room/room.ru.json"
-import type { RoomSummary } from "@/types/room"
+import roomContentRu from "@/data/locales/ru/room/catalog.ru.json"
+import type { RoomSummary } from "@/types/room.types"
 
 type RoomCatalogContentProps = {
   hasLoadError: boolean

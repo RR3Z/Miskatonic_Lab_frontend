@@ -1,10 +1,10 @@
 "use client"
 
 import { DiceRollProgressOverlay } from "@/components/character/detail/dice-roll-progress-overlay"
-import {
-  CharacterSheetStatButton,
-  CharacterSheetStatCard,
-} from "@/components/character/detail/header/character-sheet-stat-card"
+import { CharacterSheetStatButton } from "@/components/character/detail/header/character-sheet-stat/character-sheet-stat-button"
+import { CharacterSheetStatCard } from "@/components/character/detail/header/character-sheet-stat/character-sheet-stat-card"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { formatLocalizedTemplate } from "@/data/locales/utils/format-localized-template.util"
 
 export function DamageBonusRoll({
   onRoll,
@@ -19,7 +19,7 @@ export function DamageBonusRoll({
   const content = (
     <>
       <span className="block w-full min-w-0 truncate font-body text-[0.65rem] uppercase tracking-[0.12em] text-[var(--ml-ink-muted)]">
-        Бонус урона
+        {localizedContent.copy.characterDetailHeaderDamageBonusRoll.bonusUrona}
       </span>
       <span className="font-mono text-base font-semibold tabular-nums text-[var(--ml-ink-primary)]">
         {value ?? "—"}
@@ -40,7 +40,11 @@ export function DamageBonusRoll({
 
   return (
     <CharacterSheetStatButton
-      aria-label={`Бросить бонус урона ${formula}`}
+      aria-label={formatLocalizedTemplate(
+        localizedContent.copy.characterDetailHeaderDamageBonusRoll
+          .brositBonusUronaValue0,
+        { value0: formula },
+      )}
       className="relative flex flex-col items-center justify-center px-2 py-1"
       data-testid="damage-bonus-stat"
       disabled={rolling}

@@ -6,7 +6,7 @@ import { MarqueeGroup } from "@/components/marquee/infinite-marquee/marquee-grou
 import {
   getMarqueeGroupIds,
   isFirstMarqueeGroup,
-} from "@/components/marquee/infinite-marquee/utils"
+} from "@/components/marquee/infinite-marquee/utils/infinite-marquee.util"
 import { cn } from "@/lib/utils/cn.util"
 
 type MarqueeTrackProps = {

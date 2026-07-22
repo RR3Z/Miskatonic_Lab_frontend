@@ -3,8 +3,8 @@ import userEvent from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
 
 import { GuideCatalog } from "@/components/guide/catalog/guide-catalog"
-import { SidebarProvider } from "@/components/ui/sidebar"
-import { guideContent } from "@/data/guide/guide-content.data"
+import { SidebarProvider } from "@/components/ui/sidebar/sidebar-provider"
+import { guideContent } from "@/lib/guide/guide-content"
 
 function renderCatalog(onNavigate = vi.fn()) {
   return {

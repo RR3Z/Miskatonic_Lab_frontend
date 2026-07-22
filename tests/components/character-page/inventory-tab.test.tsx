@@ -3,7 +3,7 @@ import userEvent from "@testing-library/user-event"
 import { describe, expect, it, vi } from "vitest"
 
 import { InventoryTab } from "@/components/character/detail/tabs/inventory-tab"
-import type { CharacterInventoryItem } from "@/types/character"
+import type { CharacterInventoryItem } from "@/types/character.types"
 
 const mutations = vi.hoisted(() => ({
   create: { isPending: false, mutateAsync: vi.fn() },
@@ -11,9 +11,15 @@ const mutations = vi.hoisted(() => ({
   update: { isPending: false, mutateAsync: vi.fn() },
 }))
 
-vi.mock("@/lib/api/use-character-inventory", () => ({
+vi.mock("@/hooks/character/use-create-character-inventory-item", () => ({
   useCreateCharacterInventoryItem: () => mutations.create,
+}))
+
+vi.mock("@/hooks/character/use-delete-character-inventory-item", () => ({
   useDeleteCharacterInventoryItem: () => mutations.delete,
+}))
+
+vi.mock("@/hooks/character/use-update-character-inventory-item", () => ({
   useUpdateCharacterInventoryItem: () => mutations.update,
 }))
 

@@ -2,7 +2,7 @@
 
 import { useCallback } from "react"
 
-import { useSidebar } from "@/components/ui/sidebar"
+import { useSidebar } from "@/hooks/ui/use-sidebar"
 
 type UseCloseSidebarOptions = {
   mobileOnly?: boolean

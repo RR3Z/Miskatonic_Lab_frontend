@@ -1,12 +1,10 @@
 import { render, screen } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import { Tooltip } from "@/components/ui/tooltip/tooltip"
+import { TooltipContent } from "@/components/ui/tooltip/tooltip-content"
+import { TooltipProvider } from "@/components/ui/tooltip/tooltip-provider"
+import { TooltipTrigger } from "@/components/ui/tooltip/tooltip-trigger"
 
 describe("Tooltip", () => {
   it("uses the increased text size globally", () => {

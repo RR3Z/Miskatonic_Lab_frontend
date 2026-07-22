@@ -1,6 +1,6 @@
 import { GuideSymbol } from "@/components/guide/symbol/guide-symbol"
-import { guideContent } from "@/data/guide/guide-content.data"
-import type { GuideSection } from "@/data/guide/types/guide-content.types"
+import { guideContent } from "@/lib/guide/guide-content"
+import type { GuideSection } from "@/types/guide-content.types"
 
 type GuideArticleHeaderProps = {
   section: GuideSection

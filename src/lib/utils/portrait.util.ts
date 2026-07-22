@@ -1,5 +1,6 @@
 import type { StaticImageData } from "next/image"
-import type { PortraitKind } from "@/types/character"
+import localizedContent from "@/data/locales/ru/common/common.ru.json"
+import type { PortraitKind } from "@/types/character.types"
 import malePlaceholder from "../../../assets/characters/male-placeholder.webp"
 import womenPlaceholder from "../../../assets/characters/women-placeholder.webp"
 
@@ -18,9 +19,9 @@ export function getPortraitKind(sex: string | null): PortraitKind {
 
   return value === "female" ||
     value === "woman" ||
-    value === "женщина" ||
-    value === "жен" ||
-    value === "ж"
+    value === localizedContent.copy.libUtilsPortraitUtil.zhenschina ||
+    value === localizedContent.copy.libUtilsPortraitUtil.zhen ||
+    value === localizedContent.copy.libUtilsPortraitUtil.zh
     ? "female"
     : "male"
 }

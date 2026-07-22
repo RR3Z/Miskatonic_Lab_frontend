@@ -1,6 +1,6 @@
 import Link from "next/link"
-
 import { GuideSymbol } from "@/components/guide/symbol/guide-symbol"
+import localizedContent from "@/data/locales/ru/errors/pages.ru.json"
 import { getPresentedError } from "@/lib/errors/catalog"
 import { appRoutes } from "@/lib/routes/app-routes"
 
@@ -30,7 +30,7 @@ export default async function ErrorDocumentationPage({
               className="text-sm text-(--ml-accent-brass-strong) hover:underline"
               href={appRoutes.errors}
             >
-              Документация ошибок
+              {localizedContent.copy.appErrorsCodePage.dokumentatsiyaOshibok}
             </Link>
             <code className="block text-xs text-(--ml-accent-brass-strong)">
               {entry.code}
@@ -52,7 +52,7 @@ export default async function ErrorDocumentationPage({
             className="font-(family-name:--font-display) text-3xl font-semibold"
             id="error-cases-heading"
           >
-            Почему это могло произойти
+            {localizedContent.copy.appErrorsCodePage.pochemuEtoMogloProizoiti}
           </h2>
           {entry.documentation.cases.map((errorCase, index) => (
             <article
@@ -63,8 +63,8 @@ export default async function ErrorDocumentationPage({
                 {errorCase.situation}
               </h3>
               <p className="leading-relaxed text-(--ml-ink-secondary)">
-                <span className="font-semibold text-(--ml-ink-primary)">
-                  Почему:{" "}
+                <span className="mr-1 font-semibold text-(--ml-ink-primary)">
+                  {localizedContent.copy.appErrorsCodePage.pochemu}
                 </span>
                 {errorCase.why}
               </p>

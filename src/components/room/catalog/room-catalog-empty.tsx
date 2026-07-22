@@ -2,14 +2,12 @@ import { Plus } from "lucide-react"
 
 import { roomOutlineButtonClassName } from "@/components/room/styles/room-button.styles"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import roomContentRu from "@/data/room/room.ru.json"
+import { Card } from "@/components/ui/card/card"
+import { CardContent } from "@/components/ui/card/card-content"
+import { CardDescription } from "@/components/ui/card/card-description"
+import { CardHeader } from "@/components/ui/card/card-header"
+import { CardTitle } from "@/components/ui/card/card-title"
+import roomContentRu from "@/data/locales/ru/room/catalog.ru.json"
 
 export function RoomCatalogEmpty({ onCreate }: { onCreate: () => void }) {
   return (

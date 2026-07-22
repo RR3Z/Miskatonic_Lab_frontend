@@ -2,13 +2,13 @@
 
 import { Plus } from "lucide-react"
 import { useState } from "react"
-
 import { CharacterNoteCard } from "@/components/character/detail/notes/character-note-card"
 import { CreateCharacterNoteDialog } from "@/components/character/detail/notes/create-character-note-dialog"
 import { EmptySection } from "@/components/character/detail/tabs/empty-section"
 import { SectionTitle } from "@/components/character/detail/tabs/section-title"
 import { Button } from "@/components/ui/button"
-import type { CharacterNote } from "@/types/character"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import type { CharacterNote } from "@/types/character.types"
 
 export function NotesTab({
   characterId,
@@ -22,7 +22,9 @@ export function NotesTab({
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between gap-4">
-        <SectionTitle>Заметки</SectionTitle>
+        <SectionTitle>
+          {localizedContent.copy.characterDetailTabsNotesTab.zametki}
+        </SectionTitle>
         <Button
           className="shrink-0 border-[var(--ml-accent-brass-strong)]/70 bg-[color-mix(in_srgb,var(--ml-accent-brass-strong)_10%,transparent)] text-[var(--ml-accent-aged-gold)] hover:border-[var(--ml-accent-aged-gold)] hover:bg-[color-mix(in_srgb,var(--ml-accent-brass-strong)_20%,transparent)] hover:text-[var(--ml-ink-primary)]"
           disabled={isCreating}
@@ -32,7 +34,7 @@ export function NotesTab({
           variant="secondary"
         >
           <Plus aria-hidden="true" data-icon="inline-start" />
-          Добавить заметку
+          {localizedContent.copy.characterDetailTabsNotesTab.dobavitZametku}
         </Button>
       </div>
 
@@ -53,7 +55,9 @@ export function NotesTab({
           ))}
         </div>
       ) : (
-        <EmptySection>Заметок пока нет.</EmptySection>
+        <EmptySection>
+          {localizedContent.copy.characterDetailTabsNotesTab.zametokPokaNet}
+        </EmptySection>
       )}
     </div>
   )

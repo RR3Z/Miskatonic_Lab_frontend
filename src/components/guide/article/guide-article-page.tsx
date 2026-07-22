@@ -1,6 +1,6 @@
 import { GuideArticleBlock } from "@/components/guide/article/guide-article-block"
 import { GuideArticleHeader } from "@/components/guide/article/guide-article-header"
-import type { GuideSection } from "@/data/guide/types/guide-content.types"
+import type { GuideSection } from "@/types/guide-content.types"
 
 type GuideArticlePageProps = {
   matchedBlockId?: string

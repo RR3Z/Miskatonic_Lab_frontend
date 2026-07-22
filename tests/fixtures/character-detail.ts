@@ -1,4 +1,4 @@
-import type { CharacterDetail } from "@/types/character"
+import type { CharacterDetail } from "@/types/character.types"
 
 export function characterDetailFixture(
   overrides: Partial<CharacterDetail> = {},

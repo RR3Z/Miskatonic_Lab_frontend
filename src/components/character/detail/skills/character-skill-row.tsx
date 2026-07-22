@@ -4,37 +4,36 @@ import { PencilLine } from "lucide-react"
 import { motion } from "motion/react"
 import { useState } from "react"
 import { toast } from "sonner"
-
 import { DeleteResourceButton } from "@/components/character/detail/editors/delete-resource-button"
+import { DiceRollResultToast } from "@/components/character/detail/header/dice-result-toast/dice-roll-result-toast"
 import {
-  DiceRollResultToast,
   getDiceRollToastClassName,
   getDiceRollToastCloseButtonClassName,
   getDiceRollToastStyle,
-} from "@/components/character/detail/header/dice-roll-result-toast"
+} from "@/components/character/detail/header/dice-result-toast/utils/dice-roll-toast-style.util"
 import { CharacterSkillEditorDialog } from "@/components/character/detail/skills/character-skill-editor-dialog"
 import { SkillDevelopmentMark } from "@/components/character/detail/skills/skill-development-mark"
 import { SkillDiceCard } from "@/components/character/detail/skills/skill-dice-card"
 import {
   clampSkillTotal,
   getEffectiveSkillTotal,
-} from "@/components/character/detail/skills/skill-values"
+} from "@/components/character/detail/skills/utils/skill-values.util"
 import { Button } from "@/components/ui/button"
 import {
   DICE_RESULT_TOAST_DURATION_MS,
   DICE_RESULT_TOASTER_ID,
-} from "@/components/ui/sonner/constants"
+} from "@/components/ui/sonner/constants/sonner.constants"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { formatLocalizedTemplate } from "@/data/locales/utils/format-localized-template.util"
+import { useMakeCharacterDiceRoll } from "@/hooks/character/use-character-dice-rolls"
+import { useDeleteCharacterSkill } from "@/hooks/character/use-delete-character-skill"
+import { useUpdateCharacterSkill } from "@/hooks/character/use-update-character-skill"
 import {
   type D100Mode,
   parseD100RollDetails,
 } from "@/lib/api/character-dice-rolls"
-import { useMakeCharacterDiceRoll } from "@/lib/api/use-character-dice-rolls"
-import {
-  useDeleteCharacterSkill,
-  useUpdateCharacterSkill,
-} from "@/lib/api/use-character-skills"
 import { classifyCharacteristicCheck } from "@/lib/dice/characteristic-check"
-import type { CharacterSkill } from "@/types/character"
+import type { CharacterSkill } from "@/types/character.types"
 
 export function CharacterSkillRow({
   characterId,
@@ -99,7 +98,13 @@ export function CharacterSkillRow({
         },
       )
     } catch {
-      toast.error(`Не удалось проверить навык «${skill.name}»`)
+      toast.error(
+        formatLocalizedTemplate(
+          localizedContent.copy.characterDetailSkillsCharacterSkillRow
+            .neUdalosProveritNavykValue0,
+          { value0: skill.name },
+        ),
+      )
     }
   }
 
@@ -141,7 +146,11 @@ export function CharacterSkillRow({
         data-testid="character-skill-actions"
       >
         <Button
-          aria-label={`Редактировать навык ${skill.name}`}
+          aria-label={formatLocalizedTemplate(
+            localizedContent.copy.characterDetailSkillsCharacterSkillRow
+              .redaktirovatNavykValue0,
+            { value0: skill.name },
+          )}
           className="size-7 shrink-0 border-[var(--ml-accent-brass-strong)]/70 bg-[color-mix(in_srgb,var(--ml-accent-brass-strong)_10%,transparent)] text-[var(--ml-accent-aged-gold)] hover:border-[var(--ml-accent-aged-gold)] hover:bg-[color-mix(in_srgb,var(--ml-accent-brass-strong)_20%,transparent)] hover:text-[var(--ml-ink-primary)] disabled:cursor-wait"
           disabled={updateMutation.isPending}
           onClick={() => setEditorOpen(true)}
@@ -153,12 +162,26 @@ export function CharacterSkillRow({
         </Button>
         {!skill.is_protected ? (
           <DeleteResourceButton
-            ariaLabel={`Удалить навык ${skill.name}`}
+            ariaLabel={formatLocalizedTemplate(
+              localizedContent.copy.characterDetailSkillsCharacterSkillRow
+                .udalitNavykValue0,
+              { value0: skill.name },
+            )}
             className="size-7 shrink-0 border border-[var(--ml-accent-danger)]/70 bg-[color-mix(in_srgb,var(--ml-accent-danger)_12%,transparent)] text-[#f2a29e] hover:border-[var(--ml-accent-danger)] hover:bg-[color-mix(in_srgb,var(--ml-accent-danger)_24%,transparent)] hover:text-[#ffd0cc]"
-            description={`Навык «${skill.name}» будет удалён у персонажа.`}
-            errorMessage="Не удалось удалить навык. Возможно, он используется в имуществе."
+            description={formatLocalizedTemplate(
+              localizedContent.copy.characterDetailSkillsCharacterSkillRow
+                .navykValue0BudetUdalenUPersonazha,
+              { value0: skill.name },
+            )}
+            errorMessage={
+              localizedContent.copy.characterDetailSkillsCharacterSkillRow
+                .neUdalosUdalitNavykVozmozhnoOn
+            }
             onDelete={() => deleteMutation.mutateAsync(skill.id)}
-            title="Удалить навык?"
+            title={
+              localizedContent.copy.characterDetailSkillsCharacterSkillRow
+                .udalitNavyk
+            }
           />
         ) : null}
       </div>
@@ -169,7 +192,11 @@ export function CharacterSkillRow({
         onOpenChange={setEditorOpen}
         onSubmit={updateMutation.mutateAsync}
         open={editorOpen}
-        title={`Редактировать: ${skill.name}`}
+        title={formatLocalizedTemplate(
+          localizedContent.copy.characterDetailSkillsCharacterSkillRow
+            .redaktirovatValue0,
+          { value0: skill.name },
+        )}
       />
     </motion.li>
   )

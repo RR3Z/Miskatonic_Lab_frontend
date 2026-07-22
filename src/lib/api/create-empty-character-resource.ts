@@ -1,5 +1,5 @@
 import type { CharacterResourceKey } from "@/dto/character/character-sheet-values.dto"
-import type { CharacterDetail } from "@/types/character"
+import type { CharacterDetail } from "@/types/character.types"
 
 export function createEmptyCharacterResource(
   characterId: string,

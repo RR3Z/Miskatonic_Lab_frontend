@@ -3,8 +3,9 @@
 import { DeleteResourceButton } from "@/components/character/detail/editors/delete-resource-button"
 import { FinanceFieldsGrid } from "@/components/character/detail/tabs/finance-fields-grid"
 import { SectionTitle } from "@/components/character/detail/tabs/section-title"
-import { useDeleteCharacterFinances } from "@/lib/api/use-character-finances"
-import type { CharacterFinances } from "@/types/character"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { useDeleteCharacterFinances } from "@/hooks/character/use-delete-character-finances"
+import type { CharacterFinances } from "@/types/character.types"
 
 export function FinancesSection({
   characterId,
@@ -18,14 +19,28 @@ export function FinancesSection({
   return (
     <section className="space-y-3" data-testid="character-finances-content">
       <div className="flex items-center justify-between gap-3">
-        <SectionTitle>Финансы</SectionTitle>
+        <SectionTitle>
+          {localizedContent.copy.characterDetailTabsFinancesSection.finansy}
+        </SectionTitle>
         {finances.id ? (
           <DeleteResourceButton
-            ariaLabel="Удалить финансы"
-            description="Карманные деньги, наличные и активы будут удалены."
-            errorMessage="Не удалось удалить финансы"
+            ariaLabel={
+              localizedContent.copy.characterDetailTabsFinancesSection
+                .udalitFinansy
+            }
+            description={
+              localizedContent.copy.characterDetailTabsFinancesSection
+                .karmannyeDengiNalichnyeIAktivyBudut
+            }
+            errorMessage={
+              localizedContent.copy.characterDetailTabsFinancesSection
+                .neUdalosUdalitFinansy
+            }
             onDelete={() => deleteFinances.mutateAsync()}
-            title="Удалить финансы?"
+            title={
+              localizedContent.copy.characterDetailTabsFinancesSection
+                .udalitFinansy2
+            }
           />
         ) : null}
       </div>

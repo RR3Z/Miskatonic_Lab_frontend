@@ -3,11 +3,12 @@
 import { PencilLine } from "lucide-react"
 import { Controller } from "react-hook-form"
 
-import type { InlineTextEditorProps } from "@/components/character/detail/editors/inline-text-editor.types"
-import { useInlineTextEditor } from "@/components/character/detail/editors/use-inline-text-editor"
+import type { InlineTextEditorProps } from "@/components/character/detail/editors/types/inline-text-editor.types"
+import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ResizableTextarea } from "@/components/ui/resizable-textarea"
 import { Textarea } from "@/components/ui/textarea"
+import { useInlineTextEditor } from "@/hooks/character/use-inline-text-editor"
 import { cn } from "@/lib/utils/cn.util"
 
 export function InlineTextEditor({
@@ -36,7 +37,7 @@ export function InlineTextEditor({
 
   if (!isEditing) {
     return (
-      <button
+      <Button
         aria-label={ariaLabel}
         className={cn(
           "group/editor flex w-full cursor-text items-start gap-2 rounded-sm border border-transparent px-2 py-2 text-left transition-colors hover:border-[var(--ml-border-aged)] hover:bg-[var(--ml-surface-panel-raised)]/45 focus-visible:border-[var(--ml-focus-ring)] focus-visible:outline-none",
@@ -44,7 +45,9 @@ export function InlineTextEditor({
           className,
         )}
         onClick={startEditing}
+        size="content"
         type="button"
+        variant="unstyled"
       >
         <span
           className={cn(
@@ -63,7 +66,7 @@ export function InlineTextEditor({
             className="mt-1 size-3.5 shrink-0 opacity-0 transition-opacity group-hover/editor:opacity-70 group-focus-visible/editor:opacity-70"
           />
         ) : null}
-      </button>
+      </Button>
     )
   }
 

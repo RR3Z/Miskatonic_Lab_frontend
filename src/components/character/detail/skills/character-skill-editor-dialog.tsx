@@ -1,16 +1,15 @@
 "use client"
 
 import { X } from "lucide-react"
-
 import { CharacterSkillForm } from "@/components/character/detail/skills/character-skill-form"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
+import { Dialog } from "@/components/ui/dialog/dialog"
+import { DialogClose } from "@/components/ui/dialog/dialog-close"
+import { DialogContent } from "@/components/ui/dialog/dialog-content"
+import { DialogHeader } from "@/components/ui/dialog/dialog-header"
+import { DialogTitle } from "@/components/ui/dialog/dialog-title"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { formatLocalizedTemplate } from "@/data/locales/utils/format-localized-template.util"
 import type { CharacterSkillInput } from "@/lib/api/character-skills"
 
 export function CharacterSkillEditorDialog({
@@ -52,7 +51,12 @@ export function CharacterSkillEditorDialog({
         </DialogHeader>
         <DialogClose asChild>
           <Button
-            aria-label={`Закрыть окно: ${title}`}
+            aria-label={formatLocalizedTemplate(
+              localizedContent.copy
+                .characterDetailSkillsCharacterSkillEditorDialog
+                .zakrytOknoValue0,
+              { value0: title },
+            )}
             className="absolute top-2 right-2"
             disabled={isPending}
             onClick={closeDialog}
@@ -72,7 +76,10 @@ export function CharacterSkillEditorDialog({
             await onSubmit(input)
             onOpenChange(false)
           }}
-          submitLabel="Сохранить"
+          submitLabel={
+            localizedContent.copy
+              .characterDetailSkillsCharacterSkillEditorDialog.sohranit
+          }
         />
       </DialogContent>
     </Dialog>

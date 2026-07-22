@@ -1,4 +1,4 @@
-import { SHEET_CARD_CLASS_NAME } from "@/components/character/detail/tabs/sheet-card-classes"
+import { SHEET_CARD_CLASS_NAME } from "@/components/character/detail/tabs/styles/sheet-card.styles"
 
 export function FinanceCard({
   className,

@@ -1,4 +1,5 @@
 import { Spinner } from "@/components/ui/spinner"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
 
 export function DiceRollProgressOverlay() {
   return (
@@ -7,7 +8,10 @@ export function DiceRollProgressOverlay() {
       data-testid="dice-roll-progress"
     >
       <Spinner
-        aria-label="Выполняется бросок"
+        aria-label={
+          localizedContent.copy.componentsCharacterDetailDiceRollProgressOverlay
+            .vypolnyaetsyaBrosok
+        }
         className="size-5 text-[var(--ml-accent-brass-strong)]"
       />
     </span>

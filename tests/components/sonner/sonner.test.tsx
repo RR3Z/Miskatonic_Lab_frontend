@@ -7,7 +7,7 @@ import {
   DICE_RESULT_TOAST_DURATION_MS,
   DICE_RESULT_TOASTER_ID,
   GENERIC_TOAST_DURATION_MS,
-} from "@/components/ui/sonner/constants"
+} from "@/components/ui/sonner/constants/sonner.constants"
 import { DiceResultToaster } from "@/components/ui/sonner/dice-result-toaster"
 import { GenericToaster } from "@/components/ui/sonner/generic-toaster"
 

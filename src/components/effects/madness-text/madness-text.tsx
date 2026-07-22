@@ -2,12 +2,12 @@
 
 import { useReducedMotion } from "motion/react"
 import * as React from "react"
-import { MASKS_OF_NYARLATHOTEP_DATE_POOL } from "@/components/effects/madness-text/constants/masks-of-nyarlathotep-timeline"
-import { DEFAULT_AUTO_DELAY_MS } from "@/components/effects/madness-text/constants/timing"
-import { useMadnessAnimation } from "@/components/effects/madness-text/hooks/use-madness-animation"
-import { useMeasuredTextWidth } from "@/components/effects/madness-text/hooks/use-measured-text-width"
+import { MASKS_OF_NYARLATHOTEP_DATE_POOL } from "@/components/effects/madness-text/constants/masks-of-nyarlathotep-timeline.constants"
+import { DEFAULT_AUTO_DELAY_MS } from "@/components/effects/madness-text/constants/timing.constants"
 import { TransformSkewGlitch } from "@/components/effects/madness-text/transform-skew-glitch"
 import { Button } from "@/components/ui/button"
+import { useMadnessAnimation } from "@/hooks/effects/use-madness-animation"
+import { useMeasuredTextWidth } from "@/hooks/effects/use-measured-text-width"
 import { cn } from "@/lib/utils/cn.util"
 
 type MadnessTextProps = {

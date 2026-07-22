@@ -2,19 +2,17 @@
 
 import { useState } from "react"
 import { toast } from "sonner"
-
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+import { AlertDialog } from "@/components/ui/alert-dialog/alert-dialog"
+import { AlertDialogCancel } from "@/components/ui/alert-dialog/alert-dialog-cancel"
+import { AlertDialogContent } from "@/components/ui/alert-dialog/alert-dialog-content"
+import { AlertDialogDescription } from "@/components/ui/alert-dialog/alert-dialog-description"
+import { AlertDialogFooter } from "@/components/ui/alert-dialog/alert-dialog-footer"
+import { AlertDialogHeader } from "@/components/ui/alert-dialog/alert-dialog-header"
+import { AlertDialogTitle } from "@/components/ui/alert-dialog/alert-dialog-title"
 import { Button } from "@/components/ui/button"
 import { Spinner } from "@/components/ui/spinner"
-import type { CharacterListItem } from "@/types/character"
+import localizedContent from "@/data/locales/ru/character/list.ru.json"
+import type { CharacterListItem } from "@/types/character.types"
 
 type CharacterDeleteDialogProps = {
   character: Pick<CharacterListItem, "id" | "name">
@@ -42,9 +40,13 @@ export function CharacterDeleteDialog({
       await onDelete(character.id)
       onOpenChange(false)
     } catch {
-      toast.error("Не удалось удалить персонажа. Попробуйте ещё раз.", {
-        id: `character-delete-error-${character.id}`,
-      })
+      toast.error(
+        localizedContent.copy.componentsCharacterDeleteCharacterDeleteDialog
+          .neUdalosUdalitPersonazhaPoprobuiteEsche,
+        {
+          id: `character-delete-error-${character.id}`,
+        },
+      )
     } finally {
       setIsDeleting(false)
     }
@@ -60,11 +62,22 @@ export function CharacterDeleteDialog({
       <AlertDialogContent className="border border-[var(--ml-border-aged)] bg-[var(--ml-surface-panel)] shadow-2xl sm:max-w-md">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-xl">
-            Удалить персонажа?
+            {
+              localizedContent.copy
+                .componentsCharacterDeleteCharacterDeleteDialog.udalitPersonazha
+            }
           </AlertDialogTitle>
           <AlertDialogDescription>
-            Персонаж «{character.name}» будет удалён без возможности
-            восстановления.
+            {
+              localizedContent.copy
+                .componentsCharacterDeleteCharacterDeleteDialog.personazh
+            }
+            {character.name}
+            {
+              localizedContent.copy
+                .componentsCharacterDeleteCharacterDeleteDialog
+                .budetUdalenBezVozmozhnostiVosstanovleniya
+            }
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter className="sm:justify-stretch">
@@ -74,7 +87,10 @@ export function CharacterDeleteDialog({
             onClick={onCancelFocus}
             variant="secondary"
           >
-            Отмена
+            {
+              localizedContent.copy
+                .componentsCharacterDeleteCharacterDeleteDialog.otmena
+            }
           </AlertDialogCancel>
           <Button
             className="w-full sm:flex-1"
@@ -84,9 +100,16 @@ export function CharacterDeleteDialog({
             variant="destructive"
           >
             {isDeleting ? (
-              <Spinner aria-label="Удаление персонажа" />
+              <Spinner
+                aria-label={
+                  localizedContent.copy
+                    .componentsCharacterDeleteCharacterDeleteDialog
+                    .udaleniePersonazha
+                }
+              />
             ) : (
-              "Удалить"
+              localizedContent.copy
+                .componentsCharacterDeleteCharacterDeleteDialog.udalit
             )}
           </Button>
         </AlertDialogFooter>

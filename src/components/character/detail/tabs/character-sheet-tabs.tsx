@@ -1,23 +1,24 @@
 "use client"
 
-import { CharacterSheetTooltipProvider } from "@/components/character/detail/character-sheet-tooltip"
+import { CharacterSheetTooltipProvider } from "@/components/character/detail/character-sheet-tooltip/character-sheet-tooltip-provider"
+import { CHARACTER_SHEET_TABS } from "@/components/character/detail/tabs/constants/character-sheet-tabs.constants"
 import { FinancesSection } from "@/components/character/detail/tabs/finances-section"
 import { HistorySection } from "@/components/character/detail/tabs/history-section"
 import { InventoryTab } from "@/components/character/detail/tabs/inventory-tab"
 import { NotesTab } from "@/components/character/detail/tabs/notes-tab"
 import { ScrollableTabsContent } from "@/components/character/detail/tabs/scrollable-tabs-content"
-import {
-  CHARACTER_SHEET_TABS,
-  TAB_TRIGGER_CLASS_NAME,
-} from "@/components/character/detail/tabs/tab-definitions"
+import { TAB_TRIGGER_CLASS_NAME } from "@/components/character/detail/tabs/styles/character-sheet-tabs.styles"
 import { WeaponsTab } from "@/components/character/detail/tabs/weapons-tab"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Tabs } from "@/components/ui/tabs/tabs"
+import { TabsList } from "@/components/ui/tabs/tabs-list"
+import { TabsTrigger } from "@/components/ui/tabs/tabs-trigger"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
 import type {
   CharacterBackstory,
   CharacterFinances,
   CharacterInventoryItem,
   CharacterNote,
-} from "@/types/character"
+} from "@/types/character.types"
 
 export function CharacterSheetTabs({
   backstory,
@@ -38,7 +39,10 @@ export function CharacterSheetTabs({
       defaultValue="biography"
     >
       <TabsList
-        aria-label="Разделы листа персонажа"
+        aria-label={
+          localizedContent.copy.characterDetailTabsCharacterSheetTabs
+            .razdelyListaPersonazha
+        }
         className="relative h-10 w-full shrink-0 justify-start gap-0 overflow-x-auto overflow-y-hidden rounded-none border-b border-[var(--ml-border-subtle)] bg-transparent p-0 px-3 xl:overflow-visible"
         variant="line"
       >

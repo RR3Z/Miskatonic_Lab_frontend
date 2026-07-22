@@ -7,18 +7,19 @@ import type { FieldErrors } from "react-hook-form"
 import { Controller, useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { Button } from "@/components/ui/button"
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import { Field, FieldLabel } from "@/components/ui/field"
+import { Dialog } from "@/components/ui/dialog/dialog"
+import { DialogClose } from "@/components/ui/dialog/dialog-close"
+import { DialogContent } from "@/components/ui/dialog/dialog-content"
+import { DialogFooter } from "@/components/ui/dialog/dialog-footer"
+import { DialogHeader } from "@/components/ui/dialog/dialog-header"
+import { DialogTitle } from "@/components/ui/dialog/dialog-title"
+import { Field } from "@/components/ui/field/field"
+import { FieldLabel } from "@/components/ui/field/field-label"
 import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
 import { Textarea } from "@/components/ui/textarea"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { formatLocalizedTemplate } from "@/data/locales/utils/format-localized-template.util"
 import {
   type CharacterInventoryItemDto,
   type CharacterInventoryItemInput,
@@ -27,11 +28,9 @@ import {
   MAX_CHARACTER_INVENTORY_ITEM_CATEGORY_LENGTH,
   MAX_CHARACTER_INVENTORY_ITEM_NAME_LENGTH,
 } from "@/dto/character/character-inventory-item.dto"
-import {
-  useCreateCharacterInventoryItem,
-  useUpdateCharacterInventoryItem,
-} from "@/lib/api/use-character-inventory"
-import type { CharacterInventoryItem } from "@/types/character"
+import { useCreateCharacterInventoryItem } from "@/hooks/character/use-create-character-inventory-item"
+import { useUpdateCharacterInventoryItem } from "@/hooks/character/use-update-character-inventory-item"
+import type { CharacterInventoryItem } from "@/types/character.types"
 
 export function InventoryItemDialog({
   categorySuggestions,
@@ -77,7 +76,11 @@ export function InventoryItemDialog({
     createMutation.isPending ||
     updateMutation.isPending ||
     form.formState.isSubmitting
-  const dialogTitle = item ? "Редактировать предмет" : "Новый предмет"
+  const dialogTitle = item
+    ? localizedContent.copy.characterDetailInventoryInventoryItemDialog
+        .redaktirovatPredmet
+    : localizedContent.copy.characterDetailInventoryInventoryItemDialog
+        .novyiPredmet
 
   function closeDialog() {
     if (isPending) return
@@ -87,22 +90,35 @@ export function InventoryItemDialog({
 
   function handleInvalid(errors: FieldErrors<CharacterInventoryItemInput>) {
     const error = errors.name ?? errors.quantity ?? errors.category
-    toast.error(error?.message ?? "Проверьте данные предмета", {
-      id: "character-inventory-validation-error",
-    })
+    toast.error(
+      error?.message ??
+        localizedContent.copy.characterDetailInventoryInventoryItemDialog
+          .proverteDannyePredmeta,
+      {
+        id: "character-inventory-validation-error",
+      },
+    )
   }
 
   async function handleSubmit(data: CharacterInventoryItemDto) {
     try {
       if (item) await updateMutation.mutateAsync(data)
       else await createMutation.mutateAsync(data)
-      toast.success(item ? "Предмет сохранён" : "Предмет добавлен")
+      toast.success(
+        item
+          ? localizedContent.copy.characterDetailInventoryInventoryItemDialog
+              .predmetSohranen
+          : localizedContent.copy.characterDetailInventoryInventoryItemDialog
+              .predmetDobavlen,
+      )
       closeDialog()
     } catch {
       toast.error(
         item
-          ? "Не удалось сохранить предмет. Попробуйте ещё раз."
-          : "Не удалось добавить предмет. Попробуйте ещё раз.",
+          ? localizedContent.copy.characterDetailInventoryInventoryItemDialog
+              .neUdalosSohranitPredmetPoprobuiteEsche
+          : localizedContent.copy.characterDetailInventoryInventoryItemDialog
+              .neUdalosDobavitPredmetPoprobuiteEsche,
         { id: "character-inventory-save-error" },
       )
     }
@@ -127,7 +143,11 @@ export function InventoryItemDialog({
         </DialogHeader>
         <DialogClose asChild>
           <Button
-            aria-label={`Закрыть окно: ${dialogTitle}`}
+            aria-label={formatLocalizedTemplate(
+              localizedContent.copy.characterDetailInventoryInventoryItemDialog
+                .zakrytOknoValue0,
+              { value0: dialogTitle },
+            )}
             className="absolute top-2 right-2"
             disabled={isPending}
             onClick={closeDialog}
@@ -150,7 +170,12 @@ export function InventoryItemDialog({
               name="name"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={nameId}>Название</FieldLabel>
+                  <FieldLabel htmlFor={nameId}>
+                    {
+                      localizedContent.copy
+                        .characterDetailInventoryInventoryItemDialog.nazvanie
+                    }
+                  </FieldLabel>
                   <Input
                     {...field}
                     aria-invalid={fieldState.invalid}
@@ -158,7 +183,11 @@ export function InventoryItemDialog({
                     disabled={isPending}
                     id={nameId}
                     maxLength={MAX_CHARACTER_INVENTORY_ITEM_NAME_LENGTH}
-                    placeholder="Карманный фонарь"
+                    placeholder={
+                      localizedContent.copy
+                        .characterDetailInventoryInventoryItemDialog
+                        .karmannyiFonar
+                    }
                     required
                   />
                 </Field>
@@ -170,7 +199,13 @@ export function InventoryItemDialog({
                 name="quantity"
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={quantityId}>Количество</FieldLabel>
+                    <FieldLabel htmlFor={quantityId}>
+                      {
+                        localizedContent.copy
+                          .characterDetailInventoryInventoryItemDialog
+                          .kolichestvo
+                      }
+                    </FieldLabel>
                     <Input
                       {...field}
                       aria-invalid={fieldState.invalid}
@@ -178,7 +213,9 @@ export function InventoryItemDialog({
                       id={quantityId}
                       inputMode="numeric"
                       min={1}
-                      placeholder="1"
+                      placeholder={
+                        localizedContent.copy.characterDetailCommon.quantityOne
+                      }
                       type="number"
                     />
                   </Field>
@@ -189,7 +226,13 @@ export function InventoryItemDialog({
                 name="category"
                 render={({ field, fieldState }) => (
                   <Field data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor={categoryId}>Категория</FieldLabel>
+                    <FieldLabel htmlFor={categoryId}>
+                      {
+                        localizedContent.copy
+                          .characterDetailInventoryInventoryItemDialog
+                          .kategoriya
+                      }
+                    </FieldLabel>
                     <Input
                       {...field}
                       aria-invalid={fieldState.invalid}
@@ -197,7 +240,11 @@ export function InventoryItemDialog({
                       id={categoryId}
                       list={categoryListId}
                       maxLength={MAX_CHARACTER_INVENTORY_ITEM_CATEGORY_LENGTH}
-                      placeholder="Снаряжение"
+                      placeholder={
+                        localizedContent.copy
+                          .characterDetailInventoryInventoryItemDialog
+                          .snaryazhenie
+                      }
                     />
                   </Field>
                 )}
@@ -213,14 +260,23 @@ export function InventoryItemDialog({
               name="description"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
-                  <FieldLabel htmlFor={descriptionId}>Описание</FieldLabel>
+                  <FieldLabel htmlFor={descriptionId}>
+                    {
+                      localizedContent.copy
+                        .characterDetailInventoryInventoryItemDialog.opisanie
+                    }
+                  </FieldLabel>
                   <Textarea
                     {...field}
                     aria-invalid={fieldState.invalid}
                     className="min-h-24 py-2 text-sm leading-6"
                     disabled={isPending}
                     id={descriptionId}
-                    placeholder="Что важно знать об этом предмете?"
+                    placeholder={
+                      localizedContent.copy
+                        .characterDetailInventoryInventoryItemDialog
+                        .chtoVazhnoZnatObEtomPredmete
+                    }
                   />
                 </Field>
               )}
@@ -235,7 +291,10 @@ export function InventoryItemDialog({
               type="button"
               variant="secondary"
             >
-              Отмена
+              {
+                localizedContent.copy
+                  .characterDetailInventoryInventoryItemDialog.otmena
+              }
             </Button>
             <Button
               className="w-full sm:flex-1"
@@ -246,12 +305,17 @@ export function InventoryItemDialog({
               {isPending ? (
                 <>
                   <Spinner aria-hidden="true" data-icon="inline-start" />
-                  Сохранение…
+                  {
+                    localizedContent.copy
+                      .characterDetailInventoryInventoryItemDialog.sohranenie
+                  }
                 </>
               ) : item ? (
-                "Сохранить"
+                localizedContent.copy
+                  .characterDetailInventoryInventoryItemDialog.sohranit
               ) : (
-                "Добавить"
+                localizedContent.copy
+                  .characterDetailInventoryInventoryItemDialog.dobavit
               )}
             </Button>
           </DialogFooter>

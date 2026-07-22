@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 
 import { GuideArticlePage } from "@/components/guide/article/guide-article-page"
-import { getGuideSection } from "@/components/guide/utils/guide-search.util"
+import { getGuideSection } from "@/lib/guide/utils/guide-search.util"
 
 type GuideArticleRouteProps = {
   params: Promise<{ slug: string }>

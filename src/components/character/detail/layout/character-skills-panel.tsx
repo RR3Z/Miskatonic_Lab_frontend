@@ -1,5 +1,5 @@
 import { CharacterSkills } from "@/components/character/detail/skills/character-skills"
-import type { CharacterDetail } from "@/types/character"
+import type { CharacterDetail } from "@/types/character.types"
 
 export function CharacterSkillsPanel({
   character,

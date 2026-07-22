@@ -1,6 +1,6 @@
 import type { KyInstance } from "ky"
 
-import type { CharacterSkill } from "@/types/character"
+import type { CharacterSkill } from "@/types/character.types"
 
 export type CharacterSkillInput = Pick<
   CharacterSkill,

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest"
 
-import { landingContent } from "@/lib/content/landing.content"
+import { landingContent } from "@/data/locales/utils/landing-content.util"
 import { appRoutes } from "@/lib/routes/app-routes"
 
 function collectStrings(value: unknown): string[] {

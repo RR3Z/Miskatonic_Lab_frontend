@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 
 import { useRoomSession } from "@/hooks/room/use-room-session"
-import type { RoomSocketEvent } from "@/types/room"
+import type { RoomSocketEvent } from "@/types/room.types"
 
 import { parseRoomSocketEvent } from "./utils/room-socket-payload.util"
 

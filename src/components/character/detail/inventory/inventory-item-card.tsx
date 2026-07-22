@@ -1,11 +1,12 @@
 "use client"
 
 import { PencilLine } from "lucide-react"
-
 import { DeleteResourceButton } from "@/components/character/detail/editors/delete-resource-button"
 import { Button } from "@/components/ui/button"
-import { useDeleteCharacterInventoryItem } from "@/lib/api/use-character-inventory"
-import type { CharacterInventoryItem } from "@/types/character"
+import localizedContent from "@/data/locales/ru/character/detail.ru.json"
+import { formatLocalizedTemplate } from "@/data/locales/utils/format-localized-template.util"
+import { useDeleteCharacterInventoryItem } from "@/hooks/character/use-delete-character-inventory-item"
+import type { CharacterInventoryItem } from "@/types/character.types"
 
 export function InventoryItemCard({
   characterId,
@@ -44,7 +45,11 @@ export function InventoryItemCard({
           ) : null}
         </div>
         <Button
-          aria-label={`Редактировать предмет ${item.name}`}
+          aria-label={formatLocalizedTemplate(
+            localizedContent.copy.characterDetailInventoryInventoryItemCard
+              .redaktirovatPredmetValue0,
+            { value0: item.name },
+          )}
           className="border-[var(--ml-accent-brass-strong)]/70 bg-[color-mix(in_srgb,var(--ml-accent-brass-strong)_10%,transparent)] text-[var(--ml-accent-aged-gold)] hover:border-[var(--ml-accent-aged-gold)] hover:bg-[color-mix(in_srgb,var(--ml-accent-brass-strong)_20%,transparent)] hover:text-[var(--ml-ink-primary)]"
           onClick={onEdit}
           size="icon-sm"
@@ -54,11 +59,25 @@ export function InventoryItemCard({
           <PencilLine aria-hidden="true" />
         </Button>
         <DeleteResourceButton
-          ariaLabel={`Удалить предмет ${item.name}`}
-          description={`Предмет «${item.name}» будет удалён без возможности восстановления.`}
-          errorMessage="Не удалось удалить предмет"
+          ariaLabel={formatLocalizedTemplate(
+            localizedContent.copy.characterDetailInventoryInventoryItemCard
+              .udalitPredmetValue0,
+            { value0: item.name },
+          )}
+          description={formatLocalizedTemplate(
+            localizedContent.copy.characterDetailInventoryInventoryItemCard
+              .predmetValue0BudetUdalenBezVozmozhnosti,
+            { value0: item.name },
+          )}
+          errorMessage={
+            localizedContent.copy.characterDetailInventoryInventoryItemCard
+              .neUdalosUdalitPredmet
+          }
           onDelete={() => deleteMutation.mutateAsync()}
-          title="Удалить предмет?"
+          title={
+            localizedContent.copy.characterDetailInventoryInventoryItemCard
+              .udalitPredmet
+          }
           variant="destructive"
         />
       </div>

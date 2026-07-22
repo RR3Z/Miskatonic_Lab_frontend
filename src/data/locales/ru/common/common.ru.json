@@ -1,0 +1,19 @@
+{
+  "copy": {
+    "componentsAuthMobileUserControlsUtils": {
+      "profil": "Профиль"
+    },
+    "componentsNotFoundNotFoundPage": {
+      "code": "404",
+      "stranitsaNeNaidena": "Страница не найдена",
+      "stranitsaKotoruyuVyIscheteNeNaidena": "Страница, которую вы ищете, не найдена в архивах Лаборатории\n          Мискатоника.",
+      "vozmozhnoOnaBylaPogloschenaBezdnoiIli": "Возможно, она была поглощена Бездной или никогда не существовала.",
+      "vernutsyaVArhiv": "Вернуться в архив"
+    },
+    "libUtilsPortraitUtil": {
+      "zhenschina": "женщина",
+      "zhen": "жен",
+      "zh": "ж"
+    }
+  }
+}

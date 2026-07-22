@@ -2,7 +2,7 @@ import { render, screen, waitFor, within } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import { characterDetailFixture } from "@tests/fixtures/character-detail"
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import type { CharacterDetail } from "@/types/character"
+import type { CharacterDetail } from "@/types/character.types"
 
 const queryState = vi.hoisted(() => ({
   data: undefined as CharacterDetail | undefined,
@@ -14,70 +14,112 @@ const queryState = vi.hoisted(() => ({
 
 const resourceMutation = vi.hoisted(() => ({ mutateAsync: vi.fn() }))
 
-vi.mock("@/lib/api/use-characters", () => ({
+vi.mock("@/hooks/character/use-character", () => ({
   useCharacter: () => queryState,
 }))
 
-vi.mock("@/lib/api/use-character-notes", () => ({
+vi.mock("@/hooks/character/use-create-character-note", () => ({
   useCreateCharacterNote: () => ({
     isPending: false,
     mutateAsync: vi.fn(),
     reset: vi.fn(),
   }),
+}))
+
+vi.mock("@/hooks/character/use-delete-character-note", () => ({
   useDeleteCharacterNote: () => ({ mutateAsync: vi.fn() }),
+}))
+
+vi.mock("@/hooks/character/use-update-character-note", () => ({
   useUpdateCharacterNote: () => ({ mutateAsync: vi.fn() }),
 }))
 
-vi.mock("@/lib/api/use-character-inventory", () => ({
+vi.mock("@/hooks/character/use-create-character-inventory-item", () => ({
   useCreateCharacterInventoryItem: () => ({
     isPending: false,
     mutateAsync: vi.fn(),
   }),
+}))
+
+vi.mock("@/hooks/character/use-delete-character-inventory-item", () => ({
   useDeleteCharacterInventoryItem: () => ({ mutateAsync: vi.fn() }),
+}))
+
+vi.mock("@/hooks/character/use-update-character-inventory-item", () => ({
   useUpdateCharacterInventoryItem: () => ({
     isPending: false,
     mutateAsync: vi.fn(),
   }),
 }))
 
-vi.mock("@/lib/api/use-character-backstory", () => ({
+vi.mock("@/hooks/character/use-create-character-backstory-item", () => ({
   useCreateCharacterBackstoryItem: () => ({ mutateAsync: vi.fn() }),
+}))
+
+vi.mock("@/hooks/character/use-delete-character-backstory", () => ({
   useDeleteCharacterBackstory: () => ({ mutateAsync: vi.fn() }),
+}))
+
+vi.mock("@/hooks/character/use-delete-character-backstory-item", () => ({
   useDeleteCharacterBackstoryItem: () => ({ mutateAsync: vi.fn() }),
+}))
+
+vi.mock("@/hooks/character/use-update-character-backstory-item", () => ({
   useUpdateCharacterBackstoryItem: () => ({ mutateAsync: vi.fn() }),
+}))
+
+vi.mock("@/hooks/character/use-upsert-character-backstory", () => ({
   useUpsertCharacterBackstory: () => ({ mutateAsync: vi.fn() }),
 }))
 
-vi.mock("@/lib/api/use-character-finances", () => ({
+vi.mock("@/hooks/character/use-delete-character-finances", () => ({
   useDeleteCharacterFinances: () => ({ mutateAsync: vi.fn() }),
+}))
+
+vi.mock("@/hooks/character/use-update-character-finances", () => ({
   useUpdateCharacterFinances: () => ({ mutateAsync: vi.fn() }),
 }))
 
-vi.mock("@/lib/api/use-character-profile", () => ({
+vi.mock("@/hooks/character/use-update-character-portrait", () => ({
   useUpdateCharacterPortrait: () => ({
     isPending: false,
     mutateAsync: vi.fn(),
   }),
+}))
+
+vi.mock("@/hooks/character/use-update-character-profile", () => ({
   useUpdateCharacterProfile: () => ({ mutateAsync: vi.fn() }),
 }))
 
-vi.mock("@/lib/api/use-character-dice-rolls", () => ({
+vi.mock("@/hooks/character/use-character-dice-rolls", () => ({
   useMakeCharacterDiceRoll: () => ({ mutateAsync: vi.fn() }),
 }))
 
-vi.mock("@/lib/api/use-character-statistics", () => ({
+vi.mock("@/hooks/character/use-delete-character-characteristics", () => ({
   useDeleteCharacterCharacteristics: () => ({ mutateAsync: vi.fn() }),
+}))
+
+vi.mock("@/hooks/character/use-update-character-characteristics", () => ({
   useUpdateCharacterCharacteristics: () => ({ mutateAsync: vi.fn() }),
 }))
 
-vi.mock("@/lib/api/use-character-resources", () => ({
+vi.mock("@/hooks/character/use-delete-character-resource", () => ({
   useDeleteCharacterResource: () => ({ mutateAsync: vi.fn() }),
+}))
+
+vi.mock("@/hooks/character/use-update-character-resource", () => ({
   useUpdateCharacterResource: () => resourceMutation,
 }))
 
-vi.mock("@/lib/api/use-character-skills", () => ({
+vi.mock("@/hooks/character/use-create-character-skill", () => ({
   useCreateCharacterSkill: () => ({ isPending: false, mutateAsync: vi.fn() }),
+}))
+
+vi.mock("@/hooks/character/use-delete-character-skill", () => ({
   useDeleteCharacterSkill: () => ({ mutateAsync: vi.fn() }),
+}))
+
+vi.mock("@/hooks/character/use-update-character-skill", () => ({
   useUpdateCharacterSkill: () => ({
     isPending: false,
     mutate: vi.fn(),

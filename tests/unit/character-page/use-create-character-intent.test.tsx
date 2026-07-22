@@ -1,7 +1,7 @@
 import { act, renderHook } from "@testing-library/react"
 import { beforeEach, describe, expect, it } from "vitest"
 
-import { useCreateCharacterIntent } from "@/components/character/create/use-create-character-intent"
+import { useCreateCharacterIntent } from "@/hooks/character/use-create-character-intent"
 
 describe("useCreateCharacterIntent", () => {
   beforeEach(() => {

@@ -3,11 +3,11 @@
 import {
   defaultMarqueeDurationSeconds,
   defaultMarqueeSeparator,
-} from "@/components/marquee/infinite-marquee/constants"
-import { useMarqueeLoopWidth } from "@/components/marquee/infinite-marquee/hooks/use-marquee-loop-width"
+} from "@/components/marquee/infinite-marquee/constants/infinite-marquee.constants"
 import { MarqueeTrack } from "@/components/marquee/infinite-marquee/marquee-track"
-import type { InfiniteMarqueeProps } from "@/components/marquee/infinite-marquee/types"
-import { getMarqueeGroupCount } from "@/components/marquee/infinite-marquee/utils"
+import type { InfiniteMarqueeProps } from "@/components/marquee/infinite-marquee/types/infinite-marquee.types"
+import { getMarqueeGroupCount } from "@/components/marquee/infinite-marquee/utils/infinite-marquee.util"
+import { useMarqueeLoopWidth } from "@/hooks/marquee/use-marquee-loop-width"
 import { cn } from "@/lib/utils/cn.util"
 
 export function InfiniteMarquee({

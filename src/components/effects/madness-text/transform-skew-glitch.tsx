@@ -4,12 +4,12 @@ import * as React from "react"
 import {
   GLITCH_FRAME_INTERVAL_MS,
   GLITCH_PHASE_DURATION_MS,
-} from "@/components/effects/madness-text/constants/timing"
-import type { GlitchPhase } from "@/components/effects/madness-text/types"
+} from "@/components/effects/madness-text/constants/timing.constants"
+import type { GlitchPhase } from "@/components/effects/madness-text/types/madness-text.types"
 import {
   createRandomGlitchFrame,
   stableGlitchFrame,
-} from "@/lib/utils/madness-glitch-frame.util"
+} from "@/components/effects/madness-text/utils/madness-glitch-frame.util"
 
 type Props = {
   text: string

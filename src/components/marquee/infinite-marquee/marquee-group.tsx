@@ -1,5 +1,5 @@
 import type * as React from "react"
-import { getMarqueeItemsWithIds } from "@/components/marquee/infinite-marquee/utils"
+import { getMarqueeItemsWithIds } from "@/components/marquee/infinite-marquee/utils/infinite-marquee.util"
 import { cn } from "@/lib/utils/cn.util"
 
 type MarqueeGroupProps = {

@@ -1,7 +1,7 @@
 import { ArrowRight, PencilLine } from "lucide-react"
 
 import { AuthGateAction } from "@/components/auth/auth-gate-action"
-import { landingContent } from "@/lib/content/landing.content"
+import { landingContent } from "@/data/locales/utils/landing-content.util"
 import { cn } from "@/lib/utils/cn.util"
 
 type LandingActionsProps = {
