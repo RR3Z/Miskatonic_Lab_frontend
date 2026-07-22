@@ -7,6 +7,7 @@ import type {
   Room,
   RoomEvent,
   RoomMember,
+  RoomSelectedCharacter,
   RoomSummary,
   SelectRoomCharacterInput,
   TransferRoomOwnershipInput,
@@ -55,6 +56,15 @@ export function fetchRoomEvents(
   roomId: string,
 ): Promise<RoomEvent[]> {
   return api.get(`api/rooms/${roomId}/events?limit=100`).json<RoomEvent[]>()
+}
+
+export function fetchRoomSelectedCharacters(
+  api: KyInstance,
+  roomId: string,
+): Promise<RoomSelectedCharacter[]> {
+  return api
+    .get(`api/rooms/${roomId}/characters`)
+    .json<RoomSelectedCharacter[]>()
 }
 
 export function updateRoom(

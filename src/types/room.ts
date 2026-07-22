@@ -1,3 +1,5 @@
+import type { CharacterDetail } from "@/types/character"
+
 export type RoomSummary = {
   id: string
   name: string
@@ -80,4 +82,11 @@ export type RoomSocketEvent = {
   room_id: string
   actor_id: string
   payload?: unknown
+}
+
+export type RoomSelectedCharacter = {
+  member_id: string
+  user_id: string
+  role: RoomRole
+  character: CharacterDetail
 }

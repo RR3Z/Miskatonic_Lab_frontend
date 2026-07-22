@@ -27,6 +27,10 @@ export function useRoomRealtime({ onEvent, roomId }: UseRoomRealtimeOptions) {
       queryKey: roomQueryKeys.events(userId, roomId),
       type: "active",
     })
+    await queryClient.refetchQueries({
+      queryKey: roomQueryKeys.selectedCharacters(userId, roomId),
+      type: "active",
+    })
   }, [queryClient, roomId, userId])
 
   const handleEvent = useCallback(

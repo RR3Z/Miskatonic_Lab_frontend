@@ -21,14 +21,16 @@ import type {
   RoomSocketStatus,
 } from "@/hooks/room/use-room-socket"
 import { showErrorCode } from "@/lib/errors/presenter"
+import type { RoomMember } from "@/types/room"
 
 type RoomChatProps = {
+  members: RoomMember[]
   roomId: string
   send: (command: RoomSocketCommand) => boolean
   status: RoomSocketStatus
 }
 
-export function RoomChat({ roomId, send, status }: RoomChatProps) {
+export function RoomChat({ members, roomId, send, status }: RoomChatProps) {
   const { data: history, isLoading } = useRoomEvents(roomId)
   const [text, setText] = useState("")
   const messages = useMemo(
@@ -75,7 +77,8 @@ export function RoomChat({ roomId, send, status }: RoomChatProps) {
               key={message.id}
             >
               <p className="text-xs text-[var(--ml-ink-muted)]">
-                {message.actor_id}
+                {members.find((member) => member.user_id === message.actor_id)
+                  ?.username ?? message.actor_id}
               </p>
               <p className="whitespace-pre-wrap break-words">
                 {chatTextFromPayload(message.payload)}

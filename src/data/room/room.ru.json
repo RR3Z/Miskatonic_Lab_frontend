@@ -91,7 +91,13 @@
     "roleChangedSuccess": "Роль участника изменена.",
     "ownerTransferredSuccess": "Владение комнатой передано.",
     "characterSuccess": "Персонаж выбран для комнаты.",
-    "settingsSuccess": "Настройки комнаты сохранены."
+    "settingsSuccess": "Настройки комнаты сохранены.",
+    "viewCharacter": "Открыть лист",
+    "sheetBack": "К участникам",
+    "sheetLoadingTitle": "Загружаем лист персонажа…",
+    "sheetUnavailableTitle": "Лист персонажа недоступен",
+    "sheetUnavailableDescription": "Персонаж больше не выбран для этой комнаты или был удалён.",
+    "sheetReadOnlyLabel": "Лист персонажа доступен только для просмотра"
   },
   "chat": {
     "title": "Чат комнаты",

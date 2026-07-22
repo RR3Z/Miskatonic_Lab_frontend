@@ -5,4 +5,6 @@ export const roomQueryKeys = {
     ["rooms", "detail", userId, roomId] as const,
   events: (userId: string, roomId: string) =>
     ["rooms", "events", userId, roomId] as const,
+  selectedCharacters: (userId: string, roomId: string) =>
+    ["rooms", "selected-characters", userId, roomId] as const,
 } as const

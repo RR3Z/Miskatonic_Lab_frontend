@@ -25,6 +25,7 @@ import type { RoomMember, RoomRole } from "@/types/room"
 
 type RoomMemberListProps = {
   canManageMembers: boolean
+  canViewAllCharacters: boolean
   isChangingRole: boolean
   isKicking: boolean
   isTransferringOwnership: boolean
@@ -32,12 +33,14 @@ type RoomMemberListProps = {
   onChangeRole: (member: RoomMember, role: RoomRole) => void
   onKick: (member: RoomMember) => void
   onTransferOwnership: (member: RoomMember) => void
+  onViewCharacter: (member: RoomMember) => void
   ownerId: string
   userId: string | null | undefined
 }
 
 export function RoomMemberList({
   canManageMembers,
+  canViewAllCharacters,
   isChangingRole,
   isKicking,
   isTransferringOwnership,
@@ -45,6 +48,7 @@ export function RoomMemberList({
   onChangeRole,
   onKick,
   onTransferOwnership,
+  onViewCharacter,
   ownerId,
   userId,
 }: RoomMemberListProps) {
@@ -151,6 +155,17 @@ export function RoomMemberList({
                       </>
                     ) : null}
                   </div>
+                ) : null}
+                {canViewAllCharacters && hasRoomCharacter(member) ? (
+                  <Button
+                    className="shrink-0"
+                    onClick={() => onViewCharacter(member)}
+                    size="sm"
+                    type="button"
+                    variant="outline"
+                  >
+                    {roomContentRu.detail.viewCharacter}
+                  </Button>
                 ) : null}
               </li>
             )

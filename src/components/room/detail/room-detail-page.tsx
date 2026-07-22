@@ -4,12 +4,15 @@ import { useAuth } from "@clerk/nextjs"
 import { LogOut, UsersRound } from "lucide-react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { useState } from "react"
 import { toast } from "sonner"
 
 import { RoomChat } from "@/components/room/chat/room-chat"
 import { RoomCharacterPicker } from "@/components/room/detail/room-character-picker"
+import { RoomCharacterSheet } from "@/components/room/detail/room-character-sheet"
 import { RoomMemberList } from "@/components/room/detail/room-member-list"
 import { RoomSettings } from "@/components/room/detail/room-settings"
+import { roomCommandErrorCode } from "@/components/room/utils/room-command-error-code.util"
 import { roomEventUserId } from "@/components/room/utils/room-event-user-id.util"
 import { Button } from "@/components/ui/button"
 import roomContentRu from "@/data/room/room.ru.json"
@@ -18,7 +21,7 @@ import { useKickRoomMember } from "@/hooks/room/use-kick-room-member"
 import { useLeaveRoom } from "@/hooks/room/use-leave-room"
 import { useRoomRealtime } from "@/hooks/room/use-room-realtime"
 import { useTransferRoomOwnership } from "@/hooks/room/use-transfer-room-ownership"
-import { showError } from "@/lib/errors/presenter"
+import { showError, showErrorCode } from "@/lib/errors/presenter"
 import { appRoutes } from "@/lib/routes/app-routes"
 import type { Room, RoomMember, RoomRole, RoomSocketEvent } from "@/types/room"
 
@@ -36,8 +39,16 @@ export function RoomDetailPage({ room }: RoomDetailPageProps) {
   const members = room.members ?? []
   const isOwner = room.owner_id === userId
   const currentMember = members.find((member) => member.user_id === userId)
+  const [selectedCharacterUserId, setSelectedCharacterUserId] = useState<
+    string | null
+  >(null)
+  const isGameMaster = currentMember?.role === "gm"
 
   function handleRoomEvent(event: RoomSocketEvent) {
+    if (event.type === "command.error") {
+      showErrorCode(roomCommandErrorCode(event.payload))
+      return false
+    }
     if (
       event.type === "member.kicked" &&
       roomEventUserId(event.payload) === userId
@@ -133,6 +144,7 @@ export function RoomDetailPage({ room }: RoomDetailPageProps) {
         <div className="space-y-5">
           <RoomMemberList
             canManageMembers={isOwner}
+            canViewAllCharacters={isGameMaster}
             isChangingRole={changeRoleMutation.isPending}
             isKicking={kickMutation.isPending}
             isTransferringOwnership={transferOwnershipMutation.isPending}
@@ -140,17 +152,42 @@ export function RoomDetailPage({ room }: RoomDetailPageProps) {
             onChangeRole={changeRole}
             onKick={kick}
             onTransferOwnership={transferOwnership}
+            onViewCharacter={(member) =>
+              setSelectedCharacterUserId(member.user_id)
+            }
             ownerId={room.owner_id}
             userId={userId}
           />
           {currentMember?.role === "player" ? (
-            <RoomCharacterPicker
-              members={members}
+            <>
+              <RoomCharacterPicker
+                members={members}
+                roomId={room.id}
+                userId={userId}
+              />
+              {userId ? (
+                <RoomCharacterSheet
+                  readOnly={false}
+                  roomId={room.id}
+                  userId={userId}
+                />
+              ) : null}
+            </>
+          ) : null}
+          {isGameMaster && selectedCharacterUserId ? (
+            <RoomCharacterSheet
+              onBack={() => setSelectedCharacterUserId(null)}
+              readOnly
               roomId={room.id}
-              userId={userId}
+              userId={selectedCharacterUserId}
             />
           ) : null}
-          <RoomChat roomId={room.id} send={send} status={status} />
+          <RoomChat
+            members={members}
+            roomId={room.id}
+            send={send}
+            status={status}
+          />
         </div>
         {isOwner ? <RoomSettings key={room.updated_at} room={room} /> : null}
       </div>
