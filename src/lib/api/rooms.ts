@@ -51,11 +51,44 @@ export function fetchRoom(api: KyInstance, roomId: string): Promise<Room> {
   return api.get(`api/rooms/${roomId}/`).json<Room>()
 }
 
+export const roomEventsPageSize = 200
+
 export function fetchRoomEvents(
   api: KyInstance,
   roomId: string,
+  afterSequence = 0,
 ): Promise<RoomEvent[]> {
-  return api.get(`api/rooms/${roomId}/events?limit=100`).json<RoomEvent[]>()
+  const search = new URLSearchParams({ limit: String(roomEventsPageSize) })
+  if (afterSequence > 0) search.set("after", String(afterSequence))
+
+  return api
+    .get(`api/rooms/${roomId}/events?${search.toString()}`)
+    .json<RoomEvent[]>()
+}
+
+export async function fetchAllRoomEvents(
+  api: KyInstance,
+  roomId: string,
+  afterSequence = 0,
+): Promise<RoomEvent[]> {
+  const events: RoomEvent[] = []
+  let cursor = afterSequence
+
+  while (true) {
+    const page = await fetchRoomEvents(api, roomId, cursor)
+    events.push(...page)
+
+    const nextCursor = latestRoomEventSequence(page, cursor)
+    if (page.length < roomEventsPageSize || nextCursor <= cursor) return events
+    cursor = nextCursor
+  }
+}
+
+function latestRoomEventSequence(events: RoomEvent[], fallback: number) {
+  return events.reduce(
+    (latest, event) => Math.max(latest, event.sequence),
+    fallback,
+  )
 }
 
 export function fetchRoomSelectedCharacters(

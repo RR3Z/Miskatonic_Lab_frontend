@@ -61,6 +61,10 @@ export function RoomDetailPage({ room }: RoomDetailPageProps) {
 
   const { send, status } = useRoomRealtime({
     onEvent: handleRoomEvent,
+    onTerminalClose: () => {
+      showErrorCode("client.websocket_disconnected")
+      router.replace(appRoutes.rooms)
+    },
     roomId: room.id,
   })
 

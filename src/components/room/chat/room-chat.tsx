@@ -59,6 +59,11 @@ export function RoomChat({ members, roomId, send, status }: RoomChatProps) {
           </span>
         </CardTitle>
         <CardDescription>{roomContentRu.chat.description}</CardDescription>
+        {status !== "connected" ? (
+          <output className="text-sm text-[var(--ml-warning)]">
+            {roomContentRu.chat.notConnected}
+          </output>
+        ) : null}
       </CardHeader>
       <CardContent className="space-y-4">
         <ol

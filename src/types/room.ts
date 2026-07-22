@@ -71,6 +71,7 @@ export type SelectRoomCharacterInput = {
 export type RoomEvent = {
   id: string
   room_id: string
+  sequence: number
   actor_id: string
   type: string
   payload: unknown
@@ -80,6 +81,7 @@ export type RoomEvent = {
 export type RoomSocketEvent = {
   type: string
   room_id: string
+  sequence?: number
   actor_id: string
   payload?: unknown
 }

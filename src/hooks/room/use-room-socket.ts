@@ -21,6 +21,7 @@ export type RoomSocketCommand = {
 type UseRoomSocketOptions = {
   enabled: boolean
   onEvent: (event: RoomSocketEvent) => void
+  onTerminalClose?: () => void
   roomId: string
 }
 
@@ -29,16 +30,22 @@ const reconnectDelayMilliseconds = 2_000
 export function useRoomSocket({
   enabled,
   onEvent,
+  onTerminalClose,
   roomId,
 }: UseRoomSocketOptions) {
   const { getToken } = useRoomSession()
   const [status, setStatus] = useState<RoomSocketStatus>("disconnected")
   const socketRef = useRef<WebSocket | null>(null)
   const onEventRef = useRef(onEvent)
+  const onTerminalCloseRef = useRef(onTerminalClose)
 
   useEffect(() => {
     onEventRef.current = onEvent
   }, [onEvent])
+
+  useEffect(() => {
+    onTerminalCloseRef.current = onTerminalClose
+  }, [onTerminalClose])
 
   useEffect(() => {
     if (!enabled || !roomId) {
@@ -70,10 +77,14 @@ export function useRoomSocket({
         const event = parseRoomSocketEvent(message.data)
         if (event && event.room_id === roomId) onEventRef.current(event)
       }
-      socket.onclose = () => {
+      socket.onclose = (event) => {
         if (socketRef.current === socket) socketRef.current = null
         if (disposed) return
         setStatus("disconnected")
+        if (isTerminalRoomSocketClose(event.code, event.reason)) {
+          onTerminalCloseRef.current?.()
+          return
+        }
         reconnectTimer = setTimeout(
           () => void connect(),
           reconnectDelayMilliseconds,
@@ -99,6 +110,24 @@ export function useRoomSocket({
   }, [])
 
   return { send, status }
+}
+
+const terminalCloseReasons = [
+  "room deleted",
+  "room deleted after disconnect",
+  "room deleted by cleanup",
+  "room left",
+  "removed from room",
+  "room membership is closing",
+]
+
+export function isTerminalRoomSocketClose(code: number, reason: string) {
+  return (
+    code === 1008 ||
+    terminalCloseReasons.some((terminalReason) =>
+      reason.startsWith(terminalReason),
+    )
+  )
 }
 
 export function roomWebSocketURL(roomId: string) {

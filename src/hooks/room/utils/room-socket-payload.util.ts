@@ -12,7 +12,11 @@ export function parseRoomSocketEvent(value: unknown): RoomSocketEvent | null {
       !("actor_id" in event) ||
       typeof event.type !== "string" ||
       typeof event.room_id !== "string" ||
-      typeof event.actor_id !== "string"
+      typeof event.actor_id !== "string" ||
+      ("sequence" in event &&
+        (typeof event.sequence !== "number" ||
+          !Number.isSafeInteger(event.sequence) ||
+          event.sequence <= 0))
     ) {
       return null
     }
