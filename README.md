@@ -17,15 +17,16 @@
 
 Frontend for a Call of Cthulhu character and room-management app.
 
-It provides the future browser interface for investigators, character sheets, dice rolls, rooms, room events, and room WebSocket chat. Next.js owns routing and rendering, Tailwind CSS and shadcn/ui own the component layer, TanStack Query owns server state, Zustand owns local UI/realtime state, and the Go backend owns persistence and authentication enforcement.
+It provides the browser interface for investigators and the future room, dice, event, and WebSocket features. Next.js owns routing and rendering, Tailwind CSS and shadcn/ui own the component layer, TanStack Query owns server state, local component state owns current UI flows, and the Go backend owns persistence and final authorization enforcement. Zustand is reserved for shared local or realtime state when that state is introduced.
 
 ## Features
 
-- Next.js App Router scaffold with TypeScript strict mode.
-- Tailwind CSS v4 theme groundwork and shadcn/ui component setup.
-- Prepared feature folders for characters, rooms, layout, API, WebSocket, validators, stores, and shared types.
+- Next.js App Router with TypeScript strict mode and server-side protection for authenticated routes.
+- Clerk modal authentication with Russian localization and return-to-route intent.
+- Character list, creation, portrait upload, deletion, and per-user TanStack Query cache isolation.
+- Tailwind CSS v4 theme and manually maintained shadcn/ui component layer.
 - Vitest, Testing Library, MSW, and Playwright test foundation.
-- Motion installed for final animation polish, but intentionally unused in early implementation stages.
+- Motion powers restrained landing reveals, character-list layout transitions, and the reduced-motion policy.
 
 ## Requirements
 
@@ -56,9 +57,10 @@ Required for local API integration:
 - `NEXT_PUBLIC_API_BASE_URL`
 - `NEXT_PUBLIC_WS_BASE_URL`
 
-Required once Clerk frontend auth is wired:
+Required for Clerk authentication:
 
 - `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+- `CLERK_SECRET_KEY`
 
 Optional for Playwright:
 
@@ -80,17 +82,26 @@ npm run test:all   # run Biome, Vitest, build, and Playwright
 
 ## Project Surface
 
-- `src/app` - Next.js App Router routes and layouts.
-- `src/components` - shadcn/ui plus future character, room, and layout components.
-- `src/lib/api` - future typed API client and TanStack Query integration.
-- `src/lib/ws` - future room WebSocket client and hooks.
-- `src/stores` - future Zustand stores.
-- `tests` - Vitest, Testing Library, MSW, and Playwright tests.
+- `src/app` - Next.js App Router routes, layouts, route guards, and root providers.
+- `src/components` - feature composition plus shared layout, auth, motion, and UI components.
+- `src/dto` - Zod schemas, raw form input types, and validated DTO types.
+- `src/lib/api` - authenticated API transport, query keys, TanStack Query hooks, and cache lifecycle.
+- `src/lib/clerk` - shared Clerk server configuration and visual configuration.
+- `src/types` - backend response and normalized frontend data shapes.
+- `tests` - unit, component, API-mocked, and browser tests plus shared fixtures and render helpers.
+
+## Form Policy
+
+- Build form markup from manually maintained shadcn/ui components in `src/components/ui`.
+- Use React Hook Form and `Controller` for form state and controlled components such as `Select`.
+- Define validation and normalization once in a Zod schema under `src/dto/<feature>`.
+- Export separate `z.input` and `z.output` types when schema transforms raw field values into an API-ready DTO.
+- Pass only validated DTO output to TanStack Query mutations. Backend validation remains authoritative.
 
 ## Animation Policy
 
-Motion is installed as the planned React animation library. Do not use it in early feature work. Keep initial screens functional and accessible first; apply Motion during the final polish/animation stage for deliberate transitions, layout animation, gestures, and micro-interactions.
+Use Motion only where animation communicates appearance, removal, or layout change. The root `MotionProvider` uses `reducedMotion="user"`; custom timer-based effects must also check `useReducedMotion` because they are outside Motion's automatic policy. Keep shadcn transitions for Sidebar, Sheet, Dialog, Dropdown Menu, and Tooltip instead of layering duplicate Motion animations over them.
 
 
 
-More frontend detail lives in [docs/testing.md](docs/testing.md).
+Architecture boundaries live in [docs/architecture.md](docs/architecture.md). UI and test conventions live in [docs/ui.md](docs/ui.md) and [docs/testing.md](docs/testing.md). Planned cleanup is tracked in [docs/future-plans.md](docs/future-plans.md).

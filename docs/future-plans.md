@@ -22,20 +22,20 @@ Acceptance criteria:
 - Creating, editing, deleting, and reordering an item updates the sheet without overwriting financial assets.
 - Existing Characters without items retain the current useful empty state.
 
-## Support clearing nullable backstory and finance fields
+## Support clearing nullable partial-update fields
 
 Status: planned.
 
 Current behavior:
 
 - Notes, fixed backstory sections, and finances support inline create, update, and delete flows.
-- The backend update queries use SQL `COALESCE`, so sending `null` preserves an existing personal description or finance value instead of clearing it.
+- The backend partial-update queries use SQL `COALESCE`, so sending `null` preserves an existing personal description, derived stat, or finance value instead of clearing it.
 - The frontend therefore validates edited text as non-empty and offers whole-resource deletion where the backend supports it.
 
 Target behavior:
 
 - Make nullable-field updates presence-aware on the backend, preferably with narrow `PATCH` semantics or explicit nullable DTO fields.
-- Allow clearing `personal_description`, `spending_limit`, `cash`, `assets`, and `credit_rating_skill_id` without deleting unrelated values.
+- Allow clearing `personal_description`, nullable derived stats, `spending_limit`, `cash`, `assets`, and `credit_rating_skill_id` without deleting unrelated values.
 - Keep the current inline editors and update the frontend DTOs only after the backend contract distinguishes omitted fields from explicit `null`.
 
 Acceptance criteria:
@@ -43,6 +43,29 @@ Acceptance criteria:
 - Sending an omitted field preserves its value; sending `null` clears it.
 - Clearing one field does not overwrite another backstory or finance field.
 - The inline editor can save an empty nullable value and immediately reflects the backend response.
+
+## Enforce one backstory item per fixed section
+
+Status: planned.
+
+Current behavior:
+
+- The frontend renders one fixed Textarea for every backstory section and creates an item with that section's canonical title.
+- The backend validates the section name, but the database has no uniqueness constraint for `(backstory_id, section)`.
+- Creating the same section twice is therefore possible through concurrent or direct API requests; the frontend displays only the first matching item.
+
+Target behavior:
+
+- Add a database uniqueness constraint for `(backstory_id, section)`.
+- Map a duplicate-section write to a stable Character API conflict error.
+- Keep section labels fixed by the frontend and preserve the existing create, update, and delete routes.
+
+Acceptance criteria:
+
+- One Character backstory cannot contain two items for the same fixed section.
+- A duplicate create returns a documented conflict response and does not modify the existing item.
+- Updating an item cannot move it into an already occupied section.
+- The current one-Textarea-per-section frontend flow requires no data-merging or legacy compatibility path.
 
 ## Add Character weapons and attacks
 
@@ -75,6 +98,7 @@ Current behavior:
 - A newly created Character has no guaranteed baseline skill set.
 - The character sheet shows a disabled plus button for future custom-skill creation.
 - Character detail responses do not expose the category and specialty identifiers required by the existing backend skill write routes.
+- Existing skills can be deleted because that route only requires the skill identifier; create and update remain unavailable in the frontend.
 
 Target behavior:
 
@@ -92,31 +116,26 @@ Acceptance criteria:
 - Creating a custom skill adds only that skill and does not modify the standard set.
 - Reloading the character sheet preserves both standard and custom skills.
 
-## Persist character conditions
+## Support portrait removal
 
 Status: planned.
 
 Current behavior:
 
-- The six condition controls on the character sheet are local toggles initialized from `CharacterDetail`.
-- Toggle changes live only in React state and reset after a page reload.
-- The frontend does not send condition changes to the backend.
+- Character portraits can be uploaded during creation and replaced from the character sheet.
+- The backend `PATCH /api/characters/{id}/` contract requires a portrait file and does not expose a portrait-only removal operation.
 
 Target behavior:
 
-- Persist health conditions (`major_wound`, `unconscious`, `dying`, `dead`) and sanity conditions (`temp_insanity`, `indef_insanity`) on the Character backend model.
-- Add or extend a Character update endpoint and frontend mutation for condition-only changes.
-- Keep the current toggle layout, active styling, `aria-pressed`, and independent Info tooltip buttons.
-- Reconcile optimistic UI state with the server response and restore the previous value when saving fails.
-- Invalidate or update the Character query cache after a successful save.
+- Add a narrow authenticated portrait-removal route without changing unrelated Character fields.
+- Delete the stored portrait object and clear its database key as one operation.
+- Add a remove action to the existing portrait editor and restore the sex-based placeholder after success.
 
 Acceptance criteria:
 
-- Clicking a condition toggle persists the new value without a full page reload.
-- The persisted values are restored when the character sheet is opened again.
-- Saving one condition does not overwrite unrelated Character fields or other conditions.
-- A failed request is visible to the user and does not leave the toggle in a false saved state.
-- Mouse and keyboard interaction remain accessible; opening Info never changes the condition.
+- Removing a portrait does not delete or rewrite the Character.
+- The stored file and database key are both removed.
+- The character sheet shows its placeholder without requiring a full reload.
 
 ## Replace URL-driven character creation modal state
 
@@ -143,3 +162,24 @@ Acceptance criteria:
 - No component checks `create=1` or manually rewrites browser history.
 - Every creation trigger opens the same modal instance.
 - Successful creation still invalidates the character query and preserves current responsive behavior.
+
+## Optimize above-the-fold character images
+
+Status: planned.
+
+Current behavior:
+
+- Browser smoke reports Next.js LCP warnings for the app favicon and the character portrait placeholder.
+- The images render correctly, but above-the-fold loading intent is not declared explicitly.
+
+Target behavior:
+
+- Identify which logo and portrait image is actually the LCP candidate on the character list and detail pages.
+- Mark only above-the-fold candidates for eager or priority loading.
+- Keep off-screen character card portraits lazy-loaded to avoid unnecessary network work.
+
+Acceptance criteria:
+
+- Character list and detail smoke tests do not report image LCP warnings.
+- The first visible logo and portrait load without a delayed placeholder flash.
+- Off-screen portraits remain lazy-loaded.

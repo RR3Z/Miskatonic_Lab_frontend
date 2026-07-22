@@ -47,10 +47,16 @@ npm run test:all
   npm run test:all
   ```
 
+## Test Folder Structure
+
+- Group test files by feature inside each layer: for example, `tests/components/guide-page/`, `tests/unit/guide-page/`, and `tests/e2e/guide-page/`.
+- Keep shared infrastructure at the layer root: `tests/fixtures/`, `tests/helpers/`, `tests/mocks/`, `tests/utils/`, and `tests/setup.ts`.
+- Import shared test infrastructure through `@tests/*` so moving a feature suite does not require brittle relative paths.
+
 ## Unit Tests
 
 - Use Vitest.
-- Put pure helper, validator, API transform, and store tests under `tests/unit`.
+- Put pure helpers, validators, API transforms, query/cache behavior, and stores under `tests/unit`.
 - Keep tests deterministic and independent of Next.js runtime when possible.
 - Mock network with MSW instead of calling the backend.
 
@@ -61,6 +67,22 @@ npm run test:all
 - Test accessible behavior: roles, labels, keyboard interaction, validation messages, loading/error/empty states.
 - Avoid snapshot-first tests. Prefer user-visible assertions.
 - For landing reusable pieces, test shared components directly and keep page tests focused on integration.
+- Keep page suites focused on page-owned states and composition. Test modal forms, action menus, and other child workflows in suites named after their owning components.
+- Keep one integration assertion only when the parent-to-child connection is behavior the page owns.
+
+## Shared Test Support
+
+- Put reusable typed data builders under `tests/fixtures`.
+- Put React render wrappers, providers, and query-client wrappers under `tests/helpers`.
+- Put pure browser utilities such as viewport setup under `tests/utils`.
+- Keep scenario-specific mocks next to their suite; move code into shared helpers only after it is used by at least two independent suites.
+- Create a fresh TanStack Query client per render; do not share cache state between tests.
+- Keep scenario-specific MSW behavior inside the test that owns the scenario.
+- Prefer a small shared builder over copying full backend response objects across component suites.
+- Keep guide data tests in `tests/unit`; test deep search, result URLs, stable catalogue
+  anchors, and invalid text encoding without rendering a route.
+- Test search interaction separately from the guide page: query entry, keyboard focus,
+  empty state, result navigation, and the scroll area all belong to the search owner.
 
 ## API Mocking
 
