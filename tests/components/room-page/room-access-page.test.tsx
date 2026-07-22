@@ -2,7 +2,7 @@ import { act, screen, waitFor } from "@testing-library/react"
 import { renderWithQuery } from "@tests/helpers/render-with-query"
 import { server } from "@tests/mocks/server"
 import { HttpResponse, http } from "msw"
-import { describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 
 import { RoomAccessPage } from "@/components/room/join/room-access-page"
 
@@ -33,6 +33,17 @@ vi.mock("@/hooks/room/use-room-socket", () => ({
 }))
 
 describe("RoomAccessPage", () => {
+  beforeEach(() => {
+    server.use(
+      http.get("http://localhost:8000/api/rooms/room-1/characters", () =>
+        HttpResponse.json([]),
+      ),
+      http.get("http://localhost:8000/api/rooms/room-1/events", () =>
+        HttpResponse.json([]),
+      ),
+    )
+  })
+
   it("shows retryable error instead of password form after a server error", async () => {
     server.use(
       http.get("http://localhost:8000/api/rooms/room-1/", () =>
@@ -124,6 +135,12 @@ describe("RoomAccessPage", () => {
   it("refetches active room data after a room websocket event", async () => {
     let requestCount = 0
     server.use(
+      http.get("http://localhost:8000/api/rooms/room-1/characters", () =>
+        HttpResponse.json([]),
+      ),
+      http.get("http://localhost:8000/api/rooms/room-1/events", () =>
+        HttpResponse.json([]),
+      ),
       http.get("http://localhost:8000/api/rooms/room-1/", () => {
         requestCount += 1
         return HttpResponse.json({

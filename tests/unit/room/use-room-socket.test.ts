@@ -1,6 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest"
 
-import { roomWebSocketURL } from "@/hooks/room/use-room-socket"
+import {
+  isTerminalRoomSocketClose,
+  roomWebSocketURL,
+} from "@/hooks/room/use-room-socket"
 
 describe("roomWebSocketURL", () => {
   afterEach(() => vi.unstubAllEnvs())
@@ -11,5 +14,12 @@ describe("roomWebSocketURL", () => {
     expect(roomWebSocketURL("room with spaces")).toBe(
       "wss://api.example.test/base/api/rooms/room%20with%20spaces/ws",
     )
+  })
+
+  it("stops reconnecting after room lifecycle closes", () => {
+    expect(isTerminalRoomSocketClose(1000, "room deleted")).toBe(true)
+    expect(isTerminalRoomSocketClose(1000, "removed from room")).toBe(true)
+    expect(isTerminalRoomSocketClose(1008, "membership revoked")).toBe(true)
+    expect(isTerminalRoomSocketClose(1006, "")).toBe(false)
   })
 })

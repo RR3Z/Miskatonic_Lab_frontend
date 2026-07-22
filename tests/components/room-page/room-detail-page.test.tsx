@@ -260,6 +260,32 @@ describe("RoomDetailPage", () => {
     })
   })
 
+  it("shows sender-only websocket command errors without refetching the room", async () => {
+    renderWithQuery(<RoomDetailPage room={room} />)
+
+    const options = mocks.socketOptions as {
+      onEvent: (event: {
+        actor_id: string
+        payload: unknown
+        room_id: string
+        type: string
+      }) => void
+    }
+    options.onEvent({
+      actor_id: "owner-1",
+      payload: { code: "common.invalid_request" },
+      room_id: "room-1",
+      type: "command.error",
+    })
+
+    await waitFor(() =>
+      expect(mocks.toastError).toHaveBeenCalledWith(
+        "common.invalid_request — Некорректный запрос",
+        expect.anything(),
+      ),
+    )
+  })
+
   it("uses one room websocket for the detail page and chat", () => {
     renderWithQuery(<RoomDetailPage room={room} />)
 

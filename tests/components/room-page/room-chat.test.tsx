@@ -34,6 +34,7 @@ describe("RoomChat", () => {
             id: "event-1",
             payload: { text: "Добро пожаловать" },
             room_id: "room-1",
+            sequence: 1,
             type: "chat.message",
           },
         ]),
@@ -44,10 +45,26 @@ describe("RoomChat", () => {
   it("renders history and sends a chat command through the socket", async () => {
     const user = userEvent.setup()
     renderWithQuery(
-      <RoomChat roomId="room-1" send={mocks.send} status="connected" />,
+      <RoomChat
+        members={[
+          {
+            character_id: "00000000-0000-0000-0000-000000000000",
+            id: "member-keeper",
+            joined_at: "2026-07-19T10:00:00Z",
+            role: "gm",
+            room_id: "room-1",
+            user_id: "keeper-1",
+            username: "Хранитель",
+          },
+        ]}
+        roomId="room-1"
+        send={mocks.send}
+        status="connected"
+      />,
     )
 
     expect(await screen.findByText("Добро пожаловать")).toBeVisible()
+    expect(screen.getByText("Хранитель")).toBeVisible()
     await user.type(screen.getByLabelText("Сообщение в чат"), "Привет всем")
     await user.click(
       screen.getByRole("button", { name: "Отправить сообщение" }),

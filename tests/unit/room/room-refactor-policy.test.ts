@@ -125,6 +125,7 @@ describe("Rooms refactor policy", () => {
           actor_id: "user-1",
           payload: { text: "Привет" },
           room_id: "room-1",
+          sequence: 1,
           type: "chat.message",
         }),
       ),
